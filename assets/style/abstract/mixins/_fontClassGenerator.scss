@@ -1,0 +1,27 @@
+.font {
+    @each $name in $font-family {
+      @each $size in $font-size {
+        &-#{$name}-#{$size} {
+          font-size: $size + px !important;
+        }
+      }
+    }
+  }
+  
+  .iransans {
+    @each $name in $font-family {
+      [class*="font-#{$name}"] {
+        font-family: IRANSans + $name !important;
+      }
+    }
+  }
+  
+  // @media(max-width: 600px) {
+  //   .iransans {
+  //     @each $name in $font-family {
+  //       [class*="font-#{$name}"] {
+  //         font-family: mobileIRANSans + $name !important;
+  //       }
+  //     }
+  //   }
+  // }

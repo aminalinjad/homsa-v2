@@ -1,0 +1,60 @@
+<template>
+  <div>
+    <div class="thumbnailMapContainer">
+      <div id="map-wrap" class="thumbnailMapContainer__map">
+        <client-only>
+          <l-map :zoom="13" :center="[55.9464418, 8.1277591]">
+            <l-tile-layer
+              url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+            ></l-tile-layer>
+            <l-marker :lat-lng="[55.9464418, 8.1277591]"></l-marker>
+          </l-map>
+        </client-only>
+      </div>
+      <div class="thumbnailMapContainer__text text-center py-5 rounded-b-lg">
+        <span>
+          {{ mapThumbnailText }}
+        </span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      mapThumbnailText: "نمایش روی نقشه",
+    };
+  },
+  mounted() {},
+  methods: {},
+};
+</script>
+
+<style lang="scss">
+.thumbnailMapContainer {
+  min-height: 180px;
+  position: relative;
+  border-radius: 12px;
+
+  &__map {
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    z-index: 15 !important;
+    .leaflet-container.leaflet-touch-drag.leaflet-touch-zoom {
+      border-radius: 12px !important;
+    }
+  }
+  &__text {
+    position: absolute;
+    width: 100%;
+    z-index: 20 !important;
+    bottom: 0;
+    //   opacity: 0.5;
+    background: rgba(255, 255, 255, 0.9);
+    // border-radius: 0 0 12px 12px;
+  }
+}
+</style>
