@@ -26,29 +26,18 @@
         ref="carousel"
         @slide="updateCarousel"
       >
-        <slide v-for="(tag, index) in tags" :key="index">
-          <div
+        <slide v-for="(tag, index) in tags" :key="index" class="me-2">
+          <!-- <div
             class="d-flex tagItem rounded secondary--text mx-1 pt-2 pb-2 px-3"
           >
             <v-icon>mdi-diamond-outline</v-icon>
             <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
-          </div>
-        </slide>
-        <slide>
-          <div
-            class="d-flex tagItem rounded secondary--text mx-1 pt-2 pb-2 px-3"
-          >
-            <v-icon>mdi-diamond-outline</v-icon>
-            <span class="ps-2">اقامتگاه‌های لوکس</span>
-          </div>
-        </slide>
-        <slide>
-          <div
-            class="d-flex tagItem rounded secondary--text mx-1 pt-2 pb-2 px-3"
-          >
-            <v-icon>mdi-diamond-outline</v-icon>
-            <span class="ps-2">اقامتگاه‌های لوکس</span>
-          </div>
+          </div> -->
+          <v-chip outlined label class="tagItem" @click="filterTag(index)" color="borderGray" text-color="secondary">
+            <v-icon >mdi-diamond-outline</v-icon>
+            <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
+
+          </v-chip>
         </slide>
         <!-- <hooper-navigation slot="hooper-addons"></hooper-navigation> -->
       </hooper>
@@ -97,6 +86,9 @@ export default {
     updateCarousel(payload) {
       this.myCarouselData = payload.currentSlide;
     },
+    filterTag(index) {
+      console.log('tag ',index);
+    }
   },
 };
 </script>
@@ -104,6 +96,7 @@ export default {
 <style lang="scss" scope>
 .itmHoopr {
   height: 100%;
+  
 }
 .itemHooper {
   position: relative;
@@ -121,6 +114,10 @@ export default {
   }
   &__main {
   }
+  .hooper .hooper-slide {
+    width: auto !important;
+
+  }
 
   //  .nextBtnRight {
   //     right: 0!important;
@@ -131,6 +128,14 @@ export default {
 }
 
 .tagItem {
-  border: #f5f5f5 solid 1px;
+  // border: #f5f5f5 solid 1px;
+  height: 40px!important;
+  width: 166px!important;
 }
+
+.tagItem:active , .tagItem:hover {
+  color: #359138!important;
+}
+
+
 </style>

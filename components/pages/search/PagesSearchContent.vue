@@ -26,12 +26,33 @@
                 solo
                 flat
                 dense
+                class="font-regular-12"
               ></v-select>
             </div>
           </div>
-          <div class="white ms-8 rounded">
-            <v-icon class="py-2 ps-3 pe-1 secondary--text">mdi-menu</v-icon>
-            <v-icon class="py-2 ps-1 pe-3 secondary--text">mdi-apps</v-icon>
+          <div class="white rounded ms-8">
+            <v-btn  
+            elevation="0" 
+            fab  
+            small 
+            class="white me-n1" 
+            :class="ifRtl? 'leftBorderZero':'rightBorderZero'"
+            @click="listView"> 
+              <v-icon class=" secondary--text">mdi-menu</v-icon>
+            </v-btn>
+            <v-btn 
+            elevation="0" 
+            fab 
+            small 
+            class=" white" 
+            :class="ifRtl? 'rightBorderZero':'leftBorderZero'"
+            @click="gridView"
+            >
+              <v-icon class=" secondary--text">mdi-apps</v-icon>
+            </v-btn>
+
+            
+            
           </div>
         </div>
       </v-col>
@@ -72,7 +93,7 @@
           
           <v-col
             cols="12"
-            md="4"
+            :md="ifGridView?4:12"
             v-for="(result, index) in results"
             :key="index"
             class="pt-10 pb-11 px-6 resultBorder"
@@ -80,7 +101,8 @@
           >
 
           <!-- item component -->
-            <PagesSearchResultItem />
+          
+            <PagesSearchResultItem :ifGridView="ifGridView" :index="index" />
           </v-col>
         </v-row>
       </div>
@@ -98,10 +120,11 @@
 export default {
   data() {
     return {
+      gridViewResult: true,
       sortBydefault: "بهترین تجربه",
       sortBy: ["گران ترین", "بهترین تجربه"],
       results: [
-        { name: "dfd" },
+        { name: "dfd",  },
         { name: "dfd" },
         { name: "dfd" },
         { name: "dfd" },
@@ -117,7 +140,25 @@ export default {
         return false;
       }
     },
+    ifGridView() {
+      if(this.gridViewResult) {
+        return true;
+      } else {
+        return false;
+      }
+
+    }
   },
+  methods: {
+    listView() {
+      this.gridViewResult = false;
+
+    },
+    gridView() {
+      this.gridViewResult= true;
+
+    },
+  }
 };
 </script>
 
@@ -136,6 +177,16 @@ export default {
 
 .resultSideBorderLtr {
   border-right: #f5f5f5 solid 1px;
+}
+
+.leftBorderZero {
+  border-top-left-radius: 0!important;
+  border-bottom-left-radius: 0!important;
+}
+
+.rightBorderZero {
+  border-top-right-radius: 0!important;
+  border-bottom-right-radius: 0!important;
 }
 
 </style>
