@@ -37,7 +37,7 @@ export default {
       hostBtn: "میزبان شوید",
       login: "ورود",
       register: "ثبت نام",
-      phone: "021-28111500",
+      phone: "۰۲۱-۲۸۱۱۱۵۰۰",
     };
   },
 };

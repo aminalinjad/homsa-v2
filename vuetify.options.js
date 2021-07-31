@@ -10,9 +10,13 @@ export default {
     themes: {
       light: {
         primary: '#359138',
-        secondary: colors.grey.darken1,
+        secondary: '#757575',
         accent: colors.shades.black,
         error: colors.red.accent3,
+        greyLight4: colors.grey.lighten4,
+        greenDark8: '#012200',
+        orangeBooking: '#FF9D00',
+        orangeBookingBg: '#FFF6E8',
 
       },
       dark: {

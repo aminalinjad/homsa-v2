@@ -1,15 +1,14 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="3">
+      <v-col class="filterContainer">
         <PagesSearchFilters :filters="filters" />
       </v-col>
-      <v-col cols="9">
+      <v-col class="resultContainer">
         <PagesSearchContent />
+        
       </v-col>
-    </v-row>
-    <!-- <p class="font-bold-34">تست فونت</p>
-    <v-btn color="primary" @click="goId">test</v-btn> -->
+    </v-row>    
   </div>
 </template>
 <script>
@@ -136,5 +135,14 @@ export default {
   },
 };
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+
+.filterContainer {
+  flex: 0 0 340px;
+}
+
+.resultContainer {
+  overflow: hidden;
+}
+</style>
 

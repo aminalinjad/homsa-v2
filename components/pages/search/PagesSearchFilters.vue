@@ -15,7 +15,6 @@
             <div class="d-flex justify-center rangeSlider">
               <client-only>
                 <HistogramSlider
-                v-if="nextTick"
                   :width="histogramWidth"
                   :hideFromTo="true"
                   :dragInterval="true"
@@ -216,7 +215,7 @@ export default {
   },
   data() {
     return {
-      nextTick: true,
+      // nextTick: true,
       expansionOpen: [0],
       expansionclose: [],
       sliderBtnText: "اعمال محدوده قیمت",
@@ -273,14 +272,14 @@ export default {
       // console.log("here is width", width.offsetWidth);
       // console.log("here is clientWidth width", width.clientWidth);
       this.histogramSectionWidth = width.clientWidth;
-      this.nextTicker();
+      // this.nextTicker();
     },
-    nextTicker() {
-      this.nextTick = false;
-      this.$nextTick(() => {
-        this.nextTick = true;
-      });
-    },
+    // nextTicker() {
+    //   this.nextTick = false;
+    //   this.$nextTick(() => {
+    //     this.nextTick = true;
+    //   });
+    // },
   },
 };
 </script>
