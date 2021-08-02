@@ -20,6 +20,7 @@ export default {
         orangeBookingBg: '#FFF6E8',
         borderGray: '#F5F5F5',
         redOffer: '#EC4040',
+        redOfferTime: '#EC484A',
 
       },
       dark: {

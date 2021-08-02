@@ -2,8 +2,23 @@
   <v-card flat class="rounded-lg">
     <!--If Grid view  -->
     <div v-if="ifGridView">
+      
+      <!-- offer sec  -->
+      <div class="redOffer--text text-center offerSec mx-3 mb-2" v-if="(index % 3 == 0)|| (index % 2 == 0)">
+        <!-- modification need: in v-if o v-else ro bad az set kardane data bardaram -->
+        <span v-if="index % 2 == 0" class="font-regular-12">تخفیف دار</span>
+        <div class="d-flex justify-space-between" v-else-if="index % 3 == 0">
+          <span class="font-regular-12">مانده زمان تخفیف</span>
+
+          <span>
+            <span  class="font-regular-12">۰۲:۵۵:۴۰</span>
+            <v-icon small color="redOffer">mdi-clock-outline</v-icon>
+          </span>
+        </div>
+      </div>
+
       <!-- image sec  -->
-      <PagesSearchResultImg />
+      <PagesSearchResultImg  :index="index"/>
       <!-- text sec  -->
       <v-card-subtitle class="pt-3">
         <v-row>
@@ -11,9 +26,17 @@
             <span class="font-regular-12 secondary--text">رشت - گیلان</span>
           </v-col>
           <v-col class="text-left">
-            <span class="font-regular-10 secondary--text">(۳۶۰ نظر)</span>
-            <span>۳.۸</span>
-            <v-icon small class="mb-1">mdi-star</v-icon>
+            <span v-if="false">
+              <span class="font-bold-14 secondary--text">جدید</span>
+              
+
+            </span>
+            <span v-else>
+              <span class="font-regular-10 secondary--text">(۳۶۰ نظر)</span>
+            <span :class="rankColor(4) + '--text'">۴.۲</span>
+            <v-icon small class="mb-1" :color="rankColor(4)">mdi-star</v-icon>
+            </span>
+            
           </v-col>
         </v-row>
       </v-card-subtitle>
@@ -50,9 +73,12 @@
     <!--If list view  -->
     <div v-else>
       <v-row>
+        <!-- image sec -->
         <v-col cols="4">
-          <PagesSearchResultImg />
+          <PagesSearchResultImg :ifGridView='ifGridView' />
         </v-col>
+
+        <!-- info sec -->
         <v-col cols="8">
           <v-card-subtitle class="pt-3">
             <v-row>
@@ -61,7 +87,9 @@
               </v-col>
               <v-col class="text-left">
                 <span class="font-regular-12 secondary--text">(۳۶۰ نظر)</span>
-                <span class="font-bold-16" :class="rankColor(3.8)+'--text'">۳.۸</span>
+                <span class="font-bold-16" :class="rankColor(3.8) + '--text'"
+                  >۳.۸</span
+                >
                 <v-icon :color="rankColor(3.8)" class="mb-1">mdi-star</v-icon>
               </v-col>
             </v-row>
@@ -75,11 +103,15 @@
                 <p class="secondary--text font-regular-12">
                   دو خوابه - ظرفیت ۸ نفره - استخر - ماشین لباسشویی
                 </p>
-                <v-chip small label outlined color="#7575754D" text-color="black">
+                <v-chip
+                  small
+                  label
+                  outlined
+                  color="#7575754D"
+                  text-color="black"
+                >
                   <v-icon color="primary">mdi-shield-check-outline</v-icon>
-                  <span class="ms-1 font-regular-12"
-                    >گارانتی شده</span
-                  >
+                  <span class="ms-1 font-regular-12">گارانتی شده</span>
                 </v-chip>
               </v-col>
               <v-col class="text-left">
@@ -109,6 +141,7 @@
             </div>
             <v-spacer></v-spacer>
 
+            <!-- modification need: in v-if o v-else ro bad az set kardane data bardaram -->
             <v-chip
               label
               color="#EC484A0D"
@@ -117,7 +150,7 @@
             >
               <span class="mt-n1 font-regular-14">تخفیف دار</span>
             </v-chip>
-            <v-chip label color="#EC484A0D" text-color="redOffer" v-else>
+            <v-chip label color="#EC484A0D" text-color="redOfferTime" v-else>
               <span class="mt-n1 me-12 font-regular-14">مانده زمان تخفیف</span>
               <span>
                 <span>۰۲:۵۵:۴۰</span>
@@ -139,27 +172,28 @@ export default {
       default: true,
     },
     index: {
-      type: Boolean,
-      default: true,
+      type: Number,
+      default: 0,
     },
   },
-  computed: {
-  },
+  computed: {},
   methods: {
     rankColor(color) {
-      if(color >= 4) {
-        return 'primary';
-      } else if (color >= 3 ) {
-        return 'green2';
+      if (color >= 4) {
+        return "primary";
+      } else if (color >= 3) {
+        return "green2";
       } else {
-        return 'orangeBooking'
+        return "orangeBooking";
       }
-
-    }
-
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss">
+.offerSec {
+  margin-top: -33px;
+  border-bottom: 1px #EC484A solid;
+}
 </style>
