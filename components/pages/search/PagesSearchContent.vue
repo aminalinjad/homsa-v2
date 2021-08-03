@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="px-md-0">
     <!-- Top Section Start  -->
     <v-row class="mb-3">
       <v-col>

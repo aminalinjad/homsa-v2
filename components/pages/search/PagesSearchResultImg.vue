@@ -1,4 +1,5 @@
 <template>
+  <!-- <div class="resultImgSec" :style="`width:${getImgSecWidth}px`"> -->
   <div class="resultImgSec">
     <v-row class="resultImgSec__top px-2">
       <v-col>
@@ -88,29 +89,38 @@ export default {
   },
   data() {
     return {
-      imgSecWidth: null,
+      // imgSecWidth: null,
       favorite: false,
     };
   },
   computed: {
+    // getImgSecWidth() {
+    //   if (this.ifGridView) {
+    //     return 280;
+    //   } else {
+    //     return 300;
+    //   }
+    // },
     getImgSecHeight() {
       if (this.ifGridView) {
         return (this.imgSecWidth * 4) / 7;
+        // return 158;
       } else {
         return (this.imgSecWidth * 2) / 3;
+        // return 200;
       }
     },
   },
   mounted() {
-    this.calculateImgSecHeight();
-    window.addEventListener("resize", this.calculateImgSecHeight);
+    // this.calculateImgSecHeight();
+    // window.addEventListener("resize", this.calculateImgSecHeight);
   },
   methods: {
-    calculateImgSecHeight() {
-      let width = document.getElementsByClassName("resultImgSec__image")[0]
-        .clientWidth;
-      this.imgSecWidth = width;
-    },
+    // calculateImgSecHeight() {
+    //   let width = document.getElementsByClassName("resultImgSec__image")[0]
+    //     .clientWidth;
+    //   this.imgSecWidth = width;
+    // },
     addFavorite() {
       // console.log(this.index);
       this.favorite = !this.favorite;
@@ -130,6 +140,15 @@ export default {
     z-index: 10;
   }
   &__image {
+    .v-btn--icon.v-size--default {
+      width: 24px!important;
+      height: 24px!important;
+      border-radius: 50px!important;
+    }
+    .v-btn--icon.v-size--default .v-icon, .v-btn--fab.v-size--default .v-icon  {
+       font-size: 15px!important;
+
+    }
   }
 
   &__bottom {
@@ -146,14 +165,13 @@ export default {
 }
 
 .v-carousel__controls .v-item-group button {
-  width: 10px!important;
-  height: 10px!important;
+  width: 5px!important;
+  height: 5px!important;
 
 }
 .v-carousel__controls .v-item-group button i{
   // width: 20px!important;
   // height: 20px!important;
-  font-size: 10px!important;
-
+  font-size: 7px!important;
 }
 </style>

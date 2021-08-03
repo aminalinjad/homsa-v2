@@ -138,7 +138,7 @@ export default {
 <style scoped lang="scss">
 
 .filterContainer {
-  flex: 0 0 340px;
+  flex: 0 0 336px;
 }
 
 .resultContainer {

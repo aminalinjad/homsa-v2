@@ -47,18 +47,27 @@
 
       <!-- bottom sec  -->
       <v-card-actions>
+
+        <!-- Price start -->
         <div class="font-regular-12">
-          <div class="secondary--text">
+          <div class="secondary--text mb-n4"  v-if="index % 2 == 0" >
             <span>قیمت کل</span>
             <span>۲,۵۵۰,۰۰۰</span>
             <span>تومان</span>
           </div>
-          <div>
+          <div class="secondary--text mb-n4 text-center"  v-if="(index % 3 == 0)&&!(index % 2 == 0)" >
+           
+            <span class="text-decoration-line-through">۲,۵۵۰,۰۰۰</span>
+            
+          </div>
+          <div class="mt-4">
             <span>هر شب</span>
             <span class="font-bold-14">۸۵۰,۰۰۰</span>
             <span class="font-bold-14">تومان</span>
           </div>
         </div>
+        <!-- Price end -->
+
         <v-spacer></v-spacer>
 
         <v-chip label color="orangeBookingBg">
@@ -127,18 +136,25 @@
 
           <!-- bottom sec  -->
           <v-card-actions class="px-4">
-            <div class="font-regular-12">
-              <div class="secondary--text">
-                <span>قیمت کل</span>
-                <span>۲,۵۵۰,۰۰۰</span>
-                <span>تومان</span>
-              </div>
-              <div>
-                <span>هر شب</span>
-                <span class="font-bold-14">۸۵۰,۰۰۰</span>
-                <span class="font-bold-14">تومان</span>
-              </div>
-            </div>
+            <!-- Price start -->
+        <div class="font-regular-12">
+          <div class="secondary--text mb-n4"  v-if="index % 2 == 0" >
+            <span>قیمت کل</span>
+            <span>۲,۵۵۰,۰۰۰</span>
+            <span>تومان</span>
+          </div>
+          <div class="secondary--text mb-n4 text-center"  v-if="(index % 3 == 0)&&!(index % 2 == 0)" >
+           
+            <span class="text-decoration-line-through">۲,۵۵۰,۰۰۰</span>
+            
+          </div>
+          <div class="mt-4">
+            <span>هر شب</span>
+            <span class="font-bold-14">۸۵۰,۰۰۰</span>
+            <span class="font-bold-14">تومان</span>
+          </div>
+        </div>
+        <!-- Price end -->
             <v-spacer></v-spacer>
 
             <!-- modification need: in v-if o v-else ro bad az set kardane data bardaram -->
