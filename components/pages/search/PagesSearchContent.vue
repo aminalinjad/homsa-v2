@@ -3,10 +3,8 @@
     <!-- Top Section Start  -->
     <v-row class="mb-3">
       <v-col>
-        <div class="font-regular-12 mb-2">
-          <span class="secondary--text">هومسا /</span>
-          <span class="secondary--text">اقامتگاه های استان گیلان /</span>
-          <span>شهر رشت</span>
+        <div class="breadCrumbsCls">
+          <v-breadcrumbs :items="breadcrumbs"></v-breadcrumbs>
         </div>
         <div class="d-flex align-center">
           <h3 class="font-bold-18">اجاره اقامتگاه در شهر رشت</h3>
@@ -31,28 +29,26 @@
             </div>
           </div>
           <div class="white rounded ms-8">
-            <v-btn  
-            elevation="0" 
-            fab  
-            small 
-            class="white me-n1" 
-            :class="ifRtl? 'leftBorderZero':'rightBorderZero'"
-            @click="listView"> 
-              <v-icon class=" secondary--text">mdi-menu</v-icon>
-            </v-btn>
-            <v-btn 
-            elevation="0" 
-            fab 
-            small 
-            class=" white" 
-            :class="ifRtl? 'rightBorderZero':'leftBorderZero'"
-            @click="gridView"
+            <v-btn
+              elevation="0"
+              fab
+              small
+              class="white me-n1"
+              :class="ifRtl ? 'leftBorderZero' : 'rightBorderZero'"
+              @click="listView"
             >
-              <v-icon class=" secondary--text">mdi-apps</v-icon>
+              <v-icon class="secondary--text">mdi-menu</v-icon>
             </v-btn>
-
-            
-            
+            <v-btn
+              elevation="0"
+              fab
+              small
+              class="white"
+              :class="ifRtl ? 'rightBorderZero' : 'leftBorderZero'"
+              @click="gridView"
+            >
+              <v-icon class="secondary--text">mdi-apps</v-icon>
+            </v-btn>
           </div>
         </div>
       </v-col>
@@ -90,24 +86,21 @@
       <!-- Result Sec Start -->
       <div>
         <v-row class="ma-0">
-          
           <v-col
             cols="12"
-            :md="ifGridView?4:12"
+            :md="ifGridView ? 4 : 12"
             v-for="(result, index) in results"
             :key="index"
             class="pt-10 pb-11 px-6 resultBorder"
             :class="ifRtl ? 'resultSideBorderRtl' : 'resultSideBorderLtr'"
           >
+            <!-- item component -->
 
-          <!-- item component -->
-          
             <PagesSearchResultItem :ifGridView="ifGridView" :index="index" />
           </v-col>
         </v-row>
       </div>
       <!-- Result Sec End -->
-
     </div>
     <!-- Main Section End  -->
 
@@ -123,8 +116,25 @@ export default {
       gridViewResult: true,
       sortBydefault: "بهترین تجربه",
       sortBy: ["گران ترین", "بهترین تجربه"],
+      breadcrumbs: [
+        {
+          text: 'هومسا',
+          disabled: false,
+          href: '#',
+        },
+        {
+          text: 'اقامتگاه های استان گیلان',
+          disabled: false,
+          href: '#',
+        },
+        {
+          text: 'شهر رشت',
+          disabled: true,
+          href: '#',
+        },
+      ],
       results: [
-        { name: "dfd",  },
+        { name: "dfd" },
         { name: "dfd" },
         { name: "dfd" },
         { name: "dfd" },
@@ -141,24 +151,21 @@ export default {
       }
     },
     ifGridView() {
-      if(this.gridViewResult) {
+      if (this.gridViewResult) {
         return true;
       } else {
         return false;
       }
-
-    }
+    },
   },
   methods: {
     listView() {
       this.gridViewResult = false;
-
     },
     gridView() {
-      this.gridViewResult= true;
-
+      this.gridViewResult = true;
     },
-  }
+  },
 };
 </script>
 
@@ -180,13 +187,22 @@ export default {
 }
 
 .leftBorderZero {
-  border-top-left-radius: 0!important;
-  border-bottom-left-radius: 0!important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
 }
 
 .rightBorderZero {
-  border-top-right-radius: 0!important;
-  border-bottom-right-radius: 0!important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+//breadcrumb link color
+.v-application .breadCrumbsCls  a {
+  color: #757575 !important;
+}
+
+.v-application .breadCrumbsCls  a.v-breadcrumbs__item--disabled  {
+  color: black !important;
 }
 
 </style>

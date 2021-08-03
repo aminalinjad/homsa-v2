@@ -10,8 +10,14 @@
 
 // vuetify
 
-
 // Globals
+$grid-breakpoints: (
+  'xs': 0,
+  'sm': 340px,
+  'md': 540px,
+  'lg': 800px - 24px,
+  'xl': 1440px - 24px
+);
 $border-radius-root: 6px;
 $body-font-family: 'IRANSans'!important;
 
@@ -21,3 +27,8 @@ $btn-border-radius: 8px!important;
 //carosel
 $carousel-dot-margin: 0 3px 16px 3px!important;
 $carousel-controls-size: 30px!important;
+
+//breadcrumbs
+$breadcrumbs-item-font-size: 12px!important;
+$breadcrumbs-even-child-padding: 0 4px!important;
+$breadcrumbs-padding: 18px 0px!important;
