@@ -12,11 +12,7 @@
 
 // Globals
 $grid-breakpoints: (
-  'xs': 0,
-  'sm': 340px,
-  'md': 540px,
-  'lg': 800px - 24px,
-  'xl': 1440px - 24px
+  'lg': 1440px - 24px,
 );
 $border-radius-root: 6px;
 $body-font-family: 'IRANSans'!important;
