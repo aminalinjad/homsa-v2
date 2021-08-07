@@ -34,7 +34,7 @@ export default {
 
 <style lang="scss">
 .thumbnailMapContainer {
-  min-height: 180px;
+  height: 138px;
   position: relative;
   border-radius: 12px;
 

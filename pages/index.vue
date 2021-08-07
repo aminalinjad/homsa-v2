@@ -1,12 +1,11 @@
 <template>
   <div>
-    <v-row>
+    <v-row class="justify-center">
       <v-col class="filterContainer">
         <PagesSearchFilters :filters="filters" />
       </v-col>
       <v-col class="resultContainer">
         <PagesSearchContent />
-        
       </v-col>
     </v-row>    
   </div>
@@ -142,6 +141,7 @@ export default {
 }
 
 .resultContainer {
+  flex: 0 0 1008px;
   overflow: hidden;
 }
 </style>

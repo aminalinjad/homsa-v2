@@ -76,13 +76,12 @@ export default {
         this.$refs.carousel.slideNext();
       }
     },
-    slideNext(event) {
+    slideNext() {
       if (this.ifRtl) {
         this.$refs.carousel.slideNext();
       } else {
         this.$refs.carousel.slidePrev();
       }
-      console.log('here is slide next', event);
     },
     updateCarousel(payload) {
       this.myCarouselData = payload.currentSlide;

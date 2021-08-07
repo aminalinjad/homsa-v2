@@ -40,6 +40,7 @@ export default {
   plugins: [
     {src:'@/plugins/axios'},
     {src:'@/plugins/histogram-slider', mode:'client'},
+    {src: '@/plugins/owl.js', mode:'client'}
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

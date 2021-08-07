@@ -1,14 +1,14 @@
 <template>
   <v-container class="px-md-0">
     <!-- Top Section Start  -->
-    <v-row class="mb-3">
+    <v-row class="mb-3 align-center">
       <v-col>
         <div class="breadCrumbsCls">
           <v-breadcrumbs :items="breadcrumbs"></v-breadcrumbs>
         </div>
         <div class="d-flex align-center">
-          <h3 class="font-bold-18">اجاره اقامتگاه در شهر رشت</h3>
-          <span class="ms-1 font-regular-12 secondary--text">(۳۴ مورد)</span>
+          <p class="font-regular-18 mb-0">اجاره اقامتگاه در شهر رشت</p>
+          <span class="ms-2 font-regular-12 secondary--text">(۳۴ مورد)</span>
         </div>
       </v-col>
       <v-col>
@@ -83,6 +83,49 @@
       <v-divider class="greyLight4"></v-divider>
       <!-- Top Sec End -->
 
+      <!-- test of owl carousel -->
+      <!-- <client-only>
+        <carousel :items="5" >
+          <v-chip outlined label color="borderGray" text-color="secondary" class="tagItem">
+            <v-icon>mdi-diamond-outline</v-icon>
+            <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
+          </v-chip>
+          <v-chip outlined label color="borderGray" text-color="secondary" class="tagItem">
+            <v-icon>mdi-diamond-outline</v-icon>
+            <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
+          </v-chip>
+          <v-chip outlined label color="borderGray" text-color="secondary" class="tagItem">
+            <v-icon>mdi-diamond-outline</v-icon>
+            <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
+          </v-chip>
+          <v-chip outlined label color="borderGray" text-color="secondary" class="tagItem">
+            <v-icon>mdi-diamond-outline</v-icon>
+            <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
+          </v-chip>
+          <v-chip outlined label color="borderGray" text-color="secondary" class="tagItem">
+            <v-icon>mdi-diamond-outline</v-icon>
+            <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
+          </v-chip>
+          <v-chip outlined label color="borderGray" text-color="secondary" class="tagItem">
+            <v-icon>mdi-diamond-outline</v-icon>
+            <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
+          </v-chip>
+          <v-chip outlined label color="borderGray" text-color="secondary" class="tagItem">
+            <v-icon>mdi-diamond-outline</v-icon>
+            <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
+          </v-chip>
+          <v-chip outlined label color="borderGray" text-color="secondary" class="tagItem">
+            <v-icon>mdi-diamond-outline</v-icon>
+            <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
+          </v-chip>
+          <v-chip outlined label color="borderGray" text-color="secondary" class="tagItem">
+            <v-icon>mdi-diamond-outline</v-icon>
+            <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
+          </v-chip>
+          
+        </carousel>
+      </client-only> -->
+
       <!-- Result Sec Start -->
       <div>
         <v-row class="ma-0">
@@ -118,19 +161,19 @@ export default {
       sortBy: ["گران ترین", "بهترین تجربه"],
       breadcrumbs: [
         {
-          text: 'هومسا',
+          text: "هومسا",
           disabled: false,
-          href: '#',
+          href: "#",
         },
         {
-          text: 'اقامتگاه های استان گیلان',
+          text: "اقامتگاه های استان گیلان",
           disabled: false,
-          href: '#',
+          href: "#",
         },
         {
-          text: 'شهر رشت',
+          text: "شهر رشت",
           disabled: true,
-          href: '#',
+          href: "#",
         },
       ],
       results: [
@@ -165,6 +208,12 @@ export default {
     gridView() {
       this.gridViewResult = true;
     },
+    changed( ) {
+
+    },
+    updated() {
+
+    }
   },
 };
 </script>
@@ -197,11 +246,11 @@ export default {
 }
 
 //breadcrumb link color
-.v-application .breadCrumbsCls  a {
+.v-application .breadCrumbsCls a {
   color: #757575 !important;
 }
 
-.v-application .breadCrumbsCls  a.v-breadcrumbs__item--disabled  {
+.v-application .breadCrumbsCls a.v-breadcrumbs__item--disabled {
   color: black !important;
 }
 
