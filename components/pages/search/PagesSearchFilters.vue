@@ -40,7 +40,13 @@
             </div>
 
             <div
-              class="d-flex justify-space-around mt-4 text-center font-regular-12"
+              class="
+                d-flex
+                justify-space-around
+                mt-4
+                text-center
+                font-regular-12
+              "
             >
               <div class="mx-5">
                 <div>از</div>
@@ -99,9 +105,10 @@
         <div v-if="filter.title">
           <v-expansion-panels v-model="filter.expand" multiple flat>
             <v-expansion-panel class="rounded-lg countTitle">
-              <v-expansion-panel-header class="font-regular-14 navyDark--text">{{
-                filter.title
-              }}</v-expansion-panel-header>
+              <v-expansion-panel-header
+                class="font-regular-14 navyDark--text"
+                >{{ filter.title }}</v-expansion-panel-header
+              >
               <v-expansion-panel-content>
                 <div
                   v-for="(item, index) in filter.options"
@@ -113,7 +120,7 @@
                     <span>
                       <v-icon small>mdi-plus-circle-outline</v-icon>
                     </span>
-                    <span>۱</span>
+                    <span class="px-4">۱</span>
                     <span>
                       <v-icon small>mdi-minus-circle-outline</v-icon>
                     </span>
@@ -140,7 +147,7 @@
                   <span>
                     <v-icon small>mdi-plus-circle-outline</v-icon>
                   </span>
-                  <span>۱</span>
+                  <span class="px-4">۱</span>
                   <span>
                     <v-icon small>mdi-minus-circle-outline</v-icon>
                   </span>
@@ -169,10 +176,11 @@
       <div v-else-if="filter.type == 'select'">
         <v-expansion-panels v-model="filter.expand" multiple flat>
           <v-expansion-panel class="rounded-lg filterSelect">
-            <v-expansion-panel-header class="navyDark--text py-3">{{
-              filter.title
-            }}</v-expansion-panel-header>
-            <v-expansion-panel-content>
+            <v-expansion-panel-header
+              class="navyDark--text pt-3 pb-2 px-4 font-regular-14"
+              >{{ filter.title }}</v-expansion-panel-header
+            >
+            <v-expansion-panel-content class="mx-n3">
               <div
                 v-for="(item, index) in filter.options"
                 :key="index"
@@ -188,15 +196,21 @@
       <!-- selectGroup -->
       <div v-else-if="filter.type == 'selectGroup'">
         <v-card flat class="rounded-t-lg mb-n1">
-          <v-card-title class="pb-0"> {{ filter.title }}</v-card-title>
+          <v-card-title class="pt-3 pb-0 font-medium-14 greenDark8--text">
+            {{ filter.title }}</v-card-title
+          >
         </v-card>
         <div v-for="(item, index) in filter.options" :key="index" class="mb-1">
           <v-expansion-panels v-model="item.expand" multiple flat>
-            <v-expansion-panel class="filterSelect" :class="index==0? 'rounded-0': ''">
-              <v-expansion-panel-header class="navyDark--text">{{
-                item.title
-              }}</v-expansion-panel-header>
-              <v-expansion-panel-content>
+            <v-expansion-panel
+              class="filterSelect"
+              :class="index == 0 ? 'rounded-0' : ''"
+            >
+              <v-expansion-panel-header
+                class="px-4 pb-2 navyDark--text font-regular-14"
+                >{{ item.title }}</v-expansion-panel-header
+              >
+              <v-expansion-panel-content class="mx-n3">
                 <div
                   v-for="(value, index) in item.options"
                   :key="index"
@@ -271,13 +285,11 @@ export default {
   },
   methods: {
     inputRange() {
-      if(this.rangeSliderFrom && this.rangeSliderTo) {
+      if (this.rangeSliderFrom && this.rangeSliderTo) {
         this.rangeBtnDisable = false;
-
       } else {
         this.rangeBtnDisable = true;
       }
-
     },
     selectRange(e) {
       // console.log("drag result", e.from, e.to);
@@ -299,8 +311,12 @@ export default {
     //   });
     // },
     filterPrice() {
-      console.log('filter price action', this.rangeSliderFrom, this.rangeSliderTo);
-    }
+      console.log(
+        "filter price action",
+        this.rangeSliderFrom,
+        this.rangeSliderTo
+      );
+    },
   },
 };
 </script>
@@ -309,9 +325,10 @@ export default {
 //  histogram slider
 .histogramSectionCard {
   height: 238px;
-  .v-text-field--box .v-input__slot, .v-input__slot { 
-    min-height: 24px!important; 
-    }
+  .v-text-field--box .v-input__slot,
+  .v-input__slot {
+    min-height: 24px !important;
+  }
   .v-text-field.v-text-field--solo .v-input__control input {
     text-align: center !important;
   }
@@ -322,27 +339,68 @@ export default {
   }
 
   .irs--round .irs-line {
-    height: 4px!important;
+    height: 4px !important;
   }
 
   .irs--round .irs-bar {
-    height: 4px!important;
+    height: 4px !important;
   }
 }
 
-.filterBoolean .theme--light.v-label{
-  color: #000022!important;
+.filterBoolean {
+  .v-input {
+    &--switch {
+      &.v-input {
+        &--dense {
+          .v-input {
+            &--switch {
+              &__thumb {
+                color: var(--v-whiteColor-base) !important;
+              }
+            }
+          }
+        }
+      }
+      &--inset {
+        .v-input {
+          &--switch {
+            &__track {
+              opacity: 1 !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .v-label {
+    font-size: 14px !important;
+  }
+}
+
+.filterBoolean .theme--light.v-label {
+  color: #000022 !important;
 }
 
 .filterSelect .v-expansion-panel-header {
-  min-height: 46px!important;
+  min-height: 46px !important;
   .v-icon.v-icon {
-    font-size: 18px!important;
+    font-size: 18px !important;
+  }
+}
+
+.filterSelect {
+  .theme {
+    &--light {
+      &.v-label {
+        color: var(--v-greenDark8-base);
+        font-size: 12px !important;
+      }
+    }
   }
 }
 
 .countTitle .v-expansion-panel-header .v-icon.v-icon {
-  font-size: 18px!important;
-
+  font-size: 18px !important;
 }
 </style>

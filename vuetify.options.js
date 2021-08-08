@@ -7,6 +7,9 @@ export default {
   rtl: true,
   theme: {
     dark: false,
+    options: {
+      customProperties: true,
+    },
     themes: {
       light: {
         primary: '#359138',
@@ -21,7 +24,9 @@ export default {
         borderGray: '#F5F5F5',
         redOffer: '#EC4040',
         redOfferTime: '#EC484A',
-        navyDark: '#000022'
+        navyDark: '#000022',
+        whiteColor: '#FFFFFF',
+
 
       },
       dark: {
