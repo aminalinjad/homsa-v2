@@ -21,6 +21,7 @@ export default {
         borderGray: '#F5F5F5',
         redOffer: '#EC4040',
         redOfferTime: '#EC484A',
+        navyDark: '#000022'
 
       },
       dark: {

@@ -98,8 +98,8 @@
         <!-- count with title -->
         <div v-if="filter.title">
           <v-expansion-panels v-model="filter.expand" multiple flat>
-            <v-expansion-panel class="rounded-lg">
-              <v-expansion-panel-header class="font-regular-14">{{
+            <v-expansion-panel class="rounded-lg countTitle">
+              <v-expansion-panel-header class="font-regular-14 navyDark--text">{{
                 filter.title
               }}</v-expansion-panel-header>
               <v-expansion-panel-content>
@@ -153,12 +153,13 @@
 
       <!-- boolean -->
       <div v-else-if="filter.type == 'boolean'">
-        <v-card flat class="rounded-lg">
-          <v-card-text class="py-1">
+        <v-card flat class="rounded-lg" height="46">
+          <v-card-text class="py-1 filterBoolean">
             <v-switch
               inset
+              dense
               :label="filter.label"
-              class="pt-0 mt-3 mb-n2"
+              class="pt-0 mt-2"
             ></v-switch>
           </v-card-text>
         </v-card>
@@ -167,8 +168,8 @@
       <!-- select -->
       <div v-else-if="filter.type == 'select'">
         <v-expansion-panels v-model="filter.expand" multiple flat>
-          <v-expansion-panel class="rounded-lg">
-            <v-expansion-panel-header>{{
+          <v-expansion-panel class="rounded-lg filterSelect">
+            <v-expansion-panel-header class="navyDark--text py-3">{{
               filter.title
             }}</v-expansion-panel-header>
             <v-expansion-panel-content>
@@ -186,13 +187,13 @@
 
       <!-- selectGroup -->
       <div v-else-if="filter.type == 'selectGroup'">
-        <v-card flat class="rounded-t-lg">
+        <v-card flat class="rounded-t-lg mb-n1">
           <v-card-title class="pb-0"> {{ filter.title }}</v-card-title>
         </v-card>
         <div v-for="(item, index) in filter.options" :key="index" class="mb-1">
           <v-expansion-panels v-model="item.expand" multiple flat>
-            <v-expansion-panel>
-              <v-expansion-panel-header>{{
+            <v-expansion-panel class="filterSelect" :class="index==0? 'rounded-0': ''">
+              <v-expansion-panel-header class="navyDark--text">{{
                 item.title
               }}</v-expansion-panel-header>
               <v-expansion-panel-content>
@@ -327,5 +328,21 @@ export default {
   .irs--round .irs-bar {
     height: 4px!important;
   }
+}
+
+.filterBoolean .theme--light.v-label{
+  color: #000022!important;
+}
+
+.filterSelect .v-expansion-panel-header {
+  min-height: 46px!important;
+  .v-icon.v-icon {
+    font-size: 18px!important;
+  }
+}
+
+.countTitle .v-expansion-panel-header .v-icon.v-icon {
+  font-size: 18px!important;
+
 }
 </style>
