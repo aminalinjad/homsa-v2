@@ -42,7 +42,7 @@ export default {
     height: 100%;
     position: absolute;
     width: 100%;
-    z-index: 15 !important;
+    z-index: 1 !important;
     .leaflet-container.leaflet-touch-drag.leaflet-touch-zoom {
       border-radius: 12px !important;
     }
@@ -50,7 +50,7 @@ export default {
   &__text {
     position: absolute;
     width: 100%;
-    z-index: 20 !important;
+    z-index: 2 !important;
     bottom: 0;
     //   opacity: 0.5;
     background: rgba(255, 255, 255, 0.9);

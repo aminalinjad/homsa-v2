@@ -1,9 +1,11 @@
 <template>
   <div>
     <div v-for="(filter, index) in filters" :key="index" class="mb-3">
+      <!-- map -->
       <div v-if="filter.type == 'map'">
         <PagesSearchMapThumbnail />
       </div>
+      <!-- price -->
       <div v-if="filter.type == 'price'">
         <v-card flat class="rounded-lg py-3 px-5 histogramSectionCard">
           <div id="histogramSection">

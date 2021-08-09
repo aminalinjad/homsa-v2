@@ -1,10 +1,10 @@
 <template>
-  <v-container class="px-md-0">
+  <v-container class="px-md-0 pt-0">
     <!-- Top Section Start  -->
     <v-row class="mb-3 align-center">
       <v-col>
         <div class="breadCrumbsCls">
-          <v-breadcrumbs :items="breadcrumbs"></v-breadcrumbs>
+          <v-breadcrumbs :items="breadcrumbs" class="pt-0"></v-breadcrumbs>
         </div>
         <div class="d-flex align-center">
           <p class="font-regular-18 mb-0">اجاره اقامتگاه در شهر رشت</p>

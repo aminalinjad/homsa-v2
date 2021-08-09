@@ -57,6 +57,8 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     'nuxt-leaflet',
+    '@nuxtjs/svg',
+
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

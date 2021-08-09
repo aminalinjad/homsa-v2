@@ -13,10 +13,11 @@ export default {
     themes: {
       light: {
         primary: '#359138',
+        whiteColor: '#FFFFFF',
         secondary: '#757575',
         accent: colors.shades.black,
         error: colors.red.accent3,
-        greyLight4: colors.grey.lighten4,
+        greyLight4: '#F5F5F5',
         greenDark8: '#012200',
         green2: '#57C25B',
         orangeBooking: '#FF9D00',
@@ -25,7 +26,7 @@ export default {
         redOffer: '#EC4040',
         redOfferTime: '#EC484A',
         navyDark: '#000022',
-        whiteColor: '#FFFFFF',
+        
 
 
       },
