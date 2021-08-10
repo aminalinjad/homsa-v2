@@ -18,6 +18,7 @@ export default {
         accent: colors.shades.black,
         error: colors.red.accent3,
         greyLight4: '#F5F5F5',
+        greyLight2: '#ABABAB',
         greenDark8: '#012200',
         green2: '#57C25B',
         orangeBooking: '#FF9D00',
