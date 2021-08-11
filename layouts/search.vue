@@ -1,8 +1,10 @@
 <template>
-  <v-app class="iransans">
-    <div class="greyLight4">
+  <v-app class="iransans" >
+    <!-- <div class="greyLight4" >
       <LayoutHeaderSearch />
-    </div>
+    </div> -->
+
+    <LayoutHeaderSearch2 />
       
     <v-main class="greyLight4 pt-3" >
       <v-container class="px-0">
@@ -11,6 +13,14 @@
     </v-main>
   </v-app>
 </template>
+
+<script>
+export default {
+  methods: {
+   
+  }
+}
+</script>
 
 
 

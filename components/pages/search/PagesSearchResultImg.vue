@@ -137,7 +137,7 @@ export default {
     width: 100%;
     top: 16px;
     margin-inline: auto;
-    z-index: 10;
+    z-index: 2;
   }
   &__image {
     .v-btn--icon.v-size--default {
