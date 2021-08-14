@@ -23,7 +23,6 @@ export default {
         green2: '#57C25B',
         orangeBooking: '#FF9D00',
         orangeBookingBg: '#FFF6E8',
-        borderGray: '#F5F5F5',
         redOffer: '#EC4040',
         redOfferTime: '#EC484A',
         navyDark: '#000022',

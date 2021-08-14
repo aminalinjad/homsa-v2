@@ -33,7 +33,7 @@
             <v-icon>mdi-diamond-outline</v-icon>
             <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
           </div> -->
-          <v-chip outlined label class="tagItem" @click="filterTag(index)" color="borderGray" text-color="secondary">
+          <v-chip outlined label class="tagItem" @click="filterTag(index)" color="greyLight4" text-color="secondary">
             <v-icon >mdi-diamond-outline</v-icon>
             <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
 
