@@ -113,7 +113,7 @@
                 bottom
                 offset-y
                 min-width="184"
-                class="headerUserMenu"
+                content-class="headerUserMenu"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
@@ -193,7 +193,45 @@
       "
     >
       <div class="d-flex headerCls__bottom__content">
-        <v-text-field
+        <!-- destination  -->
+        <v-autocomplete
+          filled
+          clearable
+          height="66"
+          background-color="whiteColor"
+          label="مقصد، اقامتگاه"
+          :items="
+            ifSuggestion
+              ? destinationSuggestions.items
+              : destinationSearchResult
+          "
+          item-text="city"
+          item-value="city"
+          :default="searchForm.destination"
+          v-model="searchForm.destination"
+          append-icon=""
+          class="me-2 rounded srchDestination font-regular-14"
+          @click="destinationSuggestion"
+          @click:clear="clearDestination"
+          @update:search-input="destinationSearch"
+        >
+          <template v-slot:item="data">
+            <template>
+              <v-list-item-avatar rounded>
+                  <img :src="data.item.img" />
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title
+                    v-html="data.item.city"
+                  ></v-list-item-title>
+                  <v-list-item-subtitle
+                    v-html="data.item.state"
+                  ></v-list-item-subtitle>
+                </v-list-item-content>
+            </template>
+          </template>
+        </v-autocomplete>
+        <!-- <v-text-field
           filled
           height="66"
           background-color="whiteColor"
@@ -201,7 +239,9 @@
           v-model="searchForm.destination"
           class="me-2 rounded srchDestination font-regular-14"
         >
-        </v-text-field>
+        </v-text-field> -->
+
+        <!-- date range  -->
         <v-text-field
           filled
           height="66"
@@ -220,6 +260,8 @@
           class="me-2 rounded srchCheckOut font-regular-14"
         >
         </v-text-field>
+
+        <!-- count -->
         <v-text-field
           filled
           height="66"
@@ -287,6 +329,54 @@ export default {
         flexiblity: "۱",
         count: "۱",
       },
+      suggestion: true,
+      destinationSuggestions: {
+        title: "پیشنهاد هومسا",
+        items: [
+          {
+            city: "کرج",
+            state: "استان البرز",
+            img: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
+          },
+          {
+            city: "کردان",
+            state: "ساوجبلاغ، استان البرز",
+            img: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
+          },
+          {
+            city: "تهران",
+            state: "تهران",
+            img: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
+          },
+          {
+            city: "کیش",
+            state: "هرمزگان",
+            img: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
+          },
+        ],
+      },
+      destinationSearchResult: [
+        {
+          city: "یزد",
+          state: "استان یزد",
+          img: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
+        },
+        {
+          city: "ایزدشهر",
+          state: "نور، استان مازندران",
+          img: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
+        },
+        {
+          city: "مهریز",
+          state: "یزد، استان یزد",
+          img: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
+        },
+        {
+          city: "استان یزد",
+          state: "",
+          img: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
+        },
+      ],
     };
   },
   computed: {
@@ -302,6 +392,13 @@ export default {
         return false;
       } else {
         return true;
+      }
+    },
+    ifSuggestion() {
+      if (this.suggestion == true) {
+        return true;
+      } else {
+        return false;
       }
     },
   },
@@ -347,6 +444,26 @@ export default {
         this.fixedHeader = false;
       }
     },
+    destinationSuggestion() {
+      // console.log("deatination Suggestion called");
+      this.suggestion = true;
+    },
+    destinationSearch() {
+      console.log("deatination search called", this.searchForm.destination);
+      if (
+        this.searchForm.destination != "کجا می‌خواهید بروید؟" ||
+        this.searchForm.destination != ""
+      ) {
+        this.suggestion = false;
+      } else {
+        this.suggestion = true;
+      }
+    },
+    clearDestination() {
+      console.log("clearDestination");
+      this.searchForm.destination = "کجا می‌خواهید بروید؟";
+      this.suggestion = true;
+    },
     // removeFixedHeader() {
     //   let headerTop = document.getElementById('headerSearch').classList.remove("fixedHeader");
     //   console.log('headerTop', headerTop);
@@ -388,7 +505,6 @@ export default {
         width: 165px;
       }
 
-
       .v-text-field > .v-input__control > .v-input__slot:before {
         border-style: none;
       }
@@ -418,11 +534,28 @@ export default {
   right: 0;
 }
 
-// costomize user menu content
+// costomize menu content
 .v-menu {
   &__content {
-    left: 80px !important;
+    // left: 80px !important;
+    position: fixed !important;
     box-shadow: 0px 4px 20px #00000014 !important;
   }
 }
+// costomize user menu content
+.headerUserMenu.v-menu {
+  &__content {
+    left: 80px !important;
+  }
+}
+
+// costomize autocomplete menu content
+.v-autocomplete__content.v-menu__content {
+  top: 198px !important;
+  left: 974px !important;
+  width: 410px !important;
+}
+// .srchDestinationDropdown {
+//           width: 410px!important;
+//         }
 </style>
