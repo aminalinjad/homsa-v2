@@ -210,21 +210,30 @@
           :default="searchForm.destination"
           v-model="searchForm.destination"
           append-icon=""
+          no-data-text="No data available"
           class="me-2 rounded srchDestination font-regular-14"
           @click="destinationSuggestion"
           @click:clear="clearDestination"
           @update:search-input="destinationSearch"
         >
-        <template v-slot:prepend-item>
-          <v-list-item-title v-if="ifSuggestion" class="ms-6 mt-4 font-medium-14 greenDark8--text">{{ destinationSuggestions.title }}</v-list-item-title>
-
-        </template>
-          <template v-slot:item="data" >
+          <!-- title in suggestion mode -->
+          <template v-slot:prepend-item>
+            <v-list-item-title
+              v-if="ifSuggestion"
+              class="ms-6 mt-4 font-medium-14 greenDark8--text"
+              >{{ destinationSuggestions.title }}</v-list-item-title
+            >
+            <!--destination result -->
+          </template>
+          <template v-slot:item="data">
             <v-list-item-avatar rounded width="48" height="48" class="ms-2">
               <img :src="data.item.img" />
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title v-html="data.item.city" class="font-regular-14 greenDark8--text"></v-list-item-title>
+              <v-list-item-title
+                v-html="data.item.city"
+                class="font-regular-14 greenDark8--text"
+              ></v-list-item-title>
               <v-list-item-subtitle
                 v-html="data.item.state"
                 class="font-regular-12 greyLight2--text"
@@ -236,6 +245,7 @@
         <!-- date range  -->
         <v-text-field
           filled
+          readonly
           height="66"
           background-color="whiteColor"
           label="تاریخ ورود"
@@ -245,6 +255,7 @@
         </v-text-field>
         <v-text-field
           filled
+          readonly
           height="66"
           background-color="whiteColor"
           label="تاریخ خروج"
@@ -258,6 +269,7 @@
           <v-col cols="9" class="pa-0">
             <v-text-field
               filled
+              readonly
               height="66"
               background-color="whiteColor"
               label="تعداد نفرات"
@@ -273,12 +285,12 @@
           >
             <div>
               <img
-                class="mt-2"
+                class="mt-2 cursorPointer"
                 src="@/assets/images/icons/ic-add.svg"
                 @click="addCount"
               />
             </div>
-            <div class="mt-n1">
+            <div class="mt-n2 cursorPointer">
               <img
                 src="@/assets/images/icons/ic-minus.svg"
                 @click="minusCount"
@@ -447,7 +459,7 @@ export default {
       this.searchSection = false;
       this.searchResult = !this.searchResult;
       this.overlay = !this.overlay;
-      this.fixHeader(true);
+      // this.fixHeader(true);
     },
     Search() {
       this.closeSearchSection();
@@ -536,8 +548,14 @@ export default {
       max-width: min-content;
       max-height: 66px;
 
-      .srchDestination.v-autocomplete .v-select__slot > input {
-        top: -12px !important;
+      .srchDestination.v-autocomplete {
+        .v-select {
+          &__slot {
+            input {
+              top: -12px !important;
+            }
+          }
+        }
       }
       .srchDestination {
         width: 270px;
@@ -549,23 +567,34 @@ export default {
         height: 66px;
       }
 
-      .v-text-field > .v-input__control > .v-input__slot:before {
-        border-style: none;
-      }
-      .v-text-field > .v-input__control > .v-input__slot:after {
-        border-style: none;
+      .v-text-field {
+        .v-input {
+          &__control {
+            .v-input {
+              &__slot:before {
+                border-style: none;
+              }
+
+              &__slot:after {
+                border-style: none;
+              }
+            }
+          }
+        }
+
+        .v-label {
+          color: var(--v-greenDark8-base) !important;
+          font-size: 12px;
+          font-weight: 600;
+        }
       }
 
-      .v-input input,
-      .v-input textarea {
-        color: var(--v-greyLight2-base) !important;
+      .v-input {
+        input, textarea {
+          color: var(--v-greyLight2-base) !important;
+        }
       }
 
-      .v-text-field .v-label {
-        color: var(--v-greenDark8-base) !important;
-        font-size: 12px;
-        font-weight: 600;
-      }
     }
   }
 }
@@ -596,8 +625,14 @@ export default {
 // costomize autocomplete menu content
 .v-autocomplete__content.v-menu__content {
   top: 198px !important;
-  left: 974px !important;
+  // left: 974px !important;
   width: 410px !important;
+  @media(min-width: 1880px) {
+    left: 974px !important;
+  }
+  @media(min-width: 1440px) and (max-width: 1880px){
+    left: 735px !important;
+  }
 }
 // .srchDestinationDropdown {
 //           width: 410px!important;
