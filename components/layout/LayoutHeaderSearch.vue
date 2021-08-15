@@ -215,31 +215,23 @@
           @click:clear="clearDestination"
           @update:search-input="destinationSearch"
         >
-          <template v-slot:item="data">
-            <template>
-              <v-list-item-avatar rounded>
-                  <img :src="data.item.img" />
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title
-                    v-html="data.item.city"
-                  ></v-list-item-title>
-                  <v-list-item-subtitle
-                    v-html="data.item.state"
-                  ></v-list-item-subtitle>
-                </v-list-item-content>
-            </template>
+        <template v-slot:prepend-item>
+          <v-list-item-title v-if="ifSuggestion" class="ms-6 mt-4 font-medium-14 greenDark8--text">{{ destinationSuggestions.title }}</v-list-item-title>
+
+        </template>
+          <template v-slot:item="data" >
+            <v-list-item-avatar rounded width="48" height="48" class="ms-2">
+              <img :src="data.item.img" />
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title v-html="data.item.city" class="font-regular-14 greenDark8--text"></v-list-item-title>
+              <v-list-item-subtitle
+                v-html="data.item.state"
+                class="font-regular-12 greyLight2--text"
+              ></v-list-item-subtitle>
+            </v-list-item-content>
           </template>
         </v-autocomplete>
-        <!-- <v-text-field
-          filled
-          height="66"
-          background-color="whiteColor"
-          label="مقصد، اقامتگاه"
-          v-model="searchForm.destination"
-          class="me-2 rounded srchDestination font-regular-14"
-        >
-        </v-text-field> -->
 
         <!-- date range  -->
         <v-text-field
@@ -262,16 +254,51 @@
         </v-text-field>
 
         <!-- count -->
-        <v-text-field
+        <v-row class="ma-0 me-2 srchCount whiteColor rounded">
+          <v-col cols="9" class="pa-0">
+            <v-text-field
+              filled
+              height="66"
+              background-color="whiteColor"
+              label="تعداد نفرات"
+              v-model="searchForm.count"
+              class="rounded font-regular-14"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col
+            cols="3"
+            class="pa-0 pe-3"
+            :class="this.$vuetify.rtl ? 'text-left' : 'text-right'"
+          >
+            <div>
+              <img
+                class="mt-2"
+                src="@/assets/images/icons/ic-add.svg"
+                @click="addCount"
+              />
+            </div>
+            <div class="mt-n1">
+              <img
+                src="@/assets/images/icons/ic-minus.svg"
+                @click="minusCount"
+              />
+            </div>
+          </v-col>
+        </v-row>
+        <!-- <v-text-field
           filled
           height="66"
           background-color="whiteColor"
-          type="number"
           label="تعداد نفرات"
           v-model="searchForm.count"
           class="me-2 rounded srchCount font-regular-14"
         >
         </v-text-field>
+        <div>
+          <div>+</div>
+          <div>-</div>
+        </div> -->
         <v-btn
           fab
           color="primary"
@@ -319,6 +346,7 @@ export default {
         destination: "کجا می‌خواهید بروید؟",
         checkIn: "انتخاب کنید",
         checkOut: "انتخاب کنید",
+        count: "۱ نفر",
         count: "1",
       },
       searchFormValue: {
@@ -410,8 +438,8 @@ export default {
   },
   methods: {
     showSearchSection() {
-      // this.searchSection= true;
       // this.fixHeader(true);
+      // this.scrollPage();
       this.searchSection = true;
       this.overlay = !this.overlay;
     },
@@ -419,6 +447,7 @@ export default {
       this.searchSection = false;
       this.searchResult = !this.searchResult;
       this.overlay = !this.overlay;
+      this.fixHeader(true);
     },
     Search() {
       this.closeSearchSection();
@@ -464,6 +493,16 @@ export default {
       this.searchForm.destination = "کجا می‌خواهید بروید؟";
       this.suggestion = true;
     },
+
+    addCount() {
+      this.searchForm.count++;
+    },
+    minusCount() {
+      if (this.searchForm.count > 1) {
+        this.searchForm.count--;
+      } else {
+      }
+    },
     // removeFixedHeader() {
     //   let headerTop = document.getElementById('headerSearch').classList.remove("fixedHeader");
     //   console.log('headerTop', headerTop);
@@ -496,6 +535,10 @@ export default {
     &__content {
       max-width: min-content;
       max-height: 66px;
+
+      .srchDestination.v-autocomplete .v-select__slot > input {
+        top: -12px !important;
+      }
       .srchDestination {
         width: 270px;
       }
@@ -503,6 +546,7 @@ export default {
       .srchCheckOut,
       .srchCount {
         width: 165px;
+        height: 66px;
       }
 
       .v-text-field > .v-input__control > .v-input__slot:before {
