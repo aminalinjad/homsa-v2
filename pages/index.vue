@@ -1,6 +1,11 @@
 <template>
   <div>
-    <v-row class="justify-center">
+    <PagesSearchContent v-if="!mapLayout" />
+    <div v-else>
+      map
+         <v-btn @click="closeMapLayout">test</v-btn>
+    </div>
+    <!-- <v-row class="justify-center">
       <v-col class="filterContainer">
         <PagesSearchFilters :filters="filters" />
       </v-col>
@@ -12,7 +17,7 @@
          <v-btn @click="closeMapLayout">test</v-btn>
 
       </v-col>
-    </v-row>
+    </v-row> -->
   </div>
 </template>
 <script>
@@ -23,7 +28,53 @@ export default {
   data() {
     return {
       id: 444,
-      filters: [
+    };
+  },
+  watch: {
+    mapLayout() {
+      console.log("watch mapLayout ", this.mapLayout);
+      if (this.mapLayout) {
+        console.log("map");
+        this.$nuxt.setLayout("map");
+      } else {
+        console.log("search");
+        this.$nuxt.setLayout("search");
+      }
+    },
+  },
+  computed: {
+    ...mapGetters({
+      mapLayout: "modules/structure/GET_MAP_LAYOUT"
+    }),
+  },
+  mounted() {
+    this.getFilterData()
+  },
+  methods: {
+    ...mapActions({
+      setMapLayout: "modules/structure/SET_MAP_LAYOUT",
+      setFilters: "modules/filters/SET_FILTERS",
+    }),
+    goId() {
+      this.$router.push(`/${this.id}`);
+      this.$store.dispatch("getData");
+      // .then((res) => {
+      //   console.log("res in pg", res)
+      // })
+      // .catch((err) => {
+      //   console.log("errr iin pg", err)
+      // })
+    },
+    closeMapLayout() {
+      this.setMapLayout(false);
+    },
+    changeLayout() {
+      console.log('before ', this.ifMapLayout);
+      this.ifMapLayout = !this.ifMapLayout;
+      console.log('after ', this.ifMapLayout);
+    },
+    getFilterData() {
+      let filters = [
         {
           type: "map",
         },
@@ -121,61 +172,21 @@ export default {
             },
           ],
         },
-      ],
-    };
-  },
-  watch: {
-    mapLayout() {
-      console.log("watch mapLayout ", this.mapLayout);
-      if (this.mapLayout) {
-        console.log("map");
-        this.$nuxt.setLayout("map");
-      } else {
-        console.log("search");
-        this.$nuxt.setLayout("search");
-      }
-    },
-  },
-  computed: {
-    ...mapGetters({
-      mapLayout: "modules/structure/GET_MAP_LAYOUT"
-    }),
-  },
-  mounted() {},
-  methods: {
-    ...mapActions({
-      setMapLayout: "modules/structure/SET_MAP_LAYOUT"
-    }),
-    goId() {
-      this.$router.push(`/${this.id}`);
-      this.$store.dispatch("getData");
-      // .then((res) => {
-      //   console.log("res in pg", res)
-      // })
-      // .catch((err) => {
-      //   console.log("errr iin pg", err)
-      // })
-    },
-    closeMapLayout() {
-      this.setMapLayout(false);
-    },
-    changeLayout() {
-      console.log('before ', this.ifMapLayout);
-      this.ifMapLayout = !this.ifMapLayout;
-      console.log('after ', this.ifMapLayout);
-    },
+      ];
+      this.setFilters(filters);
+    }
   },
 };
 </script>
 <style scoped lang="scss">
-.filterContainer {
-  flex: 0 0 336px;
-}
+// .filterContainer {
+//   flex: 0 0 336px;
+// }
 
-.resultContainer {
-  flex: 0 0 1008px;
-  overflow: hidden;
-}
+// .resultContainer {
+//   flex: 0 0 1008px;
+//   overflow: hidden;
+// }
 .resultContainerMap {
   flex: 0 0 504px;
   overflow: hidden;

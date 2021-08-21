@@ -1,12 +1,17 @@
 <template>
-  <v-app class="iransans" >
-      <LayoutHeaderSearch />
-
-    <!-- <LayoutHeaderSearch2 /> -->
-      
-    <v-main class="pt-3" >
+  <v-app class="iransans">
+    <LayoutHeaderSearch />
+    <v-main class="pt-3">
       <v-container class="px-0">
-        <Nuxt />
+        <v-row class="justify-center">
+          <v-col class="filterContainer">
+            <PagesSearchFilters />
+          </v-col>
+          <v-col class="resultContainer">
+            <Nuxt />
+          </v-col>
+        </v-row>
+        
       </v-container>
     </v-main>
   </v-app>
@@ -14,11 +19,20 @@
 
 <script>
 export default {
-  methods: {
-   
-  }
-}
+  methods: {},
+};
 </script>
+
+<style scoped lang="scss">
+.filterContainer {
+  flex: 0 0 336px;
+}
+
+.resultContainer {
+  flex: 0 0 1008px;
+  overflow: hidden;
+}
+</style>
 
 
 

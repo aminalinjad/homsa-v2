@@ -230,15 +230,15 @@
 </template>
 
 <script>
-// import {mapActions} from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   props: {
-    filters: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
+    // filters: {
+    //   type: Array,
+    //   default() {
+    //     return [];
+    //   },
+    // },
   },
   data() {
     return {
@@ -258,6 +258,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      filters: "modules/filters/GET_FILTERS",
+    }),
     histogramWidth() {
       return this.histogramSectionWidth;
     },
