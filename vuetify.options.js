@@ -12,6 +12,7 @@ export default {
     },
     themes: {
       light: {
+        background: '#F5F5F5',
         primary: '#359138',
         whiteColor: '#FFFFFF',
         secondary: '#757575',
@@ -31,6 +32,7 @@ export default {
 
       },
       dark: {
+        // background: '#F5F5F5',
         primary: colors.blue.darken2,
         accent: colors.grey.darken3,
         secondary: colors.amber.darken3,

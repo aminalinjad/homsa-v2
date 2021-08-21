@@ -1,12 +1,10 @@
 <template>
   <v-app class="iransans" >
-    <div class="greyLight4" >
       <LayoutHeaderSearch />
-    </div>
 
     <!-- <LayoutHeaderSearch2 /> -->
       
-    <v-main class="greyLight4 pt-3" >
+    <v-main class="pt-3" >
       <v-container class="px-0">
         <Nuxt />
       </v-container>

@@ -2,3 +2,9 @@
     cursor: pointer!important;
 }
 
+.theme--dark.v-application {
+    background-color: var(--v-background-base, hsl(0, 0%, 7%)) !important;
+  }
+  .theme--light.v-application {
+    background-color: var(--v-background-base, #F5F5F5) !important;
+  }

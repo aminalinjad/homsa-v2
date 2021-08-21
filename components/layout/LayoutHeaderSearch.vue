@@ -298,19 +298,6 @@
             </div>
           </v-col>
         </v-row>
-        <!-- <v-text-field
-          filled
-          height="66"
-          background-color="whiteColor"
-          label="تعداد نفرات"
-          v-model="searchForm.count"
-          class="me-2 rounded srchCount font-regular-14"
-        >
-        </v-text-field>
-        <div>
-          <div>+</div>
-          <div>-</div>
-        </div> -->
         <v-btn
           fab
           color="primary"
@@ -322,6 +309,7 @@
           <img src="@/assets/images/icons/ic-search.svg" />
         </v-btn>
       </div>
+
       <v-overlay :value="overlay" z-index="-1"> </v-overlay>
     </div>
   </div>
@@ -443,7 +431,7 @@ export default {
     },
   },
   mounted() {
-    window.addEventListener("scroll", this.scrollPage);
+    window.addEventListener("scroll", this.scrollPage, {passive: true});
   },
   destroyed() {
     // window.removeEventListener("scroll", this.removeFixedHeader);
@@ -527,6 +515,7 @@ export default {
 <style lang="scss">
 .headerCls {
   position: relative;
+  transition: all 0.2s;
   z-index: 10;
   &__top {
     height: 80px !important;
@@ -543,6 +532,7 @@ export default {
     width: 100%;
     // z-index: 6;
     height: 114px !important;
+    
 
     &__content {
       max-width: min-content;
@@ -590,11 +580,11 @@ export default {
       }
 
       .v-input {
-        input, textarea {
+        input,
+        textarea {
           color: var(--v-greyLight2-base) !important;
         }
       }
-
     }
   }
 }
@@ -627,10 +617,10 @@ export default {
   top: 198px !important;
   // left: 974px !important;
   width: 410px !important;
-  @media(min-width: 1880px) {
+  @media (min-width: 1880px) {
     left: 974px !important;
   }
-  @media(min-width: 1440px) and (max-width: 1880px){
+  @media (min-width: 1440px) and (max-width: 1880px) {
     left: 735px !important;
   }
 }
