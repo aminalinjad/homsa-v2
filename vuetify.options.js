@@ -18,6 +18,7 @@ export default {
         secondary: '#757575',
         accent: colors.shades.black,
         error: colors.red.accent3,
+        greyLight1: '#FAFAFA',
         greyLight4: '#F5F5F5',
         greyLight2: '#ABABAB',
         greenDark8: '#012200',

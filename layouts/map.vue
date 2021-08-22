@@ -1,11 +1,8 @@
 <template>
   <v-app class="iransans">
-    <!-- <LayoutHeaderSearch2 :isRtl="isRtl"/> -->
-    <LayoutHeaderSearch/>
-    <!-- <v-app-bar class="ma-5" app :clipped-right="isRtl" :clipped-left="!isRtl">ff</v-app-bar> -->
-    <v-navigation-drawer app clipped :right="isRtl">
-          <!-- <PagesSearchFilters /> -->
-    </v-navigation-drawer>
+    <LayoutHeaderSearch />
+    <!-- <v-app-bar height="100" class="ma-5" app :clipped-right="isRtl" :clipped-left="!isRtl">ff</v-app-bar> -->
+    <LayoutMapSide :isRtl="isRtl" />
     <v-main>
       <v-container fluid> 
         <Nuxt />
@@ -27,3 +24,7 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+
+</style>

@@ -1,24 +1,8 @@
 <template>
-  <div>
     <PagesSearchContent v-if="!mapLayout" />
     <div v-else>
-      map
-         <v-btn @click="closeMapLayout">test</v-btn>
+         <PagesSearchMap />
     </div>
-    <!-- <v-row class="justify-center">
-      <v-col class="filterContainer">
-        <PagesSearchFilters :filters="filters" />
-      </v-col>
-      <v-col class="resultContainer" v-if="!mapLayout">
-        <PagesSearchContent />
-      </v-col>
-      <v-col class="mapContainer" v-else>
-        map
-         <v-btn @click="closeMapLayout">test</v-btn>
-
-      </v-col>
-    </v-row> -->
-  </div>
 </template>
 <script>
 import{ mapGetters, mapActions } from 'vuex';
@@ -32,12 +16,9 @@ export default {
   },
   watch: {
     mapLayout() {
-      console.log("watch mapLayout ", this.mapLayout);
       if (this.mapLayout) {
-        console.log("map");
         this.$nuxt.setLayout("map");
       } else {
-        console.log("search");
         this.$nuxt.setLayout("search");
       }
     },
@@ -64,9 +45,6 @@ export default {
       // .catch((err) => {
       //   console.log("errr iin pg", err)
       // })
-    },
-    closeMapLayout() {
-      this.setMapLayout(false);
     },
     changeLayout() {
       console.log('before ', this.ifMapLayout);

@@ -1,325 +1,19 @@
 <template>
-  <v-app-bar
-    id="headerSearch"
-    class="headerCls"
-    :class="ifSearchSection || !ifFixedHeader ? 'ma-4 mb-0' : ''"
-  >
-    <!-- header top section -->
-    <v-app-bar
-    absolute
-      class="ps-11 pe-12 py-4 rounded-t-lg whiteColor headerCls__top"
-      :class="ifSearchSection || ifFixedHeader ? '' : 'rounded-b-lg'"
-    >
-      <v-row>
-        <!-- header logo -->
-        <v-col>
-          <div>
-            <img
-              src="@/assets/images/logo-homsa.svg"
-              class="mt-2 cursorPointer"
-            />
-          </div>
-        </v-col>
-
-        <!-- header input -->
-        <v-col>
-          <div
-            class="
-              mx-auto
-              pt-2
-              px-3
-              text-center
-              greyLight4
-              rounded-lg
-              cursorPointer
-              selectInput
-            "
-            @click="showSearchSection"
-            v-if="!ifSearchSection"
-          >
-            <div
-              class="d-flex justify-space-between align-center"
-              v-if="!searchResult"
-            >
-              <div
-                class="
-                  ps-1
-                  d-flex
-                  justify-start
-                  secondary--text
-                  font-regular-14
-                "
-              >
-                <span>شهر را انتخاب کنید</span>
-              </div>
-              <img
-                src="@/assets/images/icons/ic-search-small-bg.svg"
-                width="32"
-              />
-            </div>
-            <div
-              class="
-                d-flex
-                justify-space-between
-                align-center
-                font-regular-14
-                greenDark8--text
-              "
-              v-else
-            >
-              <div class="pe-3">{{ searchFormValue.destination }}</div>
-              <v-divider vertical></v-divider>
-              <div class="px-3">
-                <span>{{ searchFormValue.checkIn }}</span>
-                <span class="px-1">-></span>
-
-                <span>{{ searchFormValue.checkOut }}</span>
-                <span class="ps-1 font-regular-12 greyLight2--text"
-                  >( + {{ searchFormValue.flexiblity }} روز)
-                </span>
-              </div>
-              <v-divider vertical></v-divider>
-
-              <div class="px-3">
-                <span v-if="searchFormValue.count">
-                  {{ searchFormValue.count }}
-                  نفر
-                </span>
-                <span class="font-regular-14 secondary--text" v-else
-                  >انتخاب نفرات</span
-                >
-              </div>
-              <img
-                src="@/assets/images/icons/ic-search-small-bg.svg"
-                width="32"
-              />
-            </div>
-          </div>
-        </v-col>
-
-        <!-- header user option -->
-        <v-col>
-          <div class="mt-1 d-flex align-center justify-end">
-            <div>
-              <v-btn rounded text color="primary" height="30" class="px-2 py-1">
-                <span class="font-medium-14">
-                  {{ hostBtn }}
-                </span>
-              </v-btn>
-            </div>
-            <v-divider vertical class="mx-3 greyLight4"></v-divider>
-            <div>
-              <v-menu
-                fixed
-                bottom
-                offset-y
-                min-width="184"
-                content-class="headerUserMenu"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    rounded
-                    text
-                    color="greenDark8"
-                    height="30"
-                    class="ps-1 pe-2 py-1"
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                    <img src="@/assets/images/icons/ic-profile.svg" />
-                    <div class="ms-2">
-                      <span class="font-medium-14">
-                        {{ login }}
-                      </span>
-                      <span class="font-medium-14">/</span>
-                      <span class="font-medium-14">
-                        {{ register }}
-                      </span>
-                    </div>
-                  </v-btn>
-                </template>
-                <v-list class="cursorPointer">
-                  <v-list-item link to="#">
-                    <v-list-item-subtitle class="greenDark8--text">{{
-                      userMenu.menuTitle
-                    }}</v-list-item-subtitle>
-                  </v-list-item>
-                  <v-divider class="greyLight4"></v-divider>
-                  <v-list-item
-                    v-for="(item, index) in userMenu.menuBody"
-                    :key="index"
-                    link
-                    :to="item.link"
-                  >
-                    <v-list-item-subtitle class="secondary--text">{{
-                      item.name
-                    }}</v-list-item-subtitle>
-                  </v-list-item>
-                  <v-divider class="greyLight4"></v-divider>
-                  <v-list-item
-                    v-for="(item, index) in userMenu.menuFooter"
-                    :key="index"
-                    link
-                    :to="item.link"
-                  >
-                    <v-list-item-subtitle class="secondary--text">{{
-                      item.name
-                    }}</v-list-item-subtitle>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </div>
-            <v-divider vertical class="mx-3 greyLight4"></v-divider>
-
-            <div class="d-flex align-center">
-              <v-btn icon width="30" height="30" class="pa-1">
-                <img src="@/assets/images/icons/ic-language.svg" />
-              </v-btn>
-            </div>
-          </div>
-        </v-col>
-      </v-row>
-    </v-app-bar>
-
-    <!-- header bottom / search section -->
-    <div
-      v-if="ifSearchSection"
-      class="
-        greyLight4
-        rounded-b-lg
-        headerCls__bottom
-        d-flex
-        justify-center
-        align-center
-      "
-    >
-      <div class="d-flex headerCls__bottom__content">
-        <!-- destination  -->
-        <v-autocomplete
-          filled
-          clearable
-          height="66"
-          background-color="whiteColor"
-          label="مقصد، اقامتگاه"
-          :items="
-            ifSuggestion
-              ? destinationSuggestions.items
-              : destinationSearchResult
-          "
-          item-text="city"
-          item-value="city"
-          :default="searchForm.destination"
-          v-model="searchForm.destination"
-          append-icon=""
-          no-data-text="No data available"
-          class="me-2 rounded srchDestination font-regular-14"
-          @click="destinationSuggestion"
-          @click:clear="clearDestination"
-          @update:search-input="destinationSearch"
-        >
-          <!-- title in suggestion mode -->
-          <template v-slot:prepend-item>
-            <v-list-item-title
-              v-if="ifSuggestion"
-              class="ms-6 mt-4 font-medium-14 greenDark8--text"
-              >{{ destinationSuggestions.title }}</v-list-item-title
-            >
-            <!--destination result -->
-          </template>
-          <template v-slot:item="data">
-            <v-list-item-avatar rounded width="48" height="48" class="ms-2">
-              <img :src="data.item.img" />
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title
-                v-html="data.item.city"
-                class="font-regular-14 greenDark8--text"
-              ></v-list-item-title>
-              <v-list-item-subtitle
-                v-html="data.item.state"
-                class="font-regular-12 greyLight2--text"
-              ></v-list-item-subtitle>
-            </v-list-item-content>
-          </template>
-        </v-autocomplete>
-
-        <!-- date range  -->
-        <v-text-field
-          filled
-          readonly
-          height="66"
-          background-color="whiteColor"
-          label="تاریخ ورود"
-          v-model="searchForm.checkIn"
-          class="me-2 rounded srchCheckIn font-regular-14"
-        >
-        </v-text-field>
-        <v-text-field
-          filled
-          readonly
-          height="66"
-          background-color="whiteColor"
-          label="تاریخ خروج"
-          v-model="searchForm.checkOut"
-          class="me-2 rounded srchCheckOut font-regular-14"
-        >
-        </v-text-field>
-
-        <!-- count -->
-        <v-row class="ma-0 me-2 srchCount whiteColor rounded">
-          <v-col cols="9" class="pa-0">
-            <v-text-field
-              filled
-              readonly
-              height="66"
-              background-color="whiteColor"
-              label="تعداد نفرات"
-              v-model="searchForm.count"
-              class="rounded font-regular-14"
-            >
-            </v-text-field>
-          </v-col>
-          <v-col
-            cols="3"
-            class="pa-0 pe-3"
-            :class="this.$vuetify.rtl ? 'text-left' : 'text-right'"
-          >
-            <div>
-              <img
-                class="mt-2 cursorPointer"
-                src="@/assets/images/icons/ic-add.svg"
-                @click="addCount"
-              />
-            </div>
-            <div class="mt-n2 cursorPointer">
-              <img
-                src="@/assets/images/icons/ic-minus.svg"
-                @click="minusCount"
-              />
-            </div>
-          </v-col>
-        </v-row>
-        <v-btn
-          fab
-          color="primary"
-          elevation="0"
-          width="66"
-          height="66"
-          @click="Search"
-        >
-          <img src="@/assets/images/icons/ic-search.svg" />
-        </v-btn>
-      </div>
-
-      <v-overlay :value="overlay" z-index="-1"> </v-overlay>
-    </div>
-  </v-app-bar>
+  <v-app-bar height="90"  :clipped-right="isRtl" :clipped-left="!isRtl"><div class="hh">dfgdf</div></v-app-bar>
 </template>
 
 <script>
 import SearchIcon from "~/assets/images/icons/ic-search-small-bg.svg?inline";
 export default {
   components: { SearchIcon },
+  props: {
+    isRtl: {
+      type: Boolean,
+      default: true
+    }
+
+
+  },
   data() {
     return {
       fixedHeader: false,
@@ -515,7 +209,7 @@ export default {
 
 <style lang="scss">
 .headerCls {
-//   position: relative;
+  // position: relative;
   transition: all 0.2s;
   z-index: 10;
   &__top {
@@ -529,7 +223,7 @@ export default {
     }
   }
   &__bottom {
-    position: absolute;
+    // position: absolute;
     width: 100%;
     // z-index: 6;
     height: 114px !important;
@@ -628,4 +322,11 @@ export default {
 // .srchDestinationDropdown {
 //           width: 410px!important;
 //         }
+
+.hh {
+  height: 200px;
+  position: absolute;
+  z-index: 9;
+  background-color: red;
+}
 </style>

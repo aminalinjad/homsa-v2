@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="70" height="70" viewBox="0 0 70 70">
+  <defs>
+    <filter id="Rectangle_1232" x="0" y="0" width="70" height="70" filterUnits="userSpaceOnUse">
+      <feOffset dy="4" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feFlood flood-opacity="0.102"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="delete-disabled" transform="translate(15 11)">
+    <g transform="matrix(1, 0, 0, 1, -15, -11)" filter="url(#Rectangle_1232)">
+      <rect id="Rectangle_1232-2" data-name="Rectangle 1232" width="40" height="40" rx="8" transform="translate(15 11)" fill="#fff" opacity="0"/>
+    </g>
+    <g id="close">
+      <path id="Path_9130" data-name="Path 9130" d="M0,0H40V40H0Z" fill="none"/>
+      <path id="Path_9131" data-name="Path 9131" d="M8,8,21.333,21.333" transform="translate(5.334 5.333)" fill="none" stroke="#323232" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Path_9132" data-name="Path 9132" d="M21.333,8,8,21.333" transform="translate(5.334 5.333)" fill="none" stroke="#323232" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>

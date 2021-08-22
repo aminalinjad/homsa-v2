@@ -3,13 +3,7 @@
     <!-- Top Section Start  -->
     <v-row class="mb-3 align-center">
       <v-col>
-        <div class="breadCrumbsCls">
-          <v-breadcrumbs :items="breadcrumbs" class="pt-0"></v-breadcrumbs>
-        </div>
-        <div class="d-flex align-center">
-          <p class="font-regular-18 mb-0">اجاره اقامتگاه در شهر رشت</p>
-          <span class="ms-2 font-regular-12 secondary--text">(۳۴ مورد)</span>
-        </div>
+        <PagesSearchResultTitle />
       </v-col>
       <v-col>
         <div class="d-flex align-center justify-end">
@@ -245,13 +239,5 @@ export default {
   border-bottom-right-radius: 0 !important;
 }
 
-//breadcrumb link color
-.v-application .breadCrumbsCls a {
-  color: #757575 !important;
-}
-
-.v-application .breadCrumbsCls a.v-breadcrumbs__item--disabled {
-  color: black !important;
-}
 
 </style>
