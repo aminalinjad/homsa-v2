@@ -33,7 +33,7 @@
       </v-card>
       <v-card
       flat
-      class="mt-3 pb-4"
+      class="mt-3 pb-4 rounded-t-lg rounded-b-0"
       v-else
       >
       <v-row class="mb-0">
