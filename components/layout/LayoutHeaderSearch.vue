@@ -6,9 +6,10 @@
   >
     <!-- header top section -->
     <div
-      class="ps-11 pe-12 py-4 rounded-t-lg whiteColor headerCls__top"
+      class="rounded-t-lg whiteColor headerCls__top"
       :class="ifSearchSection || ifFixedHeader ? '' : 'rounded-b-lg'"
     >
+    <v-container class="pa-4" :fluid="mapLayout?true:false" >
       <v-row>
         <!-- header logo -->
         <v-col>
@@ -178,6 +179,7 @@
           </div>
         </v-col>
       </v-row>
+    </v-container>
     </div>
 
     <!-- header bottom / search section -->
@@ -310,13 +312,14 @@
         </v-btn>
       </div>
 
-      <v-overlay :value="overlay" z-index="-1"> </v-overlay>
+      <v-overlay :value="overlay" z-index="-1"></v-overlay>
     </div>
   </div>
 </template>
 
 <script>
 import SearchIcon from "~/assets/images/icons/ic-search-small-bg.svg?inline";
+import {mapGetters} from "vuex";
 export default {
   components: { SearchIcon },
   data() {
@@ -408,6 +411,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      mapLayout: "modules/structure/GET_MAP_LAYOUT"
+    }),
     ifFixedHeader() {
       if (this.fixedHeader == false) {
         return false;
