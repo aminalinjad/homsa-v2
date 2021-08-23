@@ -51,7 +51,8 @@
         
       </v-card>
     </template>
-    <PagesSearchFilters v-if="isFilter"/>
+    <vue-custom-scrollbar class="scroll-area"  :settings="settings" @ps-scroll-y="scrollHanle">
+      <PagesSearchFilters v-if="isFilter"/>
     <v-card 
     flat
     tile
@@ -70,6 +71,9 @@
           </v-col>
         </v-row> -->
     </v-card>
+    
+  </vue-custom-scrollbar>
+    
   </v-navigation-drawer>
 </template>
 
@@ -77,8 +81,10 @@
 import CloseIcon from "~/assets/images/icons/ic-delete.svg?inline";
 import FilterIcon from "~/assets/images/icons/ic-filter.svg?inline";
 import ArrowLeftIcon from "~/assets/images/icons/ic-arrow-left.svg?inline";
+import vueCustomScrollbar from 'vue-custom-scrollbar'
+import "vue-custom-scrollbar/dist/vueScrollbar.css"
 export default {
-  components: { CloseIcon, ArrowLeftIcon, FilterIcon},
+  components: { CloseIcon, ArrowLeftIcon, FilterIcon, vueCustomScrollbar},
   props: {
     isRtl: {
       type: Boolean,
@@ -96,6 +102,11 @@ export default {
         { name: "dfd" },
         { name: "dfd" },
       ],
+      settings: {
+        suppressScrollY: false,
+        suppressScrollX: true,
+        wheelPropagation: false
+      }
     }
   },
   computed: {
@@ -111,6 +122,9 @@ export default {
     closeFilter() {
       this.filter = false;
     },
+    scrollHanle(evt) {
+      console.log(evt)
+    }
   }
 };
 </script>
@@ -118,5 +132,12 @@ export default {
 <style lang="scss" scoped>
 .navigationClass {
   padding-top: 112px !important;
+}
+
+.scroll-area {
+  position: relative;
+  margin: auto;
+  width: 100%;
+  height: 100%;
 }
 </style>

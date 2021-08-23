@@ -516,7 +516,7 @@ export default {
 .headerCls {
   position: relative;
   transition: all 0.2s;
-  z-index: 10;
+  z-index: 1500;
   &__top {
     height: 80px !important;
     // height: 74px !important;
@@ -613,17 +613,17 @@ export default {
 }
 
 // costomize autocomplete menu content
-.v-autocomplete__content.v-menu__content {
-  top: 198px !important;
-  // left: 974px !important;
-  width: 410px !important;
-  @media (min-width: 1880px) {
-    left: 974px !important;
-  }
-  @media (min-width: 1440px) and (max-width: 1880px) {
-    left: 735px !important;
-  }
-}
+// .v-autocomplete__content.v-menu__content {
+//   top: 198px !important;
+//   // left: 974px !important;
+//   width: 410px !important;
+//   @media (min-width: 1880px) {
+//     left: 974px !important;
+//   }
+//   @media (min-width: 1440px) and (max-width: 1880px) {
+//     left: 735px !important;
+//   }
+// }
 // .srchDestinationDropdown {
 //           width: 410px!important;
 //         }

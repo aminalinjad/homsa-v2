@@ -88,15 +88,16 @@ export default {
   // position: relative;
   height: 100%;
   width: 100%;
-   z-index: 1 !important;
-   
+  //  z-index: 2 !important;
+
+
 
   .mapClose {
     position: absolute;
     top: 32px;
     left: 32px;
-    z-index: 1000 !important;
+    z-index: 1100!important;
   }
 
 }
-</style>zzz
+</style>

@@ -16,6 +16,7 @@
     "nuxt": "^2.15.7",
     "nuxt-leaflet": "0.0.25",
     "sass-loader": "^10.1.1",
+    "vue-custom-scrollbar": "^1.4.1",
     "vue-histogram-slider": "^0.3.8",
     "vue-owl-carousel2": "^2.0.7",
     "vuetify": "^2.5.5"
