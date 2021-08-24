@@ -20,7 +20,7 @@
           width="100%"
         ></v-img> -->
       <v-carousel
-        width="100%"
+        :width="getImgSecWidth"
         :height="getImgSecHeight"
         class="rounded-lg"
         show-arrows-on-hover
@@ -94,33 +94,33 @@ export default {
     };
   },
   computed: {
-    // getImgSecWidth() {
-    //   if (this.ifGridView) {
-    //     return 280;
-    //   } else {
-    //     return 300;
-    //   }
-    // },
+    getImgSecWidth() {
+      if (this.ifGridView) {
+        return 280;
+      } else {
+        return 300;
+      }
+    },
     getImgSecHeight() {
       if (this.ifGridView) {
-        return (this.imgSecWidth * 4) / 7;
-        // return 158;
+        // return (this.imgSecWidth * 4) / 7;
+        return 158;
       } else {
-        return (this.imgSecWidth * 2) / 3;
-        // return 200;
+        // return (this.imgSecWidth * 2) / 3;
+        return 200;
       }
     },
   },
   mounted() {
-    // this.calculateImgSecHeight();
+    this.calculateImgSecHeight();
     // window.addEventListener("resize", this.calculateImgSecHeight);
   },
   methods: {
-    // calculateImgSecHeight() {
-    //   let width = document.getElementsByClassName("resultImgSec__image")[0]
-    //     .clientWidth;
-    //   this.imgSecWidth = width;
-    // },
+    calculateImgSecHeight() {
+      let width = document.getElementsByClassName("resultImgSec__image")[0]
+        .clientWidth;
+      this.imgSecWidth = width;
+    },
     addFavorite() {
       // console.log(this.index);
       this.favorite = !this.favorite;

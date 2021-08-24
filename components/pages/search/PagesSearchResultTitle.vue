@@ -1,18 +1,28 @@
 <template>
   <div>
     <div class="breadCrumbsCls">
-      <v-breadcrumbs :items="breadcrumbs" class="pt-0" :class="mapLayout?'pb-1':'pb-2'"></v-breadcrumbs>
+      <v-breadcrumbs
+        :items="breadcrumbs"
+        class="pt-0"
+        :class="mapLayout ? 'pb-1' : 'pb-2'"
+      ></v-breadcrumbs>
     </div>
     <div class="d-flex align-center">
       <p class="font-regular-18 mb-0">اجاره اقامتگاه در شهر رشت</p>
-      <span class="ms-2 font-regular-12 secondary--text">(۳۴ مورد)</span>
+      <span class="ms-2 font-regular-12 secondary--text" v-if="!isFilter">(۳۴ مورد)</span>
     </div>
   </div>
 </template>
 
 <script>
-import{ mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 export default {
+  props: {
+    isFilter: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       breadcrumbs: [
@@ -36,7 +46,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      mapLayout: "modules/structure/GET_MAP_LAYOUT"
+      mapLayout: "modules/structure/GET_MAP_LAYOUT",
     }),
   },
 };

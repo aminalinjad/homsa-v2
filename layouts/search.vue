@@ -28,7 +28,7 @@ export default {
 }
 
 .resultContainer {
-  flex: 0 0 1008px;
+  // flex: 0 0 1008px;
   overflow: hidden;
 }
 </style>

@@ -5,29 +5,35 @@
 
 //$btn-font-weight: 100px!important;
 
-
 // $alert-font-size: 50px!important;
 
 // vuetify
 
 // Globals
 $grid-breakpoints: (
-  'lg': 1440px - 24px,
+  "xs": 0,
+  "sm": 600px,
+  "md": 960px,
+  "lg": 1440px,
+  "xl": 1671px
 );
 $border-radius-root: 6px;
-$body-font-family: 'IRANSans'!important;
+$body-font-family: "IRANSans" !important;
 
 //btn
-$btn-border-radius: 8px!important;
+$btn-border-radius: 8px !important;
 
 //carosel
-$carousel-dot-margin: 0 3px 16px 3px!important;
-$carousel-controls-size: 20px!important;
+$carousel-dot-margin: 0 3px 16px 3px !important;
+$carousel-controls-size: 20px !important;
 
 //breadcrumbs
-$breadcrumbs-item-font-size: 12px!important;
-$breadcrumbs-even-child-padding: 0 4px!important;
-$breadcrumbs-padding: 18px 0px!important;
+$breadcrumbs-item-font-size: 12px !important;
+$breadcrumbs-even-child-padding: 0 4px !important;
+$breadcrumbs-padding: 18px 0px !important;
 
 //menus
-$menu-content-border-radius: 12px!important;
+$menu-content-border-radius: 12px !important;
+
+//tooltips
+$tooltip-font-size: 12px;

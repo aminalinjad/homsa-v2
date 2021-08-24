@@ -11,7 +11,7 @@
       <v-card flat color="background" class="my-3" v-if="isFilter">
         <v-row>
           <v-col cols="12" class="pt-0 pb-1">
-            <PagesSearchResultTitle />
+            <PagesSearchResultTitle :isFilter="isFilter" />
           </v-col>
           <v-col cols="12">
             <v-row class="align-center">
@@ -60,22 +60,23 @@
             </v-btn>
           </v-col>
         </v-row>
-        <v-divider></v-divider>
+        <v-divider class="greyLight4"></v-divider>
       </v-card>
     </template>
     <vue-custom-scrollbar
       class="scroll-area"
       :settings="settings"
       @ps-scroll-y="scrollHanle"
+      scrollYMarginOffset="20"
     >
       <PagesSearchFilters v-if="isFilter" />
-      <v-card flat class="rounded-" v-else>
+      <v-card flat class="rounded-0" v-else>
         <v-row class="ma-0">
           <v-col
             cols="12"
             v-for="(result, index) in results"
             :key="index"
-            class="pt-10 pb-11 px-6 resultBorder"
+            class="py-3 px-6 resultBorder"
           >
 
             <PagesSearchResultItemMap :index="index" />
@@ -137,7 +138,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 .navigationClass {
   padding-top: 112px !important;
 }
@@ -147,5 +148,11 @@ export default {
   margin: auto;
   width: 100%;
   height: 100%;
+}
+
+.ps {
+  &__rail-y {
+    opacity: 0!important;
+}
 }
 </style>

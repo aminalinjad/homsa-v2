@@ -2,9 +2,24 @@
     cursor: pointer!important;
 }
 
+.redOpacity {
+  background-color: #EC484A0D;
+}
+
+.opacity6 {
+  opacity: 0.6!important;
+}
+
+
+
 .theme--dark.v-application {
     background-color: var(--v-background-base, hsl(0, 0%, 7%)) !important;
   }
   .theme--light.v-application {
     background-color: var(--v-background-base, #F5F5F5) !important;
+  }
+
+  //carosel control arrow
+  .v-window__prev, .v-window__next {
+    top: calc(50% - 10px)!important;
   }

@@ -1,13 +1,13 @@
 <template>
   <!-- <div class="resultImgSec" :style="`width:${getImgSecWidth}px`"> -->
   <div class="resultImgSec">
-    <v-row class="resultImgSec__top px-2">
-      <v-col>
-        <v-chip label small color="white" class="font-regular-12"
+    <v-row class="resultImgSec__top ps-2 pe-1">
+      <v-col class="pa-0 pt-2">
+        <v-chip label small color="white" class="px-2 font-regular-12"
           >مهمان نواز</v-chip
         >
       </v-col>
-      <v-col class="text-left">
+      <v-col class="text-left pa-0 pt-1">
         <v-btn icon @click="addFavorite">
           <v-icon :color="favorite ? 'redOfferTime' : ''">mdi-heart</v-icon>
         </v-btn>
@@ -53,7 +53,7 @@
       </v-carousel>
     </div>
     <div class="resultImgSec__bottom" v-if="ifGridView">
-      <v-tooltip left>
+      <v-tooltip left color="greenDark8">
         <template v-slot:activator="{ on, attrs }">
           <div
             class="grnty rounded-sm d-flex align-center justify-center"
@@ -70,7 +70,6 @@
         </template>
         <span>گارانتی شده</span>
       </v-tooltip>
-      
     </div>
   </div>
 </template>
@@ -138,7 +137,7 @@ export default {
   position: relative;
   &__top {
     position: absolute;
-    width: 100%;
+    width: 224px;
     top: 16px;
     margin-inline: auto;
     z-index: 2;
@@ -164,9 +163,9 @@ export default {
 }
 
 .grnty {
-  background: #93a79399;
-  width: 20px;
-  height: 20px;
+  background: #01220099;
+  width: 24px;
+  height: 24px;
 }
 
 .v-carousel__controls .v-item-group button {
@@ -179,4 +178,6 @@ export default {
   // height: 20px!important;
   font-size: 7px!important;
 }
+
+
 </style>
