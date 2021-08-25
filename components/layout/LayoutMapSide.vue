@@ -7,6 +7,7 @@
     clipped
     :right="isRtl"
   >
+    <!-- top section -->
     <template v-slot:prepend>
       <v-card flat color="background" class="my-3" v-if="isFilter">
         <v-row>
@@ -63,6 +64,8 @@
         <v-divider class="greyLight4"></v-divider>
       </v-card>
     </template>
+
+    <!-- content section  -->
     <vue-custom-scrollbar
       class="scroll-area"
       :settings="settings"
@@ -78,10 +81,16 @@
             :key="index"
             class="py-3 px-6 resultBorder"
           >
-
             <PagesSearchResultItemMap :index="index" />
           </v-col>
+          
         </v-row>
+        <v-row class="paginationContainer">
+            <v-pagination
+              v-model="page"
+              :length="totalPages"
+            ></v-pagination>
+          </v-row>
       </v-card>
     </vue-custom-scrollbar>
   </v-navigation-drawer>
@@ -112,6 +121,8 @@ export default {
         { name: "dfd" },
         { name: "dfd" },
       ],
+      page: 1,
+      totalPages: 15, 
       settings: {
         suppressScrollY: false,
         suppressScrollX: true,
@@ -143,6 +154,25 @@ export default {
   padding-top: 112px !important;
 }
 
+.paginationContainer {
+  .v-pagination {
+    &__item {
+      box-shadow: none!important;
+    }
+
+    &__item--active {
+      color: var(--v-primary-base)!important;
+      background-color: var(--v-whiteColor-base)!important;
+      border: 1px solid var(--v-primary-base)!important;
+    }
+
+    &__navigation {
+      box-shadow: none!important;
+    }
+  }
+
+}
+
 .scroll-area {
   position: relative;
   margin: auto;
@@ -152,7 +182,7 @@ export default {
 
 .ps {
   &__rail-y {
-    opacity: 0!important;
-}
+    opacity: 0 !important;
+  }
 }
 </style>
