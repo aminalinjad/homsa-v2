@@ -2,7 +2,7 @@
   <v-app class="iransans">
     <LayoutHeaderSearch />
     <v-main class="pt-3">
-      <v-container class="" :fluid="$vuetify.breakpoint.md?true:false">
+      <v-container class="" :fluid="$vuetify.breakpoint.md">
         <v-row class="justify-center">
           <v-col class="filterContainer">
             <PagesSearchFilters />

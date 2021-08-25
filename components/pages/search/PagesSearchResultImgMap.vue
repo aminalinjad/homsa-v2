@@ -13,7 +13,7 @@
         </v-btn>
       </v-col>
     </v-row>
-    <div class="resultImgSec__image rounded-lg">
+    <div class="resultImgSec__imageMap rounded-lg">
       <!-- <v-img
           class="rounded-lg"
           src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
@@ -137,12 +137,13 @@ export default {
   position: relative;
   &__top {
     position: absolute;
-    width: 224px;
+    // width: 224px;
+    width: 100%;
     top: 16px;
     margin-inline: auto;
     z-index: 2;
   }
-  &__image {
+  &__imageMap {
       width: 224px;
     .v-btn--icon.v-size--default {
       width: 24px!important;
