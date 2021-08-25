@@ -9,7 +9,7 @@
       class="rounded-t-lg whiteColor headerCls__top"
       :class="ifSearchSection || ifFixedHeader ? '' : 'rounded-b-lg'"
     >
-    <v-container class="pa-4" :fluid="mapLayout?true:false" >
+    <v-container class="pa-4" :fluid="($vuetify.breakpoint.md||mapLayout)?true:false" >
       <v-row>
         <!-- header logo -->
         <v-col>
@@ -435,8 +435,13 @@ export default {
         return false;
       }
     },
+    mdAndDown() {
+      console.log('header md and down', this.$vuetify.breakpoint.mdAndDown);
+      return this.$vuetify.breakpoint.mdAndDown
+    }
   },
   mounted() {
+    console.log(this.$vuetify)
     window.addEventListener("scroll", this.scrollPage, {passive: true});
   },
   destroyed() {

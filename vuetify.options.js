@@ -1,7 +1,16 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
-  breakpoint: {},
+  // breakpoint: {
+  //   thresholds: {
+  //     xs: 600,
+  //     sm: 960,
+  //     md: 1440,
+  //     lg: 1880,
+  //   },
+  //   scrollBarWidth: 16,
+
+  // },
   icons: {},
   lang: {},
   rtl: true,

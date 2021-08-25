@@ -2,7 +2,7 @@
   <v-app class="iransans">
     <LayoutHeaderSearch />
     <v-main class="pt-3">
-      <v-container class="px-0">
+      <v-container class="" :fluid="$vuetify.breakpoint.md?true:false">
         <v-row class="justify-center">
           <v-col class="filterContainer">
             <PagesSearchFilters />
@@ -18,6 +18,13 @@
 
 <script>
 export default {
+  computed: {
+    mdAndDown() {
+      console.log('search layout:', this.$vuetify.breakpoint.mdAndDown);
+      return this.$vuetify.breakpoint.mdAndDown
+    }
+
+  },
   methods: {},
 };
 </script>

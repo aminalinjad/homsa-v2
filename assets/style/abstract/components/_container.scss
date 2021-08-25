@@ -1,11 +1,17 @@
-// @media screen and (min-width: 1440px) {
-//   .container {
-//     max-width: 1320px !important;
-//   }
-// }
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1320px !important;
+  }
+  .container--fluid {
+    max-width: 100% !important;
+  }
+}
 
-// @media screen and (min-width: 1880px) {
-//   .container {
-//     max-width: 1671px !important;
-//   }
-// }
+@media (min-width: 1880px) {
+  .container {
+    max-width: 1671px!important;
+  }
+  .container--fluid {
+    max-width: 100% !important;
+  }
+}
