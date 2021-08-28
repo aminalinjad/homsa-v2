@@ -1,6 +1,9 @@
 <template>
   <v-app class="iransans">
+    <!-- header  -->
     <LayoutHeaderSearch />
+
+    <!-- main  -->
     <v-main class="pt-3">
       <v-container class="" :fluid="$vuetify.breakpoint.md">
         <v-row class="justify-center">
@@ -13,6 +16,11 @@
         </v-row>
       </v-container>
     </v-main>
+
+    <!-- footer  -->
+    <PagesSearchFooter />
+
+    
   </v-app>
 </template>
 
@@ -20,10 +28,9 @@
 export default {
   computed: {
     mdAndDown() {
-      console.log('search layout:', this.$vuetify.breakpoint.mdAndDown);
-      return this.$vuetify.breakpoint.mdAndDown
-    }
-
+      console.log("search layout:", this.$vuetify.breakpoint.mdAndDown);
+      return this.$vuetify.breakpoint.mdAndDown;
+    },
   },
   methods: {},
 };

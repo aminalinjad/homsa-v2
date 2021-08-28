@@ -140,15 +140,8 @@
     <!-- Main Section End  -->
 
     <!-- Bottom Section Start  -->
-    <!-- <v-row class="mt-6 paginationContainer justify-center">
-      <v-pagination
-        v-model="page"
-        :total-visible="7"
-        :length="totalPages"
-        class="paginationWidth46"
-      ></v-pagination>
-    </v-row> -->
     <PagesSearchPagination :page="page" :totalPages="totalPages" class="mt-6"/>
+    <PagesSearchRelatedSearch />
     <!-- Bottom Section End  -->
   </v-container>
 </template>
