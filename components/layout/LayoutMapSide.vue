@@ -83,14 +83,10 @@
           >
             <PagesSearchResultItemMap :index="index" />
           </v-col>
-          
         </v-row>
-        <v-row class="paginationContainer">
-            <v-pagination
-              v-model="page"
-              :length="totalPages"
-            ></v-pagination>
-          </v-row>
+
+        <!-- pagination  -->
+        <PagesSearchPagination :page="page" :totalPages="totalPages" :mapLayout="true" class="mt-6"/>
       </v-card>
     </vue-custom-scrollbar>
   </v-navigation-drawer>
@@ -122,7 +118,7 @@ export default {
         { name: "dfd" },
       ],
       page: 1,
-      totalPages: 15, 
+      totalPages: 15,
       settings: {
         suppressScrollY: false,
         suppressScrollX: true,
@@ -152,25 +148,6 @@ export default {
 <style lang="scss" >
 .navigationClass {
   padding-top: 112px !important;
-}
-
-.paginationContainer {
-  .v-pagination {
-    &__item {
-      box-shadow: none!important;
-    }
-
-    &__item--active {
-      color: var(--v-primary-base)!important;
-      background-color: var(--v-whiteColor-base)!important;
-      border: 1px solid var(--v-primary-base)!important;
-    }
-
-    &__navigation {
-      box-shadow: none!important;
-    }
-  }
-
 }
 
 .scroll-area {

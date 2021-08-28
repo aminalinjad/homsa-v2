@@ -121,27 +121,34 @@
       </client-only> -->
 
       <!-- Result Sec Start -->
-      <div>
-        <v-row class="ma-0">
-          <v-col
-            cols="12"
-            :md="ifGridView ? 4 : 12"
-            v-for="(result, index) in results"
-            :key="index"
-            class="pt-10 pb-11 px-6 resultBorder"
-            :class="ifRtl ? 'resultSideBorderRtl' : 'resultSideBorderLtr'"
-          >
-            <!-- item component -->
+      <v-row class="ma-0">
+        <v-col
+          cols="12"
+          :md="ifGridView ? 4 : 12"
+          v-for="(result, index) in results"
+          :key="index"
+          class="pt-10 pb-11 px-6 resultBorder"
+          :class="ifRtl ? 'resultSideBorderRtl' : 'resultSideBorderLtr'"
+        >
+          <!-- item component -->
 
-            <PagesSearchResultItem :ifGridView="ifGridView" :index="index" />
-          </v-col>
-        </v-row>
-      </div>
+          <PagesSearchResultItem :ifGridView="ifGridView" :index="index" />
+        </v-col>
+      </v-row>
       <!-- Result Sec End -->
     </div>
     <!-- Main Section End  -->
 
     <!-- Bottom Section Start  -->
+    <!-- <v-row class="mt-6 paginationContainer justify-center">
+      <v-pagination
+        v-model="page"
+        :total-visible="7"
+        :length="totalPages"
+        class="paginationWidth46"
+      ></v-pagination>
+    </v-row> -->
+    <PagesSearchPagination :page="page" :totalPages="totalPages" class="mt-6"/>
     <!-- Bottom Section End  -->
   </v-container>
 </template>
@@ -150,6 +157,8 @@
 export default {
   data() {
     return {
+      page: 1,
+      totalPages: 15,
       gridViewResult: true,
       sortBydefault: "بهترین تجربه",
       sortBy: ["گران ترین", "بهترین تجربه"],
@@ -202,12 +211,8 @@ export default {
     gridView() {
       this.gridViewResult = true;
     },
-    changed( ) {
-
-    },
-    updated() {
-
-    }
+    changed() {},
+    updated() {},
   },
 };
 </script>
@@ -238,6 +243,4 @@ export default {
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
 }
-
-
 </style>
