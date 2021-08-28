@@ -14,13 +14,13 @@
       </v-col>
     </v-row>
     <div class="resultImgSec__image rounded-lg">
-      <v-img
+      <!-- <v-img
           class="rounded-lg"
           src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
           :width="getImgSecWidth"
         :height="getImgSecHeight"
-        ></v-img>
-      <!-- <v-carousel
+        ></v-img> -->
+      <v-carousel
         :width="getImgSecWidth"
         :height="getImgSecHeight"
         class="rounded-lg"
@@ -51,7 +51,7 @@
           src="https://cdn.vuetifyjs.com/images/carousel/sky.jpg"
         >
         </v-carousel-item>
-      </v-carousel> -->
+      </v-carousel>
     </div>
     <div class="resultImgSec__bottom" v-if="ifGridView">
       <v-tooltip left>

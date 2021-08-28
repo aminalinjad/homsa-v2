@@ -131,8 +131,12 @@
           :class="ifRtl ? 'resultSideBorderRtl' : 'resultSideBorderLtr'"
         >
           <!-- item component -->
+          <NuxtLink to="#">
+            <PagesSearchResultItem :ifGridView="ifGridView" :index="index" />
 
-          <PagesSearchResultItem :ifGridView="ifGridView" :index="index" />
+          </NuxtLink>
+
+          
         </v-col>
       </v-row>
       <!-- Result Sec End -->
