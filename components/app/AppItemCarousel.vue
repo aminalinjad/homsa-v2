@@ -27,12 +27,6 @@
         @slide="updateCarousel"
       >
         <slide v-for="(tag, index) in tags" :key="index" class="me-2">
-          <!-- <div
-            class="d-flex tagItem rounded secondary--text mx-1 pt-2 pb-2 px-3"
-          >
-            <v-icon>mdi-diamond-outline</v-icon>
-            <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
-          </div> -->
           <v-chip outlined label class="tagItem" @click="filterTag(index)" color="greyLight4" text-color="secondary">
             <v-icon >mdi-diamond-outline</v-icon>
             <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
@@ -87,7 +81,6 @@ export default {
       this.myCarouselData = payload.currentSlide;
     },
     filterTag(index) {
-      console.log('tag ',index);
     }
   },
 };
@@ -118,17 +111,9 @@ export default {
     width: auto !important;
 
   }
-
-  //  .nextBtnRight {
-  //     right: 0!important;
-  // }
-  //  .nextBtnLeft {
-  //     left: 0!important;
-  // }
 }
 
 .tagItem {
-  // border: #f5f5f5 solid 1px;
   height: 40px!important;
   width: 166px!important;
 }
@@ -136,6 +121,5 @@ export default {
 .tagItem:active , .tagItem:hover {
   color: #359138!important;
 }
-
 
 </style>

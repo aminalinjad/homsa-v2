@@ -61,9 +61,7 @@ export default {
     width: 100%;
     z-index: 2 !important;
     bottom: 0;
-    //   opacity: 0.5;
     background: rgba(255, 255, 255, 0.9);
-    // border-radius: 0 0 12px 12px;
   }
 }
 </style>

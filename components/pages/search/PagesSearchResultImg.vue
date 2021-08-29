@@ -1,5 +1,4 @@
 <template>
-  <!-- <div class="resultImgSec" :style="`width:${getImgSecWidth}px`"> -->
   <div class="resultImgSec">
     <v-row class="resultImgSec__top px-2">
       <v-col>
@@ -14,12 +13,6 @@
       </v-col>
     </v-row>
     <div class="resultImgSec__image rounded-lg">
-      <!-- <v-img
-          class="rounded-lg"
-          src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-          :width="getImgSecWidth"
-        :height="getImgSecHeight"
-        ></v-img> -->
       <v-carousel
         :width="getImgSecWidth"
         :height="getImgSecHeight"
@@ -54,7 +47,7 @@
       </v-carousel>
     </div>
     <div class="resultImgSec__bottom" v-if="ifGridView">
-      <v-tooltip left>
+      <v-tooltip left color="greenDark8">
         <template v-slot:activator="{ on, attrs }">
           <div
             class="grnty rounded-sm d-flex align-center justify-center"
@@ -65,9 +58,6 @@
               >mdi-shield-check-outline</v-icon
             >
           </div>
-          <!-- <v-icon small color="white" v-bind="attrs" v-on="on"
-              >mdi-shield-check-outline</v-icon
-            > -->
         </template>
         <span>گارانتی شده</span>
       </v-tooltip>
@@ -90,7 +80,6 @@ export default {
   },
   data() {
     return {
-      // imgSecWidth: null,
       favorite: false,
     };
   },
@@ -104,26 +93,16 @@ export default {
     },
     getImgSecHeight() {
       if (this.ifGridView) {
-        // return (this.imgSecWidth * 4) / 7;
         return 158;
       } else {
-        // return (this.imgSecWidth * 2) / 3;
         return 200;
       }
     },
   },
   mounted() {
-    this.calculateImgSecHeight();
-    // window.addEventListener("resize", this.calculateImgSecHeight);
   },
   methods: {
-    calculateImgSecHeight() {
-      let width = document.getElementsByClassName("resultImgSec__image")[0]
-        .clientWidth;
-      this.imgSecWidth = width;
-    },
     addFavorite() {
-      // console.log(this.index);
       this.favorite = !this.favorite;
     },
   },
@@ -141,7 +120,6 @@ export default {
     z-index: 2;
   }
   &__image {
-    // width: 224px;
     .v-btn--icon.v-size--default {
       width: 24px!important;
       height: 24px!important;
@@ -172,8 +150,6 @@ export default {
 
 }
 .v-carousel__controls .v-item-group button i{
-  // width: 20px!important;
-  // height: 20px!important;
   font-size: 7px!important;
 }
 </style>

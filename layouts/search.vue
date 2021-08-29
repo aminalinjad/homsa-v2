@@ -26,11 +26,7 @@
 
 <script>
 export default {
-  computed: {
-    mdAndDown() {
-      console.log("search layout:", this.$vuetify.breakpoint.mdAndDown);
-      return this.$vuetify.breakpoint.mdAndDown;
-    },
+  computed: { 
   },
   methods: {},
 };

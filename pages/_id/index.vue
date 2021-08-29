@@ -7,43 +7,31 @@
   </div>
 </template>
 <script>
-import { CurrencyService } from '@/services'
-import { mapGetters, mapActions } from 'vuex'
+import { CurrencyService } from "@/services";
+import { mapGetters, mapActions } from "vuex";
 export default {
   props: [],
-  data () {
-    return {
-    }
+  data() {
+    return {};
   },
   computed: {
     ...mapGetters({
-      currencyLists: 'modules/currencies/GET_CURRENCIES'
-    })
-
+      currencyLists: "modules/currencies/GET_CURRENCIES",
+    }),
   },
-  mounted () {
-    // console.log('here is currency list from store', this.currencyLists);
-
-  },
+  mounted() {},
   methods: {
-    ...mapActions ({
+    ...mapActions({
       setCurrencies: "modules/currencies/SET_CURRENCIES",
-
     }),
 
     useService() {
-      CurrencyService.currencyLists().then((res)=>{
-
-        console.log('res in id page from service', res);
-        this.setCurrencies(res.data.data)
-      })
-      .finally(() => {
-        console.log('here is currency list from store', this.currencyLists);
-    });
-      // console.log('here is currency list from store', this.currencyLists);
-
-    }
-
-  }
-}
+      CurrencyService.currencyLists()
+        .then((res) => {
+          this.setCurrencies(res.data.data);
+        })
+        .finally(() => {});
+    },
+  },
+};
 </script>

@@ -23,7 +23,6 @@
                 <span class="font-bold-16" :class="rankColor(3.8) + '--text'"
                   >۳.۸</span
                 >
-                <!-- <v-icon :color="rankColor(3.8)" class="mb-1">mdi-star</v-icon> -->
                 <StarIcon />
               </v-col>
             </v-row>
@@ -59,14 +58,6 @@
           </v-card-actions>
           <v-card-text class="px-0 pt-2 pb-0 black--text" v-if="index % 2 == 0">
             <!-- modification need: in v-if o v-else ro bad az set kardane data bardaram -->
-                <!-- <v-chip
-                  label
-                  color="#EC484A0D"
-                  text-color="redOffer"
-                  v-if="index % 2 == 0"
-                >
-                  <span class="mt-n1 font-regular-14">تخفیف دار</span>
-                </v-chip> -->
                 <div
                   class="px-2 redOpacity redOfferTime--text rounded-sm font-regular-12 d-flex justify-space-between"
                 >

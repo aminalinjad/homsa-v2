@@ -29,10 +29,8 @@ export default {
         }
       )
         .then((res)=> {
-          console.log('sahar res',res)
         })
         .catch((err) => {
-          console.log('sahar errrr',err)
         })
     },
 

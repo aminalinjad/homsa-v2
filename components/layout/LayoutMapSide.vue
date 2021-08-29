@@ -69,7 +69,6 @@
     <vue-custom-scrollbar
       class="scroll-area"
       :settings="settings"
-      @ps-scroll-y="scrollHanle"
       scrollYMarginOffset="20"
     >
       <PagesSearchFilters v-if="isFilter" />
@@ -139,9 +138,6 @@ export default {
     },
     closeFilter() {
       this.filter = false;
-    },
-    scrollHanle(evt) {
-      console.log(evt);
     },
   },
 };

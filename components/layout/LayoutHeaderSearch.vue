@@ -331,7 +331,6 @@ export default {
       hostBtn: "میزبان شوید",
       login: "ورود",
       register: "ثبت‌نام",
-      // phone: "۰۲۱-۲۸۱۱۱۵۰۰",
       userMenu: {
         menuTitle: "مشاهده حساب کاربری",
         menuBody: [
@@ -435,22 +434,12 @@ export default {
         return false;
       }
     },
-    mdAndDown() {
-      console.log('header md and down', this.$vuetify.breakpoint.mdAndDown);
-      return this.$vuetify.breakpoint.mdAndDown
-    }
   },
   mounted() {
-    console.log(this.$vuetify)
     window.addEventListener("scroll", this.scrollPage, {passive: true});
-  },
-  destroyed() {
-    // window.removeEventListener("scroll", this.removeFixedHeader);
   },
   methods: {
     showSearchSection() {
-      // this.fixHeader(true);
-      // this.scrollPage();
       this.searchSection = true;
       this.overlay = !this.overlay;
     },
@@ -458,7 +447,6 @@ export default {
       this.searchSection = false;
       this.searchResult = !this.searchResult;
       this.overlay = !this.overlay;
-      // this.fixHeader(true);
     },
     Search() {
       this.closeSearchSection();
@@ -466,13 +454,8 @@ export default {
     scrollPage() {
       if (window.scrollY > 0) {
         this.fixHeader(true);
-        // document.getElementById("headerSearch").classList.add("fixedHeader");
-        // this.fixedHeader = true;
-        // this.closeSearchSection();
       } else {
         this.fixHeader(false);
-        // document.getElementById("headerSearch").classList.remove("fixedHeader");
-        // this.fixedHeader = false;
       }
     },
     fixHeader(value) {
@@ -485,11 +468,9 @@ export default {
       }
     },
     destinationSuggestion() {
-      // console.log("deatination Suggestion called");
       this.suggestion = true;
     },
     destinationSearch() {
-      console.log("deatination search called", this.searchForm.destination);
       if (
         this.searchForm.destination != "کجا می‌خواهید بروید؟" ||
         this.searchForm.destination != ""
@@ -500,7 +481,6 @@ export default {
       }
     },
     clearDestination() {
-      console.log("clearDestination");
       this.searchForm.destination = "کجا می‌خواهید بروید؟";
       this.suggestion = true;
     },
@@ -514,11 +494,6 @@ export default {
       } else {
       }
     },
-    // removeFixedHeader() {
-    //   let headerTop = document.getElementById('headerSearch').classList.remove("fixedHeader");
-    //   console.log('headerTop', headerTop);
-
-    // }
   },
 };
 </script>
@@ -530,9 +505,7 @@ export default {
   z-index: 1500;
   &__top {
     height: 80px !important;
-    // height: 74px !important;
     .selectInput {
-      // width: 312px;
       min-width: 312px;
       max-width: max-content;
       height: 48px;
@@ -541,7 +514,6 @@ export default {
   &__bottom {
     position: absolute;
     width: 100%;
-    // z-index: 6;
     height: 114px !important;
     
 
@@ -602,7 +574,6 @@ export default {
 
 .fixedHeader {
   position: fixed;
-  // width: 100%;
   top: 0;
   left: 0;
   right: 0;
@@ -623,19 +594,4 @@ export default {
   }
 }
 
-// costomize autocomplete menu content
-// .v-autocomplete__content.v-menu__content {
-//   top: 198px !important;
-//   // left: 974px !important;
-//   width: 410px !important;
-//   @media (min-width: 1880px) {
-//     left: 974px !important;
-//   }
-//   @media (min-width: 1440px) and (max-width: 1880px) {
-//     left: 735px !important;
-//   }
-// }
-// .srchDestinationDropdown {
-//           width: 410px!important;
-//         }
 </style>

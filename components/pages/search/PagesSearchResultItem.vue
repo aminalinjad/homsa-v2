@@ -212,6 +212,4 @@ export default {
   margin-top: -33px;
   border-bottom: 1px #EC484A solid;
 }
-
-
 </style>

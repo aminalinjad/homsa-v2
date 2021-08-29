@@ -38,14 +38,9 @@ export default {
 .descriptionSec {
   .v-expansion-panels {
     .v-expansion-panel-header {
-      justify-content: center !important;
-    //   &__icon {
-    //     // margin-right: unset!important;
-    //   }
-
+    justify-content: center !important;
     span {
         flex: none !important;
-
     }
     }
     .descriptionSecIconRtl {
@@ -63,10 +58,6 @@ export default {
         }
       }
     }
-
-    // .v-expansion-panel-header:not(.v-expansion-panel-header__icon) {
-    //   flex: none !important;
-    // }
   }
 }
 </style>

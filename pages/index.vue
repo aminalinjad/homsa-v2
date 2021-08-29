@@ -1,11 +1,9 @@
 <template>
-    <PagesSearchContent v-if="!mapLayout" />
-    <div v-else>
-         <PagesSearchMap />
-    </div>
+  <PagesSearchContent v-if="!mapLayout" />
+  <PagesSearchMap v-else />
 </template>
 <script>
-import{ mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from "vuex";
 export default {
   layout: "search",
   props: [],
@@ -25,11 +23,11 @@ export default {
   },
   computed: {
     ...mapGetters({
-      mapLayout: "modules/structure/GET_MAP_LAYOUT"
+      mapLayout: "modules/structure/GET_MAP_LAYOUT",
     }),
   },
   mounted() {
-    this.getFilterData()
+    this.getFilterData();
   },
   methods: {
     ...mapActions({
@@ -39,17 +37,9 @@ export default {
     goId() {
       this.$router.push(`/${this.id}`);
       this.$store.dispatch("getData");
-      // .then((res) => {
-      //   console.log("res in pg", res)
-      // })
-      // .catch((err) => {
-      //   console.log("errr iin pg", err)
-      // })
     },
     changeLayout() {
-      console.log('before ', this.ifMapLayout);
       this.ifMapLayout = !this.ifMapLayout;
-      console.log('after ', this.ifMapLayout);
     },
     getFilterData() {
       let filters = [
@@ -152,19 +142,11 @@ export default {
         },
       ];
       this.setFilters(filters);
-    }
+    },
   },
 };
 </script>
 <style scoped lang="scss">
-// .filterContainer {
-//   flex: 0 0 336px;
-// }
-
-// .resultContainer {
-//   flex: 0 0 1008px;
-//   overflow: hidden;
-// }
 .resultContainerMap {
   flex: 0 0 504px;
   overflow: hidden;

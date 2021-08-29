@@ -233,16 +233,9 @@
 import { mapGetters } from 'vuex'
 export default {
   props: {
-    // filters: {
-    //   type: Array,
-    //   default() {
-    //     return [];
-    //   },
-    // },
   },
   data() {
     return {
-      // nextTick: true,
       expansionOpen: [0],
       expansionclose: [],
       sliderBtnText: "اعمال محدوده قیمت",
@@ -276,11 +269,9 @@ export default {
               histogramArray.push(data[j].price);
             }
           }
-          // console.log('here is hstgrm arr', histogramArray);
           return histogramArray;
         }
       }
-      // console.log('no price');
     },
   },
   mounted() {
@@ -299,30 +290,15 @@ export default {
       }
     },
     selectRange(e) {
-      // console.log("drag result", e.from, e.to);
       this.rangeSliderFrom = e.from;
       this.rangeSliderTo = e.to;
       this.rangeBtnDisable = false;
     },
     calculateSectionWidth() {
       let width = document.getElementById("histogramSection");
-      // console.log("here is width", width.offsetWidth);
-      // console.log("here is clientWidth width", width.clientWidth);
       this.histogramSectionWidth = width.clientWidth;
-      // this.nextTicker();
     },
-    // nextTicker() {
-    //   this.nextTick = false;
-    //   this.$nextTick(() => {
-    //     this.nextTick = true;
-    //   });
-    // },
     filterPrice() {
-      console.log(
-        "filter price action",
-        this.rangeSliderFrom,
-        this.rangeSliderTo
-      );
     },
   },
 };
@@ -341,7 +317,6 @@ export default {
   }
 
   .irs--round .irs-handle {
-    // top: calc(67% - var(--handle-size)/2 + 5px)!important;
     margin-top: 8px !important;
   }
 

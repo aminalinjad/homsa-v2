@@ -76,50 +76,7 @@
       </div>
       <v-divider class="greyLight4"></v-divider>
       <!-- Top Sec End -->
-
-      <!-- test of owl carousel -->
-      <!-- <client-only>
-        <carousel :items="5" >
-          <v-chip outlined label color="greyLight4" text-color="secondary" class="tagItem">
-            <v-icon>mdi-diamond-outline</v-icon>
-            <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
-          </v-chip>
-          <v-chip outlined label color="greyLight4" text-color="secondary" class="tagItem">
-            <v-icon>mdi-diamond-outline</v-icon>
-            <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
-          </v-chip>
-          <v-chip outlined label color="greyLight4" text-color="secondary" class="tagItem">
-            <v-icon>mdi-diamond-outline</v-icon>
-            <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
-          </v-chip>
-          <v-chip outlined label color="greyLight4" text-color="secondary" class="tagItem">
-            <v-icon>mdi-diamond-outline</v-icon>
-            <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
-          </v-chip>
-          <v-chip outlined label color="greyLight4" text-color="secondary" class="tagItem">
-            <v-icon>mdi-diamond-outline</v-icon>
-            <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
-          </v-chip>
-          <v-chip outlined label color="greyLight4" text-color="secondary" class="tagItem">
-            <v-icon>mdi-diamond-outline</v-icon>
-            <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
-          </v-chip>
-          <v-chip outlined label color="greyLight4" text-color="secondary" class="tagItem">
-            <v-icon>mdi-diamond-outline</v-icon>
-            <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
-          </v-chip>
-          <v-chip outlined label color="greyLight4" text-color="secondary" class="tagItem">
-            <v-icon>mdi-diamond-outline</v-icon>
-            <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
-          </v-chip>
-          <v-chip outlined label color="greyLight4" text-color="secondary" class="tagItem">
-            <v-icon>mdi-diamond-outline</v-icon>
-            <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
-          </v-chip>
-          
-        </carousel>
-      </client-only> -->
-
+      
       <!-- Result Sec Start -->
       <v-row class="ma-0">
         <v-col
@@ -222,7 +179,6 @@ export default {
   width: 134px;
 }
 .resultBorder {
-  // border-left: #F5F5F5 solid 1px;
   border-bottom: #f5f5f5 solid 1px;
 }
 
