@@ -39,11 +39,17 @@ export default {
 <style scoped lang="scss">
 .filterContainer {
   flex: 0 0 336px;
+  height: max-content;
+    position: sticky;
+    top: 96px;
 }
 
 .resultContainer {
   // flex: 0 0 1008px;
   overflow: hidden;
+  height: max-content;
+    position: sticky;
+    top: 96px;
 }
 </style>
 
