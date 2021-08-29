@@ -1,7 +1,7 @@
 <template>
     <v-row class="paginationContainer justify-center">
           <v-pagination
-            v-model="page"
+            v-model="currentPage"
             :total-visible="7"
             :length="totalPages"
             :class="mapLayout?'paginationFont12':'paginationWidth46'"
@@ -25,6 +25,11 @@ export default {
             default: false
         }
 
+    },
+    data() {
+      return {
+        currentPage: 1
+      }
     }
 }
 </script>
