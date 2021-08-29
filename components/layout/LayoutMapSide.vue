@@ -81,7 +81,9 @@
             :key="index"
             class="py-3 px-6 resultBorder"
           >
+          <NuxtLink to="">
             <PagesSearchResultItemMap :index="index" />
+            </NuxtLink>
           </v-col>
         </v-row>
 

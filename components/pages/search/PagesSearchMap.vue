@@ -1,22 +1,4 @@
 <template>
-  <!-- <div class="mapContainer rounded-lg">
-    <div class="mapContainer__top closeBtnleft">
-      <v-btn fab small @click="closeMapLayout">
-        <CloseIcon />
-      </v-btn>
-    </div>
-    <div id="map-wrap" class="mapContainer__map">
-      <client-only>
-        <l-map :zoom="13" :center="[55.9464418, 8.1277591]">
-          <l-tile-layer
-            url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-          ></l-tile-layer>
-          <l-marker :lat-lng="[55.9464418, 8.1277591]"></l-marker>
-        </l-map>
-      </client-only>
-      
-    </div>
-  </div> -->
   <div id="map-wrap" class="mapContainer rounded-lg">
       <client-only>
         <l-map :zoom="13" :center="[55.9464418, 8.1277591]">
@@ -57,40 +39,9 @@ export default {
 </script>
 
 <style lang="scss">
-// .mapContainer {
-//   height: 100%;
-//   // height: 80vh;
-//   position: relative;
-
-//   &__top {
-//     position: absolute;
-//     top: 16px;
-//     z-index: 2 !important;
-//   }
-
-//   .closeBtnleft {
-//     left: 16px;
-//   }
-
-//   #map-wrap {
-//     // flex: 1;
-//   }
-
-//   &__map {
-//     height: 100%;
-//     // height: 80vh;
-//     width: 100%;
-//     position: absolute;
-//     z-index: 1 !important;
-//   }
-// }
 #map-wrap.mapContainer {
-  // position: relative;
   height: 100%;
   width: 100%;
-  //  z-index: 2 !important;
-
-
 
   .mapClose {
     position: absolute;
