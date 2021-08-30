@@ -22,7 +22,7 @@
                   width="120"
                   height="40"
                   class="whiteColor"
-                  @click="closeFilter"
+                  @click="toggleFilter"
                 >
                   <CloseIcon />
                   <span class="greenDark8--text font-regular-14">
@@ -33,7 +33,7 @@
               <v-col class="ps-0">
                 <div
                   class="d-flex align-center cursorPointer"
-                  @click="closeFilter"
+                  @click="toggleFilter"
                 >
                   <span class="me-2 font-regular-12 secondary--text"
                     >مشاهده ۳۴ مورد اقامتگاه</span
@@ -54,7 +54,7 @@
               width="86"
               height="40"
               class="greyLight1"
-              @click="showFilter"
+              @click="toggleFilter"
             >
               <FilterIcon />
               <span class="greenDark8--text font-regular-14"> فیلتر </span>
@@ -133,12 +133,9 @@ export default {
     },
   },
   methods: {
-    showFilter() {
-      this.filter = true;
-    },
-    closeFilter() {
-      this.filter = false;
-    },
+    toggleFilter(){
+      this.filter = !this.filter
+    }
   },
 };
 </script>

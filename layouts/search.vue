@@ -26,9 +26,6 @@
 
 <script>
 export default {
-  computed: { 
-  },
-  methods: {},
 };
 </script>
 

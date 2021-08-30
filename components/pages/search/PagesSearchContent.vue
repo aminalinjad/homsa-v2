@@ -179,15 +179,15 @@ export default {
   width: 134px;
 }
 .resultBorder {
-  border-bottom: #f5f5f5 solid 1px;
+  border-bottom: var(--v-greyLight4-base) solid 1px;
 }
 
 .resultSideBorderRtl {
-  border-left: #f5f5f5 solid 1px;
+  border-left: var(--v-greyLight4-base) solid 1px;
 }
 
 .resultSideBorderLtr {
-  border-right: #f5f5f5 solid 1px;
+  border-right: var(--v-greyLight4-base) solid 1px;
 }
 
 .leftBorderZero {

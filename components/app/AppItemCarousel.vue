@@ -119,7 +119,7 @@ export default {
 }
 
 .tagItem:active , .tagItem:hover {
-  color: #359138!important;
+  color: var(--v-primary-base)!important;
 }
 
 </style>

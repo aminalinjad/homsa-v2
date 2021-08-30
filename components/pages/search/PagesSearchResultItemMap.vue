@@ -33,14 +33,18 @@
             <v-card-actions class="pa-0 align-center">
             <!-- Price start -->
             <div class="font-regular-12">
-              <div class="secondary--text" v-if="index % 2 == 0">
+
+              <!-- modification need: remove this v-if base on index  -->
+              <div class="secondary--text" v-if="index % 2 === 0">
                 <span>قیمت کل</span>
                 <span>۲,۵۵۰,۰۰۰</span>
                 <span>تومان</span>
               </div>
+
+              <!-- modification need: remove this v-if base on index  -->
               <div
                 class="secondary--text text-center"
-                v-if="index % 3 == 0 && !(index % 2 == 0)"
+                v-if="index % 3 === 0 && !(index % 2 === 0)"
               >
                 <span class="text-decoration-line-through">۲,۵۵۰,۰۰۰</span>
               </div>
@@ -56,7 +60,7 @@
               <LightningIcon />
             </v-chip>
           </v-card-actions>
-          <v-card-text class="px-0 pt-2 pb-0 black--text" v-if="index % 2 == 0">
+          <v-card-text class="px-0 pt-2 pb-0 black--text" v-if="index % 2 === 0">
             <!-- modification need: in v-if o v-else ro bad az set kardane data bardaram -->
                 <div
                   class="px-2 redOpacity redOfferTime--text rounded-sm font-regular-12 d-flex justify-space-between"
@@ -117,8 +121,4 @@ export default {
 
 }
 
-.offerSec {
-  margin-top: -33px;
-  border-bottom: 1px #ec484a solid;
-}
 </style>

@@ -414,21 +414,21 @@ export default {
       mapLayout: "modules/structure/GET_MAP_LAYOUT"
     }),
     ifFixedHeader() {
-      if (this.fixedHeader == false) {
+      if (this.fixedHeader === false) {
         return false;
       } else {
         return true;
       }
     },
     ifSearchSection() {
-      if (this.searchSection == false) {
+      if (this.searchSection === false) {
         return false;
       } else {
         return true;
       }
     },
     ifSuggestion() {
-      if (this.suggestion == true) {
+      if (this.suggestion === true) {
         return true;
       } else {
         return false;

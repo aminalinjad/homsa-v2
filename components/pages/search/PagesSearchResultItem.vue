@@ -4,10 +4,10 @@
     <div v-if="ifGridView">
       
       <!-- offer sec  -->
-      <div class="redOffer--text text-center offerSec mx-3 mb-2" v-if="(index % 3 == 0)|| (index % 2 == 0)">
+      <div class="redOffer--text text-center offerSec mx-3 mb-2" v-if="(index % 3 === 0)|| (index % 2 === 0)">
         <!-- modification need: in v-if o v-else ro bad az set kardane data bardaram -->
-        <span v-if="index % 2 == 0" class="font-regular-12">تخفیف دار</span>
-        <div class="d-flex justify-space-between" v-else-if="index % 3 == 0">
+        <span v-if="index % 2 === 0" class="font-regular-12">تخفیف دار</span>
+        <div class="d-flex justify-space-between" v-else-if="index % 3 === 0">
           <span class="font-regular-12">مانده زمان تخفیف</span>
 
           <span>
@@ -50,12 +50,16 @@
 
         <!-- Price start -->
         <div class="font-regular-12">
-          <div class="secondary--text mb-n4"  v-if="index % 2 == 0" >
+
+          <!-- modification need : this v-if base of index should be removed after logic and api   -->
+          <div class="secondary--text mb-n4"  v-if="index % 2 === 0" >
             <span>قیمت کل</span>
             <span>۲,۵۵۰,۰۰۰</span>
             <span>تومان</span>
           </div>
-          <div class="secondary--text mb-n4 text-center"  v-if="(index % 3 == 0)&&!(index % 2 == 0)" >
+
+          <!-- modification need : this v-if base of index should be removed after logic and api   -->
+          <div class="secondary--text mb-n4 text-center"  v-if="(index % 3 === 0)&&!(index % 2 === 0)" >
            
             <span class="text-decoration-line-through">۲,۵۵۰,۰۰۰</span>
             
@@ -138,12 +142,12 @@
           <v-card-actions class="px-4">
             <!-- Price start -->
         <div class="font-regular-12">
-          <div class="secondary--text mb-n4"  v-if="index % 2 == 0" >
+          <div class="secondary--text mb-n4"  v-if="index % 2 === 0" >
             <span>قیمت کل</span>
             <span>۲,۵۵۰,۰۰۰</span>
             <span>تومان</span>
           </div>
-          <div class="secondary--text mb-n4 text-center"  v-if="(index % 3 == 0)&&!(index % 2 == 0)" >
+          <div class="secondary--text mb-n4 text-center"  v-if="(index % 3 === 0)&&!(index % 2 === 0)" >
            
             <span class="text-decoration-line-through">۲,۵۵۰,۰۰۰</span>
             
@@ -162,7 +166,7 @@
               label
               color="#EC484A0D"
               text-color="redOffer"
-              v-if="index % 2 == 0"
+              v-if="index % 2 === 0"
             >
               <span class="mt-n1 font-regular-14">تخفیف دار</span>
             </v-chip>
@@ -210,6 +214,6 @@ export default {
 <style lang="scss">
 .offerSec {
   margin-top: -33px;
-  border-bottom: 1px #EC484A solid;
+  border-bottom: 1px var(--v-redOfferTime-base) solid;
 }
 </style>

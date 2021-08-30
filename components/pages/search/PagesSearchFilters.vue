@@ -2,11 +2,11 @@
   <div>
     <div v-for="(filter, index) in filters" :key="index">
       <!-- map -->
-      <div v-if="filter.type == 'map'&& !mapLayout" class="mb-3"> 
+      <div v-if="filter.type === 'map'&& !mapLayout" class="mb-3"> 
         <PagesSearchMapThumbnail />
       </div>
       <!-- price -->
-      <div v-if="filter.type == 'price'" class="mb-3">
+      <div v-if="filter.type === 'price'" class="mb-3">
         <v-card flat class="rounded-lg py-3 px-5 histogramSectionCard">
           <div id="histogramSection">
             <div>
@@ -58,7 +58,7 @@
                     dense
                     solo
                     flat
-                    background-color="#F5F5F5"
+                    background-color="greyLight4"
                     v-model="rangeSliderFrom"
                     :value="filter.min"
                     class="font-regular-12"
@@ -76,7 +76,7 @@
                     dense
                     solo
                     flat
-                    background-color="#F5F5F5"
+                    background-color="greyLight4"
                     v-model="rangeSliderTo"
                     class="font-regular-12"
                     @input="inputRange"
@@ -102,7 +102,7 @@
         </v-card>
       </div>
       <!-- count -->
-      <div v-else-if="filter.type == 'count'" class="mb-3">
+      <div v-else-if="filter.type === 'count'" class="mb-3">
         <!-- count with title -->
         <div v-if="filter.title">
           <v-expansion-panels v-model="filter.expand" multiple flat>
@@ -161,7 +161,7 @@
       </div>
 
       <!-- boolean -->
-      <div v-else-if="filter.type == 'boolean'" class="mb-3">
+      <div v-else-if="filter.type === 'boolean'" class="mb-3">
         <v-card flat class="rounded-lg" height="46">
           <v-card-text class="py-1 filterBoolean">
             <v-switch
@@ -175,7 +175,7 @@
       </div>
 
       <!-- select -->
-      <div v-else-if="filter.type == 'select'" class="mb-3">
+      <div v-else-if="filter.type === 'select'" class="mb-3">
         <v-expansion-panels v-model="filter.expand" multiple flat>
           <v-expansion-panel class="rounded-lg filterSelect">
             <v-expansion-panel-header
@@ -196,7 +196,7 @@
       </div>
 
       <!-- selectGroup -->
-      <div v-else-if="filter.type == 'selectGroup'" class="mb-3">
+      <div v-else-if="filter.type === 'selectGroup'" class="mb-3">
         <v-card flat class="rounded-t-lg mb-n1">
           <v-card-title class="pt-3 pb-0 font-medium-14 greenDark8--text">
             {{ filter.title }}</v-card-title
@@ -206,7 +206,7 @@
           <v-expansion-panels v-model="item.expand" multiple flat>
             <v-expansion-panel
               class="filterSelect"
-              :class="index == 0 ? 'rounded-0' : ''"
+              :class="index === 0 ? 'rounded-0' : ''"
             >
               <v-expansion-panel-header
                 class="px-4 pb-2 navyDark--text font-regular-14"
@@ -261,7 +261,7 @@ export default {
     histogramData() {
       let filters = this.filters;
       for (let i = 0; i < filters.length; i++) {
-        if (filters[i].type == "price") {
+        if (filters[i].type === "price") {
           let data = filters[i].options;
           let histogramArray = [];
           for (let j = 0; j < data.length; j++) {
@@ -361,7 +361,7 @@ export default {
 }
 
 .filterBoolean .theme--light.v-label {
-  color: #000022 !important;
+  color: var(--v-navyDark-base) !important;
 }
 
 .filterSelect .v-expansion-panel-header {

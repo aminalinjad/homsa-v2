@@ -22,8 +22,9 @@ export default {
     themes: {
       light: {
         background: '#F5F5F5',
-        primary: '#359138',
         whiteColor: '#FFFFFF',
+        blackColor: '#000000',
+        primary: '#359138',
         secondary: '#757575',
         accent: colors.shades.black,
         error: colors.red.accent3,
