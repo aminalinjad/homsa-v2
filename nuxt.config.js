@@ -58,8 +58,33 @@ export default {
     '@nuxtjs/axios',
     'nuxt-leaflet',
     '@nuxtjs/svg',
-
+    '@nuxtjs/i18n',
   ],
+  // i18n module configuration:
+  i18n: {
+    locales: [
+      {
+        code: 'en',
+        // name: 'English',
+        iso: 'en-US',
+        file: 'en.json',
+      },
+      {
+        code: 'fa',
+        // name: 'Persian',
+        iso: 'fa-IR',
+        file: 'fa.json',
+      },
+    ],
+    defaultLocale: 'fa',
+    langDir: './locales',
+    // strategy: 'no_prefix',
+
+    lazy: true,
+    vueI18n: {
+      fallbackLocale: 'en',
+    },
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {

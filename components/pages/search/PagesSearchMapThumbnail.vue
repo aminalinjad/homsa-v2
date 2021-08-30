@@ -13,7 +13,7 @@
       </div>
       <div class="thumbnailMapContainer__text text-center py-5 rounded-b-lg cursorPointer" @click="mapLayoutMode">
         <span>
-          {{ mapThumbnailText }}
+          {{ $t('search.filters.map-thumbnail') }}
         </span>
       </div>
     </div>
@@ -23,12 +23,6 @@
 <script>
 import {mapActions} from 'vuex';
 export default {
-  data() {
-    return {
-      mapThumbnailText: "نمایش روی نقشه",
-    };
-  },
-  mounted() {},
   methods: {
     ...mapActions({
       setMapLayout: "modules/structure/SET_MAP_LAYOUT"

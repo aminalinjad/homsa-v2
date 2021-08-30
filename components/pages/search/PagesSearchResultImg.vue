@@ -139,7 +139,7 @@ export default {
 }
 
 .grnty {
-  background: #93a79399;
+  background: #01220099;
   width: 20px;
   height: 20px;
 }

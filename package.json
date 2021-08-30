@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
+    "@nuxtjs/i18n": "^7.0.2",
     "@nuxtjs/svg": "^0.1.12",
     "core-js": "^3.15.1",
     "hooper": "^0.3.4",

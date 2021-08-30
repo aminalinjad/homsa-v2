@@ -8,9 +8,9 @@
       <v-col>
         <div class="d-flex align-center justify-end">
           <div class="d-flex align-center">
-            <span class="font-regular-12 secondary--text"
-              >مرتب سازی بر اساس</span
-            >
+            <span class="font-regular-12 secondary--text">
+              {{ $t('search.main.sort-by') }}
+            </span>
             <div class="sortByInput ms-3 mb-n7">
               <v-select
                 :items="sortBy"
@@ -56,7 +56,9 @@
         <v-row class="ma-0" align="center">
           <v-col cols="1" class="pa-0">
             <div>
-              <span class="secondary--text font-regular-14">برچسب ها</span>
+              <span class="secondary--text font-regular-14">
+                {{ $t('search.main.tags') }}
+                </span>
             </div>
           </v-col>
           <v-col cols="11" class="pa-0">
@@ -134,6 +136,23 @@ export default {
         },
       ],
       results: [
+        { name: "dfd" },
+        { name: "dfd" },
+        { name: "dfd" },
+        { name: "dfd" },
+        { name: "dfd" },
+        { name: "dfd" },
+        { name: "dfd" },
+        { name: "dfd" },
+        { name: "dfd" },
+        { name: "dfd" },
+        { name: "dfd" },
+        { name: "dfd" },
+        { name: "dfd" },
+        { name: "dfd" },
+        { name: "dfd" },
+        { name: "dfd" },
+        { name: "dfd" },
         { name: "dfd" },
         { name: "dfd" },
         { name: "dfd" },

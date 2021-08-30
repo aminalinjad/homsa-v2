@@ -2,8 +2,10 @@
   <v-row>
     <v-col>
       <v-row>
-        <v-col>
-          <h5 class="font-regular-14 secondary--text">جستجوهای مرتبط:</h5>
+        <v-col class="pb-1">
+          <h5 class="font-regular-14 secondary--text">
+            {{ $t('search.main.related-search')}}
+          </h5>
         </v-col>
       </v-row>
       <v-row>

@@ -11,7 +11,7 @@
           <div id="histogramSection">
             <div>
               <span class="font-regular-14">
-                {{ priceTitle }}
+                {{ $t('search.filters.price.title') }}
               </span>
             </div>
             <div class="d-flex justify-center mt-2 rangeSlider">
@@ -51,7 +51,7 @@
               "
             >
               <div class="mx-5">
-                <div>از</div>
+                <div>{{ $t('search.filters.price.from') }}</div>
                 <div class="mt-1 mb-n6 centeredInput">
                   <v-text-field
                     filled
@@ -66,10 +66,10 @@
                   >
                   </v-text-field>
                 </div>
-                <div>تومان</div>
+                <div>{{ $t('search.filters.price.unit') }}</div>
               </div>
               <div class="mx-5">
-                <div>تا</div>
+                <div>{{ $t('search.filters.price.to') }}</div>
                 <div class="mt-1 mb-n6">
                   <v-text-field
                     filled
@@ -83,7 +83,7 @@
                   >
                   </v-text-field>
                 </div>
-                <div>تومان</div>
+                <div>{{ $t('search.filters.price.unit') }}</div>
               </div>
             </div>
 
@@ -95,7 +95,7 @@
                 :disabled="rangeBtnDisable"
                 @click="filterPrice"
               >
-                {{ sliderBtnText }}
+                {{ $t('search.filters.price.btn') }}
               </v-btn>
             </div>
           </div>
@@ -238,8 +238,6 @@ export default {
     return {
       expansionOpen: [0],
       expansionclose: [],
-      sliderBtnText: "اعمال محدوده قیمت",
-      priceTitle: "محدوده قیمت",
       data: [
         20012, 33012, 35012, 44012, 48012, 49812, 50012, 50122, 50212, 51012,
         51412, 56012, 60012,

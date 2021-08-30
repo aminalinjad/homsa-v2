@@ -19,8 +19,6 @@
 
     <!-- footer  -->
     <PagesSearchFooter />
-
-    
   </v-app>
 </template>
 

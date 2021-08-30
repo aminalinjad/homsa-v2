@@ -50,7 +50,7 @@
                   font-regular-14
                 "
               >
-                <span>شهر را انتخاب کنید</span>
+                <span>{{ $t('header.top.input.destination') }}</span>
               </div>
               <img
                 src="@/assets/images/icons/ic-search-small-bg.svg"
@@ -75,7 +75,7 @@
 
                 <span>{{ searchFormValue.checkOut }}</span>
                 <span class="ps-1 font-regular-12 greyLight2--text"
-                  >( + {{ searchFormValue.flexiblity }} روز)
+                  >( + {{ searchFormValue.flexiblity }} {{ $t('header.top.input.day') }})
                 </span>
               </div>
               <v-divider vertical></v-divider>
@@ -83,10 +83,10 @@
               <div class="px-3">
                 <span v-if="searchFormValue.count">
                   {{ searchFormValue.count }}
-                  نفر
+                  {{ $t('header.top.input.unit') }}
                 </span>
                 <span class="font-regular-14 secondary--text" v-else
-                  >انتخاب نفرات</span
+                  >{{ $t('header.top.input.count') }}</span
                 >
               </div>
               <img
@@ -103,7 +103,7 @@
             <div>
               <v-btn rounded text color="primary" height="30" class="px-2 py-1">
                 <span class="font-medium-14">
-                  {{ hostBtn }}
+                  {{ $t('header.top.guest') }}
                 </span>
               </v-btn>
             </div>
@@ -122,18 +122,18 @@
                     text
                     color="greenDark8"
                     height="30"
-                    class="ps-1 pe-2 py-1"
+                    class="ps-1 pe-2 py-1 text-lowercase"
                     v-bind="attrs"
                     v-on="on"
                   >
                     <img src="@/assets/images/icons/ic-profile.svg" />
                     <div class="ms-2">
                       <span class="font-medium-14">
-                        {{ login }}
+                        {{ $t('header.top.user.login') }}
                       </span>
                       <span class="font-medium-14">/</span>
                       <span class="font-medium-14">
-                        {{ register }}
+                        {{ $t('header.top.user.register') }}
                       </span>
                     </div>
                   </v-btn>
@@ -201,7 +201,9 @@
           clearable
           height="66"
           background-color="whiteColor"
-          label="مقصد، اقامتگاه"
+          :label="`${this.$t('header.bottom.destination.label')}`"
+          :placeholder="`${this.$t('header.bottom.destination.place-holder')}`"
+          persistent-placeholder
           :items="
             ifSuggestion
               ? destinationSuggestions.items
@@ -250,7 +252,9 @@
           readonly
           height="66"
           background-color="whiteColor"
-          label="تاریخ ورود"
+          :label="`${this.$t('header.bottom.check-in.label')}`"
+          :placeholder="`${this.$t('header.bottom.check-in.place-holder')}`"
+          persistent-placeholder
           v-model="searchForm.checkIn"
           class="me-2 rounded srchCheckIn font-regular-14"
         >
@@ -260,7 +264,9 @@
           readonly
           height="66"
           background-color="whiteColor"
-          label="تاریخ خروج"
+          :label="`${this.$t('header.bottom.check-out.label')}`"
+          :placeholder="`${this.$t('header.bottom.check-out.place-holder')}`"
+          persistent-placeholder
           v-model="searchForm.checkOut"
           class="me-2 rounded srchCheckOut font-regular-14"
         >
@@ -274,7 +280,7 @@
               readonly
               height="66"
               background-color="whiteColor"
-              label="تعداد نفرات"
+              :label="`${this.$t('header.bottom.count.label')}`"
               v-model="searchForm.count"
               class="rounded font-regular-14"
             >
@@ -328,9 +334,6 @@ export default {
       searchSection: false,
       searchResult: false,
       overlay: false,
-      hostBtn: "میزبان شوید",
-      login: "ورود",
-      register: "ثبت‌نام",
       userMenu: {
         menuTitle: "مشاهده حساب کاربری",
         menuBody: [
@@ -345,10 +348,9 @@ export default {
         ],
       },
       searchForm: {
-        destination: "کجا می‌خواهید بروید؟",
-        checkIn: "انتخاب کنید",
-        checkOut: "انتخاب کنید",
-        count: "۱ نفر",
+        destination: "",
+        checkIn: "",
+        checkOut: "",
         count: "1",
       },
       searchFormValue: {
@@ -589,9 +591,9 @@ export default {
 }
 // costomize user menu content
 .headerUserMenu.v-menu {
-  &__content {
-    left: 80px !important;
-  }
+  // &__content {
+  //   left: 80px !important;
+  // }
 }
 
 </style>
