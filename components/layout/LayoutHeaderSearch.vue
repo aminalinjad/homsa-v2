@@ -1,5 +1,5 @@
 <template>
-  <div
+  <header
     id="headerSearch"
     class="headerCls"
     :class="ifSearchSection || !ifFixedHeader ? 'ma-4 mb-0' : ''"
@@ -7,7 +7,7 @@
     <!-- header top section -->
     <div
       class="rounded-t-lg whiteColor headerCls__top"
-      :class="ifSearchSection || ifFixedHeader ? '' : 'rounded-b-lg'"
+      :class="ifSearchSection || ifFixedHeader ? 'bottomShodaw' : 'rounded-b-lg'"
     >
     <v-container class="pa-4" :fluid="($vuetify.breakpoint.md||mapLayout)?true:false" >
       <v-row>
@@ -101,7 +101,7 @@
         <v-col>
           <div class="mt-1 d-flex align-center justify-end">
             <div>
-              <v-btn rounded text color="primary" height="30" class="px-2 py-1">
+              <v-btn rounded text color="primary" height="30" class="px-2 py-1 text-capitalize">
                 <span class="font-medium-14">
                   {{ $t('header.top.guest') }}
                 </span>
@@ -122,7 +122,7 @@
                     text
                     color="greenDark8"
                     height="30"
-                    class="ps-1 pe-2 py-1 text-lowercase"
+                    class="ps-1 pe-2 py-1 text-capitalize"
                     v-bind="attrs"
                     v-on="on"
                   >
@@ -139,7 +139,7 @@
                   </v-btn>
                 </template>
                 <v-list class="cursorPointer">
-                  <v-list-item link to="#">
+                  <v-list-item link to="">
                     <v-list-item-subtitle class="greenDark8--text">{{
                       userMenu.menuTitle
                     }}</v-list-item-subtitle>
@@ -320,7 +320,7 @@
 
       <v-overlay :value="overlay" z-index="-1"></v-overlay>
     </div>
-  </div>
+  </header>
 </template>
 
 <script>
@@ -581,6 +581,10 @@ export default {
       }
     }
   }
+
+  .bottomShodaw {
+      box-shadow: 0 4px 10px -2px var(--v-greyLight2-base);
+    }
 }
 
 .fixedHeader {

@@ -90,12 +90,10 @@
           :class="[$vuetify.rtl ? 'resultSideBorderRtl' : 'resultSideBorderLtr', ifGridView? 'py-10':'py-6']"
         >
           <!-- item component -->
-          <NuxtLink to="#">
+          <NuxtLink to="">
             <PagesSearchResultItem :ifGridView="ifGridView" :index="index" />
-
           </NuxtLink>
 
-          
         </v-col>
       </v-row>
       <!-- Result Sec End -->
@@ -122,17 +120,17 @@ export default {
         {
           text: "هومسا",
           disabled: false,
-          href: "#",
+          href: "",
         },
         {
           text: "اقامتگاه های استان گیلان",
           disabled: false,
-          href: "#",
+          href: "",
         },
         {
           text: "شهر رشت",
           disabled: true,
-          href: "#",
+          href: "",
         },
       ],
       results: [

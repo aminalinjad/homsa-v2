@@ -21,12 +21,12 @@
                   text
                   width="120"
                   height="40"
-                  class="whiteColor"
+                  class="whiteColor text-capitalize"
                   @click="toggleFilter"
                 >
                   <CloseIcon />
                   <span class="greenDark8--text font-regular-14">
-                    بستن فیلتر
+                    {{ $t('search.map.close-filter')}}
                   </span>
                 </v-btn>
               </v-col>
@@ -53,11 +53,11 @@
               text
               width="86"
               height="40"
-              class="greyLight1"
+              class="greyLight1 text-capitalize"
               @click="toggleFilter"
             >
               <FilterIcon />
-              <span class="greenDark8--text font-regular-14"> فیلتر </span>
+              <span class="greenDark8--text font-regular-14"> {{ $t('search.map.filter')}} </span>
             </v-btn>
           </v-col>
         </v-row>

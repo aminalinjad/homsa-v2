@@ -8,7 +8,12 @@
           <l-marker :lat-lng="[55.9464418, 8.1277591]"></l-marker>
         </l-map>
       </client-only>
-      <v-btn class="mapClose" fab small @click="closeMapLayout">
+      <v-btn 
+      fab small
+      class="mapClose" 
+      :class="{'mapCloseRight': !$vuetify.rtl}"
+      @click="closeMapLayout"
+      >
         <CloseIcon />
       </v-btn>
     </div>
@@ -48,6 +53,11 @@ export default {
     top: 32px;
     left: 32px;
     z-index: 1100!important;
+  }
+
+  .mapCloseRight {
+    left: auto!important;
+    right: 32px!important;
   }
 
 }

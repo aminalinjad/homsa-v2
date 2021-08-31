@@ -49,6 +49,10 @@
       "sort-by": "Sort by",
       "tags": "Tags",
       "related-search": "Related Search"
+    },
+    "map": {
+      "filter": "Filter",
+      "close-filter": "Close filter"
     }
   }
 }

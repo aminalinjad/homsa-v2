@@ -18,7 +18,7 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col class="pa-0 pb-2 text-left">
+              <v-col class="pa-0 pb-2" :class="$vuetify.rtl?'text-left':'text-right'">
                 <span class="font-regular-12 secondary--text opacity6">(۳۶۰ نظر)</span>
                 <span class="font-bold-16" :class="rankColor(3.8) + '--text'"
                   >۳.۸</span

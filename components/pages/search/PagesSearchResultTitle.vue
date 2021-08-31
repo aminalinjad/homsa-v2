@@ -29,17 +29,17 @@ export default {
         {
           text: "هومسا",
           disabled: false,
-          href: "#",
+          href: "",
         },
         {
           text: "اقامتگاه های استان گیلان",
           disabled: false,
-          href: "#",
+          href: "",
         },
         {
           text: "شهر رشت",
           disabled: true,
-          href: "#",
+          href: "",
         },
       ],
     };
