@@ -28,7 +28,7 @@
               fab
               small
               class="white me-n1"
-              :class="ifRtl ? 'leftBorderZero' : 'rightBorderZero'"
+              :class="this.$vuetify.rtl ? 'rounded-l-0' : 'rounded-r-0'"
               @click="listView"
             >
               <v-icon class="secondary--text">mdi-menu</v-icon>
@@ -38,7 +38,7 @@
               fab
               small
               class="white"
-              :class="ifRtl ? 'rightBorderZero' : 'leftBorderZero'"
+              :class="this.$vuetify.rtl ? 'rounded-r-0' : 'rounded-l-0'"
               @click="gridView"
             >
               <v-icon class="secondary--text">mdi-apps</v-icon>
@@ -86,8 +86,8 @@
           :md="ifGridView ? 4 : 12"
           v-for="(result, index) in results"
           :key="index"
-          class="pt-10 pb-11 px-6 resultBorder"
-          :class="ifRtl ? 'resultSideBorderRtl' : 'resultSideBorderLtr'"
+          class=" px-6 resultBorder"
+          :class="[$vuetify.rtl ? 'resultSideBorderRtl' : 'resultSideBorderLtr', ifGridView? 'py-10':'py-6']"
         >
           <!-- item component -->
           <NuxtLink to="#">
@@ -165,13 +165,6 @@ export default {
     };
   },
   computed: {
-    ifRtl() {
-      if (this.$vuetify.rtl) {
-        return true;
-      } else {
-        return false;
-      }
-    },
     ifGridView() {
       if (this.gridViewResult) {
         return true;
@@ -207,15 +200,5 @@ export default {
 
 .resultSideBorderLtr {
   border-right: var(--v-greyLight4-base) solid 1px;
-}
-
-.leftBorderZero {
-  border-top-left-radius: 0 !important;
-  border-bottom-left-radius: 0 !important;
-}
-
-.rightBorderZero {
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
 }
 </style>

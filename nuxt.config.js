@@ -65,20 +65,20 @@ export default {
     locales: [
       {
         code: 'en',
-        // name: 'English',
+        name: 'English',
         iso: 'en-US',
         file: 'en.json',
       },
       {
         code: 'fa',
-        // name: 'Persian',
+        name: 'Persian',
         iso: 'fa-IR',
         file: 'fa.json',
       },
     ],
     defaultLocale: 'fa',
     langDir: './locales',
-    // strategy: 'no_prefix',
+    strategy: 'no_prefix',
 
     lazy: true,
     vueI18n: {

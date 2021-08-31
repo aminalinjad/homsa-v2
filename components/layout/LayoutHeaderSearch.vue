@@ -172,7 +172,7 @@
             <v-divider vertical class="mx-3 greyLight4"></v-divider>
 
             <div class="d-flex align-center">
-              <v-btn icon width="30" height="30" class="pa-1">
+              <v-btn icon width="30" height="30" class="pa-1" @click="changeLang">
                 <img src="@/assets/images/icons/ic-language.svg" />
               </v-btn>
             </div>
@@ -486,7 +486,6 @@ export default {
       this.searchForm.destination = "کجا می‌خواهید بروید؟";
       this.suggestion = true;
     },
-
     addCount() {
       this.searchForm.count++;
     },
@@ -496,6 +495,16 @@ export default {
       } else {
       }
     },
+    changeLang() {
+      if(this.$i18n.locale === 'fa') {
+        this.$i18n.setLocale('en');
+        this.$vuetify.rtl= false;
+      } else {
+        this.$i18n.setLocale('fa');
+        this.$vuetify.rtl= true;
+      }
+      // this.$vuetify.rtl = !this.$vuetify.rtl;
+    }
   },
 };
 </script>

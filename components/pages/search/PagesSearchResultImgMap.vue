@@ -6,7 +6,7 @@
           >مهمان نواز</v-chip
         >
       </v-col>
-      <v-col class="text-left pa-0 pt-1">
+      <v-col class="pa-0 pt-1" :class="$vuetify.rtl?'text-left':'text-right'">
         <v-btn icon @click="addFavorite">
           <v-icon :color="favorite ? 'redOfferTime' : ''">mdi-heart</v-icon>
         </v-btn>
@@ -47,7 +47,7 @@
       </v-carousel>
     </div>
     <div class="resultImgSec__bottom">
-      <v-tooltip left color="greenDark8">
+      <v-tooltip :left="$vuetify.rtl" :right="!$vuetify.rtl" color="greenDark8">
         <template v-slot:activator="{ on, attrs }">
           <div
             class="grnty rounded-sm d-flex align-center justify-center"

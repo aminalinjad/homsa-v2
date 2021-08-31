@@ -21,7 +21,7 @@
     <div class="mx-7 itemHooper__main">
       <hooper
         class="itmHoopr"
-        :rtl="ifRtl"
+        :rtl="this.$vuetify.rtl"
         :itemsToShow="4.5"
         ref="carousel"
         @slide="updateCarousel"
@@ -54,28 +54,31 @@ export default {
 
   },
   computed: {
-    ifRtl() {
-      if (this.$vuetify.rtl) {
-        return true;
-      } else {
-        return false;
-      }
-    },
+    // ifRtl() {
+    //   if (this.$vuetify.rtl) {
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // },
   },
   methods: {
     slidePrev() {
-      if (this.ifRtl) {
-        this.$refs.carousel.slidePrev();
-      } else {
-        this.$refs.carousel.slideNext();
-      }
+      // if (this.$vuetify.rtl) {
+      //   this.$refs.carousel.slidePrev();
+      // } else {
+      //   this.$refs.carousel.slideNext();
+      // }
+      this.$refs.carousel.slidePrev();
     },
     slideNext() {
-      if (this.ifRtl) {
-        this.$refs.carousel.slideNext();
-      } else {
-        this.$refs.carousel.slidePrev();
-      }
+      // if (this.$vuetify.rtl) {
+      //   this.$refs.carousel.slideNext();
+      // } else {
+      //   this.$refs.carousel.slidePrev();
+      // }
+
+       this.$refs.carousel.slideNext();
     },
     updateCarousel(payload) {
       this.myCarouselData = payload.currentSlide;

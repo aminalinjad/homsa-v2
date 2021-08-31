@@ -2,51 +2,53 @@
   "header": {
     "top": {
       "input": {
-        "destination": "شهر را انتخاب کنید",
-        "day": "روز",
-        "unit": "نفر",
-        "count": "انتخاب نفرات"
+        "destination": "Select a city",
+        "day": "Day",
+        "unit": "guest",
+        "unit-plurals": "guests",
+        "count": "Count"
       },
-      "guest": "میزبان شوید",
+      "guest": "Be the host",
       "user": {
-        "login": "ورود",
-        "register": "ثبت‌نام"
+        "login": "Login",
+        "register": "Register"
       }
     },
     "bottom": {
       "destination": {
-        "label": "مقصد، اقامتگاه",
-        "place-holder": "کجا می‌خواهید بروید؟"
+        "label": "Location",
+        "place-holder": "Where are you going?"
       },
       "check-in": {
-        "label": "تاریخ ورود",
-        "place-holder": "انتخاب کنید"
+        "label": "Check in",
+        "place-holder": "Add dates"
       },
       "check-out": {
-        "label": "تاریخ خروج",
-        "place-holder": "انتخاب کنید"
+        "label": "check out",
+        "place-holder": "Add dates"
       },
       "count": {
-        "label": "تعداد نفرات",
-        "unit": "نفر"
+        "label": "Guests",
+        "unit": "guest",
+        "unit-plurals": "guests"
       }
     }
   },
   "search": {
     "filters": {
-      "map-thumbnail": "نمایش روی نقشه",
+      "map-thumbnail": "Show map",
       "price": {
-          "title": "محدوده قیمت",
-          "from": "از",
-          "to": "تا",
-          "unit": "تومان",
-          "btn": "اعمال محدوده قیمت"
+          "title": "Price range",
+          "from": "min price",
+          "to": "max price",
+          "unit": "Toman",
+          "btn": "Submit"
       }
     },
     "main": {
-      "sort-by": "مرتب سازی بر اساس",
-      "tags": "برچسب ها",
-      "related-search": "جستجوهای مرتبط:"
+      "sort-by": "Sort by",
+      "tags": "Tags",
+      "related-search": "Related Search"
     }
   }
 }

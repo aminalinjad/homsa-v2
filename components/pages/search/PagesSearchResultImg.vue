@@ -1,12 +1,12 @@
 <template>
   <div class="resultImgSec">
-    <v-row class="resultImgSec__top px-2">
+    <v-row class="resultImgSec__top px-1">
       <v-col>
         <v-chip label small color="white" class="font-regular-12"
           >مهمان نواز</v-chip
         >
       </v-col>
-      <v-col class="text-left">
+      <v-col :class="$vuetify.rtl?'text-left':'text-right'">
         <v-btn icon @click="addFavorite">
           <v-icon :color="favorite ? 'redOfferTime' : ''">mdi-heart</v-icon>
         </v-btn>
@@ -47,7 +47,7 @@
       </v-carousel>
     </div>
     <div class="resultImgSec__bottom" v-if="ifGridView">
-      <v-tooltip left color="greenDark8">
+      <v-tooltip :left="$vuetify.rtl" :right="!$vuetify.rtl" color="greenDark8">
         <template v-slot:activator="{ on, attrs }">
           <div
             class="grnty rounded-sm d-flex align-center justify-center"

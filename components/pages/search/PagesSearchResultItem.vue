@@ -20,12 +20,12 @@
       <!-- image sec  -->
       <PagesSearchResultImg  :index="index"/>
       <!-- text sec  -->
-      <v-card-subtitle class="pt-3">
+      <v-card-subtitle class="pt-3 pb-1 px-0">
         <v-row>
-          <v-col>
+          <v-col class="pb-2">
             <span class="font-regular-12 secondary--text">رشت - گیلان</span>
           </v-col>
-          <v-col class="text-left">
+          <v-col class="pb-2" :class="$vuetify.rtl?'text-left':'text-right'">
             <span v-if="false">
               <span class="font-bold-14 secondary--text">جدید</span>
               
@@ -40,13 +40,13 @@
           </v-col>
         </v-row>
       </v-card-subtitle>
-      <v-card-text class="black--text">
+      <v-card-text class="pb-3  px-0 greenDark8--text">
         <p class="mb-1">آپارتمان مبله دوبلکس در خیابان ولیعصر</p>
         <p class="font-regular-12">دو خوابه - ظرفیت ۸ نفره</p>
       </v-card-text>
 
       <!-- bottom sec  -->
-      <v-card-actions>
+      <v-card-actions class="px-0">
 
         <!-- Price start -->
         <div class="font-regular-12">
@@ -64,10 +64,10 @@
             <span class="text-decoration-line-through">۲,۵۵۰,۰۰۰</span>
             
           </div>
-          <div class="mt-4">
+          <div class="mt-4 greenDark8--text">
             <span>هر شب</span>
             <span class="font-bold-14">۸۵۰,۰۰۰</span>
-            <span class="font-bold-14">تومان</span>
+            <span>تومان</span>
           </div>
         </div>
         <!-- Price end -->
@@ -92,13 +92,13 @@
         </v-col>
 
         <!-- info sec -->
-        <v-col cols="8">
-          <v-card-subtitle class="pt-3">
+        <v-col cols="8 px-0">
+          <v-card-subtitle class="pt-3 pb-0">
             <v-row>
-              <v-col>
-                <span class="secondary--text">رشت - گیلان</span>
+              <v-col class="pb-0">
+                <span class="font-regular-12 secondary--text">رشت - گیلان</span>
               </v-col>
-              <v-col class="text-left">
+              <v-col class="pb-0" :class="$vuetify.rtl?'text-left':'text-right'">
                 <span class="font-regular-12 secondary--text">(۳۶۰ نظر)</span>
                 <span class="font-bold-16" :class="rankColor(3.8) + '--text'"
                   >۳.۸</span
@@ -109,11 +109,11 @@
           </v-card-subtitle>
           <v-card-text class="black--text">
             <v-row>
-              <v-col>
-                <p class="mb-1 font-medium-14">
+              <v-col class="pt-1">
+                <p class="mb-4 font-medium-14 greenDark8--text">
                   آپارتمان مبله دوبلکس در خیابان ولیعصر
                 </p>
-                <p class="secondary--text font-regular-12">
+                <p class="mb-3 secondary--text font-regular-12">
                   دو خوابه - ظرفیت ۸ نفره - استخر - ماشین لباسشویی
                 </p>
                 <v-chip
@@ -127,10 +127,10 @@
                   <span class="ms-1 font-regular-12">گارانتی شده</span>
                 </v-chip>
               </v-col>
-              <v-col class="text-left">
-                <v-chip label color="orangeBookingBg">
+              <v-col :class="$vuetify.rtl?'text-left':'text-right'">
+                <v-chip label color="orangeBookingBg" class="mt-6">
                   <v-icon color="orangeBooking">mdi-flash</v-icon>
-                  <span class="orangeBooking--text mt-n1 font-medium-14"
+                  <span class="mt-n1 orangeBooking--text font-medium-14"
                     >رزرو آنی</span
                   >
                 </v-chip>
@@ -152,13 +152,14 @@
             <span class="text-decoration-line-through">۲,۵۵۰,۰۰۰</span>
             
           </div>
-          <div class="mt-4">
+          <div class="mt-4 greenDark8--text">
             <span>هر شب</span>
             <span class="font-bold-14">۸۵۰,۰۰۰</span>
-            <span class="font-bold-14">تومان</span>
+            <span>تومان</span>
           </div>
         </div>
         <!-- Price end -->
+
             <v-spacer></v-spacer>
 
             <!-- modification need: in v-if o v-else ro bad az set kardane data bardaram -->
