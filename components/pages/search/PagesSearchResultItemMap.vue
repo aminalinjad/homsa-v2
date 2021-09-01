@@ -18,12 +18,12 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col class="pa-0 pb-2" :class="$vuetify.rtl?'text-left':'text-right'">
+              <v-col class="pa-0 pb-2 d-flex align-center justify-end">
                 <span class="font-regular-12 secondary--text opacity6">(۳۶۰ نظر)</span>
-                <span class="font-bold-16" :class="rankColor(3.8) + '--text'"
+                <span class="mx-1 font-bold-16" :class="rankColor(rank) + '--text'"
                   >۳.۸</span
                 >
-                <StarIcon />
+                <StarIcon :color="rank>=4?'#359138':rank >= 3?'#57C25B': '#FF9D00'"/>
               </v-col>
             </v-row>
           </v-card-subtitle>
@@ -81,8 +81,8 @@
 </template>
 
 <script>
-import LightningIcon from '~/assets/images/icons/ic-thunder-lightning-small.svg?inline';
-import StarIcon from '~/assets/images/icons/ic-star-favorite.svg?inline';
+import LightningIcon from '@/assets/AppIcons/thunderLightning.vue';
+import StarIcon from '@/assets/AppIcons/starFavorite.vue';
 export default {
   props: {
     index: {
@@ -97,6 +97,7 @@ export default {
   data() {
     return {
       title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
+      rank: 3.8
     };
   },
 

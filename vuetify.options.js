@@ -1,5 +1,6 @@
 import colors from "vuetify/es5/util/colors";
 import fa from "vuetify/es5/locale/fa";
+import customIcon from "@/utiles/customIcon.js"
 
 export default {
   // breakpoint: {
@@ -12,7 +13,9 @@ export default {
   //   scrollBarWidth: 16,
 
   // },
-  icons: {},
+  icons: {
+    values: customIcon
+  },
   lang: {
     locales: { fa },
     current: "fa"
@@ -35,6 +38,7 @@ export default {
         greyLight1: "#FAFAFA",
         greyLight4: "#F5F5F5",
         greyLight2: "#ABABAB",
+        greyDark8: "#323232",
         greenDark8: "#012200",
         green2: "#57C25B",
         orangeBooking: "#FF9D00",

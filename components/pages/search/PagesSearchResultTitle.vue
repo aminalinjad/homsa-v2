@@ -8,7 +8,7 @@
       ></v-breadcrumbs>
     </div>
     <div class="d-flex align-center">
-      <p class="font-regular-18 mb-0">اجاره اقامتگاه در شهر رشت</p>
+      <p class="font-regular-18 mb-0 greenDark8--text">اجاره اقامتگاه در شهر رشت</p>
       <span class="ms-2 font-regular-12 secondary--text" v-if="!isFilter">(۳۴ مورد)</span>
     </div>
   </div>
@@ -16,6 +16,8 @@
 
 <script>
 import { mapGetters } from "vuex";
+import * as types from '@/store/types.js';
+
 export default {
   props: {
     isFilter: {
@@ -46,7 +48,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      mapLayout: "modules/structure/GET_MAP_LAYOUT",
+      mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
     }),
   },
 };

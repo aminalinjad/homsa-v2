@@ -4,6 +4,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
+import * as types from '@/store/types.js';
 export default {
   layout: "search",
   props: [],
@@ -23,7 +24,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      mapLayout: "modules/structure/GET_MAP_LAYOUT",
+      mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
     }),
   },
   mounted() {
@@ -31,8 +32,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      setMapLayout: "modules/structure/SET_MAP_LAYOUT",
-      setFilters: "modules/filters/SET_FILTERS",
+      setMapLayout: `modules/structure/${types.structure.actions.GET_MAP_LAYOUT}`,
+      setFilters: `modules/filters/${types.filters.actions.SET_FILTERS}`,
     }),
     goId() {
       this.$router.push(`/${this.id}`);

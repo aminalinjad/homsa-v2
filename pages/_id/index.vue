@@ -9,6 +9,7 @@
 <script>
 import { CurrencyService } from "@/services";
 import { mapGetters, mapActions } from "vuex";
+import * as types from '@/store/types.js';
 export default {
   props: [],
   data() {
@@ -16,13 +17,13 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currencyLists: "modules/currencies/GET_CURRENCIES",
+      currencyLists: `modules/currencies/${types.currencies.getters.GET_CURRENCIES}`,
     }),
   },
   mounted() {},
   methods: {
     ...mapActions({
-      setCurrencies: "modules/currencies/SET_CURRENCIES",
+      setCurrencies: `modules/currencies/${types.currencies.actions.SET_CURRENCIES}`,
     }),
 
     useService() {

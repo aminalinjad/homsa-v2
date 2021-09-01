@@ -24,7 +24,9 @@
                   class="whiteColor text-capitalize"
                   @click="toggleFilter"
                 >
-                  <CloseIcon />
+                  <v-icon>
+                    $close
+                  </v-icon>
                   <span class="greenDark8--text font-regular-14">
                     {{ $t('search.map.close-filter')}}
                   </span>
@@ -38,7 +40,7 @@
                   <span class="me-2 font-regular-12 secondary--text"
                     >مشاهده ۳۴ مورد اقامتگاه</span
                   >
-                  <ArrowLeftIcon />
+                 <arrowRotate :rotate="!$vuetify.rtl?true:false" />
                 </div>
               </v-col>
             </v-row>
@@ -56,7 +58,12 @@
               class="greyLight1 text-capitalize"
               @click="toggleFilter"
             >
-              <FilterIcon />
+              <v-icon v-if="filterAdded">
+                $filter2
+              </v-icon>
+              <v-icon v-else>
+                $filter
+              </v-icon>
               <span class="greenDark8--text font-regular-14"> {{ $t('search.map.filter')}} </span>
             </v-btn>
           </v-col>
@@ -94,13 +101,11 @@
 </template>
 
 <script>
-import CloseIcon from "~/assets/images/icons/ic-delete.svg?inline";
-import FilterIcon from "~/assets/images/icons/ic-filter.svg?inline";
-import ArrowLeftIcon from "~/assets/images/icons/ic-arrow-left.svg?inline";
 import vueCustomScrollbar from "vue-custom-scrollbar";
 import "vue-custom-scrollbar/dist/vueScrollbar.css";
+import arrowRotate from "@/assets/AppIcons/arrowLeft"
 export default {
-  components: { CloseIcon, ArrowLeftIcon, FilterIcon, vueCustomScrollbar },
+  components: { arrowRotate, vueCustomScrollbar },
   props: {
     isRtl: {
       type: Boolean,
@@ -110,6 +115,7 @@ export default {
   data() {
     return {
       filter: false,
+      filterAdded: false,
       ifGridView: false,
       results: [
         { name: "dfd" },

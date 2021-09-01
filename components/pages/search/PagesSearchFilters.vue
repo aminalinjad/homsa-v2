@@ -230,7 +230,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex';
+import * as types from '@/store/types.js'
 export default {
   props: {
   },
@@ -250,8 +251,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      filters: "modules/filters/GET_FILTERS",
-      mapLayout: "modules/structure/GET_MAP_LAYOUT",
+      filters: `modules/filters/${types.filters.getters.GET_FILTERS}`,
+      mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
     }),
     histogramWidth() {
       return this.histogramSectionWidth;

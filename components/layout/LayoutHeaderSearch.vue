@@ -324,8 +324,10 @@
 </template>
 
 <script>
-import SearchIcon from "~/assets/images/icons/ic-search-small-bg.svg?inline";
+import SearchIcon from "@/assets/images/icons/ic-search-small-bg.svg?inline";
 import {mapGetters} from "vuex";
+import * as types from "@/store/types.js";
+
 export default {
   components: { SearchIcon },
   data() {
@@ -413,7 +415,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      mapLayout: "modules/structure/GET_MAP_LAYOUT"
+      mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
     }),
     ifFixedHeader() {
       if (this.fixedHeader === false) {

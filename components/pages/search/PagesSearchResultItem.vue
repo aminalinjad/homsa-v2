@@ -31,10 +31,10 @@
               
 
             </span>
-            <span v-else>
+            <span class="d-flex align-center justify-end" v-else>
               <span class="font-regular-10 secondary--text">(۳۶۰ نظر)</span>
-            <span :class="rankColor(4) + '--text'">۴.۲</span>
-            <v-icon small class="mb-1" :color="rankColor(4)">mdi-star</v-icon>
+            <span class="mx-1" :class="rankColor(4) + '--text'">۴.۲</span>
+            <StarIcon :color="rank>=4?'#359138':rank >= 3?'#57C25B': '#FF9D00'"/>
             </span>
             
           </v-col>
@@ -75,7 +75,7 @@
         <v-spacer></v-spacer>
 
         <v-chip label color="orangeBookingBg">
-          <v-icon color="orangeBooking">mdi-flash</v-icon>
+          <v-icon color="orangeBooking">$lightning</v-icon>
           <span class="orangeBooking--text mt-n1 font-regular-12"
             >رزرو آنی</span
           >
@@ -98,12 +98,13 @@
               <v-col class="pb-0">
                 <span class="font-regular-12 secondary--text">رشت - گیلان</span>
               </v-col>
-              <v-col class="pb-0" :class="$vuetify.rtl?'text-left':'text-right'">
+              <v-col class="pb-0 d-flex align-center justify-end">
                 <span class="font-regular-12 secondary--text">(۳۶۰ نظر)</span>
-                <span class="font-bold-16" :class="rankColor(3.8) + '--text'"
+                <span class="mx-1 font-bold-16" :class="rankColor(rank) + '--text'"
                   >۳.۸</span
                 >
-                <v-icon :color="rankColor(3.8)" class="mb-1">mdi-star</v-icon>
+                <StarIcon 
+                :color="rank>=4?'#359138':rank >= 3?'#57C25B': '#FF9D00'"/>
               </v-col>
             </v-row>
           </v-card-subtitle>
@@ -186,6 +187,7 @@
 </template>
 
 <script>
+import StarIcon from '@/assets/AppIcons/starFavorite.vue';
 export default {
   props: {
     ifGridView: {
@@ -197,7 +199,12 @@ export default {
       default: 0,
     },
   },
-  computed: {},
+  components: { StarIcon },
+  data() {
+    return {
+      rank: 4
+    }
+  },
   methods: {
     rankColor(color) {
       if (color >= 4) {
