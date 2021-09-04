@@ -1,0 +1,58 @@
+{
+  "header": {
+    "top": {
+      "input": {
+        "destination": "Select a city",
+        "day": "Day",
+        "unit": "guest",
+        "unit-plurals": "guests",
+        "count": "Count"
+      },
+      "guest": "Be the host",
+      "user": {
+        "login": "Login",
+        "register": "Register"
+      }
+    },
+    "bottom": {
+      "destination": {
+        "label": "Location",
+        "place-holder": "Where are you going?"
+      },
+      "check-in": {
+        "label": "Check in",
+        "place-holder": "Add dates"
+      },
+      "check-out": {
+        "label": "check out",
+        "place-holder": "Add dates"
+      },
+      "count": {
+        "label": "Guests",
+        "unit": "guest",
+        "unit-plurals": "guests"
+      }
+    }
+  },
+  "search": {
+    "filters": {
+      "map-thumbnail": "Show map",
+      "price": {
+          "title": "Price range",
+          "from": "min price",
+          "to": "max price",
+          "unit": "Toman",
+          "btn": "Submit"
+      }
+    },
+    "main": {
+      "sort-by": "Sort by",
+      "tags": "Tags",
+      "related-search": "Related Search"
+    },
+    "map": {
+      "filter": "Filter",
+      "close-filter": "Close filter"
+    }
+  }
+}

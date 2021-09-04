@@ -10,12 +10,16 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
+    "@nuxtjs/i18n": "^7.0.2",
+    "@nuxtjs/svg": "^0.1.12",
     "core-js": "^3.15.1",
     "hooper": "^0.3.4",
     "nuxt": "^2.15.7",
     "nuxt-leaflet": "0.0.25",
     "sass-loader": "^10.1.1",
+    "vue-custom-scrollbar": "^1.4.1",
     "vue-histogram-slider": "^0.3.8",
+    "vue-owl-carousel2": "^2.0.7",
     "vuetify": "^2.5.5"
   },
   "devDependencies": {

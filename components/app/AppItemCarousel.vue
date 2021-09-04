@@ -21,34 +21,17 @@
     <div class="mx-7 itemHooper__main">
       <hooper
         class="itmHoopr"
-        :rtl="ifRtl"
+        :rtl="this.$vuetify.rtl"
         :itemsToShow="4.5"
         ref="carousel"
         @slide="updateCarousel"
       >
-        <slide v-for="(tag, index) in tags" :key="index">
-          <div
-            class="d-flex tagItem rounded secondary--text mx-1 pt-2 pb-2 px-3"
-          >
-            <v-icon>mdi-diamond-outline</v-icon>
+        <slide v-for="(tag, index) in tags" :key="index" class="me-2">
+          <v-chip outlined label class="tagItem" @click="filterTag(index)" color="greyLight4" text-color="secondary">
+            <v-icon >mdi-diamond-outline</v-icon>
             <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
-          </div>
-        </slide>
-        <slide>
-          <div
-            class="d-flex tagItem rounded secondary--text mx-1 pt-2 pb-2 px-3"
-          >
-            <v-icon>mdi-diamond-outline</v-icon>
-            <span class="ps-2">اقامتگاه‌های لوکس</span>
-          </div>
-        </slide>
-        <slide>
-          <div
-            class="d-flex tagItem rounded secondary--text mx-1 pt-2 pb-2 px-3"
-          >
-            <v-icon>mdi-diamond-outline</v-icon>
-            <span class="ps-2">اقامتگاه‌های لوکس</span>
-          </div>
+
+          </v-chip>
         </slide>
         <!-- <hooper-navigation slot="hooper-addons"></hooper-navigation> -->
       </hooper>
@@ -71,32 +54,37 @@ export default {
 
   },
   computed: {
-    ifRtl() {
-      if (this.$vuetify.rtl) {
-        return true;
-      } else {
-        return false;
-      }
-    },
+    // ifRtl() {
+    //   if (this.$vuetify.rtl) {
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // },
   },
   methods: {
     slidePrev() {
-      if (this.ifRtl) {
-        this.$refs.carousel.slidePrev();
-      } else {
-        this.$refs.carousel.slideNext();
-      }
+      // if (this.$vuetify.rtl) {
+      //   this.$refs.carousel.slidePrev();
+      // } else {
+      //   this.$refs.carousel.slideNext();
+      // }
+      this.$refs.carousel.slidePrev();
     },
     slideNext() {
-      if (this.ifRtl) {
-        this.$refs.carousel.slideNext();
-      } else {
-        this.$refs.carousel.slidePrev();
-      }
+      // if (this.$vuetify.rtl) {
+      //   this.$refs.carousel.slideNext();
+      // } else {
+      //   this.$refs.carousel.slidePrev();
+      // }
+
+       this.$refs.carousel.slideNext();
     },
     updateCarousel(payload) {
       this.myCarouselData = payload.currentSlide;
     },
+    filterTag(index) {
+    }
   },
 };
 </script>
@@ -104,6 +92,7 @@ export default {
 <style lang="scss" scope>
 .itmHoopr {
   height: 100%;
+  
 }
 .itemHooper {
   position: relative;
@@ -121,16 +110,19 @@ export default {
   }
   &__main {
   }
+  .hooper .hooper-slide {
+    width: auto !important;
 
-  //  .nextBtnRight {
-  //     right: 0!important;
-  // }
-  //  .nextBtnLeft {
-  //     left: 0!important;
-  // }
+  }
 }
 
 .tagItem {
-  border: #f5f5f5 solid 1px;
+  height: 40px!important;
+  width: 166px!important;
 }
+
+.tagItem:active , .tagItem:hover {
+  color: var(--v-primary-base)!important;
+}
+
 </style>

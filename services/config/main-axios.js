@@ -15,7 +15,6 @@ API_V4.interceptors.response.use(
       return response;
     },
     async function(error) {
-      console.log('error occur in config page', error);
       return Promise.reject(error.response);
     }
   );

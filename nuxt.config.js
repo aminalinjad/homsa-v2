@@ -40,6 +40,7 @@ export default {
   plugins: [
     {src:'@/plugins/axios'},
     {src:'@/plugins/histogram-slider', mode:'client'},
+    {src: '@/plugins/owl.js', mode:'client'}
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -56,7 +57,34 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     'nuxt-leaflet',
+    '@nuxtjs/svg',
+    '@nuxtjs/i18n',
   ],
+  // i18n module configuration:
+  i18n: {
+    locales: [
+      {
+        code: 'en',
+        name: 'English',
+        iso: 'en-US',
+        file: 'en.json',
+      },
+      {
+        code: 'fa',
+        name: 'Persian',
+        iso: 'fa-IR',
+        file: 'fa.json',
+      },
+    ],
+    defaultLocale: 'fa',
+    langDir: './locales',
+    strategy: 'no_prefix',
+
+    lazy: true,
+    vueI18n: {
+      fallbackLocale: 'en',
+    },
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
@@ -72,28 +100,6 @@ export default {
     customVariables: ['~/assets/style/variables.scss'],
     treeShake: true,
     optionsPath: './vuetify.options.js',
-
-    // rtl: true,
-    // theme: {
-    //   dark: false,
-    //   themes: {
-    //     light: {
-    //       primary: colors.red,
-    //       secondary: colors.grey.darken1,
-    //       accent: colors.shades.black,
-    //       error: colors.red.accent3,
-    //     },
-    //     dark: {
-    //       primary: colors.blue.darken2,
-    //       accent: colors.grey.darken3,
-    //       secondary: colors.amber.darken3,
-    //       info: colors.teal.lighten1,
-    //       warning: colors.amber.base,
-    //       error: colors.deepOrange.accent4,
-    //       success: colors.green.accent3
-    //     }
-    //   }
-    // }
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

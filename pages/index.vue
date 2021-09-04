@@ -1,25 +1,49 @@
 <template>
-  <div>
-    <v-row>
-      <v-col cols="3">
-        <PagesSearchFilters :filters="filters" />
-      </v-col>
-      <v-col cols="9">
-        <PagesSearchContent />
-      </v-col>
-    </v-row>
-    <!-- <p class="font-bold-34">تست فونت</p>
-    <v-btn color="primary" @click="goId">test</v-btn> -->
-  </div>
+  <PagesSearchContent v-if="!mapLayout" />
+  <PagesSearchMap v-else />
 </template>
 <script>
+import { mapGetters, mapActions } from "vuex";
+import * as types from '@/store/types.js';
 export default {
   layout: "search",
   props: [],
   data() {
     return {
       id: 444,
-      filters: [
+    };
+  },
+  watch: {
+    mapLayout() {
+      if (this.mapLayout) {
+        this.$nuxt.setLayout("map");
+      } else {
+        this.$nuxt.setLayout("search");
+      }
+    },
+  },
+  computed: {
+    ...mapGetters({
+      mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
+    }),
+  },
+  mounted() {
+    this.getFilterData();
+  },
+  methods: {
+    ...mapActions({
+      setMapLayout: `modules/structure/${types.structure.actions.GET_MAP_LAYOUT}`,
+      setFilters: `modules/filters/${types.filters.actions.SET_FILTERS}`,
+    }),
+    goId() {
+      this.$router.push(`/${this.id}`);
+      this.$store.dispatch("getData");
+    },
+    changeLayout() {
+      this.ifMapLayout = !this.ifMapLayout;
+    },
+    getFilterData() {
+      let filters = [
         {
           type: "map",
         },
@@ -117,24 +141,21 @@ export default {
             },
           ],
         },
-      ],
-    };
-  },
-  computed: {},
-  mounted() {},
-  methods: {
-    goId() {
-      this.$router.push(`/${this.id}`);
-      this.$store.dispatch("getData");
-      // .then((res) => {
-      //   console.log("res in pg", res)
-      // })
-      // .catch((err) => {
-      //   console.log("errr iin pg", err)
-      // })
+      ];
+      this.setFilters(filters);
     },
   },
 };
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.resultContainerMap {
+  flex: 0 0 504px;
+  overflow: hidden;
+}
+
+.mapContainer {
+  // flex: 0 0 1008px;
+  overflow: hidden;
+}
+</style>
 

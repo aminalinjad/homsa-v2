@@ -1,0 +1,56 @@
+{
+  "header": {
+    "top": {
+      "input": {
+        "destination": "شهر را انتخاب کنید",
+        "day": "روز",
+        "unit": "نفر",
+        "count": "انتخاب نفرات"
+      },
+      "guest": "میزبان شوید",
+      "user": {
+        "login": "ورود",
+        "register": "ثبت‌نام"
+      }
+    },
+    "bottom": {
+      "destination": {
+        "label": "مقصد، اقامتگاه",
+        "place-holder": "کجا می‌خواهید بروید؟"
+      },
+      "check-in": {
+        "label": "تاریخ ورود",
+        "place-holder": "انتخاب کنید"
+      },
+      "check-out": {
+        "label": "تاریخ خروج",
+        "place-holder": "انتخاب کنید"
+      },
+      "count": {
+        "label": "تعداد نفرات",
+        "unit": "نفر"
+      }
+    }
+  },
+  "search": {
+    "filters": {
+      "map-thumbnail": "نمایش روی نقشه",
+      "price": {
+          "title": "محدوده قیمت",
+          "from": "از",
+          "to": "تا",
+          "unit": "تومان",
+          "btn": "اعمال محدوده قیمت"
+      }
+    },
+    "main": {
+      "sort-by": "مرتب سازی بر اساس",
+      "tags": "برچسب ها",
+      "related-search": "جستجوهای مرتبط:"
+    },
+    "map": {
+      "filter": "فیلتر",
+      "close-filter": "بستن فیلتر"
+    }
+  }
+}

@@ -1,31 +1,32 @@
 <template>
   <div>
-    <div v-for="(filter, index) in filters" :key="index" class="mb-3">
-      <div v-if="filter.type =='map'">
+    <div v-for="(filter, index) in filters" :key="index">
+      <!-- map -->
+      <div v-if="filter.type === 'map'&& !mapLayout" class="mb-3"> 
         <PagesSearchMapThumbnail />
       </div>
-      <div v-if="filter.type == 'price'">
-        <v-card flat class="rounded-lg py-4 px-5">
+      <!-- price -->
+      <div v-if="filter.type === 'price'" class="mb-3">
+        <v-card flat class="rounded-lg py-3 px-5 histogramSectionCard">
           <div id="histogramSection">
             <div>
               <span class="font-regular-14">
-                {{ priceTitle }}
+                {{ $t('search.filters.price.title') }}
               </span>
             </div>
-            <div class="d-flex justify-center rangeSlider">
+            <div class="d-flex justify-center mt-2 rangeSlider">
               <client-only>
                 <HistogramSlider
-                v-if="nextTick"
                   :width="histogramWidth"
                   :hideFromTo="true"
                   :dragInterval="true"
                   :grid="false"
-                  :bar-height="70"
+                  :bar-height="26"
                   primaryColor="#3591384D"
                   holderColor="#35913826"
                   handleColor="#359138"
                   gridTextColor="#359138"
-                  :handleSize="12"
+                  :handleSize="10"
                   :barGap="1"
                   :barRadius="0"
                   :histSliderGap="0"
@@ -41,73 +42,89 @@
             </div>
 
             <div
-              class="d-flex justify-space-around mt-7 text-center text-caption"
+              class="
+                d-flex
+                justify-space-around
+                mt-4
+                text-center
+                font-regular-12
+              "
             >
               <div class="mx-5">
-                <div>از</div>
+                <div>{{ $t('search.filters.price.from') }}</div>
                 <div class="mt-1 mb-n6 centeredInput">
                   <v-text-field
                     filled
                     dense
                     solo
                     flat
-                    background-color="#F5F5F5"
+                    background-color="greyLight4"
                     v-model="rangeSliderFrom"
-                    readonly
+                    :value="filter.min"
+                    class="font-regular-12"
+                    @input="inputRange"
                   >
                   </v-text-field>
                 </div>
-                <div>تومان</div>
+                <div>{{ $t('search.filters.price.unit') }}</div>
               </div>
               <div class="mx-5">
-                <div>تا</div>
+                <div>{{ $t('search.filters.price.to') }}</div>
                 <div class="mt-1 mb-n6">
                   <v-text-field
                     filled
                     dense
                     solo
                     flat
-                    background-color="#F5F5F5"
+                    background-color="greyLight4"
                     v-model="rangeSliderTo"
-                    readonly
+                    class="font-regular-12"
+                    @input="inputRange"
                   >
                   </v-text-field>
                 </div>
-                <div>تومان</div>
+                <div>{{ $t('search.filters.price.unit') }}</div>
               </div>
             </div>
 
             <div class="d-flex justify-center mt-5">
-              <v-btn color="primary" class="font-medium-14" outlined :disabled="rangeBtnDisable">
-                {{ sliderBtnText }}
+              <v-btn
+                color="primary"
+                class="font-medium-14"
+                outlined
+                :disabled="rangeBtnDisable"
+                @click="filterPrice"
+              >
+                {{ $t('search.filters.price.btn') }}
               </v-btn>
             </div>
           </div>
         </v-card>
       </div>
       <!-- count -->
-      <div v-else-if="filter.type == 'count'">
+      <div v-else-if="filter.type === 'count'" class="mb-3">
         <!-- count with title -->
         <div v-if="filter.title">
           <v-expansion-panels v-model="filter.expand" multiple flat>
-            <v-expansion-panel class="rounded-lg">
-              <v-expansion-panel-header class="font-weight-bold">{{
-                filter.title
-              }}</v-expansion-panel-header>
+            <v-expansion-panel class="rounded-lg countTitle">
+              <v-expansion-panel-header
+                class="font-regular-14 navyDark--text"
+                >{{ filter.title }}</v-expansion-panel-header
+              >
               <v-expansion-panel-content>
                 <div
                   v-for="(item, index) in filter.options"
                   :key="index"
                   class="d-flex justify-space-between mb-2 font-light-14"
                 >
-                  <div>{{ item }}</div>
-                  <div>
+                  <div class="font-regular-12">{{ item }}</div>
+                  <div class="font-medium-12">
                     <span>
-                      <v-icon>mdi-plus-circle-outline</v-icon>
+                      <v-icon small>mdi-plus-circle-outline</v-icon>
                     </span>
-                    <span>1</span>
+                    <span class="px-4">۱</span>
                     <span>
-                      <v-icon>mdi-minus-circle-outline</v-icon>
+                      <v-icon small>mdi-minus-circle-outline</v-icon>
                     </span>
                   </div>
                 </div>
@@ -126,15 +143,15 @@
                 class="d-flex justify-space-between px-2"
               >
                 <div>
-                  <span class="black--text">{{ item }}</span>
+                  <span class="black--text font-regular-14">{{ item }}</span>
                 </div>
                 <div>
                   <span>
-                    <v-icon>mdi-plus-circle-outline</v-icon>
+                    <v-icon small>mdi-plus-circle-outline</v-icon>
                   </span>
-                  <span>1</span>
+                  <span class="px-4">۱</span>
                   <span>
-                    <v-icon>mdi-minus-circle-outline</v-icon>
+                    <v-icon small>mdi-minus-circle-outline</v-icon>
                   </span>
                 </div>
               </div>
@@ -144,26 +161,28 @@
       </div>
 
       <!-- boolean -->
-      <div v-else-if="filter.type == 'boolean'">
-        <v-card flat class="rounded-lg">
-          <v-card-text class="py-1">
+      <div v-else-if="filter.type === 'boolean'" class="mb-3">
+        <v-card flat class="rounded-lg" height="46">
+          <v-card-text class="py-1 filterBoolean">
             <v-switch
               inset
+              dense
               :label="filter.label"
-              class="pt-0 mt-3 mb-n2"
+              class="pt-0 mt-2"
             ></v-switch>
           </v-card-text>
         </v-card>
       </div>
 
       <!-- select -->
-      <div v-else-if="filter.type == 'select'">
+      <div v-else-if="filter.type === 'select'" class="mb-3">
         <v-expansion-panels v-model="filter.expand" multiple flat>
-          <v-expansion-panel class="rounded-lg">
-            <v-expansion-panel-header>{{
-              filter.title
-            }}</v-expansion-panel-header>
-            <v-expansion-panel-content>
+          <v-expansion-panel class="rounded-lg filterSelect">
+            <v-expansion-panel-header
+              class="navyDark--text pt-3 pb-2 px-4 font-regular-14"
+              >{{ filter.title }}</v-expansion-panel-header
+            >
+            <v-expansion-panel-content class="mx-n3">
               <div
                 v-for="(item, index) in filter.options"
                 :key="index"
@@ -177,17 +196,23 @@
       </div>
 
       <!-- selectGroup -->
-      <div v-else-if="filter.type == 'selectGroup'">
-        <v-card flat class="rounded-t-lg">
-          <v-card-title class="pb-0"> {{ filter.title }}</v-card-title>
+      <div v-else-if="filter.type === 'selectGroup'" class="mb-3">
+        <v-card flat class="rounded-t-lg mb-n1">
+          <v-card-title class="pt-3 pb-0 font-medium-14 greenDark8--text">
+            {{ filter.title }}</v-card-title
+          >
         </v-card>
         <div v-for="(item, index) in filter.options" :key="index" class="mb-1">
           <v-expansion-panels v-model="item.expand" multiple flat>
-            <v-expansion-panel>
-              <v-expansion-panel-header>{{
-                item.title
-              }}</v-expansion-panel-header>
-              <v-expansion-panel-content>
+            <v-expansion-panel
+              class="filterSelect"
+              :class="index === 0 ? 'rounded-0' : ''"
+            >
+              <v-expansion-panel-header
+                class="px-4 pb-2 navyDark--text font-regular-14"
+                >{{ item.title }}</v-expansion-panel-header
+              >
+              <v-expansion-panel-content class="mx-n3">
                 <div
                   v-for="(value, index) in item.options"
                   :key="index"
@@ -205,54 +230,48 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import * as types from '@/store/types.js'
 export default {
   props: {
-    filters: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
   },
   data() {
     return {
-      nextTick: true,
       expansionOpen: [0],
       expansionclose: [],
-      sliderBtnText: "اعمال محدوده قیمت",
-      priceTitle: "محدوده قیمت",
       data: [
-        20012, 33012, 35012, 44012, 48012, 49812, 50012, 50122, 50212,
-        51012, 51412, 56012, 60012,
+        20012, 33012, 35012, 44012, 48012, 49812, 50012, 50122, 50212, 51012,
+        51412, 56012, 60012,
       ],
       rangeSliderFrom: null,
       rangeSliderTo: null,
       histogramSectionWidth: null,
-      rangeBtnDisable: true
+      rangeBtnDisable: true,
     };
   },
   computed: {
+    ...mapGetters({
+      filters: `modules/filters/${types.filters.getters.GET_FILTERS}`,
+      mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
+    }),
     histogramWidth() {
       return this.histogramSectionWidth;
     },
     histogramData() {
-      let filters = this.filters
-      for (let i=0; i < filters.length; i++) {
-        if(filters[i].type == 'price') {
+      let filters = this.filters;
+      for (let i = 0; i < filters.length; i++) {
+        if (filters[i].type === "price") {
           let data = filters[i].options;
-          let histogramArray = []
-          for(let j=0; j< data.length; j++) {
-            for(let x=0; x< data[j].count; x++) {
-              histogramArray.push(data[j].price)
+          let histogramArray = [];
+          for (let j = 0; j < data.length; j++) {
+            for (let x = 0; x < data[j].count; x++) {
+              histogramArray.push(data[j].price);
             }
           }
-          // console.log('here is hstgrm arr', histogramArray);
           return histogramArray;
-        } 
+        }
       }
-      // console.log('no price');
-
-    }
+    },
   },
   mounted() {
     this.calculateSectionWidth();
@@ -262,38 +281,107 @@ export default {
     window.removeEventListener("resize", this.calculateSectionWidth);
   },
   methods: {
+    inputRange() {
+      if (this.rangeSliderFrom && this.rangeSliderTo) {
+        this.rangeBtnDisable = false;
+      } else {
+        this.rangeBtnDisable = true;
+      }
+    },
     selectRange(e) {
-      // console.log("drag result", e.from, e.to);
       this.rangeSliderFrom = e.from;
       this.rangeSliderTo = e.to;
-      this.rangeBtnDisable= false;
+      this.rangeBtnDisable = false;
     },
     calculateSectionWidth() {
       let width = document.getElementById("histogramSection");
-      // console.log("here is width", width.offsetWidth);
-      // console.log("here is clientWidth width", width.clientWidth);
       this.histogramSectionWidth = width.clientWidth;
-      this.nextTicker();
     },
-    nextTicker() {
-      this.nextTick = false;
-      this.$nextTick(() => {
-        this.nextTick = true;
-      });
+    filterPrice() {
     },
   },
 };
 </script>
 
 <style lang="scss">
-
 //  histogram slider
-.v-text-field.v-text-field--solo .v-input__control input {
-  text-align: center!important;
+.histogramSectionCard {
+  height: 238px;
+  .v-text-field--box .v-input__slot,
+  .v-input__slot {
+    min-height: 24px !important;
+  }
+  .v-text-field.v-text-field--solo .v-input__control input {
+    text-align: center !important;
+  }
+
+  .irs--round .irs-handle {
+    margin-top: 8px !important;
+  }
+
+  .irs--round .irs-line {
+    height: 4px !important;
+  }
+
+  .irs--round .irs-bar {
+    height: 4px !important;
+  }
 }
 
-.irs--round .irs-handle {
-  // top: calc(67% - var(--handle-size)/2 + 5px)!important;
-  margin-top: 8px!important;
+.filterBoolean {
+  .v-input {
+    &--switch {
+      &.v-input {
+        &--dense {
+          .v-input {
+            &--switch {
+              &__thumb {
+                color: var(--v-whiteColor-base) !important;
+              }
+            }
+          }
+        }
+      }
+      &--inset {
+        .v-input {
+          &--switch {
+            &__track {
+              opacity: 1 !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .v-label {
+    font-size: 14px !important;
+  }
+}
+
+.filterBoolean .theme--light.v-label {
+  color: var(--v-navyDark-base) !important;
+}
+
+.filterSelect .v-expansion-panel-header {
+  min-height: 46px !important;
+  .v-icon.v-icon {
+    font-size: 18px !important;
+  }
+}
+
+.filterSelect {
+  .theme {
+    &--light {
+      &.v-label {
+        color: var(--v-greenDark8-base);
+        font-size: 12px !important;
+      }
+    }
+  }
+}
+
+.countTitle .v-expansion-panel-header .v-icon.v-icon {
+  font-size: 18px !important;
 }
 </style>

@@ -11,9 +11,9 @@
           </l-map>
         </client-only>
       </div>
-      <div class="thumbnailMapContainer__text text-center py-5 rounded-b-lg">
+      <div class="thumbnailMapContainer__text text-center py-5 rounded-b-lg cursorPointer" @click="mapLayoutMode">
         <span>
-          {{ mapThumbnailText }}
+          {{ $t('search.filters.map-thumbnail') }}
         </span>
       </div>
     </div>
@@ -21,20 +21,23 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex';
 export default {
-  data() {
-    return {
-      mapThumbnailText: "نمایش روی نقشه",
-    };
+  methods: {
+    ...mapActions({
+      setMapLayout: "modules/structure/SET_MAP_LAYOUT"
+    }),
+    mapLayoutMode() {
+      this.setMapLayout(true);
+    }
+
   },
-  mounted() {},
-  methods: {},
 };
 </script>
 
 <style lang="scss">
 .thumbnailMapContainer {
-  min-height: 180px;
+  height: 138px;
   position: relative;
   border-radius: 12px;
 
@@ -42,7 +45,7 @@ export default {
     height: 100%;
     position: absolute;
     width: 100%;
-    z-index: 15 !important;
+    z-index: 1 !important;
     .leaflet-container.leaflet-touch-drag.leaflet-touch-zoom {
       border-radius: 12px !important;
     }
@@ -50,11 +53,9 @@ export default {
   &__text {
     position: absolute;
     width: 100%;
-    z-index: 20 !important;
+    z-index: 2 !important;
     bottom: 0;
-    //   opacity: 0.5;
     background: rgba(255, 255, 255, 0.9);
-    // border-radius: 0 0 12px 12px;
   }
 }
 </style>

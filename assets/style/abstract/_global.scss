@@ -1,0 +1,29 @@
+.cursorPointer {
+  cursor: pointer !important;
+}
+
+.redOpacity {
+  background-color: #ec484a0d;
+}
+
+.opacity6 {
+  opacity: 0.6 !important;
+}
+
+.theme--dark.v-application {
+  background-color: var(--v-background-base, hsl(0, 0%, 7%)) !important;
+}
+
+.theme--light.v-application {
+  background-color: var(--v-background-base, #f5f5f5) !important;
+}
+
+//carosel control arrow
+.v-window__prev,
+.v-window__next {
+  top: calc(50% - 10px) !important;
+}
+
+a {
+  text-decoration: none !important;
+}
