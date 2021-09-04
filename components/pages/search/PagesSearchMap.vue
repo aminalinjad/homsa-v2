@@ -60,9 +60,10 @@ export default {
     return {
       options: {
         zoomControl: false,
-        zoom: 6,
-        center: [32.4279, 53.6880]
       },
+      zoom: 6,
+      center: [32.4279, 53.6880],
+      bounds: null
     }
   },
   computed: {
