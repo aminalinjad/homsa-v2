@@ -56,9 +56,9 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    'nuxt-leaflet',
     '@nuxtjs/svg',
     '@nuxtjs/i18n',
+    'nuxt-leaflet',
   ],
   // i18n module configuration:
   i18n: {
