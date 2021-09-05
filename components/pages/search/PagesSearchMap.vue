@@ -2,12 +2,11 @@
   <div id="map-wrap" class="mapContainer rounded-lg">
     <client-only>
       <l-map
+        @ready="mapInitials"
         ref="map"
         :zoom="zoom"
         :center="center"
         :options="options"
-        @update:zoom="zoomUpdated"
-        @update:center="centerUpdated"
         @update:bounds="boundsUpdated"
       >
         <l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
@@ -24,30 +23,25 @@
         <!--  zoom icon -->
         <l-control-zoom position="bottomright"></l-control-zoom>
         <!-- show marker on map marker -->
-        <l-marker :lat-lng="[32.4279, 53.6880]">
+        <l-marker v-for="(place , index) in places" :key="`place${index}`" :lat-lng="place.coordinates">
           <l-icon class="someCustomClasses">
 
             <div class="custom-marker font-regular-12">
-              <span>۱۲۵۰,۰۰۰ تومان</span>
-              <v-icon class="heart-icon" small color="redOfferTime">mdi-heart</v-icon>
+              <span>{{ place.price }} تومان</span>
+              <v-icon v-if="place.like" class="heart-icon" small color="redOfferTime">mdi-heart</v-icon>
             </div>
-          </l-icon>
-        </l-marker>
-        <l-marker :lat-lng="[31.4279, 53.6880]">
-          <l-icon class="someCustomClasses">
-            <div class="custom-marker font-regular-12">
-              <span>۱۲۵۰,۰۰۰ تومان</span>
-              <v-icon class="heart-icon" small color="redOfferTime">mdi-heart</v-icon>
-            </div>
-          </l-icon>
-        </l-marker>
-        <l-marker :lat-lng="[32.4279, 53.9880]">
-          <l-icon class="someCustomClasses">
-            <div class="custom-marker font-regular-12">۸۵۰,۰۰۰ تومان</div>
           </l-icon>
         </l-marker>
       </l-map>
     </client-only>
+
+    <div class="drag-search-div rounded-md">
+        <v-checkbox v-model="dragMapCheckbox" :hide-details="true" class="ma-2 pt-0">
+          <template v-slot:label>
+          <div class="font-regular-14">{{ $t('search.map.drag-map') }}</div>
+          </template>
+        </v-checkbox>
+    </div>
   </div>
 </template>
 
@@ -58,12 +52,57 @@ import * as types from "@/store/types.js"
 export default {
   data() {
     return {
+      dragMapCheckbox: false,
       options: {
         zoomControl: false,
       },
-      zoom: 6,
-      center: [32.4279, 53.6880],
-      bounds: null
+      zoom: 5,
+      center: [32.4279, 33.6880],
+      bounds: null,
+      places: [
+        {
+          price: '۱۸۵۰,۰۰۰',
+          name: 'تهران',
+          id: 1,
+          like: true,
+          coordinates: [32.4279, 53.6880]
+        },
+        {
+          price: '۸۵۰,۰۰۰',
+          name: 'تهران',
+          id: 1,
+          like: false,
+          coordinates: [31.4279, 54.6880]
+        },
+        {
+          price: '۱۲۵۰,۰۰۰',
+          name: 'تهران',
+          id: 1,
+          like: true,
+          coordinates: [31.4279, 56.6880]
+        },
+        {
+          price: '۱۲۵۰,۰۰۰',
+          name: 'تهران',
+          id: 1,
+          like: true,
+          coordinates: [31.4279, 46.6880]
+        },
+        {
+          price: '۱۲۵۰,۰۰۰',
+          name: 'تهران',
+          id: 1,
+          like: true,
+          coordinates: [20.4279, 58.6880]
+        },
+        {
+          price: '۱۲۵۰,۰۰۰',
+          name: 'تهران',
+          id: 1,
+          like: true,
+          coordinates: [38.4279, 56.6880]
+        }
+      ]
     }
   },
   computed: {
@@ -76,20 +115,17 @@ export default {
     ...mapActions({
       setMapLayout: `modules/structure/${types.structure.actions.SET_MAP_LAYOUT}`,
     }),
+    mapInitials() {
+      this.$refs.map.mapObject.fitBounds(this.places.map(m => { return m.coordinates }) ,{ padding: [20, 20] })
+    },
     closeMapLayout() {
       this.setMapLayout(false);
     },
-    zoomUpdated(zoom) {
-      this.zoom = zoom;
-      console.log(zoom)
-    },
-    centerUpdated(center) {
-      this.center = center;
-      console.log(center)
-    },
     boundsUpdated(bounds) {
       this.bounds = bounds;
-      console.log(bounds)
+      if (this.dragMapCheckbox) {
+        alert('search mikonm')
+      }
     }
   },
 };
@@ -123,7 +159,7 @@ export default {
     height: 0;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
-    border-top: 10px solid var(--v-whiteColor-base);;
+    border-top: 10px solid var(--v-whiteColor-base);
     position: absolute;
     top: 26px;
     left: 0;
@@ -138,6 +174,16 @@ export default {
     position: absolute;
     right: -6px;
     top: -6px;
+  }
+  .drag-search-div {
+    position: absolute;
+    right: 0;
+    left: 0;
+    margin: auto;
+    z-index: 9999;
+    width: fit-content;
+    bottom: 17px;
+    background: var(--v-whiteColor-base);
   }
 }
 </style>

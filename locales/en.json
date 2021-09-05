@@ -52,7 +52,8 @@
     },
     "map": {
       "filter": "Filter",
-      "close-filter": "Close filter"
+      "close-filter": "Close filter",
+      "drag-map" : "Update the results map by shifting it."
     }
   }
 }
