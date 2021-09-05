@@ -2,8 +2,8 @@
   <svg
     id="Add"
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
+    :width="size ? size : 24"
+    :height="size ? size : 24"
     viewBox="0 0 24 24"
   >
     <path id="Path_9182" data-name="Path 9182" d="M0,0H24V24H0Z" fill="none" />
@@ -15,13 +15,13 @@
       :stroke="clr ? clr : (!$vuetify.theme.dark ? $vuetify.theme.themes.light.secondary : $vuetify.theme.themes.dark.secondary)"
       stroke-linecap="round"
       stroke-linejoin="round"
-      stroke-width="1.5"
+      :stroke-width="strkWdth ? strkWdth : 1.5"
     />
   </svg>
 </template>
 
 <script>
 export default {
-  props: ['clr']
+  props: ['clr','size','strkWdth']
 }
 </script>

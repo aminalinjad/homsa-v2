@@ -8,7 +8,22 @@
       </v-col>
       <v-col class="pa-0 pt-1" :class="$vuetify.rtl?'text-left':'text-right'">
         <v-btn icon @click="addFavorite">
-          <v-icon :color="favorite ? 'redOfferTime' : ''">mdi-heart</v-icon>
+          <Heart
+            :clr="
+              favorite
+                ? $vuetify.theme.dark
+                  ? $vuetify.theme.themes.dark.redOfferTime
+                  : $vuetify.theme.themes.light.redOfferTime
+                : null
+            "
+            :strk="
+              favorite
+                ? $vuetify.theme.dark
+                  ? $vuetify.theme.themes.dark.redOfferTime
+                  : $vuetify.theme.themes.light.redOfferTime
+                : null
+            "
+          />
         </v-btn>
       </v-col>
     </v-row>
@@ -66,12 +81,17 @@
 </template>
 
 <script>
+import Heart from "@/assets/AppIcons/heart.vue";
+
 export default {
   props: {
     index: {
       type: Number,
       default: 0,
     },
+  },
+  components: {
+    Heart
   },
   data() {
     return {

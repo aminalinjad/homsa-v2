@@ -38,14 +38,17 @@ export default {
         greyLight2: "#ABABAB",
         greyLight3: "#D4D4D4",
         greyLight4: "#F5F5F5",
+        greyLight5: "#56606B1F",
         greyDark8: "#323232",
+        greyDark7: "#01220099",
         greenDark8: "#012200",
         green2: "#57C25B",
         orangeBooking: "#FF9D00",
         orangeBookingBg: "#FFF6E8",
         redOffer: "#EC4040",
         redOfferTime: "#EC484A",
-        navyDark: "#000022"
+        navyDark: "#000022",
+
       },
       dark: {
         background: "#F5F5F5",

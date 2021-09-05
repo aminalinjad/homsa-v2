@@ -57,13 +57,7 @@
                 >
                   <span>{{ $t("header.top.input.destination") }}</span>
                 </div>
-                <v-btn
-                  fab
-                  color="primary"
-                  elevation="0"
-                  width="32"
-                  height="32"
-                >
+                <v-btn fab color="primary" elevation="0" width="32" height="32">
                   <v-icon>$searchLeft</v-icon>
                 </v-btn>
               </div>
@@ -100,16 +94,9 @@
                     $t("header.top.input.count")
                   }}</span>
                 </div>
-                <v-btn
-                  fab
-                  color="primary"
-                  elevation="0"
-                  width="32"
-                  height="32"
-                >
+                <v-btn fab color="primary" elevation="0" width="32" height="32">
                   <v-icon>$searchLeft</v-icon>
                 </v-btn>
-                
               </div>
             </div>
           </v-col>
@@ -134,6 +121,7 @@
               <div>
                 <v-menu
                   fixed
+                  :left="$vuetify.rtl"
                   bottom
                   offset-y
                   min-width="184"
@@ -149,7 +137,7 @@
                       v-bind="attrs"
                       v-on="on"
                     >
-                      <img src="@/assets/images/icons/ic-profile.svg" />
+                      <v-icon size="22">$profile</v-icon>
                       <div class="ms-2">
                         <span class="font-medium-14">
                           {{ $t("header.top.user.login") }}
@@ -202,7 +190,7 @@
                   class="pa-1"
                   @click="changeLang"
                 >
-                  <img src="@/assets/images/icons/ic-language.svg" />
+                  <v-icon size="30">$language</v-icon>
                 </v-btn>
               </div>
             </div>
@@ -225,13 +213,14 @@
     >
       <div class="d-flex headerCls__bottom__content">
         <!-- destination  -->
+        <v-hover v-slot="{ hover }">
         <v-autocomplete
           filled
           clearable
           height="66"
           background-color="whiteColor"
-          :label="`${this.$t('header.bottom.destination.label')}`"
-          :placeholder="`${this.$t('header.bottom.destination.place-holder')}`"
+          :label="`${$t('header.bottom.destination.label')}`"
+          :placeholder="`${$t('header.bottom.destination.place-holder')}`"
           persistent-placeholder
           :items="
             ifSuggestion
@@ -244,6 +233,7 @@
           v-model="searchForm.destination"
           append-icon=""
           no-data-text="No data available"
+          :class="hover ? 'bxShadow' : ''"
           class="me-2 rounded srchDestination font-regular-14"
           @click="destinationSuggestion"
           @click:clear="clearDestination"
@@ -274,64 +264,110 @@
             </v-list-item-content>
           </template>
         </v-autocomplete>
+        </v-hover>
 
         <!-- date range  -->
+        <v-hover v-slot="{ hover }">
         <v-text-field
           filled
           readonly
           height="66"
           background-color="whiteColor"
-          :label="`${this.$t('header.bottom.check-in.label')}`"
-          :placeholder="`${this.$t('header.bottom.check-in.place-holder')}`"
+          :label="`${$t('header.bottom.check-in.label')}`"
+          :placeholder="`${$t('header.bottom.check-in.place-holder')}`"
           persistent-placeholder
           v-model="searchForm.checkIn"
+          :class="hover ? 'bxShadow' : ''"
           class="me-2 rounded srchCheckIn font-regular-14"
         >
         </v-text-field>
+        </v-hover>
+
+
+        <v-hover v-slot="{ hover }">
         <v-text-field
           filled
           readonly
           height="66"
           background-color="whiteColor"
-          :label="`${this.$t('header.bottom.check-out.label')}`"
-          :placeholder="`${this.$t('header.bottom.check-out.place-holder')}`"
+          :label="`${$t('header.bottom.check-out.label')}`"
+          :placeholder="`${$t('header.bottom.check-out.place-holder')}`"
           persistent-placeholder
           v-model="searchForm.checkOut"
+          :class="hover ? 'bxShadow' : ''"
           class="me-2 rounded srchCheckOut font-regular-14"
         >
         </v-text-field>
+        </v-hover>
 
         <!-- count -->
-        <v-row class="ma-0 me-2 srchCount whiteColor rounded">
-          <v-col cols="9" class="pa-0">
-            <v-text-field
-              filled
-              readonly
-              height="66"
-              background-color="whiteColor"
-              :label="`${this.$t('header.bottom.count.label')}`"
-              v-model="searchForm.count"
-              class="rounded font-regular-14"
-            >
-            </v-text-field>
-          </v-col>
-          <v-col
-            cols="3"
-            class="pa-0 pe-3"
-            :class="this.$vuetify.rtl ? 'text-left' : 'text-right'"
+        <v-hover v-slot="{ hover }">
+          <v-row
+            :class="hover ? 'bxShadow' : ''"
+            class="ma-0 me-2 srchCount whiteColor rounded"
           >
-            <div>
-              <v-btn icon depressed @click="addCount" >
-                <AddIcon />
-              </v-btn>
-            </div>
-            <div class="mt-n2 cursorPointer">
-               <v-btn icon depressed @click="minusCount" :disabled="searchForm.count===1">
-                <MinusIcon :clr="searchForm.count===1 ? null: $vuetify.theme.themes.dark.secondary"/>
-              </v-btn>
-            </div>
-          </v-col>
-        </v-row>
+            <v-col cols="9" class="pa-0">
+              <v-text-field
+                filled
+                readonly
+                height="66"
+                background-color="whiteColor"
+                :label="`${$t('header.bottom.count.label')}`"
+                v-model="searchForm.count"
+                class="rounded font-regular-14"
+              >
+              </v-text-field>
+            </v-col>
+
+            <v-col
+              cols="3"
+              class="pa-0 pe-3"
+              :class="$vuetify.rtl ? 'text-left' : 'text-right'"
+            >
+              <v-row class="ma-0" v-if="hover">
+                <v-col class="pt-2 pb-1 px-0">
+                  <v-hover v-slot="{ hover }">
+                    <v-btn small icon depressed @click="addCount">
+                      <AddIcon
+                        :clr="
+                          hover
+                            ? $vuetify.theme.dark
+                              ? $vuetify.theme.themes.dark.primary
+                              : $vuetify.theme.themes.light.primary
+                            : null
+                        "
+                      />
+                    </v-btn>
+                  </v-hover>
+                </v-col>
+                <v-col class="mt-n3 pt-1 px-0">
+                  <v-hover v-slot="{ hover }">
+                    <v-btn
+                      small
+                      icon
+                      depressed
+                      @click="minusCount"
+                      :disabled="searchForm.count === 1"
+                    >
+                      <MinusIcon
+                        :clr="
+                          searchForm.count === 1
+                            ? null
+                            : hover
+                            ? $vuetify.theme.dark
+                              ? $vuetify.theme.themes.dark.primary
+                              : $vuetify.theme.themes.light.primary
+                            : $vuetify.theme.themes.dark.secondary
+                        "
+                      />
+                    </v-btn>
+                  </v-hover>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-hover>
+
         <v-btn
           fab
           color="primary"
@@ -358,8 +394,7 @@ import AddIcon from "@/assets/AppIcons/add.vue";
 export default {
   components: {
     MinusIcon,
-    AddIcon
-
+    AddIcon,
   },
   data() {
     return {
@@ -385,7 +420,7 @@ export default {
         destination: "",
         checkIn: "",
         checkOut: "",
-        count: "1",
+        count: 1,
       },
       searchFormValue: {
         destination: "یزد",
@@ -564,6 +599,10 @@ export default {
       max-width: min-content;
       max-height: 66px;
 
+      .bxShadow {
+        box-shadow: 0px 4px 10px #0000001A;
+      }
+
       .srchDestination.v-autocomplete {
         .v-select {
           &__slot {
@@ -629,7 +668,6 @@ export default {
 // costomize menu content
 .v-menu {
   &__content {
-    // left: 80px !important;
     position: fixed !important;
     box-shadow: 0px 4px 20px #00000014 !important;
   }
