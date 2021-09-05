@@ -23,10 +23,11 @@
         <!--  zoom icon -->
         <l-control-zoom position="bottomright"></l-control-zoom>
         <!-- show marker on map marker -->
-        <l-marker v-for="(place , index) in places" :key="`place${index}`" :lat-lng="place.coordinates">
+        <l-marker :z-index-offset="[place.id === propsId?1000 : 100]" v-for="(place , index) in places" :key="`place${index}`" :lat-lng="place.coordinates">
+
           <l-icon class="someCustomClasses">
 
-            <div class="custom-marker font-regular-12">
+            <div class="custom-marker font-regular-12" :class="[place.id === propsId ? 'hoverOnItem': '']">
               <span>{{ place.price }} تومان</span>
               <v-icon v-if="place.like" class="heart-icon" small color="redOfferTime">mdi-heart</v-icon>
             </div>
@@ -50,6 +51,12 @@ import {mapGetters, mapActions} from "vuex"
 import * as types from "@/store/types.js"
 
 export default {
+  props: {
+    propsId: {
+      required: true,
+      default: 3,
+    }
+  },
   data() {
     return {
       dragMapCheckbox: false,
@@ -70,36 +77,36 @@ export default {
         {
           price: '۸۵۰,۰۰۰',
           name: 'تهران',
-          id: 1,
+          id: 2,
           like: false,
           coordinates: [31.4279, 54.6880]
         },
         {
           price: '۱۲۵۰,۰۰۰',
           name: 'تهران',
-          id: 1,
-          like: true,
+          id: 3,
+          like: false,
           coordinates: [31.4279, 56.6880]
         },
         {
           price: '۱۲۵۰,۰۰۰',
           name: 'تهران',
-          id: 1,
-          like: true,
+          id: 4,
+          like: false,
           coordinates: [31.4279, 46.6880]
         },
         {
           price: '۱۲۵۰,۰۰۰',
           name: 'تهران',
-          id: 1,
-          like: true,
+          id: 5,
+          like: false,
           coordinates: [20.4279, 58.6880]
         },
         {
           price: '۱۲۵۰,۰۰۰',
           name: 'تهران',
-          id: 1,
-          like: true,
+          id: 6,
+          like: false,
           coordinates: [38.4279, 56.6880]
         }
       ]
@@ -116,6 +123,7 @@ export default {
       setMapLayout: `modules/structure/${types.structure.actions.SET_MAP_LAYOUT}`,
     }),
     mapInitials() {
+      console.log(this.$refs.map)
       this.$refs.map.mapObject.fitBounds(this.places.map(m => { return m.coordinates }) ,{ padding: [20, 20] })
     },
     closeMapLayout() {
@@ -148,12 +156,12 @@ export default {
     font-size: 15px;
   }
 
-  .custom-marker:hover {
+  .custom-marker:hover , .hoverOnItem {
     background: var(--v-primary-base);
     color: var(--v-whiteColor-base);
   }
 
-  .custom-marker::before {
+  .custom-marker::before , .hoverOnItem::before {
     content: "";
     width: 0;
     height: 0;
@@ -167,7 +175,7 @@ export default {
     margin: auto;
   }
 
-  .custom-marker:hover:before {
+  .custom-marker:hover:before  , .hoverOnItem:before{
     border-top: 10px solid var(--v-primary-base);
   }
   .heart-icon {
