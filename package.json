@@ -15,6 +15,8 @@
     "hooper": "^0.3.4",
     "nuxt": "^2.15.7",
     "nuxt-leaflet": "0.0.25",
+    "vue2-leaflet": "^2.7.1",
+    "leaflet": "^1.7.1",
     "sass-loader": "^10.1.1",
     "vue-custom-scrollbar": "^1.4.1",
     "vue-histogram-slider": "^0.3.8",

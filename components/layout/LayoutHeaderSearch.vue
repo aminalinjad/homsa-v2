@@ -672,10 +672,4 @@ export default {
     box-shadow: 0px 4px 20px #00000014 !important;
   }
 }
-// costomize user menu content
-.headerUserMenu.v-menu {
-  // &__content {
-  //   left: 80px !important;
-  // }
-}
 </style>
