@@ -2,7 +2,7 @@
   <header
     id="headerSearch"
     class="headerCls"
-    :class="ifSearchSection || !ifFixedHeader ? 'ma-4 mb-0' : ''"
+    :class="ifSearchSection || !ifFixedHeader ? 'pa-4 mb-0' : ''"
   >
     <!-- header top section -->
     <v-row
@@ -590,7 +590,7 @@ export default {
     }
   }
   &__bottom {
-    position: absolute;
+    position: relative;
     width: 100%;
     height: 114px !important;
 
@@ -658,7 +658,7 @@ export default {
 }
 
 .fixedHeader {
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   right: 0;

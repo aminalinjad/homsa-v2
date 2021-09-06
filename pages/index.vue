@@ -4,7 +4,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
-import * as types from '@/store/types.js';
+import * as types from "@/store/types.js";
 export default {
   layout: "search",
   props: [],
@@ -29,11 +29,13 @@ export default {
   },
   mounted() {
     this.getFilterData();
+    this.getSearchList();
   },
   methods: {
     ...mapActions({
       setMapLayout: `modules/structure/${types.structure.actions.GET_MAP_LAYOUT}`,
       setFilters: `modules/filters/${types.filters.actions.SET_FILTERS}`,
+      setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
     }),
     goId() {
       this.$router.push(`/${this.id}`);
@@ -143,6 +145,169 @@ export default {
         },
       ];
       this.setFilters(filters);
+    },
+
+    getSearchList() {
+      let searchList = [
+        {
+          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
+          comments: 260,
+          
+          pricePerNight: "۸۵۰,۰۰۰",
+          Discount: true,
+          // map 
+          totalPrice: "۲,۵۵۰,۰۰۰",
+          id: 1,
+          like: true,
+          coordinates: [32.4279, 53.688],
+        },
+        {
+          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
+          comments: 260,
+          
+          pricePerNight: "۸۵۰,۰۰۰",
+          Discount: true,
+          // map 
+          totalPrice: "۲,۵۵۰,۰۰۰",
+          id: 1,
+          like: true,
+          coordinates: [32.4279, 53.688],
+        },
+        {
+          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
+          comments: 260,
+          
+          pricePerNight: "۸۵۰,۰۰۰",
+          Discount: true,
+          // map 
+          totalPrice: "۲,۵۵۰,۰۰۰",
+          id: 1,
+          like: true,
+          coordinates: [32.4279, 53.688],
+        },
+        {
+          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
+          comments: 260,
+          
+          pricePerNight: "۸۵۰,۰۰۰",
+          Discount: true,
+          // map 
+          totalPrice: "۲,۵۵۰,۰۰۰",
+          id: 1,
+          like: true,
+          coordinates: [32.4279, 53.688],
+        },
+        {
+          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
+          comments: 260,
+          
+          pricePerNight: "۸۵۰,۰۰۰",
+          Discount: true,
+          // map 
+          totalPrice: "۲,۵۵۰,۰۰۰",
+          id: 1,
+          like: true,
+          coordinates: [32.4279, 53.688],
+        },
+        {
+          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
+          comments: 260,
+          
+          pricePerNight: "۸۵۰,۰۰۰",
+          Discount: true,
+          // map 
+          totalPrice: "۲,۵۵۰,۰۰۰",
+          id: 1,
+          like: true,
+          coordinates: [32.4279, 53.688],
+        },
+        {
+          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
+          comments: 260,
+          
+          pricePerNight: "۸۵۰,۰۰۰",
+          Discount: true,
+          // map 
+          totalPrice: "۲,۵۵۰,۰۰۰",
+          id: 1,
+          like: true,
+          coordinates: [32.4279, 53.688],
+        },
+        {
+          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
+          comments: 260,
+          
+          pricePerNight: "۸۵۰,۰۰۰",
+          Discount: true,
+          // map 
+          totalPrice: "۲,۵۵۰,۰۰۰",
+          id: 1,
+          like: true,
+          coordinates: [32.4279, 53.688],
+        },
+        {
+          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
+          comments: 260,
+          
+          pricePerNight: "۸۵۰,۰۰۰",
+          Discount: true,
+          // map 
+          totalPrice: "۲,۵۵۰,۰۰۰",
+          id: 1,
+          like: true,
+          coordinates: [32.4279, 53.688],
+        },
+        {
+          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
+          comments: 260,
+          
+          pricePerNight: "۸۵۰,۰۰۰",
+          Discount: true,
+          // map 
+          totalPrice: "۲,۵۵۰,۰۰۰",
+          id: 1,
+          like: true,
+          coordinates: [32.4279, 53.688],
+        },
+        {
+          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
+          comments: 260,
+          
+          pricePerNight: "۸۵۰,۰۰۰",
+          Discount: true,
+          // map 
+          totalPrice: "۲,۵۵۰,۰۰۰",
+          id: 1,
+          like: true,
+          coordinates: [32.4279, 53.688],
+        },
+        {
+          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
+          comments: 260,
+          
+          pricePerNight: "۸۵۰,۰۰۰",
+          Discount: true,
+          // map 
+          totalPrice: "۲,۵۵۰,۰۰۰",
+          id: 1,
+          like: true,
+          coordinates: [32.4279, 53.688],
+        },
+        {
+          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
+          comments: 260,
+          
+          pricePerNight: "۸۵۰,۰۰۰",
+          Discount: true,
+          // map 
+          totalPrice: "۲,۵۵۰,۰۰۰",
+          id: 1,
+          like: true,
+          coordinates: [32.4279, 53.688],
+        },
+      ];
+      this.setSearchResult(searchList);
+
     },
   },
 };

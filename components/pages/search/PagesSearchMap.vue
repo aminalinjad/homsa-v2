@@ -23,7 +23,7 @@
         <!--  zoom icon -->
         <l-control-zoom position="bottomright"></l-control-zoom>
         <!-- show marker on map marker -->
-        <l-marker :z-index-offset="[place.id === propsId?1000 : 100]" v-for="(place , index) in places" :key="`place${index}`" :lat-lng="place.coordinates">
+        <l-marker :z-index-offset="place.id === propsId?1000 : 100" v-for="(place , index) in places" :key="`place${index}`" :lat-lng="place.coordinates">
 
           <l-icon class="someCustomClasses">
 
@@ -53,7 +53,6 @@ import * as types from "@/store/types.js"
 export default {
   props: {
     propsId: {
-      required: true,
       default: 3,
     }
   },

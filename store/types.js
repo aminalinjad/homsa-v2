@@ -13,6 +13,24 @@ export const structure = {
     }
   };
 
+// search
+export const search = {
+    getters: {
+      GET_SEARCH_RESULTS: "GET_SEARCH_RESULTS",
+      GET_HOVERED_ITEM: "GET_HOVERED_ITEM",
+    },
+  
+    mutations: {
+      MUTATE_SEARCH_RESULTS: "MUTATE_SEARCH_RESULTS",
+      MUTATE_HOVERED_ITEM: "MUTATE_HOVERED_ITEM",
+    },
+  
+    actions: {
+      SET_SEARCH_RESULTS: "SET_SEARCH_RESULTS",
+      SET_HOVERED_ITEM: "SET_HOVERED_ITEM",
+    }
+  };
+
 // filters
 export const filters = {
     getters: {
