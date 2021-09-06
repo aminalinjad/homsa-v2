@@ -62,6 +62,8 @@ export default {
       dragMapCheckbox: false,
       options: {
         zoomControl: false,
+        maxZoom: 10,
+        minZoom: 6,
       },
       zoom: 5,
       center: [32.4279, 33.6880],
