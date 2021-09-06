@@ -86,6 +86,8 @@
             v-for="(result, index) in results"
             :key="index"
             class="py-3 px-6 resultBorder"
+            @mouseover="itemHover(index)"
+            @mouseleave="itemHover(null)"
           >
           <NuxtLink to="">
               <PagesSearchResultItemMap :index="index" />
@@ -103,7 +105,10 @@
 <script>
 import vueCustomScrollbar from "vue-custom-scrollbar";
 import "vue-custom-scrollbar/dist/vueScrollbar.css";
-import arrowRotate from "@/assets/AppIcons/arrowLeft"
+import arrowRotate from "@/assets/AppIcons/arrowLeft";
+import { mapActions } from "vuex";
+import * as types from "@/store/types.js";
+
 export default {
   components: { arrowRotate, vueCustomScrollbar },
   props: {
@@ -139,8 +144,22 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      setHoveredItem: `modules/search/${types.search.actions.SET_HOVERED_ITEM}`,
+    }),
     toggleFilter(){
       this.filter = !this.filter
+    },
+    itemHover(index) {
+    if(index) {
+      console.log('qqqq',index);
+      this.setHoveredItem(index);
+
+
+    } else {
+       console.log('dddd');
+       this.setHoveredItem(null);
+    }
     }
   },
 };
