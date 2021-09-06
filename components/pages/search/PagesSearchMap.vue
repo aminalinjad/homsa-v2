@@ -23,7 +23,7 @@
         <!--  zoom icon -->
         <l-control-zoom position="bottomright"></l-control-zoom>
         <!-- show marker on map marker -->
-        <l-marker :z-index-offset="place.id === getHoveredItem ? 1000 : 100" v-for="(place , index) in places" :key="`place${index}`" :lat-lng="place.coordinates">
+        <l-marker @mouseover="itemHover(place.id)" @mouseleave="itemHover(null)" :z-index-offset="place.id === getHoveredItem ? 1000 : 100" v-for="(place , index) in places" :key="`place${index}`" :lat-lng="place.coordinates">
 
           <l-icon class="someCustomClasses">
             <div class="custom-marker font-regular-12" :class="[place.id === getHoveredItem ? 'hoverOnItem': '']">
@@ -118,6 +118,7 @@ export default {
   methods: {
     ...mapActions({
       setMapLayout: `modules/structure/${types.structure.actions.SET_MAP_LAYOUT}`,
+      setHoveredItem: `modules/search/${types.search.actions.SET_HOVERED_ITEM}`,
     }),
     mapInitials() {
       console.log(this.$refs.map)
@@ -130,6 +131,17 @@ export default {
       this.bounds = bounds;
       if (this.dragMapCheckbox) {
         alert('search mikonm')
+      }
+    },
+    itemHover(index) {
+      if(index) {
+        console.log('qqqq',index);
+        this.setHoveredItem(index);
+
+
+      } else {
+        console.log('dddd');
+        this.setHoveredItem(null);
       }
     }
   },
