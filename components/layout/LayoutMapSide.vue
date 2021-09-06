@@ -86,6 +86,7 @@
             v-for="(result, index) in results"
             :key="index"
             class="py-3 px-6 resultBorder"
+            :class="getHoveredItem === index ? '': ''"
             @mouseover="itemHover(index)"
             @mouseleave="itemHover(null)"
           >
@@ -106,7 +107,7 @@
 import vueCustomScrollbar from "vue-custom-scrollbar";
 import "vue-custom-scrollbar/dist/vueScrollbar.css";
 import arrowRotate from "@/assets/AppIcons/arrowLeft";
-import { mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import * as types from "@/store/types.js";
 
 export default {
@@ -139,6 +140,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      getHoveredItem: `modules/search/${types.search.getters.GET_HOVERED_ITEM}`,
+    }),
     isFilter() {
       return this.filter;
     },
