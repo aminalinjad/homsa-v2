@@ -6,16 +6,31 @@
           >مهمان نواز</v-chip
         >
       </v-col>
-      <v-col :class="$vuetify.rtl?'text-left':'text-right'">
+      <v-col class="pa-2" :class="$vuetify.rtl ? 'text-left' : 'text-right'">
         <v-btn icon @click="addFavorite">
-          <v-icon :color="favorite ? 'redOfferTime' : ''">mdi-heart</v-icon>
+          <Heart
+            :clr="
+              favorite
+                ? $vuetify.theme.dark
+                  ? $vuetify.theme.themes.dark.redOfferTime
+                  : $vuetify.theme.themes.light.redOfferTime
+                : null
+            "
+            :strk="
+              favorite
+                ? $vuetify.theme.dark
+                  ? $vuetify.theme.themes.dark.redOfferTime
+                  : $vuetify.theme.themes.light.redOfferTime
+                : null
+            "
+          />
         </v-btn>
       </v-col>
     </v-row>
     <div class="resultImgSec__image rounded-lg">
       <v-carousel
-        :width="getImgSecWidth"
-        :height="getImgSecHeight"
+        :width="ifGridView ? 280 : 300"
+        :height="ifGridView ? 158 : 200"
         class="rounded-lg"
         show-arrows-on-hover
         hide-delimiter-background
@@ -61,12 +76,13 @@
         </template>
         <span>گارانتی شده</span>
       </v-tooltip>
-      
     </div>
   </div>
 </template>
 
 <script>
+import Heart from "@/assets/AppIcons/heart.vue";
+
 export default {
   props: {
     ifGridView: {
@@ -78,28 +94,13 @@ export default {
       default: 0,
     },
   },
+  components: {
+    Heart,
+  },
   data() {
     return {
       favorite: false,
     };
-  },
-  computed: {
-    getImgSecWidth() {
-      if (this.ifGridView) {
-        return 280;
-      } else {
-        return 300;
-      }
-    },
-    getImgSecHeight() {
-      if (this.ifGridView) {
-        return 158;
-      } else {
-        return 200;
-      }
-    },
-  },
-  mounted() {
   },
   methods: {
     addFavorite() {
@@ -120,14 +121,26 @@ export default {
     z-index: 2;
   }
   &__image {
-    .v-btn--icon.v-size--default {
-      width: 24px!important;
-      height: 24px!important;
-      border-radius: 50px!important;
-    }
-    .v-btn--icon.v-size--default .v-icon, .v-btn--fab.v-size--default .v-icon  {
-       font-size: 15px!important;
+    .v-btn {
+      &--icon.v-size {
+        &--default {
+          width: 24px !important;
+          height: 24px !important;
+          border-radius: 50px !important;
 
+          .v-icon {
+            font-size: 15px !important;
+          }
+        }
+      }
+
+      &--fab.v-size {
+        &--default {
+          .v-icon {
+            font-size: 15px !important;
+          }
+        }
+      }
     }
   }
 
@@ -144,12 +157,18 @@ export default {
   height: 20px;
 }
 
-.v-carousel__controls .v-item-group button {
-  width: 5px!important;
-  height: 5px!important;
+.v-carousel {
+  &__controls {
+    .v-item-group {
+      button {
+        width: 5px !important;
+        height: 5px !important;
 
-}
-.v-carousel__controls .v-item-group button i{
-  font-size: 7px!important;
+        i {
+          font-size: 7px !important;
+        }
+      }
+    }
+  }
 }
 </style>

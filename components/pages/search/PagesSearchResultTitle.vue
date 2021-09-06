@@ -56,11 +56,18 @@ export default {
 
 <style lang="scss">
 //breadcrumb link color
-.v-application .breadCrumbsCls a {
-  color: var(--v-secondary-base) !important;
-}
 
-.v-application .breadCrumbsCls a.v-breadcrumbs__item--disabled {
-  color: var(--v-blackColor-base) !important;
+.v-application {
+  .breadCrumbsCls a {
+    color: var(--v-secondary-base) !important;
+  }
+
+  a.v-breadcrumbs {
+    &__item {
+      &--disabled {
+        color: var(--v-blackColor-base) !important;
+      }
+    }
+  }
 }
 </style>
