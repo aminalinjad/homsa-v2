@@ -12,7 +12,7 @@
         </client-only>
       </div>
       <div class="thumbnailMapContainer__text text-center py-5 rounded-b-lg cursorPointer" @click="mapLayoutMode">
-        <span>
+        <span class="greenDark8--text">
           {{ $t('search.filters.map-thumbnail') }}
         </span>
       </div>

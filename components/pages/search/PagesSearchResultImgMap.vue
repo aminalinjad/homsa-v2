@@ -8,7 +8,22 @@
       </v-col>
       <v-col class="pa-0 pt-1" :class="$vuetify.rtl?'text-left':'text-right'">
         <v-btn icon @click="addFavorite">
-          <v-icon :color="favorite ? 'redOfferTime' : ''">mdi-heart</v-icon>
+          <Heart
+            :clr="
+              favorite
+                ? $vuetify.theme.dark
+                  ? $vuetify.theme.themes.dark.redOfferTime
+                  : $vuetify.theme.themes.light.redOfferTime
+                : null
+            "
+            :strk="
+              favorite
+                ? $vuetify.theme.dark
+                  ? $vuetify.theme.themes.dark.redOfferTime
+                  : $vuetify.theme.themes.light.redOfferTime
+                : null
+            "
+          />
         </v-btn>
       </v-col>
     </v-row>
@@ -66,12 +81,17 @@
 </template>
 
 <script>
+import Heart from "@/assets/AppIcons/heart.vue";
+
 export default {
   props: {
     index: {
       type: Number,
       default: 0,
     },
+  },
+  components: {
+    Heart
   },
   data() {
     return {
@@ -100,15 +120,31 @@ export default {
   }
   &__imageMap {
       width: 224px;
-    .v-btn--icon.v-size--default {
-      width: 24px!important;
-      height: 24px!important;
-      border-radius: 50px!important;
-    }
-    .v-btn--icon.v-size--default .v-icon, .v-btn--fab.v-size--default .v-icon  {
-       font-size: 15px!important;
 
+    .v-btn {
+      &--icon.v-size {
+        &--default {
+          width: 24px !important;
+          height: 24px !important;
+          border-radius: 50px !important;
+
+          .v-icon {
+            font-size: 15px !important;
+          }
+        }
+      }
+
+      &--fab.v-size {
+        &--default {
+          .v-icon {
+            font-size: 15px !important;
+          }
+        }
+      }
     }
+
+
+
   }
 
   &__bottom {
@@ -122,15 +158,6 @@ export default {
   background: #01220099;
   width: 24px;
   height: 24px;
-}
-
-.v-carousel__controls .v-item-group button {
-  width: 5px!important;
-  height: 5px!important;
-
-}
-.v-carousel__controls .v-item-group button i{
-  font-size: 7px!important;
 }
 
 

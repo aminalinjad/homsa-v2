@@ -7,7 +7,7 @@
       x-small
       @click.prevent="slidePrev"
     >
-      <v-icon>mdi-chevron-right</v-icon>
+      <v-icon>$arrowRight</v-icon>
     </v-btn>
     <v-btn
       class="itemHooper__chevronLeft"
@@ -16,12 +16,12 @@
       x-small
       @click.prevent="slideNext"
     >
-      <v-icon>mdi-chevron-left</v-icon>
+      <v-icon>$arrowLeft</v-icon>
     </v-btn>
     <div class="mx-7 itemHooper__main">
       <hooper
         class="itmHoopr"
-        :rtl="this.$vuetify.rtl"
+        :rtl="$vuetify.rtl"
         :itemsToShow="4.5"
         ref="carousel"
         @slide="updateCarousel"
@@ -53,31 +53,11 @@ export default {
     }
 
   },
-  computed: {
-    // ifRtl() {
-    //   if (this.$vuetify.rtl) {
-    //     return true;
-    //   } else {
-    //     return false;
-    //   }
-    // },
-  },
   methods: {
     slidePrev() {
-      // if (this.$vuetify.rtl) {
-      //   this.$refs.carousel.slidePrev();
-      // } else {
-      //   this.$refs.carousel.slideNext();
-      // }
       this.$refs.carousel.slidePrev();
     },
     slideNext() {
-      // if (this.$vuetify.rtl) {
-      //   this.$refs.carousel.slideNext();
-      // } else {
-      //   this.$refs.carousel.slidePrev();
-      // }
-
        this.$refs.carousel.slideNext();
     },
     updateCarousel(payload) {
@@ -107,8 +87,6 @@ export default {
     top: 50%;
     transform: translateY(-50%);
     left: 0 !important;
-  }
-  &__main {
   }
   .hooper .hooper-slide {
     width: auto !important;

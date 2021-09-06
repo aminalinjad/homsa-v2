@@ -9,7 +9,7 @@
         <div class="d-flex align-center justify-end">
           <div class="d-flex align-center">
             <span class="font-regular-12 secondary--text">
-              {{ $t('search.main.sort-by') }}
+              {{ $t("search.main.sort-by") }}
             </span>
             <div class="sortByInput ms-3 mb-n7">
               <v-select
@@ -28,20 +28,36 @@
               fab
               small
               class="white me-n1"
-              :class="this.$vuetify.rtl ? 'rounded-l-0' : 'rounded-r-0'"
+              :class="$vuetify.rtl ? 'rounded-l-0' : 'rounded-r-0'"
               @click="listView"
             >
-              <v-icon class="secondary--text">mdi-menu</v-icon>
+              <ListIcon
+                :clr="
+                  !ifGridView
+                    ? $vuetify.theme.dark
+                      ? $vuetify.theme.themes.dark.greenDark8
+                      : $vuetify.theme.themes.light.greenDark8
+                    : null
+                "
+              />
             </v-btn>
             <v-btn
               elevation="0"
               fab
               small
               class="white"
-              :class="this.$vuetify.rtl ? 'rounded-r-0' : 'rounded-l-0'"
+              :class="$vuetify.rtl ? 'rounded-r-0' : 'rounded-l-0'"
               @click="gridView"
             >
-              <v-icon class="secondary--text">mdi-apps</v-icon>
+              <GridIcon
+                :clr="
+                  !ifGridView
+                    ? $vuetify.theme.dark
+                      ? $vuetify.theme.themes.dark.secondary
+                      : $vuetify.theme.themes.light.secondary
+                    : null
+                "
+              />
             </v-btn>
           </div>
         </div>
@@ -57,8 +73,8 @@
           <v-col cols="1" class="pa-0">
             <div>
               <span class="secondary--text font-regular-14">
-                {{ $t('search.main.tags') }}
-                </span>
+                {{ $t("search.main.tags") }}
+              </span>
             </div>
           </v-col>
           <v-col cols="11" class="pa-0">
@@ -78,7 +94,7 @@
       </div>
       <v-divider class="greyLight4"></v-divider>
       <!-- Top Sec End -->
-      
+
       <!-- Result Sec Start -->
       <v-row class="ma-0">
         <v-col
@@ -86,14 +102,16 @@
           :md="ifGridView ? 4 : 12"
           v-for="(result, index) in results"
           :key="index"
-          class=" px-6 resultBorder"
-          :class="[$vuetify.rtl ? 'resultSideBorderRtl' : 'resultSideBorderLtr', ifGridView? 'py-10':'py-6']"
+          class="px-6 resultBorder"
+          :class="[
+            $vuetify.rtl ? 'resultSideBorderRtl' : 'resultSideBorderLtr',
+            ifGridView ? 'py-10' : 'py-6',
+          ]"
         >
           <!-- item component -->
           <NuxtLink to="">
             <PagesSearchResultItem :ifGridView="ifGridView" :index="index" />
           </NuxtLink>
-
         </v-col>
       </v-row>
       <!-- Result Sec End -->
@@ -101,14 +119,20 @@
     <!-- Main Section End  -->
 
     <!-- Bottom Section Start  -->
-    <PagesSearchPagination :page="page" :totalPages="totalPages" class="mt-6"/>
+    <PagesSearchPagination :page="page" :totalPages="totalPages" class="mt-6" />
     <PagesSearchRelatedSearch />
     <!-- Bottom Section End  -->
   </v-container>
 </template>
 
 <script>
+import GridIcon from "@/assets/AppIcons/grid.vue";
+import ListIcon from "@/assets/AppIcons/list.vue";
 export default {
+  components: {
+    GridIcon,
+    ListIcon,
+  },
   data() {
     return {
       page: 1,
@@ -158,7 +182,6 @@ export default {
         { name: "dfd" },
         { name: "dfd" },
         { name: "dfd" },
-        
       ],
     };
   },
