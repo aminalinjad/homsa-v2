@@ -23,11 +23,10 @@
         <!--  zoom icon -->
         <l-control-zoom position="bottomright"></l-control-zoom>
         <!-- show marker on map marker -->
-        <l-marker :z-index-offset="place.id === propsId?1000 : 100" v-for="(place , index) in places" :key="`place${index}`" :lat-lng="place.coordinates">
+        <l-marker :z-index-offset="place.id === getHoveredItem ? 1000 : 100" v-for="(place , index) in places" :key="`place${index}`" :lat-lng="place.coordinates">
 
           <l-icon class="someCustomClasses">
-
-            <div class="custom-marker font-regular-12" :class="[place.id === propsId ? 'hoverOnItem': '']">
+            <div class="custom-marker font-regular-12" :class="[place.id === getHoveredItem ? 'hoverOnItem': '']">
               <span>{{ place.price }} تومان</span>
               <v-icon v-if="place.like" class="heart-icon" small color="redOfferTime">mdi-heart</v-icon>
             </div>
@@ -51,11 +50,6 @@ import {mapGetters, mapActions} from "vuex"
 import * as types from "@/store/types.js"
 
 export default {
-  props: {
-    propsId: {
-      default: 3,
-    }
-  },
   data() {
     return {
       dragMapCheckbox: false,
@@ -116,6 +110,8 @@ export default {
   computed: {
     ...mapGetters({
       mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
+      getHoveredItem: `modules/search/${types.search.getters.GET_HOVERED_ITEM}`,
+      getSearchResult: `modules/search/${types.search.getters.GET_SEARCH_RESULTS}`,
     }),
   },
 
