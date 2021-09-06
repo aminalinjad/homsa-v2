@@ -5,8 +5,8 @@
     :class="ifSearchSection || !ifFixedHeader ? 'ma-4 mb-0' : ''"
   >
     <!-- header top section -->
-    <div
-      class="rounded-t-lg whiteColor headerCls__top"
+    <v-row
+      class="ma-0 rounded-t-lg whiteColor headerCls__top"
       :class="
         ifSearchSection || ifFixedHeader ? 'bottomShodaw' : 'rounded-b-lg'
       "
@@ -18,12 +18,10 @@
         <v-row>
           <!-- header logo -->
           <v-col>
-            <div>
               <img
                 src="@/assets/images/logo-homsa.svg"
                 class="mt-2 cursorPointer"
               />
-            </div>
           </v-col>
 
           <!-- header input -->
@@ -197,12 +195,13 @@
           </v-col>
         </v-row>
       </v-container>
-    </div>
+    </v-row>
 
     <!-- header bottom / search section -->
-    <div
+    <v-row
       v-if="ifSearchSection"
       class="
+      ma-0
         greyLight4
         rounded-b-lg
         headerCls__bottom
@@ -381,7 +380,7 @@
       </div>
 
       <v-overlay :value="overlay" z-index="-1"></v-overlay>
-    </div>
+    </v-row>
   </header>
 </template>
 

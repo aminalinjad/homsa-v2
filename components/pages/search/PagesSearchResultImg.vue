@@ -29,8 +29,8 @@
     </v-row>
     <div class="resultImgSec__image rounded-lg">
       <v-carousel
-        :width="getImgSecWidth"
-        :height="getImgSecHeight"
+        :width="ifGridView ? 280 : 300"
+        :height="ifGridView ? 158 : 200"
         class="rounded-lg"
         show-arrows-on-hover
         hide-delimiter-background
@@ -102,23 +102,6 @@ export default {
       favorite: false,
     };
   },
-  computed: {
-    getImgSecWidth() {
-      if (this.ifGridView) {
-        return 280;
-      } else {
-        return 300;
-      }
-    },
-    getImgSecHeight() {
-      if (this.ifGridView) {
-        return 158;
-      } else {
-        return 200;
-      }
-    },
-  },
-  mounted() {},
   methods: {
     addFavorite() {
       this.favorite = !this.favorite;
@@ -138,14 +121,26 @@ export default {
     z-index: 2;
   }
   &__image {
-    .v-btn--icon.v-size--default {
-      width: 24px !important;
-      height: 24px !important;
-      border-radius: 50px !important;
-    }
-    .v-btn--icon.v-size--default .v-icon,
-    .v-btn--fab.v-size--default .v-icon {
-      font-size: 15px !important;
+    .v-btn {
+      &--icon.v-size {
+        &--default {
+          width: 24px !important;
+          height: 24px !important;
+          border-radius: 50px !important;
+
+          .v-icon {
+            font-size: 15px !important;
+          }
+        }
+      }
+
+      &--fab.v-size {
+        &--default {
+          .v-icon {
+            font-size: 15px !important;
+          }
+        }
+      }
     }
   }
 
@@ -162,11 +157,18 @@ export default {
   height: 20px;
 }
 
-.v-carousel__controls .v-item-group button {
-  width: 5px !important;
-  height: 5px !important;
-}
-.v-carousel__controls .v-item-group button i {
-  font-size: 7px !important;
+.v-carousel {
+  &__controls {
+    .v-item-group {
+      button {
+        width: 5px !important;
+        height: 5px !important;
+
+        i {
+          font-size: 7px !important;
+        }
+      }
+    }
+  }
 }
 </style>

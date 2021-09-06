@@ -24,8 +24,8 @@
                   :bar-height="26"
                   primaryColor="#3591384D"
                   holderColor="#35913826"
-                  handleColor="#359138"
-                  gridTextColor="#359138"
+                  :handleColor="$vuetify.theme.dark? $vuetify.theme.themes.dark.primary : $vuetify.theme.themes.light.primary"
+                  :gridTextColor="$vuetify.theme.dark? $vuetify.theme.themes.dark.primary : $vuetify.theme.themes.light.primary"
                   :handleSize="10"
                   :barGap="1"
                   :barRadius="0"
@@ -115,15 +115,22 @@
                 <v-row
                   v-for="(item, index) in filter.options"
                   :key="index"
-                  class="ma-1 mb-n1 d-flex justify-space-between align-center font-light-14"
+                  class="
+                    ma-1
+                    mb-n1
+                    d-flex
+                    justify-space-between
+                    align-center
+                    font-light-14
+                  "
                 >
-                  <div class="font-regular-12  greenDark8--text">{{ item }}</div>
+                  <div class="font-regular-12 greenDark8--text">{{ item }}</div>
                   <div class="font-medium-12">
                     <v-btn small icon depressed>
-                      <AddIcon 
-                      size="16"
-                      :clr="$vuetify.theme.themes.dark.greenDark8"
-                       />
+                      <AddIcon
+                        size="16"
+                        :clr="$vuetify.theme.themes.dark.greenDark8"
+                      />
                     </v-btn>
                     <span class="px-2 greenDark8--text">۱</span>
                     <v-btn small class="me-n3" icon depressed>
@@ -149,14 +156,16 @@
                 class="d-flex justify-space-between px-2"
               >
                 <div>
-                  <span class="greenDark8--text font-regular-14">{{ item }}</span>
+                  <span class="greenDark8--text font-regular-14">{{
+                    item
+                  }}</span>
                 </div>
                 <div>
                   <v-btn small icon depressed>
-                    <AddIcon 
-                    size="16"
-                    :clr="$vuetify.theme.themes.light.greenDark8"
-                     />
+                    <AddIcon
+                      size="16"
+                      :clr="$vuetify.theme.themes.light.greenDark8"
+                    />
                   </v-btn>
                   <span class="px-2 greenDark8--text">۱</span>
                   <v-btn small class="me-n3" icon depressed>
@@ -200,7 +209,12 @@
                 :key="index"
                 class="ma-0 mb-2 font-light-14"
               >
-                <v-checkbox off-icon="$checkBox" on-icon="$checkBoxActive"  class="mt-0 mb-n5 pa-0 checkBoxClass" :label="item"></v-checkbox>
+                <v-checkbox
+                  off-icon="$checkBox"
+                  on-icon="$checkBoxActive"
+                  class="mt-0 mb-n5 pa-0 checkBoxClass"
+                  :label="item"
+                ></v-checkbox>
               </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
@@ -215,13 +229,13 @@
           >
         </v-card>
         <div v-for="(item, index) in filter.options" :key="index" class="mb-1">
-          <v-expansion-panels  multiple flat>
+          <v-expansion-panels multiple flat>
             <v-expansion-panel
               class="filterSelect"
               :class="index === 0 ? 'rounded-0' : ''"
             >
               <v-expansion-panel-header
-                class="px-4  navyDark--text font-regular-14"
+                class="px-4 navyDark--text font-regular-14"
                 >{{ item.title }}</v-expansion-panel-header
               >
               <v-expansion-panel-content class="mx-n2 mb-n3">
@@ -230,7 +244,12 @@
                   :key="index"
                   class="ma-0 mb-2 font-light-14"
                 >
-                   <v-checkbox off-icon="$checkBox" on-icon="$checkBoxActive"  class="mt-0 mb-n5 pa-0 checkBoxClass" :label="value"></v-checkbox>
+                  <v-checkbox
+                    off-icon="$checkBox"
+                    on-icon="$checkBoxActive"
+                    class="mt-0 mb-n5 pa-0 checkBoxClass"
+                    :label="value"
+                  ></v-checkbox>
                 </v-row>
               </v-expansion-panel-content>
             </v-expansion-panel>
@@ -324,24 +343,43 @@ export default {
 //  histogram slider
 .histogramSectionCard {
   height: 238px;
-  .v-text-field--box .v-input__slot,
-  .v-input__slot {
-    min-height: 24px !important;
+
+  .v-text-field {
+    &--box {
+      .v-input {
+        &__slot {
+          min-height: 24px !important;
+        }
+      }
+    }
+    &--solo {
+      .v-input {
+        &__control input {
+          text-align: center !important;
+        }
+      }
+    }
   }
-  .v-text-field.v-text-field--solo .v-input__control input {
-    text-align: center !important;
+  .v-input {
+    &__slot {
+      min-height: 24px !important;
+    }
   }
 
-  .irs--round .irs-handle {
-    margin-top: 8px !important;
-  }
+  .irs {
+    &--round {
+      .irs-handle {
+        margin-top: 8px !important;
+      }
 
-  .irs--round .irs-line {
-    height: 4px !important;
-  }
+      .irs-line {
+        height: 4px !important;
+      }
 
-  .irs--round .irs-bar {
-    height: 4px !important;
+      .irs-bar {
+        height: 4px !important;
+      }
+    }
   }
 }
 
@@ -376,18 +414,24 @@ export default {
   }
 }
 
-.filterBoolean .theme--light.v-label {
-  color: var(--v-navyDark-base) !important;
-}
-
-.filterSelect .v-expansion-panel-header {
-  min-height: 46px !important;
-  .v-icon.v-icon {
-    font-size: 18px !important;
+.filterBoolean {
+  .theme {
+    &--light {
+      .v-label {
+        color: var(--v-navyDark-base) !important;
+      }
+    }
   }
 }
 
 .filterSelect {
+  .v-expansion-panel-header {
+    min-height: 46px !important;
+    .v-icon {
+      font-size: 18px !important;
+    }
+  }
+
   .theme {
     &--light {
       &.v-label {
@@ -401,17 +445,18 @@ export default {
     .v-input {
       &--selection-controls {
         &__input {
-          width: 18px!important;
+          width: 18px !important;
         }
-
       }
-
     }
-    
   }
 }
 
-.countTitle .v-expansion-panel-header .v-icon.v-icon {
-  font-size: 18px !important;
+.countTitle {
+  .v-expansion-panel-header {
+    .v-icon {
+      font-size: 18px !important;
+    }
+  }
 }
 </style>

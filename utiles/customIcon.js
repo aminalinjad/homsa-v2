@@ -1,4 +1,5 @@
 import arrowLeft from "@/assets/AppIcons/arrowLeft.vue";
+import arrowRight from "@/assets/AppIcons/arrowRight.vue";
 import close from "@/assets/AppIcons/close.vue";
 import filter from "@/assets/AppIcons/filter.vue";
 import filter2 from "@/assets/AppIcons/filter2.vue";
@@ -19,6 +20,9 @@ import checkBoxActive from "@/assets/AppIcons/checkBoxActive.vue";
 const CustomIcons = {
     arrowLeft: {
     component: arrowLeft
+  },
+    arrowRight: {
+    component: arrowRight
   },
     close: {
     component: close
