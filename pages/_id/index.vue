@@ -1,9 +1,10 @@
 <template>
   <div>
-    <h1>new id page</h1>
+    <!-- <h1>new id page</h1> -->
     <v-btn color="primary" @click="useService"
       >get currency from service file</v-btn
     >
+    <AppCalendar />
   </div>
 </template>
 <script>
