@@ -199,13 +199,12 @@
 
     <!-- header bottom / search section -->
     <v-row
-      v-if="ifSearchSection"
+      :class="ifSearchSection? 'search-section-down':'search-section-up'"
       class="
       ma-0
         greyLight4
         rounded-b-lg
         headerCls__bottom
-        d-flex
         justify-center
         align-center
       "
@@ -379,8 +378,8 @@
         </v-btn>
       </div>
 
-      <v-overlay :value="overlay" z-index="-1"></v-overlay>
     </v-row>
+    <v-overlay :value="overlay" z-index="-1"></v-overlay>
   </header>
 </template>
 
@@ -582,6 +581,8 @@ export default {
   transition: all 0.2s;
   z-index: 1500;
   &__top {
+    z-index: 1;
+    position: relative;
     height: 80px !important;
     .selectInput {
       min-width: 312px;
@@ -592,7 +593,9 @@ export default {
   &__bottom {
     position: relative;
     width: 100%;
-    height: 114px !important;
+    height: 114px;
+    top: -60px;
+    z-index: 0;
 
     &__content {
       max-width: min-content;
@@ -656,6 +659,39 @@ export default {
     box-shadow: 0 4px 10px -2px var(--v-greyLight2-base);
   }
 }
+
+////animation menu
+.search-section-down {
+  animation: headerMove 300ms forwards;
+}
+.search-section-up {
+  animation: headerBackMove 300ms forwards;
+
+
+}
+@keyframes headerBackMove {
+  from {
+    top: 0;
+    opacity: 1 ;
+    height: 114px;
+  }
+  to {
+    top: -30px;
+    opacity: 0;
+    height: 0;
+  }
+}
+@keyframes headerMove {
+  from {
+    opacity: 0 ;
+    top: -60px;
+  }
+  to {
+    opacity: 1;
+    top: 0;
+  }
+}
+
 
 .fixedHeader {
   position: sticky;
