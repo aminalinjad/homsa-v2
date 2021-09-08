@@ -671,7 +671,7 @@ export default {
 }
 @keyframes headerBackMove {
   from {
-    top: 0;
+    top: -10px;
     opacity: 1 ;
     height: 114px;
   }
