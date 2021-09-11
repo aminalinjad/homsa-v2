@@ -83,11 +83,8 @@
                       "
                       :outlined="hover ? true : false"
                       @click="datePick(value, clndr.id)"
-                      :disabled="value.type === 'disable'"
-                      :class="[(checkIn.day === value.day &&
-                          checkIn.month === clndr.id) ? 'firstDay selected' : (checkOut.day === value.day &&
-                          checkOut.month === clndr.id) ? 'lastDay selected' : (parseInt(value.day) >parseInt(checkIn.day) && parseInt(value.day) < parseInt(checkOut.day) &&
-                          clndr.id >= parseInt(checkIn.month) && clndr.id <= parseInt(checkOut.month) ) ? 'selected' : '' ]"
+                      :disabled="value.type === 'disable' || value.day=== ''"
+                      :class=" value.day=== '' ? '' : btnClss(value, clndr.id)"
                     >
                       <span
                         :class="
@@ -375,9 +372,9 @@ export default {
             this.checkIn.day = value.day;
             this.checkIn.month = month;
           } else {
-          this.checkOut.day = value.day;
-          this.checkOut.month = month;
-        }
+            this.checkOut.day = value.day;
+            this.checkOut.month = month;
+          }
         } else if (month < parseInt(this.checkIn.month)) {
           this.checkIn.day = value.day;
           this.checkIn.month = month;
@@ -411,6 +408,44 @@ export default {
         this.nextDisable = true;
       }
     },
+    btnClss(value, month) {
+      // parseInt(value.day) > parseInt(this.checkIn.day) &&
+      //   parseInt(value.day) < parseInt(this.checkOut.day) &&
+      //   month >= parseInt(this.checkIn.month) &&
+      //   month <= parseInt(this.checkOut.month)
+
+      if (this.checkIn.day === value.day && this.checkIn.month === month) {
+        return "firstDay selected";
+      } else if (
+        this.checkOut.day === value.day &&
+        this.checkOut.month === month
+      ) {
+        return "lastDay selected";
+      } else if (month === this.checkIn.month) {
+        if (month === this.checkOut.month) {
+          if (
+            parseInt(value.day) > parseInt(this.checkIn.day) &&
+            parseInt(value.day) < parseInt(this.checkOut.day)
+          ) {
+            return "selected";
+          }
+        } else if (
+          month < parseInt(this.checkOut.month) &&
+          parseInt(value.day) > parseInt(this.checkIn.day)
+        ) {
+          return "selected";
+        }
+      } else if (month > parseInt(this.checkIn.month)) {
+        if (month === this.checkOut.month) {
+          if (parseInt(value.day) < parseInt(this.checkOut.day)) {
+            return "selected";
+          }
+        } else if (month < parseInt(this.checkOut.month)) {
+          return "selected";
+        }
+      }
+      return "";
+    },
   },
 };
 </script>
@@ -418,5 +453,8 @@ export default {
 <style lang="scss">
 .calenderClass {
   border-radius: 16px !important;
+}
+.selected {
+  background: #35913826;
 }
 </style>
