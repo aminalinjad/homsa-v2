@@ -84,6 +84,10 @@
                       :outlined="hover ? true : false"
                       @click="datePick(value, clndr.id)"
                       :disabled="value.type === 'disable'"
+                      :class="[(checkIn.day === value.day &&
+                          checkIn.month === clndr.id) ? 'firstDay selected' : (checkOut.day === value.day &&
+                          checkOut.month === clndr.id) ? 'lastDay selected' : (parseInt(value.day) >parseInt(checkIn.day) && parseInt(value.day) < parseInt(checkOut.day) &&
+                          clndr.id >= parseInt(checkIn.month) && clndr.id <= parseInt(checkOut.month) ) ? 'selected' : '' ]"
                     >
                       <span
                         :class="
@@ -359,24 +363,34 @@ export default {
   },
   methods: {
     datePick(value, month) {
-      console.log(this.checkIn.day === null , 'or', value.day < this.checkIn.day , 'and',this.checkIn.month === null, 'or',  value.month >= month);
-      if (
-        (this.checkIn.day === null || value.day < this.checkIn.day) &&
-        (this.checkIn.month === null || value.month <= month)
-      ) {
-        console.log('111', value, month);
+      // let checkInDay = parseInt(this.checkIn.day);
+      // let valueDay = parseInt(value.day);
+      // let checkInMonth = parseInt(this.checkIn.month);
+      if (!this.checkIn.day) {
         this.checkIn.day = value.day;
         this.checkIn.month = month;
-      } else if (
-        (this.checkOut.day === null || value.day > this.checkOut.day) &&
-        (this.checkOut.month === null || value.month >= month)
-      ) {
-        console.log('222', value, month);
-        this.checkOut.day = value.day;
-        this.checkOut.month = month;
-      }
-      else {
-        console.log(333, value, month);
+      } else if (!this.checkOut.day) {
+        if (month === parseInt(this.checkIn.month)) {
+          if (parseInt(value.day) <= parseInt(this.checkIn.day)) {
+            this.checkIn.day = value.day;
+            this.checkIn.month = month;
+          } else {
+          this.checkOut.day = value.day;
+          this.checkOut.month = month;
+        }
+        } else if (month < parseInt(this.checkIn.month)) {
+          this.checkIn.day = value.day;
+          this.checkIn.month = month;
+        } else {
+          this.checkOut.day = value.day;
+          this.checkOut.month = month;
+        }
+      } else {
+        this.checkIn.day = null;
+        this.checkIn.month = null;
+        this.checkOut.day = null;
+        this.checkOut.month = null;
+        this.datePick(value, month);
       }
     },
     setDisplayedCalendar(f, s) {
@@ -384,7 +398,6 @@ export default {
       this.displayedCalendar.push(this.calendar[f], this.calendar[s]);
     },
     prev(index) {
-      console.log(index);
       if (index != 1) {
         this.setDisplayedCalendar(0, 1);
         this.prevDisable = true;
@@ -392,7 +405,6 @@ export default {
       }
     },
     next(index) {
-      console.log(index);
       if (index != 3) {
         this.setDisplayedCalendar(2, 3);
         this.prevDisable = false;
