@@ -68,6 +68,7 @@
                 >
                   <v-hover v-slot="{ hover }">
                     <v-btn
+                    elevation="0"
                       :width="36"
                       :height="36"
                       :min-width="36"
@@ -83,16 +84,18 @@
                       "
                       :outlined="hover ? true : false"
                       @click="datePick(value, clndr.id)"
-                      :disabled="value.type === 'disable' || value.day=== ''"
-                      :class=" value.day=== '' ? '' : btnClss(value, clndr.id)"
+                      :disabled="value.type === 'disable' || value.day === ''"
+                      class="calendarBtn"
+                      :class="value.day === '' ? '' : btnClss(value, clndr.id)"
                     >
                       <span
                         :class="
-                        (checkIn.day === value.day &&
-                          checkIn.month === clndr.id) ||
-                        (checkOut.day === value.day &&
-                          checkOut.month === clndr.id) ? 'WhiteColor' :
-                          hover
+                          (checkIn.day === value.day &&
+                            checkIn.month === clndr.id) ||
+                          (checkOut.day === value.day &&
+                            checkOut.month === clndr.id)
+                            ? 'WhiteColor'
+                            : hover
                             ? ''
                             : value.type === 'normal'
                             ? 'greenDark8--text'
@@ -114,12 +117,16 @@
     </v-row>
 
     <!-- bottom section  -->
-    <v-row align="center" class="mt-8 greenDark8--text" v-if="checkIn.day && checkOut.day">
+    <v-row
+      align="center"
+      class="mt-8 greenDark8--text"
+      v-if="checkIn.day && checkOut.day"
+    >
       <v-col cols="auto">
         <span class="font-medium-12"> {{ selectDays }} شب </span>
       </v-col>
       <v-col class="text-center font-regular-14">
-        <v-btn text small color="greenDark8" class="px-2 font-medium-14">
+        <v-btn text small color="greenDark8" class="px-2 font-medium-14" >
           <span>+ ۱ روز</span>
         </v-btn>
         <v-btn text small color="greenDark8" class="px-2 font-medium-14">
@@ -366,45 +373,69 @@ export default {
   },
   computed: {
     selectDays() {
-      if(this.checkIn.day && this.checkOut.day) {
-        let dif = this.checkOut.month-this.checkIn.month;
-        if(dif== 0) {
+      if (this.checkIn.day && this.checkOut.day) {
+        let dif = this.checkOut.month - this.checkIn.month;
+        if (dif == 0) {
           return this.checkOut.day - this.checkIn.day;
         } else if (dif == 1) {
-          if(this.checkIn.month < 6) {
-            return parseInt(31 - this.checkIn.day) + parseInt(this.checkOut.day);
+          if (this.checkIn.month < 6) {
+            return (
+              parseInt(31 - this.checkIn.day) + parseInt(this.checkOut.day)
+            );
           } else {
-            return parseInt(30 - this.checkIn.day) + parseInt(this.checkOut.day);
+            return (
+              parseInt(30 - this.checkIn.day) + parseInt(this.checkOut.day)
+            );
           }
         } else if (dif == 2) {
-          if(this.checkIn.month < 6) {
-            if(this.checkOut.month>6) {
-              return parseInt(31 - this.checkIn.day) +30+ parseInt(this.checkOut.day);
+          if (this.checkIn.month < 6) {
+            if (this.checkOut.month > 6) {
+              return (
+                parseInt(31 - this.checkIn.day) +
+                30 +
+                parseInt(this.checkOut.day)
+              );
             } else {
-              return parseInt(31 - this.checkIn.day) +31+ parseInt(this.checkOut.day);
+              return (
+                parseInt(31 - this.checkIn.day) +
+                31 +
+                parseInt(this.checkOut.day)
+              );
             }
-            
           } else {
-            return parseInt(30 - this.checkIn.day) + 30 + parseInt(this.checkOut.day);
+            return (
+              parseInt(30 - this.checkIn.day) + 30 + parseInt(this.checkOut.day)
+            );
           }
         } else if (dif == 3) {
-          if(this.checkIn.month < 6) {
-            if(this.checkOut.month>7) {
-              return parseInt(31 - this.checkIn.day) +60+ parseInt(this.checkOut.day);
-            } else if(this.checkOut.month == 7) {
-              return parseInt(31 - this.checkIn.day) +61+ parseInt(this.checkOut.day);
+          if (this.checkIn.month < 6) {
+            if (this.checkOut.month > 7) {
+              return (
+                parseInt(31 - this.checkIn.day) +
+                60 +
+                parseInt(this.checkOut.day)
+              );
+            } else if (this.checkOut.month == 7) {
+              return (
+                parseInt(31 - this.checkIn.day) +
+                61 +
+                parseInt(this.checkOut.day)
+              );
             } else {
-              return parseInt(31 - this.checkIn.day) +62+ parseInt(this.checkOut.day);
+              return (
+                parseInt(31 - this.checkIn.day) +
+                62 +
+                parseInt(this.checkOut.day)
+              );
             }
-            
           } else {
-            return parseInt(30 - this.checkIn.day) + 60 + parseInt(this.checkOut.day);
+            return (
+              parseInt(30 - this.checkIn.day) + 60 + parseInt(this.checkOut.day)
+            );
           }
-        } 
-
+        }
       }
-    }
-
+    },
   },
   created() {
     this.setDisplayedCalendar(0, 1);
@@ -505,7 +536,11 @@ export default {
 .calenderClass {
   border-radius: 16px !important;
 }
+.calendarBtn {
+  border-radius: 4px!important;
+}
 .selected {
   background: #35913826;
 }
+
 </style>

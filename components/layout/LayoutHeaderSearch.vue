@@ -18,10 +18,10 @@
         <v-row>
           <!-- header logo -->
           <v-col>
-              <img
-                src="@/assets/images/logo-homsa.svg"
-                class="mt-2 cursorPointer"
-              />
+            <img
+              src="@/assets/images/logo-homsa.svg"
+              class="mt-2 cursorPointer"
+            />
           </v-col>
 
           <!-- header input -->
@@ -199,9 +199,9 @@
 
     <!-- header bottom / search section -->
     <v-row
-      :class="ifSearchSection? 'search-section-down':'search-section-up'"
+      :class="ifSearchSection ? 'search-section-down' : 'search-section-up'"
       class="
-      ma-0
+        ma-0
         greyLight4
         rounded-b-lg
         headerCls__bottom
@@ -212,90 +212,91 @@
       <div class="d-flex headerCls__bottom__content">
         <!-- destination  -->
         <v-hover v-slot="{ hover }">
-        <v-autocomplete
-          filled
-          clearable
-          height="66"
-          background-color="whiteColor"
-          :label="`${$t('header.bottom.destination.label')}`"
-          :placeholder="`${$t('header.bottom.destination.place-holder')}`"
-          persistent-placeholder
-          :items="
-            ifSuggestion
-              ? destinationSuggestions.items
-              : destinationSearchResult
-          "
-          item-text="city"
-          item-value="city"
-          :default="searchForm.destination"
-          v-model="searchForm.destination"
-          append-icon=""
-          no-data-text="No data available"
-          :class="hover ? 'bxShadow' : ''"
-          class="me-2 rounded srchDestination font-regular-14"
-          @click="destinationSuggestion"
-          @click:clear="clearDestination"
-          @update:search-input="destinationSearch"
-        >
-          <!-- title in suggestion mode -->
-          <template v-slot:prepend-item>
-            <v-list-item-title
-              v-if="ifSuggestion"
-              class="ms-6 mt-4 font-medium-14 greenDark8--text"
-              >{{ destinationSuggestions.title }}</v-list-item-title
-            >
-            <!--destination result -->
-          </template>
-          <template v-slot:item="data">
-            <v-list-item-avatar rounded width="48" height="48" class="ms-2">
-              <img :src="data.item.img" />
-            </v-list-item-avatar>
-            <v-list-item-content>
+          <v-autocomplete
+            filled
+            clearable
+            height="66"
+            background-color="whiteColor"
+            :label="`${$t('header.bottom.destination.label')}`"
+            :placeholder="`${$t('header.bottom.destination.place-holder')}`"
+            persistent-placeholder
+            :items="
+              ifSuggestion
+                ? destinationSuggestions.items
+                : destinationSearchResult
+            "
+            item-text="city"
+            item-value="city"
+            :default="searchForm.destination"
+            v-model="searchForm.destination"
+            append-icon=""
+            no-data-text="No data available"
+            :class="hover ? 'bxShadow' : ''"
+            class="me-2 rounded srchDestination font-regular-14"
+            @click="destinationSuggestion"
+            @click:clear="clearDestination"
+            @update:search-input="destinationSearch"
+          >
+            <!-- title in suggestion mode -->
+            <template v-slot:prepend-item>
               <v-list-item-title
-                v-html="data.item.city"
-                class="font-regular-14 greenDark8--text"
-              ></v-list-item-title>
-              <v-list-item-subtitle
-                v-html="data.item.state"
-                class="font-regular-12 greyLight2--text"
-              ></v-list-item-subtitle>
-            </v-list-item-content>
-          </template>
-        </v-autocomplete>
+                v-if="ifSuggestion"
+                class="ms-6 mt-4 font-medium-14 greenDark8--text"
+                >{{ destinationSuggestions.title }}</v-list-item-title
+              >
+              <!--destination result -->
+            </template>
+            <template v-slot:item="data">
+              <v-list-item-avatar rounded width="48" height="48" class="ms-2">
+                <img :src="data.item.img" />
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title
+                  v-html="data.item.city"
+                  class="font-regular-14 greenDark8--text"
+                ></v-list-item-title>
+                <v-list-item-subtitle
+                  v-html="data.item.state"
+                  class="font-regular-12 greyLight2--text"
+                ></v-list-item-subtitle>
+              </v-list-item-content>
+            </template>
+          </v-autocomplete>
         </v-hover>
 
         <!-- date range  -->
         <v-hover v-slot="{ hover }">
-        <v-text-field
-          filled
-          readonly
-          height="66"
-          background-color="whiteColor"
-          :label="`${$t('header.bottom.check-in.label')}`"
-          :placeholder="`${$t('header.bottom.check-in.place-holder')}`"
-          persistent-placeholder
-          v-model="searchForm.checkIn"
-          :class="hover ? 'bxShadow' : ''"
-          class="me-2 rounded srchCheckIn font-regular-14"
-        >
-        </v-text-field>
+          <v-text-field
+            filled
+            readonly
+            height="66"
+            background-color="whiteColor"
+            :label="`${$t('header.bottom.check-in.label')}`"
+            :placeholder="`${$t('header.bottom.check-in.place-holder')}`"
+            persistent-placeholder
+            v-model="searchForm.checkIn"
+            :class="hover ? 'bxShadow' : ''"
+            class="me-2 rounded srchCheckIn font-regular-14"
+            @click="showCalendar"
+          >
+          </v-text-field>
         </v-hover>
 
-
         <v-hover v-slot="{ hover }">
-        <v-text-field
-          filled
-          readonly
-          height="66"
-          background-color="whiteColor"
-          :label="`${$t('header.bottom.check-out.label')}`"
-          :placeholder="`${$t('header.bottom.check-out.place-holder')}`"
-          persistent-placeholder
-          v-model="searchForm.checkOut"
-          :class="hover ? 'bxShadow' : ''"
-          class="me-2 rounded srchCheckOut font-regular-14"
-        >
-        </v-text-field>
+          <v-text-field
+            filled
+            readonly
+            height="66"
+            background-color="whiteColor"
+            :label="`${$t('header.bottom.check-out.label')}`"
+            :placeholder="`${$t('header.bottom.check-out.place-holder')}`"
+            persistent-placeholder
+            v-model="searchForm.checkOut"
+            :class="hover ? 'bxShadow' : ''"
+            class="me-2 rounded srchCheckOut font-regular-14"
+            @click="showCalendar"
+          >
+          </v-text-field>
         </v-hover>
 
         <!-- count -->
@@ -377,8 +378,10 @@
           <v-icon size="30">$search</v-icon>
         </v-btn>
       </div>
-
     </v-row>
+
+    <!-- calendar  -->
+    <AppCalendar class="appCalendar" v-if="calendar" />
     <v-overlay :value="overlay" z-index="-1"></v-overlay>
   </header>
 </template>
@@ -396,6 +399,7 @@ export default {
   },
   data() {
     return {
+      calendar: false,
       fixedHeader: false,
       searchSection: false,
       searchResult: false,
@@ -518,6 +522,7 @@ export default {
       this.overlay = !this.overlay;
     },
     Search() {
+      this.calendar = false;
       this.closeSearchSection();
     },
     scrollPage() {
@@ -571,6 +576,9 @@ export default {
       }
       // this.$vuetify.rtl = !this.$vuetify.rtl;
     },
+    showCalendar() {
+      this.calendar = true;
+    },
   },
 };
 </script>
@@ -602,7 +610,7 @@ export default {
       max-height: 66px;
 
       .bxShadow {
-        box-shadow: 0px 4px 10px #0000001A;
+        box-shadow: 0px 4px 10px #0000001a;
       }
 
       .srchDestination.v-autocomplete {
@@ -666,13 +674,11 @@ export default {
 }
 .search-section-up {
   animation: headerBackMove 300ms forwards;
-
-
 }
 @keyframes headerBackMove {
   from {
     top: 0;
-    opacity: 1 ;
+    opacity: 1;
     height: 114px;
   }
   to {
@@ -683,7 +689,7 @@ export default {
 }
 @keyframes headerMove {
   from {
-    opacity: 0 ;
+    opacity: 0;
     top: -60px;
   }
   to {
@@ -691,7 +697,6 @@ export default {
     top: 0;
   }
 }
-
 
 .fixedHeader {
   position: sticky;
@@ -706,5 +711,15 @@ export default {
     position: fixed !important;
     box-shadow: 0px 4px 20px #00000014 !important;
   }
+}
+
+// customize calendar position
+.appCalendar {
+  position: absolute !important;
+  left: 0;
+  right: 0;
+  margin-top: -8px;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
