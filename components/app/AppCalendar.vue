@@ -88,6 +88,10 @@
                     >
                       <span
                         :class="
+                        (checkIn.day === value.day &&
+                          checkIn.month === clndr.id) ||
+                        (checkOut.day === value.day &&
+                          checkOut.month === clndr.id) ? 'WhiteColor' :
                           hover
                             ? ''
                             : value.type === 'normal'
@@ -110,14 +114,20 @@
     </v-row>
 
     <!-- bottom section  -->
-    <v-row align="center" class="mt-8 greenDark8--text" v-if="rangeSection">
+    <v-row align="center" class="mt-8 greenDark8--text" v-if="checkIn.day && checkOut.day">
       <v-col cols="auto">
-        <span class="font-medium-12"> ۶ شب </span>
+        <span class="font-medium-12"> {{ selectDays }} شب </span>
       </v-col>
       <v-col class="text-center font-regular-14">
-        <span>+ ۱ روز</span>
-        <span class="mx-4">+ ۳ روز</span>
-        <span>+ ۷ روز</span>
+        <v-btn text small color="greenDark8" class="px-2 font-medium-14">
+          <span>+ ۱ روز</span>
+        </v-btn>
+        <v-btn text small color="greenDark8" class="px-2 font-medium-14">
+          <span>+ ۳ روز</span>
+        </v-btn>
+        <v-btn text small color="greenDark8" class="px-2 font-medium-14">
+          <span>+ ۷ روز</span>
+        </v-btn>
       </v-col>
     </v-row>
   </v-card>
@@ -129,7 +139,6 @@ export default {
     return {
       prevDisable: true,
       nextDisable: false,
-      rangeSection: true,
       checkIn: {
         day: null,
         month: null,
@@ -354,6 +363,48 @@ export default {
         },
       ],
     };
+  },
+  computed: {
+    selectDays() {
+      if(this.checkIn.day && this.checkOut.day) {
+        let dif = this.checkOut.month-this.checkIn.month;
+        if(dif== 0) {
+          return this.checkOut.day - this.checkIn.day;
+        } else if (dif == 1) {
+          if(this.checkIn.month < 6) {
+            return parseInt(31 - this.checkIn.day) + parseInt(this.checkOut.day);
+          } else {
+            return parseInt(30 - this.checkIn.day) + parseInt(this.checkOut.day);
+          }
+        } else if (dif == 2) {
+          if(this.checkIn.month < 6) {
+            if(this.checkOut.month>6) {
+              return parseInt(31 - this.checkIn.day) +30+ parseInt(this.checkOut.day);
+            } else {
+              return parseInt(31 - this.checkIn.day) +31+ parseInt(this.checkOut.day);
+            }
+            
+          } else {
+            return parseInt(30 - this.checkIn.day) + 30 + parseInt(this.checkOut.day);
+          }
+        } else if (dif == 3) {
+          if(this.checkIn.month < 6) {
+            if(this.checkOut.month>7) {
+              return parseInt(31 - this.checkIn.day) +60+ parseInt(this.checkOut.day);
+            } else if(this.checkOut.month == 7) {
+              return parseInt(31 - this.checkIn.day) +61+ parseInt(this.checkOut.day);
+            } else {
+              return parseInt(31 - this.checkIn.day) +62+ parseInt(this.checkOut.day);
+            }
+            
+          } else {
+            return parseInt(30 - this.checkIn.day) + 60 + parseInt(this.checkOut.day);
+          }
+        } 
+
+      }
+    }
+
   },
   created() {
     this.setDisplayedCalendar(0, 1);
