@@ -7,9 +7,10 @@
     <!-- header top section -->
     <v-row
       class="ma-0 rounded-t-lg whiteColor headerCls__top"
-      :class="
-        ifSearchSection || ifFixedHeader ? 'bottomShodaw' : 'rounded-b-lg'
-      "
+      :class="[
+        ifSearchSection || ifFixedHeader ? '' : 'rounded-b-lg', 
+        !ifSearchSection && ifFixedHeader ? 'bottomShodaw' : ''
+      ]"
     >
       <v-container
         class="pa-4"

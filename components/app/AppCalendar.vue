@@ -68,7 +68,7 @@
                 >
                   <v-hover v-slot="{ hover }">
                     <v-btn
-                    elevation="0"
+                      elevation="0"
                       :width="36"
                       :height="36"
                       :min-width="36"
@@ -126,7 +126,7 @@
         <span class="font-medium-12"> {{ selectDays }} شب </span>
       </v-col>
       <v-col class="text-center font-regular-14">
-        <v-btn text small color="greenDark8" class="px-2 font-medium-14" >
+        <v-btn text small color="greenDark8" class="px-2 font-medium-14">
           <span>+ ۱ روز</span>
         </v-btn>
         <v-btn text small color="greenDark8" class="px-2 font-medium-14">
@@ -374,64 +374,40 @@ export default {
   computed: {
     selectDays() {
       if (this.checkIn.day && this.checkOut.day) {
-        let dif = this.checkOut.month - this.checkIn.month;
+        let checkInDay = parseInt(this.checkIn.day);
+        let checkInMonth = parseInt(this.checkIn.month);
+        let checkOutDay = parseInt(this.checkOut.day);
+        let checkOutMonth = parseInt(this.checkOut.month);
+        let dif = checkOutMonth - this.checkIn.month;
         if (dif == 0) {
-          return this.checkOut.day - this.checkIn.day;
+          return checkOutDay - checkInDay;
         } else if (dif == 1) {
-          if (this.checkIn.month < 6) {
-            return (
-              parseInt(31 - this.checkIn.day) + parseInt(this.checkOut.day)
-            );
+          if (checkInMonth < 6) {
+            return 31 - checkInDay + checkOutDay;
           } else {
-            return (
-              parseInt(30 - this.checkIn.day) + parseInt(this.checkOut.day)
-            );
+            return 30 - checkInDay + checkOutDay;
           }
         } else if (dif == 2) {
-          if (this.checkIn.month < 6) {
-            if (this.checkOut.month > 6) {
-              return (
-                parseInt(31 - this.checkIn.day) +
-                30 +
-                parseInt(this.checkOut.day)
-              );
+          if (checkInMonth < 6) {
+            if (checkOutMonth > 6) {
+              return 61 - checkInDay+ checkOutDay;
             } else {
-              return (
-                parseInt(31 - this.checkIn.day) +
-                31 +
-                parseInt(this.checkOut.day)
-              );
+              return 62 - checkInDay + checkOutDay;
             }
           } else {
-            return (
-              parseInt(30 - this.checkIn.day) + 30 + parseInt(this.checkOut.day)
-            );
+            return 60 - checkInDay + checkOutDay;
           }
         } else if (dif == 3) {
-          if (this.checkIn.month < 6) {
-            if (this.checkOut.month > 7) {
-              return (
-                parseInt(31 - this.checkIn.day) +
-                60 +
-                parseInt(this.checkOut.day)
-              );
-            } else if (this.checkOut.month == 7) {
-              return (
-                parseInt(31 - this.checkIn.day) +
-                61 +
-                parseInt(this.checkOut.day)
-              );
+          if (checkInMonth < 6) {
+            if (checkOutMonth > 7) {
+              return 91 - checkInDay + checkOutDay;
+            } else if (checkOutMonth == 7) {
+              return 92 - checkInDay + checkOutDay;
             } else {
-              return (
-                parseInt(31 - this.checkIn.day) +
-                62 +
-                parseInt(this.checkOut.day)
-              );
+              return 93 - checkInDay + checkOutDay;
             }
           } else {
-            return (
-              parseInt(30 - this.checkIn.day) + 60 + parseInt(this.checkOut.day)
-            );
+            return 90 - checkInDay + checkOutDay;
           }
         }
       }
@@ -490,39 +466,72 @@ export default {
         this.nextDisable = true;
       }
     },
+    // btnClss(value, month) {
+    //   if (this.checkIn.day === value.day && this.checkIn.month === month) {
+    //     return "firstDay selected";
+    //   } else if (
+    //     this.checkOut.day === value.day &&
+    //     this.checkOut.month === month
+    //   ) {
+    //     return "lastDay selected";
+    //   } else if (month === this.checkIn.month) {
+    //     if (month === this.checkOut.month) {
+    //       if (
+    //         parseInt(value.day) > parseInt(this.checkIn.day) &&
+    //         parseInt(value.day) < parseInt(this.checkOut.day)
+    //       ) {
+    //         return "selected";
+    //       }
+    //     } else if (
+    //       month < parseInt(this.checkOut.month) &&
+    //       parseInt(value.day) > parseInt(this.checkIn.day)
+    //     ) {
+    //       return "selected";
+    //     }
+    //   } else if (month > parseInt(this.checkIn.month)) {
+    //     if (month === this.checkOut.month) {
+    //       if (parseInt(value.day) < parseInt(this.checkOut.day)) {
+    //         return "selected";
+    //       }
+    //     } else if (month < parseInt(this.checkOut.month)) {
+    //       return "selected";
+    //     }
+    //   }
+    //   return "";
+    // },
     btnClss(value, month) {
-      // parseInt(value.day) > parseInt(this.checkIn.day) &&
-      //   parseInt(value.day) < parseInt(this.checkOut.day) &&
-      //   month >= parseInt(this.checkIn.month) &&
-      //   month <= parseInt(this.checkOut.month)
-
-      if (this.checkIn.day === value.day && this.checkIn.month === month) {
+      let valueDay = parseInt(value.day);
+      let checkInDay = parseInt(this.checkIn.day);
+        let checkInMonth = parseInt(this.checkIn.month);
+        let checkOutDay = parseInt(this.checkOut.day);
+        let checkOutMonth = parseInt(this.checkOut.month);
+      if (checkInDay === valueDay && checkInMonth === month) {
         return "firstDay selected";
       } else if (
-        this.checkOut.day === value.day &&
-        this.checkOut.month === month
+        checkOutDay === valueDay &&
+        checkOutMonth === month
       ) {
         return "lastDay selected";
-      } else if (month === this.checkIn.month) {
-        if (month === this.checkOut.month) {
+      } else if (month === checkInMonth) {
+        if (month === checkOutMonth) {
           if (
-            parseInt(value.day) > parseInt(this.checkIn.day) &&
-            parseInt(value.day) < parseInt(this.checkOut.day)
+            valueDay > checkInDay &&
+            valueDay < checkOutDay
           ) {
             return "selected";
           }
         } else if (
-          month < parseInt(this.checkOut.month) &&
-          parseInt(value.day) > parseInt(this.checkIn.day)
+          month < checkOutMonth &&
+          valueDay > checkInDay
         ) {
           return "selected";
         }
-      } else if (month > parseInt(this.checkIn.month)) {
-        if (month === this.checkOut.month) {
-          if (parseInt(value.day) < parseInt(this.checkOut.day)) {
+      } else if (month > checkInMonth) {
+        if (month === checkOutMonth) {
+          if (valueDay < checkOutDay) {
             return "selected";
           }
-        } else if (month < parseInt(this.checkOut.month)) {
+        } else if (month < checkOutMonth) {
           return "selected";
         }
       }
@@ -537,10 +546,9 @@ export default {
   border-radius: 16px !important;
 }
 .calendarBtn {
-  border-radius: 4px!important;
+  border-radius: 4px !important;
 }
 .selected {
   background: #35913826;
 }
-
 </style>
