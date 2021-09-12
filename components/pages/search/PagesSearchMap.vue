@@ -23,7 +23,8 @@
         <!--  zoom icon -->
         <l-control-zoom position="bottomright"></l-control-zoom>
         <!-- show marker on map marker -->
-        <l-marker @mouseover="itemHover(place.id)" @mouseleave="itemHover(null)" :z-index-offset="place.id === getHoveredItem ? 1000 : 100" v-for="(place , index) in places" :key="`place${index}`" :lat-lng="place.coordinates">
+        <l-marker :z-index-offset="place.id === getHoveredItem ? 1000 : 100" v-for="(place , index) in places"
+                  :key="`place${index}`" :lat-lng="place.coordinates">
 
           <l-icon class="someCustomClasses">
             <div class="custom-marker font-regular-12" :class="[place.id === getHoveredItem ? 'hoverOnItem': '']">
@@ -31,16 +32,71 @@
               <v-icon v-if="place.like" class="heart-icon" small color="redOfferTime">mdi-heart</v-icon>
             </div>
           </l-icon>
+
+          <l-popup :options="popupOption">
+            <PagesSearchResultImg :index="1"/>
+            <v-card-subtitle class="pt-3 pb-1 px-0">
+              <div
+                class="pb-2"
+                :class="$vuetify.rtl ? 'text-left' : 'text-right'"
+              >
+            <span v-if="false">
+              <span class="font-bold-14 secondary--text">جدید</span>
+            </span>
+                <span class="d-flex align-center justify-end" v-else>
+              <span class="font-regular-10 secondary--text">(۳۶۰ نظر)</span>
+              <span class="mx-1">۴.۲</span>
+            </span>
+              </div>
+            </v-card-subtitle>
+            <v-card-text class="pb-3 px-0 greenDark8--text">
+              <p class="mb-1">آپارتمان مبله دوبلکس در خیابان ولیعصر</p>
+            </v-card-text>
+
+            <!-- bottom sec  -->
+            <v-card-actions class="px-0">
+              <!-- Price start -->
+              <div class="font-regular-12">
+                <!-- modification need : this v-if base of index should be removed after logic and api   -->
+                <div class="secondary--text mb-n4" v-if="index % 2 === 0">
+                  <span>قیمت کل</span>
+                  <span>۲,۵۵۰,۰۰۰</span>
+                  <span>تومان</span>
+                </div>
+
+                <!-- modification need : this v-if base of index should be removed after logic and api   -->
+                <div
+                  class="secondary--text mb-n4 text-center"
+                  v-if="index % 3 === 0 && !(index % 2 === 0)"
+                >
+                  <span class="text-decoration-line-through">۲,۵۵۰,۰۰۰</span>
+                </div>
+                <div class="mt-4 greenDark8--text">
+                  <span>هر شب</span>
+                  <span class="font-bold-14">۸۵۰,۰۰۰</span>
+                  <span>تومان</span>
+                </div>
+              </div>
+              <!-- Price end -->
+
+              <v-spacer></v-spacer>
+
+              <v-chip label color="orangeBookingBg">
+                <v-icon color="orangeBooking" size="18">$lightning</v-icon>
+              </v-chip>
+            </v-card-actions>
+          </l-popup>
+
         </l-marker>
       </l-map>
     </client-only>
 
     <div class="drag-search-div rounded-md">
-        <v-checkbox v-model="dragMapCheckbox" :hide-details="true" class="ma-2 pt-0">
-          <template v-slot:label>
+      <v-checkbox v-model="dragMapCheckbox" :hide-details="true" class="ma-2 pt-0">
+        <template v-slot:label>
           <div class="font-regular-14">{{ $t('search.map.drag-map') }}</div>
-          </template>
-        </v-checkbox>
+        </template>
+      </v-checkbox>
     </div>
   </div>
 </template>
@@ -55,8 +111,14 @@ export default {
       dragMapCheckbox: false,
       options: {
         zoomControl: false,
-        maxZoom: 10,
+        maxZoom: 14,
         minZoom: 6,
+      },
+      popupOption: {
+        closeButton: false,
+        minWidth: 312,
+        maxWidth: 312,
+        className: 'justifyBox'
       },
       zoom: 5,
       center: [32.4279, 33.6880],
@@ -122,7 +184,9 @@ export default {
     }),
     mapInitials() {
       console.log(this.$refs.map)
-      this.$refs.map.mapObject.fitBounds(this.places.map(m => { return m.coordinates }) ,{ padding: [20, 20] })
+      this.$refs.map.mapObject.fitBounds(this.places.map(m => {
+        return m.coordinates
+      }), {padding: [20, 20]})
     },
     closeMapLayout() {
       this.setMapLayout(false);
@@ -133,17 +197,15 @@ export default {
         alert('search mikonm')
       }
     },
-    itemHover(index) {
-      if(index) {
-        console.log('qqqq',index);
-        this.setHoveredItem(index);
-
-
+    rankColor(color) {
+      if (color >= 4) {
+        return "primary";
+      } else if (color >= 3) {
+        return "green2";
       } else {
-        console.log('dddd');
-        this.setHoveredItem(null);
+        return "orangeBooking";
       }
-    }
+    },
   },
 };
 </script>
@@ -165,12 +227,12 @@ export default {
     font-size: 15px;
   }
 
-  .custom-marker:hover , .hoverOnItem {
+  .custom-marker:hover, .hoverOnItem {
     background: var(--v-primary-base);
     color: var(--v-whiteColor-base);
   }
 
-  .custom-marker::before , .hoverOnItem::before {
+  .custom-marker::before, .hoverOnItem::before {
     content: "";
     width: 0;
     height: 0;
@@ -184,14 +246,16 @@ export default {
     margin: auto;
   }
 
-  .custom-marker:hover:before  , .hoverOnItem:before{
+  .custom-marker:hover:before, .hoverOnItem:before {
     border-top: 10px solid var(--v-primary-base);
   }
+
   .heart-icon {
     position: absolute;
     right: -6px;
     top: -6px;
   }
+
   .drag-search-div {
     position: absolute;
     right: 0;
@@ -201,6 +265,10 @@ export default {
     width: fit-content;
     bottom: 17px;
     background: var(--v-whiteColor-base);
+  }
+
+  .justifyBox > div {
+    text-align: justify
   }
 }
 </style>
