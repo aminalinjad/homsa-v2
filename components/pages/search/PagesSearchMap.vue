@@ -33,7 +33,7 @@
             </div>
           </l-icon>
 
-          <l-popup class="matin" :options="popupOption">
+          <l-popup :options="popupOption">
             <PagesSearchResultImg :index="1"/>
             <v-card-subtitle class="pt-3 pb-1 px-0">
               <div
