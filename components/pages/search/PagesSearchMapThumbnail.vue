@@ -2,14 +2,7 @@
   <div>
     <div class="thumbnailMapContainer">
       <div id="map-wrap" class="thumbnailMapContainer__map">
-        <client-only>
-          <l-map :zoom="13" :center="[55.9464418, 8.1277591]">
-            <l-tile-layer
-              url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-            ></l-tile-layer>
-            <l-marker :lat-lng="[55.9464418, 8.1277591]"></l-marker>
-          </l-map>
-        </client-only>
+        <img :src="require('@/assets/images/map.svg')" />
       </div>
       <div class="thumbnailMapContainer__text text-center py-5 rounded-b-lg cursorPointer" @click="mapLayoutMode">
         <span class="greenDark8--text">
@@ -45,10 +38,6 @@ export default {
     height: 100%;
     position: absolute;
     width: 100%;
-    z-index: 1 !important;
-    .leaflet-container.leaflet-touch-drag.leaflet-touch-zoom {
-      border-radius: 12px !important;
-    }
   }
   &__text {
     position: absolute;

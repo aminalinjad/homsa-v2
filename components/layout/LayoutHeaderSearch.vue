@@ -74,11 +74,14 @@
                 <v-divider vertical></v-divider>
                 <div class="px-3">
                   <span>{{ searchFormValue.checkIn }}</span>
-                  <span class="px-1">-></span>
+                  <v-icon v-if="$vuetify.rtl">$arrowLine</v-icon>
+                  <v-icon v-else>$arrowLineRight</v-icon>
 
                   <span>{{ searchFormValue.checkOut }}</span>
                   <span class="ps-1 font-regular-12 greyLight2--text"
-                    >( + {{ searchFormValue.flexiblity }}
+                    >( 
+                      <v-icon small>$plusMinusGrey</v-icon>
+                      {{ searchFormValue.flexiblity }}
                     {{ $t("header.top.input.day") }})
                   </span>
                 </div>

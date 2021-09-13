@@ -16,6 +16,10 @@ import list from "@/assets/AppIcons/list.vue";
 import heart from "@/assets/AppIcons/heart.vue";
 import checkBox from "@/assets/AppIcons/checkBox.vue";
 import checkBoxActive from "@/assets/AppIcons/checkBoxActive.vue";
+import arrowLine from "@/assets/AppIcons/arrowLine.vue";
+import arrowLineRight from "@/assets/AppIcons/arrowLineRight.vue";
+import plusMinus from "@/assets/AppIcons/plusMinus.vue";
+import plusMinusGrey from "@/assets/AppIcons/plusMinusGrey.vue";
 
 const CustomIcons = {
     arrowLeft: {
@@ -71,6 +75,18 @@ const CustomIcons = {
   },
   checkBoxActive: {
     component: checkBoxActive,
+  },
+  arrowLine: {
+    component: arrowLine,
+  },
+  arrowLineRight: {
+    component: arrowLineRight,
+  },
+  plusMinus: {
+    component: plusMinus,
+  },
+  plusMinusGrey: {
+    component: plusMinusGrey,
   },
 };
 

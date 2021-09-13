@@ -3,7 +3,7 @@
     <LayoutHeaderSearch />
     <LayoutMapSide class="pb-4" :isRtl="isRtl" />
     <v-main>
-      <v-container class="fill-height" fluid> 
+      <v-container class="pt-0 fill-height" fluid> 
         <Nuxt class="mapLayoutContainer px-1" />
       </v-container>
     </v-main>

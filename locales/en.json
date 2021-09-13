@@ -31,6 +31,10 @@
         "label": "Guests",
         "unit": "guest",
         "unit-plurals": "guests"
+      },
+      "calendar": {
+        "night": "night",
+        "day": "day"
       }
     }
   },
