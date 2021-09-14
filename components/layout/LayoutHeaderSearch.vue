@@ -703,8 +703,9 @@ export default {
 // costomize menu content
 .v-menu {
   &__content {
-    position: fixed !important;
-    box-shadow: 0px 4px 20px #00000014 !important;
+    //position: fixed !important;
+    box-shadow: 0 4px 20px #00000014 !important;
+    z-index: 9999 !important;
   }
 }
 </style>

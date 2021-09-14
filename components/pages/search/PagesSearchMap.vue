@@ -116,7 +116,7 @@ export default {
       },
       popupOption: {
         closeButton: false,
-        minWidth: 312,
+        minWidth: 270,
         maxWidth: 312,
         className: 'justifyBox'
       },
