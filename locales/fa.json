@@ -28,7 +28,8 @@
       },
       "count": {
         "label": "تعداد نفرات",
-        "unit": "نفر"
+        "unit": "نفر",
+        "suffix": "نفر"
       },
       "calendar": {
         "night": "شب",

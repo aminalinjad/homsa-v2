@@ -86,7 +86,6 @@
             v-for="(result, index) in results"
             :key="index"
             class="py-3 px-6 resultBorder"
-            :class="getHoveredItem === index ? '': ''"
             @mouseover="itemHover(index)"
             @mouseleave="itemHover(null)"
           >
@@ -140,9 +139,6 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({
-      getHoveredItem: `modules/search/${types.search.getters.GET_HOVERED_ITEM}`,
-    }),
     isFilter() {
       return this.filter;
     },
