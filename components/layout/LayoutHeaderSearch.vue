@@ -73,12 +73,13 @@
                 <div class="pe-3">{{ searchFormValue.destination }}</div>
                 <v-divider vertical></v-divider>
                 <div class="px-3">
-                  <span>{{ searchFormValue.checkIn }}</span>
+                  <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''">{{ searchFormValue.checkIn }}</span>
                   <v-icon v-if="$vuetify.rtl">$arrowLine</v-icon>
                   <v-icon v-else>$arrowLineRight</v-icon>
 
-                  <span>{{ searchFormValue.checkOut }}</span>
+                  <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''">{{ searchFormValue.checkOut }}</span>
                   <span class="ps-1 font-regular-12 greyLight2--text"
+                  :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
                     >( 
                       <v-icon small>$plusMinusGrey</v-icon>
                       {{ searchFormValue.flexiblity }}
@@ -88,7 +89,7 @@
                 <v-divider vertical></v-divider>
 
                 <div class="px-3">
-                  <span v-if="searchFormValue.count">
+                  <span v-if="searchFormValue.count" :class="$i18n.locale === 'fa' ? 'font-FaNummedium-14' : ''">
                     {{ searchFormValue.count }}
                     {{ $t("header.top.input.unit") }}
                   </span>
@@ -171,7 +172,7 @@
                     <v-divider class="greyLight4"></v-divider>
                     <v-list-item
                       v-for="(item, index) in userMenu.menuFooter"
-                      :key="index"
+                      :key="`${index+userMenu.menuBody.length}`"
                       link
                       :to="item.link"
                     >
@@ -318,6 +319,7 @@
                 :label="`${$t('header.bottom.count.label')}`"
                 v-model="searchForm.count"
                 class="rounded font-regular-14"
+                :class="$i18n.locale === 'fa' ? 'font-FaNummedium-14' : ''"
               >
               </v-text-field>
             </v-col>
@@ -386,6 +388,8 @@
 
     <!-- calendar  -->
     <AppCalendar class="appCalendar" v-if="calendar" />
+
+    <!-- overlay  -->
     <v-overlay :value="overlay" z-index="-1"></v-overlay>
   </header>
 </template>
@@ -431,10 +435,10 @@ export default {
       searchFormValue: {
         destination: "یزد",
         destination: "کهگیلویه و بویراحمد",
-        checkIn: "۱۲/۰۸",
-        checkOut: "۱۲/۳۱",
-        flexiblity: "۱",
-        count: "۱",
+        checkIn: "12/08",
+        checkOut: "12/31",
+        flexiblity: 1,
+        count: 1,
       },
       suggestion: true,
       destinationSuggestions: {
@@ -712,7 +716,7 @@ export default {
 // costomize menu content
 .v-menu {
   &__content {
-    position: fixed !important;
+    // position: fixed !important;
     box-shadow: 0px 4px 20px #00000014 !important;
   }
 }

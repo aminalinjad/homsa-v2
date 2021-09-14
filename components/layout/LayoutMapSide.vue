@@ -156,12 +156,10 @@ export default {
     },
     itemHover(index) {
     if(index) {
-      console.log('qqqq',index);
       this.setHoveredItem(index);
 
 
     } else {
-       console.log('dddd');
        this.setHoveredItem(null);
     }
     }
