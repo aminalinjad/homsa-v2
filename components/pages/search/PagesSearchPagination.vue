@@ -4,7 +4,10 @@
       v-model="currentPage"
       :total-visible="7"
       :length="totalPages"
-      :class="mapLayout ? 'paginationFont12' : 'paginationWidth46'"
+      :class="[
+        mapLayout ? 'paginationFont12' : 'paginationWidth46',
+        $i18n.locale == 'fa' ? 'farsiFontPagination' : '',
+      ]"
     ></v-pagination>
   </v-row>
 </template>
@@ -66,6 +69,14 @@ export default {
         width: 46px !important;
         height: 46px !important;
       }
+    }
+  }
+
+  .farsiFontPagination {
+    .v-pagination {
+      li {
+          font-family: IRANSansFaNumregular !important;
+        }
     }
   }
 }

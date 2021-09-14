@@ -20,12 +20,19 @@
           <v-row>
             <v-col class="pa-0 pb-2 d-flex align-center justify-end">
               <span class="font-regular-12 secondary--text opacity6"
-                >(۳۶۰ نظر)</span
+                >(
+                  <span
+                    :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
+                    >260</span
+                  >
+                  <span>{{ $t("search.main.item.comments") }}</span>
+                  )
+                </span
               >
               <span
                 class="mx-1 font-bold-16"
-                :class="rankColor(rank) + '--text'"
-                >۳.۸</span
+                :class="[rankColor(rank) + '--text', $i18n.locale === 'fa' ? 'font-FaNumbold-16' : '']"
+                >3.9</span
               >
               <StarIcon 
               :color="
@@ -44,9 +51,11 @@
             <div class="font-regular-12">
               <!-- modification need: remove this v-if base on index  -->
               <div class="secondary--text" v-if="index % 2 === 0">
-                <span>قیمت کل</span>
-                <span>۲,۵۵۰,۰۰۰</span>
-                <span>تومان</span>
+                <span>{{ $t("search.main.item.total-price") }}</span>
+            <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
+              >2,550,000</span
+            >
+            <span>{{ $t("search.main.item.unit") }}</span>
               </div>
 
               <!-- modification need: remove this v-if base on index  -->
@@ -54,12 +63,21 @@
                 class="secondary--text text-center"
                 v-if="index % 3 === 0 && !(index % 2 === 0)"
               >
-                <span class="text-decoration-line-through">۲,۵۵۰,۰۰۰</span>
+                <span
+              class="text-decoration-line-through"
+              :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
+              >2,550,000</span
+            >
               </div>
               <div class="greenDark8--text">
-                <span>هر شب</span>
-                <span class="font-bold-14">۸۵۰,۰۰۰</span>
-                <span class="">تومان</span>
+                <span>{{ $t("search.main.item.per-night") }}</span>
+            <span
+              :class="
+                $i18n.locale === 'fa' ? 'font-FaNumbold-14' : 'font-bold-14'
+              "
+              >850,000</span
+            >
+            <span>{{ $t("search.main.item.unit") }}</span>
               </div>
             </div>
             <!-- Price end -->
@@ -90,7 +108,14 @@
               "
             >
               <span>مانده زمان تخفیف</span>
-              <span> ۰۲:۵۵:۴۰ </span>
+              <span
+              :class="
+                $i18n.locale === 'fa'
+                  ? 'font-FaNumregular-12'
+                  : 'font-regular-12'
+              "
+              >۰2:55:40</span
+            >
             </div>
           </v-card-text>
         </div>

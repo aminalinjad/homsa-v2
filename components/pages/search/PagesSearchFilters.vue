@@ -132,7 +132,7 @@
                         :clr="$vuetify.theme.themes.dark.greenDark8"
                       />
                     </v-btn>
-                    <span class="px-2 greenDark8--text">۱</span>
+                    <span class="px-2 greenDark8--text" :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''">1</span>
                     <v-btn small class="me-n3" icon depressed>
                       <MinusIcon
                         size="16"
@@ -167,7 +167,7 @@
                       :clr="$vuetify.theme.themes.light.greenDark8"
                     />
                   </v-btn>
-                  <span class="px-2 greenDark8--text">۱</span>
+                  <span class="px-2 greenDark8--text" :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''">1</span>
                   <v-btn small class="me-n3" icon depressed>
                     <MinusIcon
                       size="16"

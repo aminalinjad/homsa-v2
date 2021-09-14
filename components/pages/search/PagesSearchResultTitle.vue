@@ -9,7 +9,12 @@
     </div>
     <div class="d-flex align-center">
       <p class="font-regular-18 mb-0 greenDark8--text">اجاره اقامتگاه در شهر رشت</p>
-      <span class="ms-2 font-regular-12 secondary--text" v-if="!isFilter">(۳۴ مورد)</span>
+      <span class="ms-2 font-regular-12 secondary--text" v-if="!isFilter">
+        (
+          <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''">34</span>
+          <span>{{$t('search.main.resultsTotal')}}</span>
+          )
+        </span>
     </div>
   </div>
 </template>

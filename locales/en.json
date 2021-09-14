@@ -50,9 +50,16 @@
       }
     },
     "main": {
+      "resultsTotal": "results",
       "sort-by": "Sort by",
       "tags": "Tags",
-      "related-search": "Related Search"
+      "related-search": "Related Search",
+      "item": {
+        "comments": "comments",
+        "total-price": "total price",
+        "per-night": "per night",
+        "unit": "Toman"
+      }
     },
     "map": {
       "filter": "Filter",

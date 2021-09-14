@@ -321,8 +321,8 @@
                 background-color="whiteColor"
                 :label="`${$t('header.bottom.count.label')}`"
                 v-model="searchForm.count"
-                class="rounded font-regular-14"
-                :class="$i18n.locale === 'fa' ? 'font-FaNummedium-14' : ''"
+                class="rounded"
+                :class="$i18n.locale === 'fa' ? 'farsiFontCountInput' : ''"
               >
               </v-text-field>
             </v-col>
@@ -615,6 +615,7 @@ export default {
 
   &__bottom {
     position: relative;
+    overflow: hidden;
     width: 100%;
     height: 114px;
     top: -60px;
@@ -675,6 +676,14 @@ export default {
         input,
         textarea {
           color: var(--v-greyLight2-base) !important;
+        }
+      }
+
+      .farsiFontCountInput {
+        .v-text-field {
+          &__slot {
+            font-family: IRANSansFaNumregular!important;
+          }
         }
       }
     }

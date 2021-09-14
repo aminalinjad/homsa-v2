@@ -13,7 +13,14 @@
           <span class="font-regular-12">مانده زمان تخفیف</span>
 
           <span>
-            <span class="font-regular-12">۰۲:۵۵:۴۰</span>
+            <span
+              :class="
+                $i18n.locale === 'fa'
+                  ? 'font-FaNumregular-12'
+                  : 'font-regular-12'
+              "
+              >۰2:55:40</span
+            >
             <v-icon small color="redOffer">mdi-clock-outline</v-icon>
           </span>
         </div>
@@ -35,8 +42,23 @@
               <span class="font-bold-14 secondary--text">جدید</span>
             </span>
             <span class="d-flex align-center justify-end" v-else>
-              <span class="font-regular-10 secondary--text">(۳۶۰ نظر)</span>
-              <span class="mx-1" :class="rankColor(rank) + '--text'">۴.۲</span>
+              <span class="font-regular-10 secondary--text"
+                >(
+                <span
+                  :class="$i18n.locale === 'fa' ? 'font-FaNumregular-10' : ''"
+                  >360</span
+                >
+                <span>{{ $t("search.main.item.comments") }}</span>
+                )</span
+              >
+              <span
+                class="mx-1"
+                :class="[
+                  rankColor(rank) + '--text',
+                  $i18n.locale === 'fa' ? 'font-FaNumregular-14' : '',
+                ]"
+                >4.2</span
+              >
               <StarIcon
                 :color="
                   rank >= 4
@@ -67,9 +89,11 @@
         <div class="font-regular-12">
           <!-- modification need : this v-if base of index should be removed after logic and api   -->
           <div class="secondary--text mb-n4" v-if="index % 2 === 0">
-            <span>قیمت کل</span>
-            <span>۲,۵۵۰,۰۰۰</span>
-            <span>تومان</span>
+            <span>{{ $t("search.main.item.total-price") }}</span>
+            <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
+              >2,550,000</span
+            >
+            <span>{{ $t("search.main.item.unit") }}</span>
           </div>
 
           <!-- modification need : this v-if base of index should be removed after logic and api   -->
@@ -77,12 +101,21 @@
             class="secondary--text mb-n4 text-center"
             v-if="index % 3 === 0 && !(index % 2 === 0)"
           >
-            <span class="text-decoration-line-through">۲,۵۵۰,۰۰۰</span>
+            <span
+              class="text-decoration-line-through"
+              :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
+              >2,550,000</span
+            >
           </div>
           <div class="mt-4 greenDark8--text">
-            <span>هر شب</span>
-            <span class="font-bold-14">۸۵۰,۰۰۰</span>
-            <span>تومان</span>
+            <span>{{ $t("search.main.item.per-night") }}</span>
+            <span
+              :class="
+                $i18n.locale === 'fa' ? 'font-FaNumbold-14' : 'font-bold-14'
+              "
+              >850,000</span
+            >
+            <span>{{ $t("search.main.item.unit") }}</span>
           </div>
         </div>
         <!-- Price end -->
@@ -114,11 +147,22 @@
                 <span class="font-regular-12 secondary--text">رشت - گیلان</span>
               </v-col>
               <v-col class="pb-0 d-flex align-center justify-end">
-                <span class="font-regular-12 secondary--text">(۳۶۰ نظر)</span>
+                <span class="font-regular-12 secondary--text"
+                  >(
+                  <span
+                    :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
+                    >460</span
+                  >
+                  <span>{{ $t("search.main.item.comments") }}</span>
+                  )</span
+                >
                 <span
                   class="mx-1 font-bold-16"
-                  :class="rankColor(rank) + '--text'"
-                  >۴.۲</span
+                  :class="[
+                    rankColor(rank) + '--text',
+                    $i18n.locale === 'fa' ? 'font-FaNumbold-16' : '',
+                  ]"
+                  >4.2</span
                 >
                 <StarIcon
                   :color="
@@ -174,20 +218,33 @@
             <!-- Price start -->
             <div class="font-regular-12">
               <div class="secondary--text mb-n4" v-if="index % 2 === 0">
-                <span>قیمت کل</span>
-                <span>۲,۵۵۰,۰۰۰</span>
-                <span>تومان</span>
+                <span>{{ $t("search.main.item.total-price") }}</span>
+                <span
+                  :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
+                  >2,550,000</span
+                >
+                <span>{{ $t("search.main.item.unit") }}</span>
               </div>
               <div
                 class="secondary--text mb-n4 text-center"
                 v-if="index % 3 === 0 && !(index % 2 === 0)"
               >
-                <span class="text-decoration-line-through">۲,۵۵۰,۰۰۰</span>
+                <span
+              class="text-decoration-line-through"
+              :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
+              >2,550,000</span
+            >
               </div>
               <div class="mt-4 greenDark8--text">
-                <span>هر شب</span>
-                <span class="font-bold-14">۸۵۰,۰۰۰</span>
-                <span>تومان</span>
+                <span>{{ $t("search.main.item.per-night") }}</span>
+            <span
+              :class="
+                $i18n.locale === 'fa' ? 'font-FaNumbold-14' : 'font-bold-14'
+              "
+              >850,000</span
+            >
+            <span>{{ $t("search.main.item.unit") }}</span>
+                
               </div>
             </div>
             <!-- Price end -->
@@ -206,7 +263,14 @@
             <v-chip label color="#EC484A0D" text-color="redOfferTime" v-else>
               <span class="mt-n1 me-12 font-regular-14">مانده زمان تخفیف</span>
               <span>
-                <span>۰۲:۵۵:۴۰</span>
+                <span
+              :class="
+                $i18n.locale === 'fa'
+                  ? 'font-FaNumregular-14'
+                  : ''
+              "
+              >۰2:55:40</span
+            >
                 <v-icon>mdi-clock-outline</v-icon>
               </span>
             </v-chip>
