@@ -18,10 +18,10 @@
         <v-row>
           <!-- header logo -->
           <v-col>
-              <img
-                src="@/assets/images/logo-homsa.svg"
-                class="mt-2 cursorPointer"
-              />
+            <img
+              src="@/assets/images/logo-homsa.svg"
+              class="mt-2 cursorPointer"
+            />
           </v-col>
 
           <!-- header input -->
@@ -77,7 +77,7 @@
 
                   <span>{{ searchFormValue.checkOut }}</span>
                   <span class="ps-1 font-regular-12 greyLight2--text"
-                    >( + {{ searchFormValue.flexiblity }}
+                  >( + {{ searchFormValue.flexiblity }}
                     {{ $t("header.top.input.day") }})
                   </span>
                 </div>
@@ -89,8 +89,8 @@
                     {{ $t("header.top.input.unit") }}
                   </span>
                   <span class="font-regular-14 secondary--text" v-else>{{
-                    $t("header.top.input.count")
-                  }}</span>
+                      $t("header.top.input.count")
+                    }}</span>
                 </div>
                 <v-btn fab color="primary" elevation="0" width="32" height="32">
                   <v-icon>$searchLeft</v-icon>
@@ -117,13 +117,13 @@
               </div>
               <v-divider vertical class="mx-3 greyLight4"></v-divider>
               <div>
-                <v-menu
-                  fixed
-                  :left="$vuetify.rtl"
-                  bottom
-                  offset-y
-                  min-width="184"
-                  content-class="headerUserMenu"
+                <v-menu ref="test"
+                        fixed
+                        :left="$vuetify.rtl"
+                        bottom
+                        offset-y
+                        min-width="184"
+                        content-class="headerUserMenu"
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
@@ -150,8 +150,9 @@
                   <v-list class="cursorPointer">
                     <v-list-item link to="">
                       <v-list-item-subtitle class="greenDark8--text">{{
-                        userMenu.menuTitle
-                      }}</v-list-item-subtitle>
+                          userMenu.menuTitle
+                        }}
+                      </v-list-item-subtitle>
                     </v-list-item>
                     <v-divider class="greyLight4"></v-divider>
                     <v-list-item
@@ -161,8 +162,9 @@
                       :to="item.link"
                     >
                       <v-list-item-subtitle class="secondary--text">{{
-                        item.name
-                      }}</v-list-item-subtitle>
+                          item.name
+                        }}
+                      </v-list-item-subtitle>
                     </v-list-item>
                     <v-divider class="greyLight4"></v-divider>
                     <v-list-item
@@ -172,8 +174,9 @@
                       :to="item.link"
                     >
                       <v-list-item-subtitle class="secondary--text">{{
-                        item.name
-                      }}</v-list-item-subtitle>
+                          item.name
+                        }}
+                      </v-list-item-subtitle>
                     </v-list-item>
                   </v-list>
                 </v-menu>
@@ -212,90 +215,91 @@
       <div class="d-flex headerCls__bottom__content">
         <!-- destination  -->
         <v-hover v-slot="{ hover }">
-        <v-autocomplete
-          filled
-          clearable
-          height="66"
-          background-color="whiteColor"
-          :label="`${$t('header.bottom.destination.label')}`"
-          :placeholder="`${$t('header.bottom.destination.place-holder')}`"
-          persistent-placeholder
-          :items="
+          <v-autocomplete
+            filled
+            clearable
+            height="66"
+            background-color="whiteColor"
+            :label="`${$t('header.bottom.destination.label')}`"
+            :placeholder="`${$t('header.bottom.destination.place-holder')}`"
+            persistent-placeholder
+            :items="
             ifSuggestion
               ? destinationSuggestions.items
               : destinationSearchResult
           "
-          item-text="city"
-          item-value="city"
-          :default="searchForm.destination"
-          v-model="searchForm.destination"
-          append-icon=""
-          no-data-text="No data available"
-          :class="hover ? 'bxShadow' : ''"
-          class="me-2 rounded srchDestination font-regular-14"
-          @click="destinationSuggestion"
-          @click:clear="clearDestination"
-          @update:search-input="destinationSearch"
-        >
-          <!-- title in suggestion mode -->
-          <template v-slot:prepend-item>
-            <v-list-item-title
-              v-if="ifSuggestion"
-              class="ms-6 mt-4 font-medium-14 greenDark8--text"
-              >{{ destinationSuggestions.title }}</v-list-item-title
-            >
-            <!--destination result -->
-          </template>
-          <template v-slot:item="data">
-            <v-list-item-avatar rounded width="48" height="48" class="ms-2">
-              <img :src="data.item.img" />
-            </v-list-item-avatar>
-            <v-list-item-content>
+            item-text="city"
+            item-value="city"
+            :default="searchForm.destination"
+            v-model="searchForm.destination"
+            append-icon=""
+            no-data-text="No data available"
+            :class="hover ? 'bxShadow' : ''"
+            class="me-2 rounded srchDestination font-regular-14"
+            @click="destinationSuggestion"
+            @click:clear="clearDestination"
+            @update:search-input="destinationSearch"
+          >
+            <!-- title in suggestion mode -->
+            <template v-slot:prepend-item>
               <v-list-item-title
-                v-html="data.item.city"
-                class="font-regular-14 greenDark8--text"
-              ></v-list-item-title>
-              <v-list-item-subtitle
-                v-html="data.item.state"
-                class="font-regular-12 greyLight2--text"
-              ></v-list-item-subtitle>
-            </v-list-item-content>
-          </template>
-        </v-autocomplete>
+                v-if="ifSuggestion"
+                class="ms-6 mt-4 font-medium-14 greenDark8--text"
+              >{{ destinationSuggestions.title }}
+              </v-list-item-title
+              >
+              <!--destination result -->
+            </template>
+            <template v-slot:item="data">
+              <v-list-item-avatar rounded width="48" height="48" class="ms-2">
+                <img :src="data.item.img"/>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title
+                  v-html="data.item.city"
+                  class="font-regular-14 greenDark8--text"
+                ></v-list-item-title>
+                <v-list-item-subtitle
+                  v-html="data.item.state"
+                  class="font-regular-12 greyLight2--text"
+                ></v-list-item-subtitle>
+              </v-list-item-content>
+            </template>
+          </v-autocomplete>
         </v-hover>
 
         <!-- date range  -->
         <v-hover v-slot="{ hover }">
-        <v-text-field
-          filled
-          readonly
-          height="66"
-          background-color="whiteColor"
-          :label="`${$t('header.bottom.check-in.label')}`"
-          :placeholder="`${$t('header.bottom.check-in.place-holder')}`"
-          persistent-placeholder
-          v-model="searchForm.checkIn"
-          :class="hover ? 'bxShadow' : ''"
-          class="me-2 rounded srchCheckIn font-regular-14"
-        >
-        </v-text-field>
+          <v-text-field
+            filled
+            readonly
+            height="66"
+            background-color="whiteColor"
+            :label="`${$t('header.bottom.check-in.label')}`"
+            :placeholder="`${$t('header.bottom.check-in.place-holder')}`"
+            persistent-placeholder
+            v-model="searchForm.checkIn"
+            :class="hover ? 'bxShadow' : ''"
+            class="me-2 rounded srchCheckIn font-regular-14"
+          >
+          </v-text-field>
         </v-hover>
 
 
         <v-hover v-slot="{ hover }">
-        <v-text-field
-          filled
-          readonly
-          height="66"
-          background-color="whiteColor"
-          :label="`${$t('header.bottom.check-out.label')}`"
-          :placeholder="`${$t('header.bottom.check-out.place-holder')}`"
-          persistent-placeholder
-          v-model="searchForm.checkOut"
-          :class="hover ? 'bxShadow' : ''"
-          class="me-2 rounded srchCheckOut font-regular-14"
-        >
-        </v-text-field>
+          <v-text-field
+            filled
+            readonly
+            height="66"
+            background-color="whiteColor"
+            :label="`${$t('header.bottom.check-out.label')}`"
+            :placeholder="`${$t('header.bottom.check-out.place-holder')}`"
+            persistent-placeholder
+            v-model="searchForm.checkOut"
+            :class="hover ? 'bxShadow' : ''"
+            class="me-2 rounded srchCheckOut font-regular-14"
+          >
+          </v-text-field>
         </v-hover>
 
         <!-- count -->
@@ -384,7 +388,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
 import * as types from "@/store/types.js";
 import MinusIcon from "@/assets/AppIcons/minus.vue";
 import AddIcon from "@/assets/AppIcons/add.vue";
@@ -404,14 +408,14 @@ export default {
       userMenu: {
         menuTitle: "مشاهده حساب کاربری",
         menuBody: [
-          { name: "اقامتگاه‌های من", link: "#1" },
-          { name: "رزروهای من", link: "#2" },
-          { name: "لیست اعلان‌ها", link: "#3" },
-          { name: "لیست علاقه مندی‌ها", link: "#4" },
+          {name: "اقامتگاه‌های من", link: "#1"},
+          {name: "رزروهای من", link: "#2"},
+          {name: "لیست اعلان‌ها", link: "#3"},
+          {name: "لیست علاقه مندی‌ها", link: "#4"},
         ],
         menuFooter: [
-          { name: "پشتیبانی", link: "#5" },
-          { name: "خروج", link: "#6" },
+          {name: "پشتیبانی", link: "#5"},
+          {name: "خروج", link: "#6"},
         ],
       },
       searchForm: {
@@ -505,7 +509,7 @@ export default {
     },
   },
   mounted() {
-    window.addEventListener("scroll", this.scrollPage, { passive: true });
+    window.addEventListener("scroll", this.scrollPage, {passive: true});
   },
   methods: {
     showSearchSection() {
@@ -521,6 +525,7 @@ export default {
       this.closeSearchSection();
     },
     scrollPage() {
+      if (this.$refs.test.isActive) this.$refs.test.isActive = false
       if (window.scrollY > 0) {
         this.fixHeader(true);
       } else {
@@ -580,16 +585,19 @@ export default {
   position: relative;
   transition: all 0.2s;
   z-index: 1500;
+
   &__top {
     z-index: 1;
     position: relative;
     height: 80px !important;
+
     .selectInput {
       min-width: 312px;
       max-width: max-content;
       height: 48px;
     }
   }
+
   &__bottom {
     position: relative;
     width: 100%;
@@ -614,9 +622,11 @@ export default {
           }
         }
       }
+
       .srchDestination {
         width: 270px;
       }
+
       .srchCheckIn,
       .srchCheckOut,
       .srchCount {
@@ -664,15 +674,17 @@ export default {
 .search-section-down {
   animation: headerMove 300ms forwards;
 }
+
 .search-section-up {
   animation: headerBackMove 300ms forwards;
 
 
 }
+
 @keyframes headerBackMove {
   from {
     top: -10px;
-    opacity: 1 ;
+    opacity: 1;
     height: 114px;
   }
   to {
@@ -681,9 +693,10 @@ export default {
     height: 0;
   }
 }
+
 @keyframes headerMove {
   from {
-    opacity: 0 ;
+    opacity: 0;
     top: -60px;
   }
   to {
