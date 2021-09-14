@@ -94,8 +94,8 @@
                     {{ $t("header.top.input.unit") }}
                   </span>
                   <span class="font-regular-14 secondary--text" v-else>{{
-                    $t("header.top.input.count")
-                  }}</span>
+                      $t("header.top.input.count")
+                    }}</span>
                 </div>
                 <v-btn fab color="primary" elevation="0" width="32" height="32">
                   <v-icon>$searchLeft</v-icon>
@@ -122,13 +122,13 @@
               </div>
               <v-divider vertical class="mx-3 greyLight4"></v-divider>
               <div>
-                <v-menu
-                  fixed
-                  :left="$vuetify.rtl"
-                  bottom
-                  offset-y
-                  min-width="184"
-                  content-class="headerUserMenu"
+                <v-menu ref="test"
+                        fixed
+                        :left="$vuetify.rtl"
+                        bottom
+                        offset-y
+                        min-width="184"
+                        content-class="headerUserMenu"
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
@@ -155,8 +155,9 @@
                   <v-list class="cursorPointer">
                     <v-list-item link to="">
                       <v-list-item-subtitle class="greenDark8--text">{{
-                        userMenu.menuTitle
-                      }}</v-list-item-subtitle>
+                          userMenu.menuTitle
+                        }}
+                      </v-list-item-subtitle>
                     </v-list-item>
                     <v-divider class="greyLight4"></v-divider>
                     <v-list-item
@@ -166,8 +167,9 @@
                       :to="item.link"
                     >
                       <v-list-item-subtitle class="secondary--text">{{
-                        item.name
-                      }}</v-list-item-subtitle>
+                          item.name
+                        }}
+                      </v-list-item-subtitle>
                     </v-list-item>
                     <v-divider class="greyLight4"></v-divider>
                     <v-list-item
@@ -177,8 +179,9 @@
                       :to="item.link"
                     >
                       <v-list-item-subtitle class="secondary--text">{{
-                        item.name
-                      }}</v-list-item-subtitle>
+                          item.name
+                        }}
+                      </v-list-item-subtitle>
                     </v-list-item>
                   </v-list>
                 </v-menu>
@@ -395,7 +398,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
 import * as types from "@/store/types.js";
 import MinusIcon from "@/assets/AppIcons/minus.vue";
 import AddIcon from "@/assets/AppIcons/add.vue";
@@ -416,14 +419,14 @@ export default {
       userMenu: {
         menuTitle: "مشاهده حساب کاربری",
         menuBody: [
-          { name: "اقامتگاه‌های من", link: "#1" },
-          { name: "رزروهای من", link: "#2" },
-          { name: "لیست اعلان‌ها", link: "#3" },
-          { name: "لیست علاقه مندی‌ها", link: "#4" },
+          {name: "اقامتگاه‌های من", link: "#1"},
+          {name: "رزروهای من", link: "#2"},
+          {name: "لیست اعلان‌ها", link: "#3"},
+          {name: "لیست علاقه مندی‌ها", link: "#4"},
         ],
         menuFooter: [
-          { name: "پشتیبانی", link: "#5" },
-          { name: "خروج", link: "#6" },
+          {name: "پشتیبانی", link: "#5"},
+          {name: "خروج", link: "#6"},
         ],
       },
       searchForm: {
@@ -517,7 +520,7 @@ export default {
     },
   },
   mounted() {
-    window.addEventListener("scroll", this.scrollPage, { passive: true });
+    window.addEventListener("scroll", this.scrollPage, {passive: true});
   },
   methods: {
     showSearchSection() {
@@ -534,6 +537,7 @@ export default {
       this.closeSearchSection();
     },
     scrollPage() {
+      if (this.$refs.test.isActive) this.$refs.test.isActive = false
       if (window.scrollY > 0) {
         this.fixHeader(true);
       } else {
@@ -596,16 +600,19 @@ export default {
   position: relative;
   transition: all 0.2s;
   z-index: 1500;
+
   &__top {
     z-index: 1;
     position: relative;
     height: 80px !important;
+
     .selectInput {
       min-width: 312px;
       max-width: max-content;
       height: 48px;
     }
   }
+
   &__bottom {
     position: relative;
     width: 100%;
@@ -630,9 +637,11 @@ export default {
           }
         }
       }
+
       .srchDestination {
         width: 270px;
       }
+
       .srchCheckIn,
       .srchCheckOut,
       .srchCount {
@@ -680,13 +689,15 @@ export default {
 .search-section-down {
   animation: headerMove 300ms forwards;
 }
+
 .search-section-up {
   animation: headerBackMove 300ms forwards;
 }
+
 @keyframes headerBackMove {
   from {
     top: -10px;
-    opacity: 1 ;
+    opacity: 1;
     height: 114px;
   }
   to {
@@ -695,6 +706,7 @@ export default {
     height: 0;
   }
 }
+
 @keyframes headerMove {
   from {
     opacity: 0;
@@ -716,8 +728,9 @@ export default {
 // costomize menu content
 .v-menu {
   &__content {
-    // position: fixed !important;
-    box-shadow: 0px 4px 20px #00000014 !important;
+    //position: fixed !important;
+    box-shadow: 0 4px 20px #00000014 !important;
+    z-index: 9999 !important;
   }
 }
 
