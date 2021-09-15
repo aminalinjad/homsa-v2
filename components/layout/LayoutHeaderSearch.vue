@@ -247,6 +247,7 @@
             v-model="searchForm.destination"
             append-icon=""
             no-data-text="No data available"
+            :menu-props="{ minWidth: 410, left: $vuetify.rtl}"
             :class="hover ? 'bxShadow' : ''"
             class="me-2 rounded srchDestination font-regular-14"
             @click="destinationSuggestion"
@@ -411,6 +412,7 @@ import { mapGetters } from "vuex";
 import * as types from "@/store/types.js";
 import MinusIcon from "@/assets/AppIcons/minus.vue";
 import AddIcon from "@/assets/AppIcons/add.vue";
+import ClickOutside from 'vue-click-outside';
 
 export default {
   components: {
@@ -531,6 +533,9 @@ export default {
   mounted() {
     window.addEventListener("scroll", this.scrollPage, { passive: true });
   },
+  directives: {
+    ClickOutside
+  },
   methods: {
     showSearchSection() {
       this.searchSection = true;
@@ -600,6 +605,9 @@ export default {
     showCalendar() {
       this.calendar = true;
     },
+    hide() {
+      console.log('click outside');
+    }
   },
 };
 </script>
@@ -777,6 +785,20 @@ export default {
     z-index: 9999 !important;
   }
 }
+
+// costomize autocomplete menu content
+.v-autocomplete__content.v-menu__content {
+  // top: 198px !important;
+  // left: 974px !important;
+  // width: 410px !important;
+  // @media(min-width: 1880px) {
+  //   left: 974px !important;
+  // }
+  // @media(min-width: 1440px) and (max-width: 1880px){
+  //   left: 735px !important;
+  // }
+}
+
 
 // customize calendar position
 .appCalendar {
