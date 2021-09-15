@@ -12,6 +12,7 @@
         <l-tile-layer
           url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
         ></l-tile-layer>
+
         <!--  close map icon -->
         <l-control position="topleft">
           <v-btn fab small @click="closeMapLayout">
@@ -19,7 +20,14 @@
           </v-btn>
         </l-control>
         <!--  zoom icon -->
-        <l-control-zoom position="bottomright"></l-control-zoom>
+        <l-control-zoom position="topright"></l-control-zoom>
+
+        <!--    get user location button    -->
+        <l-control position="topright">
+          <v-btn depressed fab small @click="getUserLocation">
+            <v-icon x-large> $location</v-icon>
+          </v-btn>
+        </l-control>
         <!-- show marker on map marker -->
         <l-marker
           :z-index-offset="place.id === getHoveredItem ? 1000 : 100"
@@ -32,7 +40,7 @@
               class="custom-marker font-regular-12"
               :class="[place.id === getHoveredItem ? 'hoverOnItem' : '']"
             >
-            <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''">{{ place.price }}</span>
+              <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''">{{ place.price }}</span>
               <span>
                  {{ $t("search.main.item.unit") }}</span>
               <v-icon
@@ -40,14 +48,15 @@
                 class="heart-icon"
                 small
                 color="redOfferTime"
-                >mdi-heart</v-icon
+              >mdi-heart
+              </v-icon
               >
             </div>
           </l-icon>
 
           <l-popup :options="popupOption">
-            <PagesSearchResultImg :index="1" />
-            <v-card-subtitle class="pt-3 pb-1 px-0">
+            <PagesSearchResultImg :index="1"/>
+            <div class="pt-3 pb-1 px-0">
               <div
                 class="pb-2"
                 :class="$vuetify.rtl ? 'text-left' : 'text-right'"
@@ -57,13 +66,35 @@
                 </span>
                 <span class="d-flex align-center justify-end" v-else>
                   <span class="font-regular-10 secondary--text">(۳۶۰ نظر)</span>
-                  <span class="mx-1">۴.۲</span>
+                  <span
+                    class="mx-1"
+                    :class="[
+                  rankColor(rank) + '--text',
+                  $i18n.locale === 'fa' ? 'font-FaNumregular-14' : '',
+                ]"
+                  >4.2</span
+                  >
+              <StarIcon
+                :color="
+                  rank >= 4
+                    ? !$vuetify.theme.dark
+                      ? $vuetify.theme.themes.light.primary
+                      : $vuetify.theme.themes.dark.primary
+                    : rank >= 3
+                    ? !$vuetify.theme.dark
+                      ? $vuetify.theme.themes.light.green2
+                      : $vuetify.theme.themes.dark.green2
+                    : !$vuetify.theme.dark
+                    ? $vuetify.theme.themes.light.orangeBooking
+                    : $vuetify.theme.themes.dark.orangeBooking
+                "
+              />
                 </span>
               </div>
-            </v-card-subtitle>
-            <v-card-text class="pb-3 px-0 greenDark8--text">
-              <p class="mb-1">آپارتمان مبله دوبلکس در خیابان ولیعصر</p>
-            </v-card-text>
+            </div>
+            <div class="pb-3 px-0 greenDark8--text">
+              <p class="mb-1 mt-0">آپارتمان مبله دوبلکس در خیابان ولیعصر</p>
+            </div>
 
             <!-- bottom sec  -->
             <v-card-actions class="px-0">
@@ -74,7 +105,7 @@
                   <span>{{ $t("search.main.item.total-price") }}</span>
                   <span
                     :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
-                    >2,550,000</span
+                  >2,550,000</span
                   >
                   <span>{{ $t("search.main.item.unit") }}</span>
                 </div>
@@ -85,20 +116,20 @@
                   v-if="index % 3 === 0 && !(index % 2 === 0)"
                 >
                   <span
-              class="text-decoration-line-through"
-              :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
-              >2,550,000</span
-            >
+                    class="text-decoration-line-through"
+                    :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
+                  >2,550,000</span
+                  >
                 </div>
                 <div class="mt-4 greenDark8--text">
                   <span>{{ $t("search.main.item.per-night") }}</span>
-            <span
-              :class="
+                  <span
+                    :class="
                 $i18n.locale === 'fa' ? 'font-FaNumbold-14' : 'font-bold-14'
               "
-              >850,000</span
-            >
-            <span>{{ $t("search.main.item.unit") }}</span>
+                  >850,000</span
+                  >
+                  <span>{{ $t("search.main.item.unit") }}</span>
                 </div>
               </div>
               <!-- Price end -->
@@ -129,12 +160,14 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import {mapGetters, mapActions} from "vuex";
 import * as types from "@/store/types.js";
+import StarIcon from "@/assets/AppIcons/starFavorite.vue";
 
 export default {
   data() {
     return {
+      rank: 4.2,
       dragMapCheckbox: false,
       options: {
         zoomControl: false,
@@ -144,7 +177,7 @@ export default {
       popupOption: {
         closeButton: false,
         minWidth: 270,
-        maxWidth: 312,
+        maxWidth: 270,
         className: "justifyBox",
       },
       zoom: 5,
@@ -196,6 +229,9 @@ export default {
       ],
     };
   },
+  components: {
+    StarIcon
+  },
   computed: {
     ...mapGetters({
       mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
@@ -210,13 +246,16 @@ export default {
       setHoveredItem: `modules/search/${types.search.actions.SET_HOVERED_ITEM}`,
     }),
     mapInitials() {
-      console.log(this.$refs.map);
       this.$refs.map.mapObject.fitBounds(
         this.places.map((m) => {
           return m.coordinates;
         }),
-        { padding: [20, 20] }
+        {padding: [20, 20]}
       );
+    },
+    getUserLocation() {
+      this.$refs.map.mapObject.locate()
+      console.log(this.$refs.map.mapObject);
     },
     closeMapLayout() {
       this.setMapLayout(false);

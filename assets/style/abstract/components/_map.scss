@@ -1,0 +1,22 @@
+.leaflet-touch .leaflet-bar a {
+  width: 40px !important;
+  height: 40px !important;
+}
+.leaflet-touch .leaflet-control-layers, .leaflet-touch .leaflet-bar {
+  border: unset !important;
+}
+.leaflet-touch .leaflet-bar a:last-child {
+  border-bottom-left-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+}
+.leaflet-touch .leaflet-bar a:first-child {
+  border-top-left-radius: 8px !important;
+  border-top-right-radius: 8px !important;
+}
+.leaflet-bar a {
+  border-bottom: unset !important;
+}
+.leaflet-control-zoom-in , .leaflet-control-zoom-out {
+  color: #3a3a3a !important;
+  font-size: 25px !important;
+}

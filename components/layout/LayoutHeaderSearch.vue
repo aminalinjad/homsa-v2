@@ -8,7 +8,7 @@
     <v-row
       class="ma-0 rounded-t-lg whiteColor headerCls__top"
       :class="[
-        ifSearchSection || ifFixedHeader ? '' : 'rounded-b-lg', 
+        ifSearchSection || ifFixedHeader ? '' : 'rounded-b-lg',
         !ifSearchSection && ifFixedHeader ? 'bottomShodaw' : ''
       ]"
     >
@@ -80,7 +80,7 @@
                   <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''">{{ searchFormValue.checkOut }}</span>
                   <span class="ps-1 font-regular-12 greyLight2--text"
                   :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
-                    >( 
+                    >(
                       <v-icon small>$plusMinusGrey</v-icon>
                       {{ searchFormValue.flexiblity }}
                     {{ $t("header.top.input.day") }})
@@ -122,7 +122,7 @@
               </div>
               <v-divider vertical class="mx-3 greyLight4"></v-divider>
               <div>
-                <v-menu ref="test"
+                <v-menu ref="menuRef"
                         fixed
                         :left="$vuetify.rtl"
                         bottom
@@ -537,7 +537,9 @@ export default {
       this.closeSearchSection();
     },
     scrollPage() {
-      if (this.$refs.test.isActive) this.$refs.test.isActive = false
+      if (this.$refs.menuRef) {
+        this.$refs.menuRef.isActive = false
+      }
       if (window.scrollY > 0) {
         this.fixHeader(true);
       } else {
