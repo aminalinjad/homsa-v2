@@ -2,14 +2,14 @@
   <header
     id="headerSearch"
     class="headerCls"
-    :class="ifSearchSection || !fixedHeader ? 'pa-4 mb-0' : ''"
+    :class="[searchSection || !fixedHeader ? 'pa-4 mb-0' : '', fixedHeader ? 'fixedHeader':'']"
   >
     <!-- header top section -->
     <v-row
       class="ma-0 rounded-t-lg whiteColor headerCls__top"
       :class="[
-        ifSearchSection || ifFixedHeader ? '' : 'rounded-b-lg',
-        !ifSearchSection && ifFixedHeader ? 'bottomShodaw' : ''
+        searchSection || fixedHeader ? '' : 'rounded-b-lg',
+        !searchSection && fixedHeader ? 'bottomShodaw' : ''
       ]"
     >
       <v-container
@@ -39,7 +39,7 @@
                 selectInput
               "
               @click="showSearchSection"
-              v-if="!ifSearchSection"
+              v-if="!searchSection"
             >
               <div
                 class="d-flex justify-space-between align-center"
@@ -211,7 +211,7 @@
 
     <!-- header bottom / search section -->
     <v-row
-      :class="ifSearchSection ? 'search-section-down' : 'search-section-up'"
+      :class="searchSection ? 'search-section-down' : 'search-section-up'"
       class="
         ma-0
         greyLight4
@@ -233,7 +233,7 @@
             :placeholder="`${$t('header.bottom.destination.place-holder')}`"
             persistent-placeholder
             :items="
-              ifSuggestion
+              homsaSuggestion
                 ? destinationSuggestions.items
                 : destinationSearchResult
             "
@@ -253,7 +253,7 @@
             <!-- title in suggestion mode -->
             <template v-slot:prepend-item>
               <v-list-item-title
-                v-if="ifSuggestion"
+                v-if="homsaSuggestion"
                 class="ms-6 mt-4 font-medium-14 greenDark8--text"
                 >{{ destinationSuggestions.title }}</v-list-item-title
               >
@@ -504,31 +504,34 @@ export default {
     ...mapGetters({
       mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
     }),
-    ifFixedHeader() {
-      if (this.fixedHeader === false) {
-        return false;
-      } else {
-        return true;
-      }
-    },
-    ifSearchSection() {
-      if (this.searchSection === false) {
-        return false;
-      } else {
-        return true;
-      }
-    },
-    ifSuggestion() {
-      if (this.suggestion === true) {
-        return true;
-      } else {
-        return false;
-      }
+    // ifFixedHeader() {
+    //   if (this.fixedHeader === false) {
+    //     return false;
+    //   } else {
+    //     return true;
+    //   }
+    // },
+
+    // ifSearchSection() {
+    //   if (this.searchSection === false) {
+    //     return false;
+    //   } else {
+    //     return true;
+    //   }
+    // },
+
+    homsaSuggestion() {
+        return this.suggestion === true;
     },
   },
   mounted() {
     window.addEventListener("scroll", this.scrollPage, { passive: true });
   },
+
+  destroyed() {
+    window.removeEventListener("scroll", this.scrollPage);
+  },
+
   
   methods: {
     showSearchSection() {
@@ -551,17 +554,8 @@ export default {
         this.$refs.menuRef.isActive = false
       }
       if (window.scrollY > 0) {
-        this.fixHeader(true);
-      } else {
-        this.fixHeader(false);
-      }
-    },
-    fixHeader(value) {
-      if (value) {
-        document.getElementById("headerSearch").classList.add("fixedHeader");
         this.fixedHeader = true;
       } else {
-        document.getElementById("headerSearch").classList.remove("fixedHeader");
         this.fixedHeader = false;
       }
     },
