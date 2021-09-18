@@ -400,7 +400,7 @@
 
     
     <!-- overlay  -->
-    <v-overlay :value="overlay"  @click.native="hide" z-index="-1"></v-overlay>
+    <v-overlay :value="overlay"  @click.native="closeSearchSection" z-index="-1"></v-overlay>
   </header>
 </template>
 
@@ -504,21 +504,6 @@ export default {
     ...mapGetters({
       mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
     }),
-    // ifFixedHeader() {
-    //   if (this.fixedHeader === false) {
-    //     return false;
-    //   } else {
-    //     return true;
-    //   }
-    // },
-
-    // ifSearchSection() {
-    //   if (this.searchSection === false) {
-    //     return false;
-    //   } else {
-    //     return true;
-    //   }
-    // },
 
     homsaSuggestion() {
         return this.suggestion === true;
@@ -539,7 +524,7 @@ export default {
       this.overlay = !this.overlay;
     },
     closeSearchSection() {
-      this.searchSection = false;
+      this.searchSection = !this.searchSection;
       this.calendar = false
       this.searchResult = !this.searchResult;
       this.overlay = !this.overlay;
@@ -597,11 +582,6 @@ export default {
     showCalendar() {
       this.calendar = true;
     },
-    hide() {
-      this.searchSection = false;
-      this.calendar = false;
-      this.overlay = false;
-    }
   },
 };
 </script>
