@@ -2,7 +2,7 @@
   <header
     id="headerSearch"
     class="headerCls"
-    :class="ifSearchSection || !ifFixedHeader ? 'pa-4 mb-0' : ''"
+    :class="ifSearchSection || !fixedHeader ? 'pa-4 mb-0' : ''"
   >
     <!-- header top section -->
     <v-row
@@ -398,8 +398,9 @@
     <!-- calendar  -->
     <AppCalendar class="appCalendar" v-if="calendar" />
 
+    
     <!-- overlay  -->
-    <v-overlay :value="overlay" z-index="-1"></v-overlay>
+    <v-overlay :value="overlay"  @click.native="hide" z-index="-1"></v-overlay>
   </header>
 </template>
 
@@ -408,7 +409,6 @@ import { mapGetters } from "vuex";
 import * as types from "@/store/types.js";
 import MinusIcon from "@/assets/AppIcons/minus.vue";
 import AddIcon from "@/assets/AppIcons/add.vue";
-import ClickOutside from 'vue-click-outside';
 
 export default {
   components: {
@@ -529,9 +529,7 @@ export default {
   mounted() {
     window.addEventListener("scroll", this.scrollPage, { passive: true });
   },
-  directives: {
-    ClickOutside
-  },
+  
   methods: {
     showSearchSection() {
       this.searchSection = true;
@@ -539,8 +537,10 @@ export default {
     },
     closeSearchSection() {
       this.searchSection = false;
+      this.calendar = false
       this.searchResult = !this.searchResult;
       this.overlay = !this.overlay;
+      ;
     },
     Search() {
       this.calendar = false;
@@ -604,7 +604,9 @@ export default {
       this.calendar = true;
     },
     hide() {
-      console.log('click outside');
+      this.searchSection = false;
+      this.calendar = false;
+      this.overlay = false;
     }
   },
 };
