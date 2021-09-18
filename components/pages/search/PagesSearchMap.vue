@@ -252,10 +252,13 @@ export default {
         }),
         {padding: [20, 20]}
       );
+      setTimeout(() => {
+        this.$refs.map.mapObject.invalidateSize()
+      }, 100)
     },
     getUserLocation() {
       this.$refs.map.mapObject.locate()
-      console.log(this.$refs.map.mapObject);
+      console.log(this.$refs.map);
     },
     closeMapLayout() {
       this.setMapLayout(false);
