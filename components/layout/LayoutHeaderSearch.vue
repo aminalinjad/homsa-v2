@@ -77,25 +77,32 @@
                   <v-icon v-if="$vuetify.rtl">$arrowLine</v-icon>
                   <v-icon v-else>$arrowLineRight</v-icon>
 
-                  <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''">{{ searchFormValue.checkOut }}</span>
-                  <span class="ps-1 font-regular-12 greyLight2--text"
-                  :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
+                  <span
+                    :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
+                    >{{ searchFormValue.checkOut }}</span
+                  >
+                  <span
+                    class="ps-1 font-regular-12 greyLight2--text"
+                    :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
                     >(
-                      <v-icon small>$plusMinusGrey</v-icon>
-                      {{ searchFormValue.flexiblity }}
+                    <v-icon small>$plusMinusGrey</v-icon>
+                    {{ searchFormValue.flexiblity }}
                     {{ $t("header.top.input.day") }})
                   </span>
                 </div>
                 <v-divider vertical></v-divider>
 
                 <div class="px-3">
-                  <span v-if="searchFormValue.count" :class="$i18n.locale === 'fa' ? 'font-FaNummedium-14' : ''">
+                  <span
+                    v-if="searchFormValue.count"
+                    :class="$i18n.locale === 'fa' ? 'font-FaNummedium-14' : ''"
+                  >
                     {{ searchFormValue.count }}
                     {{ $t("header.top.input.unit") }}
                   </span>
                   <span class="font-regular-14 secondary--text" v-else>{{
-                      $t("header.top.input.count")
-                    }}</span>
+                    $t("header.top.input.count")
+                  }}</span>
                 </div>
                 <v-btn fab color="primary" elevation="0" width="32" height="32">
                   <v-icon>$searchLeft</v-icon>
@@ -154,9 +161,8 @@
                   </template>
                   <v-list class="cursorPointer">
                     <v-list-item link to="">
-                      <v-list-item-subtitle class="greenDark8--text">{{
-                          userMenu.menuTitle
-                        }}
+                      <v-list-item-subtitle class="greenDark8--text"
+                        >{{ userMenu.menuTitle }}
                       </v-list-item-subtitle>
                     </v-list-item>
                     <v-divider class="greyLight4"></v-divider>
@@ -166,21 +172,19 @@
                       link
                       :to="item.link"
                     >
-                      <v-list-item-subtitle class="secondary--text">{{
-                          item.name
-                        }}
+                      <v-list-item-subtitle class="secondary--text"
+                        >{{ item.name }}
                       </v-list-item-subtitle>
                     </v-list-item>
                     <v-divider class="greyLight4"></v-divider>
                     <v-list-item
                       v-for="(item, index) in userMenu.menuFooter"
-                      :key="`${index+userMenu.menuBody.length}`"
+                      :key="`${index + userMenu.menuBody.length}`"
                       link
                       :to="item.link"
                     >
-                      <v-list-item-subtitle class="secondary--text">{{
-                          item.name
-                        }}
+                      <v-list-item-subtitle class="secondary--text"
+                        >{{ item.name }}
                       </v-list-item-subtitle>
                     </v-list-item>
                   </v-list>
@@ -239,6 +243,7 @@
             v-model="searchForm.destination"
             append-icon=""
             no-data-text="No data available"
+            :menu-props="{ minWidth: 410, left: $vuetify.rtl}"
             :class="hover ? 'bxShadow' : ''"
             class="me-2 rounded srchDestination font-regular-14"
             @click="destinationSuggestion"
@@ -319,10 +324,11 @@
                 readonly
                 height="66"
                 background-color="whiteColor"
+                :suffix="`${$t('header.bottom.count.suffix')}`"
                 :label="`${$t('header.bottom.count.label')}`"
                 v-model="searchForm.count"
                 class="rounded"
-                :class="$i18n.locale === 'fa' ? 'farsiFontCountInput' : ''"
+                :class="$i18n.locale === 'fa' ? 'farsiFontCountInput' : 'inputRight'"
               >
               </v-text-field>
             </v-col>
@@ -398,10 +404,11 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 import * as types from "@/store/types.js";
 import MinusIcon from "@/assets/AppIcons/minus.vue";
 import AddIcon from "@/assets/AppIcons/add.vue";
+import ClickOutside from 'vue-click-outside';
 
 export default {
   components: {
@@ -419,14 +426,14 @@ export default {
       userMenu: {
         menuTitle: "مشاهده حساب کاربری",
         menuBody: [
-          {name: "اقامتگاه‌های من", link: "#1"},
-          {name: "رزروهای من", link: "#2"},
-          {name: "لیست اعلان‌ها", link: "#3"},
-          {name: "لیست علاقه مندی‌ها", link: "#4"},
+          { name: "اقامتگاه‌های من", link: "#1" },
+          { name: "رزروهای من", link: "#2" },
+          { name: "لیست اعلان‌ها", link: "#3" },
+          { name: "لیست علاقه مندی‌ها", link: "#4" },
         ],
         menuFooter: [
-          {name: "پشتیبانی", link: "#5"},
-          {name: "خروج", link: "#6"},
+          { name: "پشتیبانی", link: "#5" },
+          { name: "خروج", link: "#6" },
         ],
       },
       searchForm: {
@@ -520,7 +527,10 @@ export default {
     },
   },
   mounted() {
-    window.addEventListener("scroll", this.scrollPage, {passive: true});
+    window.addEventListener("scroll", this.scrollPage, { passive: true });
+  },
+  directives: {
+    ClickOutside
   },
   methods: {
     showSearchSection() {
@@ -593,6 +603,9 @@ export default {
     showCalendar() {
       this.calendar = true;
     },
+    hide() {
+      console.log('click outside');
+    }
   },
 };
 </script>
@@ -650,6 +663,26 @@ export default {
       .srchCount {
         width: 165px;
         height: 66px;
+
+        // .v-input {
+        //   input {
+        //       text-align: end!important;
+        //     }
+        // }
+
+        .v-input.farsiFontCountInput {
+          input,
+          textarea {
+            text-align: left!important;
+          }
+        }
+
+        .v-input.inputRight {
+          input,
+          textarea {
+            text-align: right!important;
+          }
+        }
       }
 
       .v-text-field {
@@ -672,6 +705,12 @@ export default {
           font-size: 12px;
           font-weight: 600;
         }
+
+        &__suffix {
+          color: var(--v-greyLight2-base) !important;
+          font-size: 14px;
+          margin-top: 10px !important;
+        }
       }
 
       .v-input {
@@ -684,7 +723,7 @@ export default {
       .farsiFontCountInput {
         .v-text-field {
           &__slot {
-            font-family: IRANSansFaNumregular!important;
+            font-family: IRANSansFaNumregular !important;
           }
         }
       }

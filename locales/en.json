@@ -30,7 +30,8 @@
       "count": {
         "label": "Guests",
         "unit": "guest",
-        "unit-plurals": "guests"
+        "unit-plurals": "guests",
+        "suffix": "guest"
       },
       "calendar": {
         "night": "night",

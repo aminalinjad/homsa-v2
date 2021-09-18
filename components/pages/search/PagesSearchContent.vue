@@ -109,9 +109,9 @@
           ]"
         >
           <!-- item component -->
-          <NuxtLink to="">
+          <!-- <NuxtLink to=""> -->
             <PagesSearchResultItem :ifGridView="ifGridView" :index="index" />
-          </NuxtLink>
+          <!-- </NuxtLink> -->
         </v-col>
       </v-row>
       <!-- Result Sec End -->

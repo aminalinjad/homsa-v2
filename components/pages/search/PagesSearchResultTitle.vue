@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="breadCrumbsCls">
+    <div class="breadCrumbs">
       <v-breadcrumbs
         :items="breadcrumbs"
         class="pt-0"
@@ -63,14 +63,23 @@ export default {
 //breadcrumb link color
 
 .v-application {
-  .breadCrumbsCls a {
+  .breadCrumbs a {
     color: var(--v-secondary-base) !important;
+  }
+
+  .v-breadcrumbs {
+    &__item {
+      color: var(--v-secondary-base) !important;
+      &--disabled {
+        color: var(--v-greenDark8-base) !important;
+      }
+    }
   }
 
   a.v-breadcrumbs {
     &__item {
       &--disabled {
-        color: var(--v-blackColor-base) !important;
+        color: var(--v-greenDark8-base) !important;
       }
     }
   }
