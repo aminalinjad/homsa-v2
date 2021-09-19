@@ -548,10 +548,7 @@ export default {
       this.suggestion = true;
     },
     destinationSearch() {
-      if (
-        this.searchForm.destination != "کجا می‌خواهید بروید؟" ||
-        this.searchForm.destination != ""
-      ) {
+      if (this.searchForm.destination !== "کجا می‌خواهید بروید؟" || this.searchForm.destination !== "") {
         this.suggestion = false;
       } else {
         this.suggestion = true;

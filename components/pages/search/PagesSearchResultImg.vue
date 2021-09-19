@@ -106,9 +106,6 @@ export default {
     addFavorite() {
       this.favorite = !this.favorite;
     },
-    test() {
-      console.log('testttt');
-    }
   },
 };
 </script>
