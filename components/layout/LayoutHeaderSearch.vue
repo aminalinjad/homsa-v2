@@ -225,6 +225,7 @@
         <!-- destination  -->
         <v-hover v-slot="{ hover }">
           <v-autocomplete
+            ref="cityAutocomplete"
             filled
             clearable
             height="66"
@@ -398,7 +399,6 @@
     <!-- calendar  -->
     <AppCalendar class="appCalendar" v-if="calendar" />
 
-    
     <!-- overlay  -->
     <v-overlay :value="overlay"  @click.native="closeSearchSection" z-index="-1"></v-overlay>
   </header>
@@ -516,8 +516,6 @@ export default {
   destroyed() {
     window.removeEventListener("scroll", this.scrollPage);
   },
-
-  
   methods: {
     showSearchSection() {
       this.searchSection = true;
@@ -528,13 +526,15 @@ export default {
       this.calendar = false
       this.searchResult = !this.searchResult;
       this.overlay = !this.overlay;
-      ;
     },
     Search() {
       this.calendar = false;
       this.closeSearchSection();
     },
     scrollPage() {
+      if (this.$refs.cityAutocomplete) {
+        this.$refs.cityAutocomplete.isMenuActive = false
+      }
       if (this.$refs.menuRef) {
         this.$refs.menuRef.isActive = false
       }
