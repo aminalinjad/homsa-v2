@@ -6,7 +6,7 @@ import axios from "axios";
 // };
 const API_V4 = axios.create({
   // baseURL: 'https://api-dev-ex.ernyka.com/api/',
-  baseURL: process.env.baseUrl,
+  baseURL: "https://new-homsa-dev.ernyka.com/api/website/v1",
 //   headers: headers
 });
 

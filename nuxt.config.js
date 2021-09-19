@@ -88,7 +88,7 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // server
-    baseURL: 'https://api-dev-ex.ernyka.com/api/',
+    baseURL: 'https://new-homsa-dev.ernyka.com/api/website/v1',
     // baseURL: 'https://api-dev-ex.ernyka.com/api/',
     // baseURL: 'https://jsonplaceholder.typicode.com/',
     credentials: false,
