@@ -3,8 +3,10 @@
   <PagesSearchMap v-else/>
 </template>
 <script>
-import {mapGetters, mapActions} from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import * as types from "@/store/types.js";
+
+import {Search} from "@/services"
 
 export default {
   layout: "search",
@@ -13,6 +15,24 @@ export default {
     return {
       id: 444,
     };
+  },
+  asyncData({params, app , store}) {
+    let result
+    let data = {
+      q: "shiraz",
+      "Accept-Language": "fa",
+      page: 1,
+      sort: "popular"
+    }
+    return Search.searchResults(data).then(res => {
+      console.log(res.data.data)
+      store.dispatch('modules/search/SET_SEARCH_RESULTS' , res.data.data)
+      return {
+        results: res.data.data
+      }
+    }).catch(err => {
+      console.log(err)
+    })
   },
   watch: {
     mapLayout() {
@@ -30,7 +50,7 @@ export default {
   },
   mounted() {
     this.getFilterData();
-    this.getSearchList();
+    // this.getSearchList();
   },
   methods: {
     ...mapActions({
