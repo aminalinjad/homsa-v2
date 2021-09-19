@@ -225,6 +225,7 @@
         <!-- destination  -->
         <v-hover v-slot="{ hover }">
           <v-autocomplete
+            ref="cityAutocomplete"
             filled
             clearable
             height="66"
@@ -252,10 +253,10 @@
           >
             <!-- title in suggestion mode -->
             <template v-slot:prepend-item>
-              <v-list-item-title
+              <v-list-item-titl
                 v-if="ifSuggestion"
                 class="ms-6 mt-4 font-medium-14 greenDark8--text"
-                >{{ destinationSuggestions.title }}</v-list-item-title
+                >{{ destinationSuggestions.title }}</v-list-item-titl
               >
               <!--destination result -->
             </template>
@@ -394,7 +395,6 @@
         </v-btn>
       </div>
     </v-row>
-
     <!-- calendar  -->
     <AppCalendar class="appCalendar" v-if="calendar" />
 
@@ -547,6 +547,9 @@ export default {
       this.closeSearchSection();
     },
     scrollPage() {
+      if (this.$refs.cityAutocomplete) {
+        this.$refs.cityAutocomplete.isMenuActive = false
+      }
       if (this.$refs.menuRef) {
         this.$refs.menuRef.isActive = false
       }
