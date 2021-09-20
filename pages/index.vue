@@ -7,6 +7,7 @@ import { mapGetters, mapActions } from "vuex";
 import * as types from "@/store/types.js";
 
 import {Search} from "@/services"
+import {SearchServices} from "@/services"
 
 export default {
   layout: "search",
@@ -16,7 +17,7 @@ export default {
       id: 444,
     };
   },
-  asyncData({params, app , store}) {
+  asyncData({params, app, store}) {
     let result
     let data = {
       q: "shiraz",
@@ -24,9 +25,9 @@ export default {
       page: 1,
       sort: "popular"
     }
-    return Search.searchResults(data).then(res => {
+    return SearchServices.searchResults(data).then(res => {
       console.log(res.data.data)
-      store.dispatch('modules/search/SET_SEARCH_RESULTS' , res.data.data)
+      store.dispatch('modules/search/SET_SEARCH_RESULTS', res.data.data)
       return {
         results: res.data.data
       }

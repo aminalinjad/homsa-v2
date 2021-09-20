@@ -1,6 +1,6 @@
 import {API_V1} from "/services/config/main-axios";
 
-class Search {
+class SearchServices {
   searchResults(data) {
     return API_V1.post("/search", {
       q: data.q,
@@ -12,4 +12,4 @@ class Search {
 
 }
 
-export default new Search();
+export default new SearchServices();
