@@ -1,12 +1,40 @@
 <template>
-  <PagesSearchContent v-if="!mapLayout"/>
-  <PagesSearchMap v-else/>
+  <!--  without map -->
+  <div v-if="!mapLayout">
+    <!-- main  -->
+    <v-main class="pt-3">
+      <v-container class="" :fluid="$vuetify.breakpoint.md">
+        <v-row class="justify-center">
+          <v-col class="filterContainer">
+            <PagesSearchFilters/>
+          </v-col>
+          <v-col class="resultContainer">
+            <PagesSearchContent/>
+          </v-col>
+        </v-row>
+
+      </v-container>
+    </v-main>
+
+    <!-- footer  -->
+    <PagesSearchFooter/>
+  </div>
+
+  <!--  with map -->
+  <v-row v-else class="ma-0">
+    <LayoutMapSide class="pb-4" :isRtl="$vuetify.rtl"/>
+    <v-main>
+      <v-container class="pt-0 fill-height" fluid>
+        <PagesSearchMap class="mapLayoutContainer px-1"/>
+      </v-container>
+    </v-main>
+  </v-row>
+
 </template>
 <script>
-import { mapGetters, mapActions } from "vuex";
+import {mapGetters, mapActions} from "vuex";
 import * as types from "@/store/types.js";
 
-import {Search} from "@/services"
 import {SearchServices} from "@/services"
 
 export default {
@@ -35,15 +63,6 @@ export default {
       console.log(err)
     })
   },
-  watch: {
-    mapLayout() {
-      if (this.mapLayout) {
-        this.$nuxt.setLayout("map");
-      } else {
-        this.$nuxt.setLayout("search");
-      }
-    },
-  },
   computed: {
     ...mapGetters({
       mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
@@ -51,7 +70,6 @@ export default {
   },
   mounted() {
     this.getFilterData();
-    // this.getSearchList();
   },
   methods: {
     ...mapActions({
@@ -59,10 +77,6 @@ export default {
       setFilters: `modules/filters/${types.filters.actions.SET_FILTERS}`,
       setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
     }),
-    goId() {
-      this.$router.push(`/${this.id}`);
-      this.$store.dispatch("getData");
-    },
     changeLayout() {
       this.ifMapLayout = !this.ifMapLayout;
     },
@@ -168,172 +182,10 @@ export default {
       ];
       this.setFilters(filters);
     },
-
-    getSearchList() {
-      let searchList = [
-        {
-          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
-          comments: 260,
-
-          pricePerNight: "۸۵۰,۰۰۰",
-          Discount: true,
-          // map
-          totalPrice: "۲,۵۵۰,۰۰۰",
-          id: 1,
-          like: true,
-          coordinates: [32.4279, 53.688],
-        },
-        {
-          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
-          comments: 260,
-
-          pricePerNight: "۸۵۰,۰۰۰",
-          Discount: true,
-          // map
-          totalPrice: "۲,۵۵۰,۰۰۰",
-          id: 1,
-          like: true,
-          coordinates: [32.4279, 53.688],
-        },
-        {
-          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
-          comments: 260,
-
-          pricePerNight: "۸۵۰,۰۰۰",
-          Discount: true,
-          // map
-          totalPrice: "۲,۵۵۰,۰۰۰",
-          id: 1,
-          like: true,
-          coordinates: [32.4279, 53.688],
-        },
-        {
-          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
-          comments: 260,
-
-          pricePerNight: "۸۵۰,۰۰۰",
-          Discount: true,
-          // map
-          totalPrice: "۲,۵۵۰,۰۰۰",
-          id: 1,
-          like: true,
-          coordinates: [32.4279, 53.688],
-        },
-        {
-          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
-          comments: 260,
-
-          pricePerNight: "۸۵۰,۰۰۰",
-          Discount: true,
-          // map
-          totalPrice: "۲,۵۵۰,۰۰۰",
-          id: 1,
-          like: true,
-          coordinates: [32.4279, 53.688],
-        },
-        {
-          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
-          comments: 260,
-
-          pricePerNight: "۸۵۰,۰۰۰",
-          Discount: true,
-          // map
-          totalPrice: "۲,۵۵۰,۰۰۰",
-          id: 1,
-          like: true,
-          coordinates: [32.4279, 53.688],
-        },
-        {
-          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
-          comments: 260,
-
-          pricePerNight: "۸۵۰,۰۰۰",
-          Discount: true,
-          // map
-          totalPrice: "۲,۵۵۰,۰۰۰",
-          id: 1,
-          like: true,
-          coordinates: [32.4279, 53.688],
-        },
-        {
-          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
-          comments: 260,
-
-          pricePerNight: "۸۵۰,۰۰۰",
-          Discount: true,
-          // map
-          totalPrice: "۲,۵۵۰,۰۰۰",
-          id: 1,
-          like: true,
-          coordinates: [32.4279, 53.688],
-        },
-        {
-          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
-          comments: 260,
-
-          pricePerNight: "۸۵۰,۰۰۰",
-          Discount: true,
-          // map
-          totalPrice: "۲,۵۵۰,۰۰۰",
-          id: 1,
-          like: true,
-          coordinates: [32.4279, 53.688],
-        },
-        {
-          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
-          comments: 260,
-
-          pricePerNight: "۸۵۰,۰۰۰",
-          Discount: true,
-          // map
-          totalPrice: "۲,۵۵۰,۰۰۰",
-          id: 1,
-          like: true,
-          coordinates: [32.4279, 53.688],
-        },
-        {
-          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
-          comments: 260,
-
-          pricePerNight: "۸۵۰,۰۰۰",
-          Discount: true,
-          // map
-          totalPrice: "۲,۵۵۰,۰۰۰",
-          id: 1,
-          like: true,
-          coordinates: [32.4279, 53.688],
-        },
-        {
-          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
-          comments: 260,
-
-          pricePerNight: "۸۵۰,۰۰۰",
-          Discount: true,
-          // map
-          totalPrice: "۲,۵۵۰,۰۰۰",
-          id: 1,
-          like: true,
-          coordinates: [32.4279, 53.688],
-        },
-        {
-          title: " آپارتمان مبله دوبلکس در خیابان ولیعصر",
-          comments: 260,
-
-          pricePerNight: "۸۵۰,۰۰۰",
-          Discount: true,
-          // map
-          totalPrice: "۲,۵۵۰,۰۰۰",
-          id: 1,
-          like: true,
-          coordinates: [32.4279, 53.688],
-        },
-      ];
-      this.setSearchResult(searchList);
-
-    },
   },
 };
 </script>
+
 <style scoped lang="scss">
 .resultContainerMap {
   flex: 0 0 504px;
@@ -343,6 +195,26 @@ export default {
 .mapContainer {
   // flex: 0 0 1008px;
   overflow: hidden;
+}
+
+.filterContainer {
+  flex: 0 0 336px;
+  height: max-content;
+  position: sticky;
+  top: 96px;
+}
+
+.resultContainer {
+  // flex: 0 0 1008px;
+  overflow: hidden;
+  height: max-content;
+  position: sticky;
+  top: 96px;
+}
+
+.mapLayoutContainer {
+  flex: 1;
+  height: 100%;
 }
 </style>
 
