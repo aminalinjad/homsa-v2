@@ -611,6 +611,7 @@ export default {
     height: 114px;
     top: -60px;
     z-index: 0;
+    visibility: hidden;
 
     &__content {
       max-width: min-content;
@@ -727,6 +728,7 @@ export default {
     height: 114px;
   }
   to {
+    visibility: hidden;
     top: -30px;
     opacity: 0;
     height: 0;
@@ -739,6 +741,7 @@ export default {
     top: -60px;
   }
   to {
+    visibility: visible;
     opacity: 1;
     top: 0;
   }
