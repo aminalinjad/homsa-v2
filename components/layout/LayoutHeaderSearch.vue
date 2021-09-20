@@ -389,7 +389,7 @@
           elevation="0"
           width="66"
           height="66"
-          @click="Search"
+          @click="SearchServices"
         >
           <v-icon size="30">$search</v-icon>
         </v-btn>
@@ -527,7 +527,7 @@ export default {
       this.searchResult = !this.searchResult;
       this.overlay = !this.overlay;
     },
-    Search() {
+    SearchServices() {
       this.calendar = false;
       this.closeSearchSection();
     },

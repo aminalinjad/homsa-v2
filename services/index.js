@@ -1,8 +1,8 @@
 import CurrencyService from "./modules/currencyService.js"
-import Search from "./modules/search"
+import SearchServices from "./modules/searchServices"
 
 
 export {
   CurrencyService,
-  Search
+  SearchServices
 }

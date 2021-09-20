@@ -31,16 +31,16 @@
         <!-- show marker on map marker -->
         <l-marker
           :z-index-offset="place.id === getHoveredItem ? 1000 : 100"
-          v-for="(place, index) in places"
+          v-for="(place, index) in getSearchResult"
           :key="`place${index}`"
-          :lat-lng="place.coordinates"
+          :lat-lng="[place.latitude , place.longitude]"
         >
           <l-icon class="someCustomClasses">
             <div
               class="custom-marker font-regular-12"
               :class="[place.id === getHoveredItem ? 'hoverOnItem' : '']"
             >
-              <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''">{{ place.price }}</span>
+              <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''">{{ place.discount_night }}</span>
               <span>
                  {{ $t("search.main.item.unit") }}</span>
               <v-icon
@@ -55,7 +55,7 @@
           </l-icon>
 
           <l-popup :options="popupOption">
-            <PagesSearchResultImg :index="1"/>
+            <PagesSearchResultImg :images="place.photos" :index="1"/>
             <div class="pt-3 pb-1 px-0">
               <div
                 class="pb-2"
@@ -69,11 +69,9 @@
                   <span
                     class="mx-1"
                     :class="[
-                  rankColor(rank) + '--text',
-                  $i18n.locale === 'fa' ? 'font-FaNumregular-14' : '',
-                ]"
-                  >4.2</span
-                  >
+                  rankColor(rank) + '--text',$i18n.locale === 'fa' ? 'font-FaNumregular-14' : '',]">
+                    {{ place.overall_rating }}
+                  </span>
               <StarIcon
                 :color="
                   rank >= 4
@@ -93,7 +91,7 @@
               </div>
             </div>
             <div class="pb-3 px-0 greenDark8--text">
-              <p class="mb-1 mt-0">آپارتمان مبله دوبلکس در خیابان ولیعصر</p>
+              <p class="mb-1 mt-0">{{ place.name }}</p>
             </div>
 
             <!-- bottom sec  -->
@@ -127,7 +125,7 @@
                     :class="
                 $i18n.locale === 'fa' ? 'font-FaNumbold-14' : 'font-bold-14'
               "
-                  >850,000</span
+                  >{{ place.discount_night }}</span
                   >
                   <span>{{ $t("search.main.item.unit") }}</span>
                 </div>
@@ -183,51 +181,7 @@ export default {
       zoom: 5,
       center: [32.4279, 33.688],
       bounds: null,
-      places: [
-        {
-          price: "1,850,000",
-          name: "تهران",
-          id: 1,
-          like: true,
-          coordinates: [32.4279, 53.688],
-        },
-        {
-          price: "850,000",
-          name: "تهران",
-          id: 2,
-          like: false,
-          coordinates: [31.4279, 54.688],
-        },
-        {
-          price: "1,250,000",
-          name: "تهران",
-          id: 3,
-          like: false,
-          coordinates: [31.4279, 56.688],
-        },
-        {
-          price: "1,250,000",
-          name: "تهران",
-          id: 4,
-          like: false,
-          coordinates: [31.4279, 46.688],
-        },
-        {
-          price: "1,250,000",
-          name: "تهران",
-          id: 5,
-          like: false,
-          coordinates: [20.4279, 58.688],
-        },
-        {
-          price: "1,250,000",
-          name: "تهران",
-          id: 6,
-          like: false,
-          coordinates: [38.4279, 56.688],
-        },
-      ],
-    };
+    }
   },
   components: {
     StarIcon
@@ -247,10 +201,9 @@ export default {
     }),
     mapInitials() {
       this.$refs.map.mapObject.fitBounds(
-        this.places.map((m) => {
-          return m.coordinates;
+        this.getSearchResult.map((m) => {
+          return [m.latitude, m.longitude];
         }),
-        {padding: [20, 20]}
       );
       setTimeout(() => {
         this.$refs.map.mapObject.invalidateSize()
