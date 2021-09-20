@@ -22,7 +22,7 @@
 
   <!--  with map -->
   <v-row v-else class="ma-0">
-    <LayoutMapSide class="pb-4" :isRtl="$vuetify.rtl"/>
+    <PagesSearchMapSide class="pb-4" :isRtl="$vuetify.rtl"/>
     <v-main>
       <v-container class="pt-0 fill-height" fluid>
         <PagesSearchMap class="mapLayoutContainer px-1"/>
