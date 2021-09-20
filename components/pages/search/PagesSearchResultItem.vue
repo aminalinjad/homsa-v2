@@ -244,7 +244,7 @@
               >850,000</span
             >
             <span>{{ $t("search.main.item.unit") }}</span>
-                
+
               </div>
             </div>
             <!-- Price end -->

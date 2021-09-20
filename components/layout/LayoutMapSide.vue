@@ -88,10 +88,9 @@
             class="py-3 px-6 resultBorder"
             @mouseover="itemHover(index)"
             @mouseleave="itemHover(null)"
+            @click="itemPage"
           >
-            <NuxtLink to="">
-              <PagesSearchResultItemMap :index="index"/>
-            </NuxtLink>
+              <PagesSearchResultItemMap :index="index" />
           </v-col>
         </v-row>
 
@@ -160,13 +159,14 @@ export default {
       this.filter = !this.filter
     },
     itemHover(index) {
-      if (index) {
-        this.setHoveredItem(index);
-
-
-      } else {
-        this.setHoveredItem(null);
-      }
+    if(index) {
+      this.setHoveredItem(index);
+    } else {
+       this.setHoveredItem(null);
+    }
+    },
+    itemPage() {
+      this.$router.push('/')
     }
   },
 };

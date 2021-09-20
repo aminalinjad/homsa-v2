@@ -102,16 +102,17 @@
           :md="ifGridView ? 4 : 12"
           v-for="(result, index) in results"
           :key="index"
-          class="px-6 resultBorder"
+          class="px-6 resultBorder cursorPointer"
           :class="[
             $vuetify.rtl ? 'resultSideBorderRtl' : 'resultSideBorderLtr',
             ifGridView ? 'py-10' : 'py-6',
           ]"
+          @click="itemPage"
         >
           <!-- item component -->
-          <!-- <NuxtLink to="#"> -->
+
             <PagesSearchResultItem :ifGridView="ifGridView" :index="index" />
-          <!-- </NuxtLink> -->
+
         </v-col>
       </v-row>
       <!-- Result Sec End -->
@@ -213,6 +214,9 @@ export default {
     },
     changed() {},
     updated() {},
+    itemPage() {
+      this.$router.push('/#')
+    }
   },
 };
 </script>

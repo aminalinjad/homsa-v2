@@ -1,12 +1,22 @@
 <template>
   <v-app class="iransans">
-    <LayoutHeader />
-    <v-main>
-      <v-container>
-        <Nuxt />
-      </v-container>
-    </v-main>
-    <LayoutFooter />
+    <!-- header  -->
+    <LayoutHeaderSearch/>
+
+    <!-- main  -->
+    <Nuxt/>
   </v-app>
 </template>
+
+<script>
+export default {};
+</script>
+
+<style scoped lang="scss">
+
+</style>
+
+
+
+
 
