@@ -12,7 +12,7 @@
       <v-card flat color="background" class="my-3" v-if="isFilter">
         <v-row>
           <v-col cols="12" class="pt-0 pb-1">
-            <PagesSearchResultTitle :isFilter="isFilter" />
+            <PagesSearchResultTitle :isFilter="isFilter"/>
           </v-col>
           <v-col cols="12">
             <v-row class="align-center">
@@ -28,7 +28,7 @@
                     $close
                   </v-icon>
                   <span class="greenDark8--text font-regular-14">
-                    {{ $t('search.map.close-filter')}}
+                    {{ $t('search.map.close-filter') }}
                   </span>
                 </v-btn>
               </v-col>
@@ -38,9 +38,9 @@
                   @click="toggleFilter"
                 >
                   <span class="me-2 font-regular-12 secondary--text"
-                    >مشاهده ۳۴ مورد اقامتگاه</span
+                  >مشاهده ۳۴ مورد اقامتگاه</span
                   >
-                 <arrowRotate :rotate="!$vuetify.rtl?true:false" />
+                  <arrowRotate :rotate="!$vuetify.rtl?true:false"/>
                 </div>
               </v-col>
             </v-row>
@@ -50,7 +50,7 @@
       <v-card flat class="mt-3 pb-4 rounded-t-lg rounded-b-0" v-else>
         <v-row class="mb-0">
           <v-col class="px-7 d-flex justify-space-between align-center">
-            <PagesSearchResultTitle />
+            <PagesSearchResultTitle/>
             <v-btn
               text
               width="86"
@@ -64,7 +64,7 @@
               <v-icon v-else>
                 $filter
               </v-icon>
-              <span class="greenDark8--text font-regular-14"> {{ $t('search.map.filter')}} </span>
+              <span class="greenDark8--text font-regular-14"> {{ $t('search.map.filter') }} </span>
             </v-btn>
           </v-col>
         </v-row>
@@ -78,7 +78,7 @@
       :settings="settings"
       scrollYMarginOffset="20"
     >
-      <PagesSearchFilters v-if="isFilter" />
+      <PagesSearchFilters v-if="isFilter"/>
       <v-card flat class="rounded-0" v-else>
         <v-row class="ma-0">
           <v-col
@@ -89,14 +89,22 @@
             @mouseover="itemHover(index)"
             @mouseleave="itemHover(null)"
           >
-          <NuxtLink to="">
-              <PagesSearchResultItemMap :index="index" />
+            <NuxtLink to="">
+              <PagesSearchResultItemMap :index="index"/>
             </NuxtLink>
           </v-col>
         </v-row>
 
         <!-- pagination  -->
-        <PagesSearchPagination :page="page" :totalPages="totalPages" :mapLayout="true" class="mt-6"/>
+        <v-row class="paginationContainer justify-center mt-6">
+          <v-pagination
+            v-model="currentPage"
+            :total-visible="7"
+            :length="totalPages"
+            class="paginationFont12"
+            :class="[$i18n.locale === 'fa' ? 'farsiFontPagination' : '',]"
+          ></v-pagination>
+        </v-row>
       </v-card>
     </vue-custom-scrollbar>
   </v-navigation-drawer>
@@ -106,11 +114,11 @@
 import vueCustomScrollbar from "vue-custom-scrollbar";
 import "vue-custom-scrollbar/dist/vueScrollbar.css";
 import arrowRotate from "@/assets/AppIcons/arrowLeft";
-import { mapGetters, mapActions } from "vuex";
+import {mapGetters, mapActions} from "vuex";
 import * as types from "@/store/types.js";
 
 export default {
-  components: { arrowRotate, vueCustomScrollbar },
+  components: {arrowRotate, vueCustomScrollbar},
   props: {
     isRtl: {
       type: Boolean,
@@ -123,14 +131,15 @@ export default {
       filterAdded: false,
       ifGridView: false,
       results: [
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
+        {name: "dfd"},
+        {name: "dfd"},
+        {name: "dfd"},
+        {name: "dfd"},
+        {name: "dfd"},
       ],
       page: 1,
       totalPages: 15,
+      currentPage: 1,
       settings: {
         suppressScrollY: false,
         suppressScrollX: true,
@@ -147,23 +156,23 @@ export default {
     ...mapActions({
       setHoveredItem: `modules/search/${types.search.actions.SET_HOVERED_ITEM}`,
     }),
-    toggleFilter(){
+    toggleFilter() {
       this.filter = !this.filter
     },
     itemHover(index) {
-    if(index) {
-      this.setHoveredItem(index);
+      if (index) {
+        this.setHoveredItem(index);
 
 
-    } else {
-       this.setHoveredItem(null);
-    }
+      } else {
+        this.setHoveredItem(null);
+      }
     }
   },
 };
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 .navigationClass {
   padding-top: 112px !important;
 }

@@ -14,7 +14,7 @@
             <div class="sortByInput ms-3 mb-n7">
               <v-select
                 :items="sortBy"
-                v-model="sortBydefault"
+                v-model="sortByDefault"
                 solo
                 flat
                 dense
@@ -119,7 +119,16 @@
     <!-- Main Section End  -->
 
     <!-- Bottom Section Start  -->
-    <PagesSearchPagination :page="page" :totalPages="totalPages" class="mt-6" />
+    <v-row class="paginationContainer justify-center mt-6">
+      <v-pagination
+        v-model="currentPage"
+        class="paginationWidth46"
+        :total-visible="7"
+        :length="totalPages"
+        :class="[$i18n.locale == 'fa' ? 'farsiFontPagination' : '',]"
+      ></v-pagination>
+    </v-row>
+
     <PagesSearchRelatedSearch />
     <!-- Bottom Section End  -->
   </v-container>
@@ -137,8 +146,9 @@ export default {
     return {
       page: 1,
       totalPages: 15,
+      currentPage: 1,
       gridViewResult: true,
-      sortBydefault: "بهترین تجربه",
+      sortByDefault: "بهترین تجربه",
       sortBy: ["گران ترین", "بهترین تجربه"],
       breadcrumbs: [
         {
