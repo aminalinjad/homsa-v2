@@ -81,15 +81,13 @@
                       :min-width="36"
                       color="primary"
                       :text="
-                        (checkIn.day === value.day &&
+                        !((checkIn.day === value.day &&
                           checkIn.month === clndr.id) ||
                         (checkOut.day === value.day &&
                           checkOut.month === clndr.id) ||
-                        hover
-                          ? false
-                          : true
+                        hover)
                       "
-                      :outlined="hover ? true : false"
+                      :outlined="hover"
                       @click="datePick(value, clndr.id)"
                       :disabled="value.type === 'disable' || value.day === ''"
                       class="calendarBtn"

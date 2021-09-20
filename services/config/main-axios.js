@@ -4,13 +4,12 @@ import axios from "axios";
 //   "Content-Type": "application/json",
 //   Accept: "application/json",
 // };
-const API_V4 = axios.create({
-  // baseURL: 'https://api-dev-ex.ernyka.com/api/',
+const API_V1 = axios.create({
   baseURL: "https://new-homsa-dev.ernyka.com/api/website/v1",
 //   headers: headers
 });
 
-API_V4.interceptors.response.use(
+API_V1.interceptors.response.use(
     response => {
       return response;
     },
@@ -19,6 +18,6 @@ API_V4.interceptors.response.use(
     }
   );
 
-export { API_V4 };
+export { API_V1 };
 
 

@@ -152,8 +152,6 @@ export default {
     itemHover(index) {
     if(index) {
       this.setHoveredItem(index);
-
-
     } else {
        this.setHoveredItem(null);
     }
