@@ -2,7 +2,7 @@
   <div>
     <div v-for="(filter, index) in filters" :key="index">
       <!-- map -->
-      <div v-if="filter.type === 'map' && !mapLayout" class="mb-3">
+      <div v-if="filter.type === 'map' && $route.query.showMap !== 'true'" class="mb-3">
         <PagesSearchMapThumbnail />
       </div>
       <!-- price -->

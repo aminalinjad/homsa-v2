@@ -100,7 +100,7 @@
         <v-col
           cols="12"
           :md="ifGridView ? 4 : 12"
-          v-for="(result, index) in results"
+          v-for="(result, index) in getSearchResult.data"
           :key="index"
           class="px-6 resultBorder cursorPointer"
           :class="[
@@ -111,7 +111,7 @@
         >
           <!-- item component -->
 
-            <PagesSearchResultItem :ifGridView="ifGridView" :index="index" />
+            <PagesSearchResultItem :place="result" :ifGridView="ifGridView" :index="index" />
 
         </v-col>
       </v-row>
@@ -122,6 +122,7 @@
     <!-- Bottom Section Start  -->
     <v-row class="paginationContainer justify-center mt-6">
       <v-pagination
+        @input="changePagination"
         v-model="currentPage"
         class="paginationWidth46"
         :total-visible="7"
@@ -136,8 +137,12 @@
 </template>
 
 <script>
-import GridIcon from "@/assets/AppIcons/grid.vue";
-import ListIcon from "@/assets/AppIcons/list.vue";
+import GridIcon from "@/assets/AppIcons/grid.vue"
+import ListIcon from "@/assets/AppIcons/list.vue"
+import {mapActions, mapGetters} from "vuex"
+import * as types from "@/store/types.js"
+import {SearchServices} from "@/services"
+
 export default {
   components: {
     GridIcon,
@@ -146,8 +151,8 @@ export default {
   data() {
     return {
       page: 1,
-      totalPages: 15,
-      currentPage: 1,
+      totalPages: 5,
+      currentPage: Number(this.$route.query.page) || 1,
       gridViewResult: true,
       sortByDefault: "بهترین تجربه",
       sortBy: ["گران ترین", "بهترین تجربه"],
@@ -168,35 +173,12 @@ export default {
           href: "",
         },
       ],
-      results: [
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-        { name: "dfd" },
-      ],
     };
   },
   computed: {
+    ...mapGetters({
+      getSearchResult: `modules/search/${types.search.getters.GET_SEARCH_RESULTS}`,
+    }),
     ifGridView() {
       if (this.gridViewResult) {
         return true;
@@ -205,15 +187,35 @@ export default {
       }
     },
   },
+  created() {
+    this.totalPages = Math.ceil(this.getSearchResult.total / 24)
+  },
   methods: {
+    ...mapActions({
+      setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
+    }),
+    changePagination() {
+      let qs = {}
+      if (this.currentPage > 1) qs.page = this.currentPage
+
+      this.$router.push({query: {...this.$route.query, page: qs.page}})
+      let data = {
+        q: "shiraz",
+        "Accept-Language": "fa",
+        page: this.currentPage,
+        sort: "popular"
+      }
+
+      SearchServices.searchResults(data).then(res => {
+        this.setSearchResult(res.data)
+      })
+    },
     listView() {
       this.gridViewResult = false;
     },
     gridView() {
       this.gridViewResult = true;
     },
-    changed() {},
-    updated() {},
     itemPage() {
       this.$router.push('/#')
     }

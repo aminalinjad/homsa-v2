@@ -1,6 +1,6 @@
 <template>
   <!--  without map -->
-  <div v-if="!mapLayout">
+  <div v-if="$route.query.showMap === 'false' || !$route.query.showMap">
     <!-- main  -->
     <v-main class="pt-3">
       <v-container class="" :fluid="$vuetify.breakpoint.md">
@@ -45,7 +45,7 @@ export default {
       id: 444,
     };
   },
-  asyncData({params, app, store}) {
+  asyncData({params, app, store , router}) {
     let result
     let data = {
       q: "shiraz",
@@ -54,13 +54,11 @@ export default {
       sort: "popular"
     }
     return SearchServices.searchResults(data).then(res => {
-      console.log(res.data.data)
-      store.dispatch('modules/search/SET_SEARCH_RESULTS', res.data.data)
+      console.log(res.data)
+      store.dispatch('modules/search/SET_SEARCH_RESULTS', res.data)
       return {
         results: res.data.data
       }
-    }).catch(err => {
-      console.log(err)
     })
   },
   computed: {

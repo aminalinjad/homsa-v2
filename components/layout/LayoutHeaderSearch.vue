@@ -14,7 +14,7 @@
     >
       <v-container
         class="pa-4"
-        :fluid="$vuetify.breakpoint.md || mapLayout ? true : false"
+        :fluid="$vuetify.breakpoint.md || $route.query.showMap === 'true' ? true : false"
       >
         <v-row>
           <!-- header logo -->

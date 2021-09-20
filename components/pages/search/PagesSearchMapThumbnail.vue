@@ -14,14 +14,11 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex';
+
 export default {
   methods: {
-    ...mapActions({
-      setMapLayout: "modules/structure/SET_MAP_LAYOUT"
-    }),
     mapLayoutMode() {
-      this.setMapLayout(true);
+      this.$router.push({query: {...this.$route.query, showMap: 'true'}})
     }
 
   },

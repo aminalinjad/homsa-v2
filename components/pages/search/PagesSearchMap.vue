@@ -31,7 +31,7 @@
         <!-- show marker on map marker -->
         <l-marker
           :z-index-offset="place.id === getHoveredItem ? 1000 : 100"
-          v-for="(place, index) in getSearchResult"
+          v-for="(place, index) in getSearchResult.data"
           :key="`place${index}`"
           :lat-lng="[place.latitude , place.longitude]"
         >
@@ -196,12 +196,11 @@ export default {
 
   methods: {
     ...mapActions({
-      setMapLayout: `modules/structure/${types.structure.actions.SET_MAP_LAYOUT}`,
       setHoveredItem: `modules/search/${types.search.actions.SET_HOVERED_ITEM}`,
     }),
     mapInitials() {
       this.$refs.map.mapObject.fitBounds(
-        this.getSearchResult.map((m) => {
+        this.getSearchResult.data.map((m) => {
           return [m.latitude, m.longitude];
         }),
       );
@@ -214,7 +213,7 @@ export default {
       console.log(this.$refs.map);
     },
     closeMapLayout() {
-      this.setMapLayout(false);
+      this.$router.push({query: {...this.$route.query, showMap: 'false'}})
     },
     boundsUpdated(bounds) {
       this.bounds = bounds;

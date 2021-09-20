@@ -79,7 +79,7 @@
         </v-row>
       </v-card-subtitle>
       <v-card-text class="pb-3 px-0 greenDark8--text">
-        <p class="mb-1">آپارتمان مبله دوبلکس در خیابان ولیعصر</p>
+        <p class="mb-1">{{ place.name }}</p>
         <p class="font-regular-12">دو خوابه - ظرفیت ۸ نفره</p>
       </v-card-text>
 
@@ -285,6 +285,9 @@
 import StarIcon from "@/assets/AppIcons/starFavorite.vue";
 export default {
   props: {
+    place: {
+      type: Object
+    },
     ifGridView: {
       type: Boolean,
       default: true,
