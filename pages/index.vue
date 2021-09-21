@@ -45,12 +45,12 @@ export default {
       id: 444,
     };
   },
-  asyncData({params, app, store , router}) {
+  asyncData({params, app, store , route}) {
     let result
     let data = {
-      q: "shiraz",
+      q: "tehran",
       "Accept-Language": "fa",
-      page: 1,
+      page: Number(route.query.page) || 1,
       sort: "popular"
     }
     return SearchServices.searchResults(data).then(res => {

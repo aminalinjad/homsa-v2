@@ -149,7 +149,7 @@ export default {
     },
   },
   created() {
-    this.totalPages = Math.ceil(this.getSearchResult.total / 24)
+    this.totalPages = this.getSearchResult.last_page
   },
   methods: {
     ...mapActions({
@@ -169,7 +169,6 @@ export default {
       }
 
       SearchServices.searchResults(data).then(res => {
-        alert('fghfgh')
         this.setSearchResult(res.data)
       })
     },

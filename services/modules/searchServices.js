@@ -5,7 +5,8 @@ class SearchServices {
     return API_V1.post("/search", {
       q: data.q,
       page: data.page,
-      sort: data.sort
+      sort: data.sort,
+      boundaries: data.boundaries,
     })
 
   }

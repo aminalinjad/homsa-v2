@@ -161,6 +161,7 @@
 import {mapGetters, mapActions} from "vuex";
 import * as types from "@/store/types.js";
 import StarIcon from "@/assets/AppIcons/starFavorite.vue";
+import {SearchServices} from "@/services"
 
 export default {
   data() {
@@ -197,13 +198,14 @@ export default {
   methods: {
     ...mapActions({
       setHoveredItem: `modules/search/${types.search.actions.SET_HOVERED_ITEM}`,
+      setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
     }),
     mapInitials() {
       this.$refs.map.mapObject.fitBounds(
         this.getSearchResult.data.map((m) => {
           return [m.latitude, m.longitude];
         }),
-      );
+      )
       setTimeout(() => {
         this.$refs.map.mapObject.invalidateSize()
       }, 100)
@@ -216,9 +218,29 @@ export default {
       this.$router.push({query: {...this.$route.query, showMap: 'false'}})
     },
     boundsUpdated(bounds) {
+
       this.bounds = bounds;
+      console.log(this.bounds)
       if (this.dragMapCheckbox) {
-        alert("search mikonm");
+        this.$nuxt.$loading.start()
+        let data = {
+          "Accept-Language": "fa",
+          page: 1,
+          sort: "popular",
+          "boundaries": {
+            "max_lat": this.bounds._northEast.lat,
+            "max_long": this.bounds._northEast.lng,
+            "min_lat": this.bounds._southWest.lat,
+            "min_long": this.bounds._southWest.lng
+          },
+        }
+
+        this.$router.push({query: {...this.$route.query, page: undefined}})
+        SearchServices.searchResults(data).then(res => {
+          this.$nuxt.$loading.finish()
+          console.log(res.data)
+          this.setSearchResult(res.data)
+        })
       }
     },
     rankColor(color) {

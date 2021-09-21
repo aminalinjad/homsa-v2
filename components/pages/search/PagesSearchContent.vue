@@ -81,14 +81,6 @@
             <div>
               <AppItemCarousel />
             </div>
-
-            <!-- <v-tabs show-arrows>
-                <v-tabs-slider color="teal lighten-3"></v-tabs-slider>
-
-                <v-tab v-for="i in 30" :key="i" :href="'#tab-' + i">
-                  Item {{ i }}
-                </v-tab>
-              </v-tabs> -->
           </v-col>
         </v-row>
       </div>
@@ -188,7 +180,7 @@ export default {
     },
   },
   created() {
-    this.totalPages = Math.ceil(this.getSearchResult.total / 24)
+    this.totalPages = this.getSearchResult.last_page
   },
   methods: {
     ...mapActions({
