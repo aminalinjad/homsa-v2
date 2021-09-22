@@ -7,6 +7,8 @@
         :zoom="zoom"
         :center="center"
         :options="options"
+        @dragend="getData"
+        @zoomend="getData"
         @update:bounds="boundsUpdated"
       >
         <l-tile-layer
@@ -31,7 +33,7 @@
         <!-- show marker on map marker -->
         <l-marker
           :z-index-offset="place.id === getHoveredItem ? 1000 : 100"
-          v-for="(place, index) in getSearchResult"
+          v-for="(place, index) in getSearchResult.data"
           :key="`place${index}`"
           :lat-lng="[place.latitude , place.longitude]"
         >
@@ -161,6 +163,7 @@
 import {mapGetters, mapActions} from "vuex";
 import * as types from "@/store/types.js";
 import StarIcon from "@/assets/AppIcons/starFavorite.vue";
+import {SearchServices} from "@/services"
 
 export default {
   data() {
@@ -196,15 +199,41 @@ export default {
 
   methods: {
     ...mapActions({
-      setMapLayout: `modules/structure/${types.structure.actions.SET_MAP_LAYOUT}`,
       setHoveredItem: `modules/search/${types.search.actions.SET_HOVERED_ITEM}`,
+      setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
     }),
+    getData() {
+      if (this.dragMapCheckbox) {
+        this.$nuxt.$loading.start()
+        let data = {
+          "Accept-Language": "fa",
+          page: 1,
+          sort: "popular",
+          "boundaries": {
+            "max_lat": this.bounds._northEast.lat,
+            "max_long": this.bounds._northEast.lng,
+            "min_lat": this.bounds._southWest.lat,
+            "min_long": this.bounds._southWest.lng
+          },
+        }
+
+        this.$router.push({query: {...this.$route.query, page: undefined}})
+        SearchServices.searchResults(data).then(res => {
+          this.$nuxt.$loading.finish()
+          console.log(res.data)
+          this.setSearchResult(res.data)
+        }).catch(err => {
+          this.$nuxt.$loading.finish()
+          alert('err dare')
+        })
+      }
+    },
     mapInitials() {
       this.$refs.map.mapObject.fitBounds(
-        this.getSearchResult.map((m) => {
+        this.getSearchResult.data.map((m) => {
           return [m.latitude, m.longitude];
         }),
-      );
+      )
       setTimeout(() => {
         this.$refs.map.mapObject.invalidateSize()
       }, 100)
@@ -214,13 +243,12 @@ export default {
       console.log(this.$refs.map);
     },
     closeMapLayout() {
-      this.setMapLayout(false);
+      this.$router.push({query: {...this.$route.query, showMap: 'false'}})
     },
     boundsUpdated(bounds) {
+
       this.bounds = bounds;
-      if (this.dragMapCheckbox) {
-        alert("search mikonm");
-      }
+      console.log(this.bounds)
     },
     rankColor(color) {
       if (color >= 4) {

@@ -35,30 +35,7 @@
         show-arrows-on-hover
         hide-delimiter-background
       >
-        <v-carousel-item
-          src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-        >
-        </v-carousel-item>
-        <v-carousel-item
-          src="https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg"
-        >
-        </v-carousel-item>
-        <v-carousel-item
-          src="https://cdn.vuetifyjs.com/images/carousel/sky.jpg"
-        >
-        </v-carousel-item>
-        <v-carousel-item
-          src="https://cdn.vuetifyjs.com/images/carousel/sky.jpg"
-        >
-        </v-carousel-item>
-        <v-carousel-item
-          src="https://cdn.vuetifyjs.com/images/carousel/sky.jpg"
-        >
-        </v-carousel-item>
-        <v-carousel-item
-          src="https://cdn.vuetifyjs.com/images/carousel/sky.jpg"
-        >
-        </v-carousel-item>
+        <v-carousel-item v-for="(image , index) in images" :key="`imageCarousel${index}`" :src="image"></v-carousel-item>
       </v-carousel>
     </div>
     <div class="resultImgSec__bottom">
@@ -89,6 +66,9 @@ export default {
       type: Number,
       default: 0,
     },
+    images: {
+      type: Array
+    }
   },
   components: {
     Heart

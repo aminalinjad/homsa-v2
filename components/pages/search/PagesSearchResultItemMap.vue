@@ -4,7 +4,7 @@
     <v-row>
       <!-- image sec -->
       <v-col class="px-0">
-        <PagesSearchResultImgMap />
+        <PagesSearchResultImgMap :images="place.photos" />
       </v-col>
 
       <!-- info sec -->
@@ -13,7 +13,7 @@
           <v-row>
             <v-col class="pa-0 pb-2">
               <span class="font-regular-14 greenDark8--text">
-                {{ title.substring(0, 33) }}
+                {{ place.name.substring(0, 33) }}
               </span>
             </v-col>
           </v-row>
@@ -34,10 +34,10 @@
                 :class="[rankColor(rank) + '--text', $i18n.locale === 'fa' ? 'font-FaNumbold-16' : '']"
                 >3.9</span
               >
-              <StarIcon 
+              <StarIcon
               :color="
               rank>=4? (!$vuetify.theme.dark ? $vuetify.theme.themes.light.primary : $vuetify.theme.themes.dark.primary)
-              :rank >= 3 ? (!$vuetify.theme.dark ? $vuetify.theme.themes.light.green2 : $vuetify.theme.themes.dark.green2) 
+              :rank >= 3 ? (!$vuetify.theme.dark ? $vuetify.theme.themes.light.green2 : $vuetify.theme.themes.dark.green2)
               : (!$vuetify.theme.dark ? $vuetify.theme.themes.light.orangeBooking : $vuetify.theme.themes.dark.orangeBooking)
               "/>
             </v-col>
@@ -129,6 +129,9 @@ import LightningIcon from "@/assets/AppIcons/thunderLightning.vue";
 import StarIcon from "@/assets/AppIcons/starFavorite.vue";
 export default {
   props: {
+    place: {
+      type: Object
+    },
     index: {
       type: Number,
       default: 0,

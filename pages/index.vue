@@ -1,6 +1,6 @@
 <template>
   <!--  without map -->
-  <div v-if="!mapLayout">
+  <div v-if="$route.query.showMap === 'false' || !$route.query.showMap">
     <!-- main  -->
     <v-main class="pt-3">
       <v-container class="" :fluid="$vuetify.breakpoint.md">
@@ -43,24 +43,23 @@ export default {
   data() {
     return {
       id: 444,
+      propsPagination: null
     };
   },
-  asyncData({params, app, store}) {
+  asyncData({params, app, store , route}) {
     let result
     let data = {
-      q: "shiraz",
+      q: "tehran",
       "Accept-Language": "fa",
-      page: 1,
+      page: Number(route.query.page) || 1,
       sort: "popular"
     }
     return SearchServices.searchResults(data).then(res => {
-      console.log(res.data.data)
-      store.dispatch('modules/search/SET_SEARCH_RESULTS', res.data.data)
+      console.log(res.data)
+      store.dispatch('modules/search/SET_SEARCH_RESULTS', res.data)
       return {
         results: res.data.data
       }
-    }).catch(err => {
-      console.log(err)
     })
   },
   computed: {
@@ -77,9 +76,6 @@ export default {
       setFilters: `modules/filters/${types.filters.actions.SET_FILTERS}`,
       setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
     }),
-    changeLayout() {
-      this.ifMapLayout = !this.ifMapLayout;
-    },
     getFilterData() {
       let filters = [
         {

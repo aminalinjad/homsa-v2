@@ -83,23 +83,24 @@
         <v-row class="ma-0">
           <v-col
             cols="12"
-            v-for="(result, index) in results"
+            v-for="(result, index) in getSearchResult.data"
             :key="index"
             class="py-3 px-6 resultBorder"
-            @mouseover="itemHover(index)"
+            @mouseover="itemHover(result.id)"
             @mouseleave="itemHover(null)"
-            @click="itemPage"
           >
-              <PagesSearchResultItemMap :index="index" />
+            <PagesSearchResultItemMap :place="result" :index="index"/>
           </v-col>
         </v-row>
 
         <!-- pagination  -->
+        {{getSearchResult.current_page}}
         <v-row class="paginationContainer justify-center mt-6">
           <v-pagination
+            @input="changePagination"
             v-model="currentPage"
             :total-visible="7"
-            :length="totalPages"
+            :length="getSearchResult.last_page"
             class="paginationFont12"
             :class="[$i18n.locale === 'fa' ? 'farsiFontPagination' : '',]"
           ></v-pagination>
@@ -115,6 +116,7 @@ import "vue-custom-scrollbar/dist/vueScrollbar.css";
 import arrowRotate from "@/assets/AppIcons/arrowLeft";
 import {mapGetters, mapActions} from "vuex";
 import * as types from "@/store/types.js";
+import {SearchServices} from "@/services"
 
 export default {
   components: {arrowRotate, vueCustomScrollbar},
@@ -123,22 +125,19 @@ export default {
       type: Boolean,
       default: true,
     },
+    propsPagination: {
+      type: Number
+    }
   },
   data() {
     return {
       filter: false,
+      test: {},
       filterAdded: false,
       ifGridView: false,
-      results: [
-        {name: "dfd"},
-        {name: "dfd"},
-        {name: "dfd"},
-        {name: "dfd"},
-        {name: "dfd"},
-      ],
       page: 1,
-      totalPages: 15,
-      currentPage: 1,
+      totalPages: 5,
+      currentPage: Number(this.$route.query.page) || 1,
       settings: {
         suppressScrollY: false,
         suppressScrollX: true,
@@ -147,27 +146,59 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      getSearchResult: `modules/search/${types.search.getters.GET_SEARCH_RESULTS}`,
+    }),
     isFilter() {
       return this.filter;
     },
   },
+  watch: {
+    getSearchResult: {
+      immediate: false,
+      deep: true,
+      handler(newValue) {
+        if (newValue) {
+          this.currentPage = newValue.current_page
+        }
+      }
+    }
+  },
+  created() {
+    this.totalPages = this.getSearchResult.last_page
+  },
   methods: {
     ...mapActions({
+      setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
       setHoveredItem: `modules/search/${types.search.actions.SET_HOVERED_ITEM}`,
     }),
+    changePagination() {
+      let qs = {}
+      if (this.currentPage > 1) qs.page = this.currentPage
+
+      this.$router.push({query: {...this.$route.query, page: qs.page}})
+      let data = {
+        q: "shiraz",
+        "Accept-Language": "fa",
+        page: this.currentPage,
+        sort: "popular"
+      }
+      console.log(data)
+
+      SearchServices.searchResults(data).then(res => {
+        this.setSearchResult(res.data)
+      })
+    },
     toggleFilter() {
       this.filter = !this.filter
     },
     itemHover(index) {
-    if(index) {
-      this.setHoveredItem(index);
-    } else {
-       this.setHoveredItem(null);
-    }
+      if (index) {
+        this.setHoveredItem(index);
+      } else {
+        this.setHoveredItem(null);
+      }
     },
-    itemPage() {
-      this.$router.push('/')
-    }
   },
 };
 </script>

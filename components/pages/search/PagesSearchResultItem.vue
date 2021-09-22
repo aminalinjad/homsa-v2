@@ -27,12 +27,12 @@
       </div>
 
       <!-- image sec  -->
-      <PagesSearchResultImg :index="index" />
+      <PagesSearchResultImg :images="place.photos" :index="index" />
       <!-- text sec  -->
       <v-card-subtitle class="pt-3 pb-1 px-0">
         <v-row>
           <v-col class="pb-2">
-            <span class="font-regular-12 secondary--text">رشت - گیلان</span>
+            <span class="font-regular-12 secondary--text">{{ place.city }} - {{ place.province }}</span>
           </v-col>
           <v-col
             class="pb-2"
@@ -57,7 +57,7 @@
                   rankColor(rank) + '--text',
                   $i18n.locale === 'fa' ? 'font-FaNumregular-14' : '',
                 ]"
-                >4.2</span
+                >{{ place.overall_rating }}</span
               >
               <StarIcon
                 :color="
@@ -79,8 +79,10 @@
         </v-row>
       </v-card-subtitle>
       <v-card-text class="pb-3 px-0 greenDark8--text">
-        <p class="mb-1">آپارتمان مبله دوبلکس در خیابان ولیعصر</p>
-        <p class="font-regular-12">دو خوابه - ظرفیت ۸ نفره</p>
+        <p class="mb-1">{{ place.name }}</p>
+        <p class="font-regular-12">
+          <span>{{ place.bedrooms }}</span> خوابه - ظرفیت <span>{{ place.accommodates }}</span> نفره
+        </p>
       </v-card-text>
 
       <!-- bottom sec  -->
@@ -88,10 +90,10 @@
         <!-- Price start -->
         <div class="font-regular-12">
           <!-- modification need : this v-if base of index should be removed after logic and api   -->
-          <div class="secondary--text mb-n4" v-if="index % 2 === 0">
+          <div class="secondary--text mb-n4" v-if="place.total_price !== 0">
             <span>{{ $t("search.main.item.total-price") }}</span>
             <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
-              >2,550,000</span
+              >{{ place.total_price }}</span
             >
             <span>{{ $t("search.main.item.unit") }}</span>
           </div>
@@ -113,7 +115,7 @@
               :class="
                 $i18n.locale === 'fa' ? 'font-FaNumbold-14' : 'font-bold-14'
               "
-              >850,000</span
+              >{{ place.night }}</span
             >
             <span>{{ $t("search.main.item.unit") }}</span>
           </div>
@@ -136,7 +138,7 @@
       <v-row>
         <!-- image sec -->
         <v-col cols="4">
-          <PagesSearchResultImg :ifGridView="ifGridView" />
+          <PagesSearchResultImg :images="place.photos" :ifGridView="ifGridView" />
         </v-col>
 
         <!-- info sec -->
@@ -144,7 +146,7 @@
           <v-card-subtitle class="pt-3 pb-0">
             <v-row>
               <v-col class="pb-0">
-                <span class="font-regular-12 secondary--text">رشت - گیلان</span>
+                <span class="font-regular-12 secondary--text">{{ place.city }} - {{ place.province }}</span>
               </v-col>
               <v-col class="pb-0 d-flex align-center justify-end">
                 <span class="font-regular-12 secondary--text"
@@ -162,7 +164,7 @@
                     rankColor(rank) + '--text',
                     $i18n.locale === 'fa' ? 'font-FaNumbold-16' : '',
                   ]"
-                  >4.2</span
+                  >{{ place.overall_rating }}</span
                 >
                 <StarIcon
                   :color="
@@ -185,9 +187,7 @@
           <v-card-text class="black--text">
             <v-row>
               <v-col class="pt-1">
-                <p class="mb-4 font-medium-14 greenDark8--text">
-                  آپارتمان مبله دوبلکس در خیابان ولیعصر
-                </p>
+                <p class="mb-4 font-medium-14 greenDark8--text">{{ place.name }}</p>
                 <p class="mb-3 secondary--text font-regular-12">
                   دو خوابه - ظرفیت ۸ نفره - استخر - ماشین لباسشویی
                 </p>
@@ -285,6 +285,9 @@
 import StarIcon from "@/assets/AppIcons/starFavorite.vue";
 export default {
   props: {
+    place: {
+      type: Object
+    },
     ifGridView: {
       type: Boolean,
       default: true,
