@@ -43,6 +43,7 @@ export default {
   data() {
     return {
       id: 444,
+      propsPagination: null
     };
   },
   asyncData({params, app, store , route}) {
@@ -75,9 +76,6 @@ export default {
       setFilters: `modules/filters/${types.filters.actions.SET_FILTERS}`,
       setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
     }),
-    changeLayout() {
-      this.ifMapLayout = !this.ifMapLayout;
-    },
     getFilterData() {
       let filters = [
         {

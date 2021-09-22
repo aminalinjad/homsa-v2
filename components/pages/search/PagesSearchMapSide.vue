@@ -94,12 +94,13 @@
         </v-row>
 
         <!-- pagination  -->
+        {{getSearchResult.current_page}}
         <v-row class="paginationContainer justify-center mt-6">
           <v-pagination
             @input="changePagination"
             v-model="currentPage"
             :total-visible="7"
-            :length="totalPages"
+            :length="getSearchResult.last_page"
             class="paginationFont12"
             :class="[$i18n.locale === 'fa' ? 'farsiFontPagination' : '',]"
           ></v-pagination>
@@ -124,10 +125,14 @@ export default {
       type: Boolean,
       default: true,
     },
+    propsPagination: {
+      type: Number
+    }
   },
   data() {
     return {
       filter: false,
+      test: {},
       filterAdded: false,
       ifGridView: false,
       page: 1,
@@ -148,6 +153,17 @@ export default {
       return this.filter;
     },
   },
+  watch: {
+    getSearchResult: {
+      immediate: false,
+      deep: true,
+      handler(newValue) {
+        if (newValue) {
+          this.currentPage = newValue.current_page
+        }
+      }
+    }
+  },
   created() {
     this.totalPages = this.getSearchResult.last_page
   },
@@ -167,6 +183,7 @@ export default {
         page: this.currentPage,
         sort: "popular"
       }
+      console.log(data)
 
       SearchServices.searchResults(data).then(res => {
         this.setSearchResult(res.data)
