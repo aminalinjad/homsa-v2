@@ -1,7 +1,7 @@
 <template>
   <v-card
     width="864"
-    :height="checkIn.day && checkOut.day ? 475 : 415"
+    :height="checkIn.day && checkOut.day ? 434 : 415"
     class="py-9 px-11 calenderClass"
     style="transition: all 0.5s"
   >
@@ -71,11 +71,34 @@
               <v-divider class="my-1 greyLight4"></v-divider>
 
               <!--days -->
-              <v-row>
+              <v-row class="my-0">
                 <v-col
                   v-for="(dayInfo, dayIndex) in calendarMonth.calendar"
                   :key="dayIndex"
-                  class="ps-1 pe-2 pb-1 text-center"
+                  class="my-1 py-0 text-center"
+                  :class="[
+                    dayInfo.other_month
+                      ? ''
+                      : btnColClass(dayInfo, calendarMonth.id),
+                    $vuetify.rtl
+                      ? btnColClass(dayInfo, calendarMonth.id) ===
+                        'firstDay selected'
+                        ? 'ms-1 ps-0'
+                        : 'ps-1'
+                      : btnColClass(dayInfo, calendarMonth.id) ===
+                        'lastDay selected'
+                      ? 'ms-1 ps-0'
+                      : 'ps-1',
+                      $vuetify.rtl
+                      ? btnColClass(dayInfo, calendarMonth.id) ===
+                        'lastDay selected'
+                        ? 'me-2 pe-0'
+                      : 'pe-2'
+                      : btnColClass(dayInfo, calendarMonth.id) ===
+                        'firstDay selected'
+                      ? 'me-2 pe-0'
+                      : 'pe-2'
+                  ]"
                 >
                   <v-hover v-slot="{ hover }">
                     <v-btn
@@ -144,57 +167,64 @@
 
     <!-- bottom section  -->
     <v-scroll-y-transition>
-      <v-row
-        align="center"
-        class="mt-8 greenDark8--text"
-        v-show="checkIn.day && checkOut.day"
-      >
-        <v-col cols="auto">
-          <span class="font-FaNummedium-12">{{ selectedDays }}</span>
-          <span class="font-medium-12">
-            {{ $t("header.bottom.calendar.night") }}
-          </span>
-        </v-col>
-        <v-col class="text-center font-regular-14">
-          <v-btn
-            text
-            small
-            color="greenDark8"
-            class="px-2 font-medium-14 text-lowercase"
-            @click="setSelectedDaysFlexibility(1)"
+      <v-row class="ma-0 mt-5">
+        <v-col class="pa-0">
+          <v-row
+            align="center"
+            class="greenDark8--text"
+            v-show="checkIn.day && checkOut.day"
           >
-            <v-icon small>$plusMinus</v-icon>
-            <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
-              >1</span
-            >
-            <span>{{ $t("header.bottom.calendar.day") }}</span>
-          </v-btn>
-          <v-btn
-            text
-            small
-            color="greenDark8"
-            class="px-2 font-medium-14 text-lowercase"
-            @click="setSelectedDaysFlexibility(3)"
-          >
-            <v-icon small>$plusMinus</v-icon>
-            <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
-              >3</span
-            >
-            <span>{{ $t("header.bottom.calendar.day") }}</span>
-          </v-btn>
-          <v-btn
-            text
-            small
-            color="greenDark8"
-            class="px-2 font-medium-14 text-lowercase"
-            @click="setSelectedDaysFlexibility(7)"
-          >
-            <v-icon small>$plusMinus</v-icon>
-            <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
-              >7</span
-            >
-            <span>{{ $t("header.bottom.calendar.day") }}</span>
-          </v-btn>
+            <v-col cols="auto">
+              <span :class="$vuetify.rtl? 'font-FaNummedium-12': 'font-medium-12'">{{ selectedDays }}</span>
+              <span class="font-medium-12">
+                {{ $t("header.bottom.calendar.night") }}
+              </span>
+            </v-col>
+            <v-col class="text-center font-regular-14">
+              <v-btn
+                text
+                small
+                color="greenDark8"
+                class="px-2 font-medium-14 text-lowercase"
+                @click="setSelectedDaysFlexibility(1)"
+              >
+                <v-icon small>$plusMinus</v-icon>
+                <span
+                  :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
+                  >1</span
+                >
+                <span>{{ $t("header.bottom.calendar.day") }}</span>
+              </v-btn>
+              <v-btn
+                text
+                small
+                color="greenDark8"
+                class="px-2 font-medium-14 text-lowercase"
+                @click="setSelectedDaysFlexibility(3)"
+              >
+                <v-icon small>$plusMinus</v-icon>
+                <span
+                  :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
+                  >3</span
+                >
+                <span>{{ $t("header.bottom.calendar.day") }}</span>
+              </v-btn>
+              <v-btn
+                text
+                small
+                color="greenDark8"
+                class="px-2 font-medium-14 text-lowercase"
+                @click="setSelectedDaysFlexibility(7)"
+              >
+                <v-icon small>$plusMinus</v-icon>
+                <span
+                  :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
+                  >7</span
+                >
+                <span>{{ $t("header.bottom.calendar.day") }}</span>
+              </v-btn>
+            </v-col>
+          </v-row>
         </v-col>
       </v-row>
     </v-scroll-y-transition>
@@ -268,16 +298,9 @@ export default {
   },
   created() {
     this.getCalendar();
-    // this.setDisplayedCalendar(0, 1);
-  },
-  mounted() {
-    // this.getCalendar();
   },
   methods: {
     datePick(value, month, monthId) {
-      // let checkInDay = parseInt(this.checkIn.day);
-      // let valueDay = parseInt(value.day);
-      // let checkInMonth = parseInt(this.checkIn.monthId);
       if (!this.checkIn.day) {
         this.checkIn = value;
         this.checkIn.month = month;
@@ -319,18 +342,23 @@ export default {
         this.calendar[secondDisplayedMonth]
       );
     },
-    prev(index) {
-      if (index !== 0) {
-        this.setDisplayedCalendar(0, 1);
-        this.prevDisable = true;
+    prev(monthId) {
+      if (monthId !== 0) {
+        this.setDisplayedCalendar(monthId-1, monthId);
         this.nextDisable = false;
+        if( monthId === 1) {
+          this.prevDisable = true;
+        }
       }
     },
-    next(index) {
-      if (index !== this.calendar.length - 1) {
-        this.setDisplayedCalendar(2, 3);
+    next(monthId) {
+      let calendarLength = this.calendar.length;
+      if (monthId !== calendarLength - 1) {
+        this.setDisplayedCalendar(monthId, monthId+1);
         this.prevDisable = false;
-        this.nextDisable = true;
+        if(monthId === calendarLength - 2) {
+          this.nextDisable = true;
+        }
       }
     },
     setSelectedDaysFlexibility(value) {
@@ -344,6 +372,22 @@ export default {
       let checkOutMonthId = this.checkOut.monthId;
       if (checkInDay === valueDay && checkInMonthId === monthId) {
         return this.$vuetify.rtl ? "firstDay selected" : "lastDay selected";
+      } else if (checkOutDay === valueDay && checkOutMonthId === monthId) {
+        return this.$vuetify.rtl ? "lastDay selected" : "firstDay selected";
+      }
+      return "";
+    },
+    btnColClass(value, monthId) {
+      let valueDay = value.day;
+      let checkInDay = this.checkIn.day;
+      let checkInMonthId = this.checkIn.monthId;
+      let checkOutDay = this.checkOut.day;
+      let checkOutMonthId = this.checkOut.monthId;
+      if (checkInDay === valueDay && checkInMonthId === monthId) {
+        if(checkOutDay) {
+          return this.$vuetify.rtl ? "firstDay selected" : "lastDay selected";
+        }
+
       } else if (checkOutDay === valueDay && checkOutMonthId === monthId) {
         return this.$vuetify.rtl ? "lastDay selected" : "firstDay selected";
       } else if (monthId === checkInMonthId) {
