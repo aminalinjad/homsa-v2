@@ -112,9 +112,9 @@
     <!-- Main Section End  -->
 
     <!-- Bottom Section Start  -->
-    <v-row class="paginationContainer justify-center mt-6">
+    <v-row  class="paginationContainer justify-center mt-6">
       <v-pagination
-        @input="changePagination"
+        @input="changePagination()"
         v-model="currentPage"
         class="paginationWidth46"
         :total-visible="7"
@@ -187,19 +187,23 @@ export default {
       setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
     }),
     changePagination() {
+      setTimeout(() => {
+        this.$nuxt.$loading.start()
+      } , 1)
+
       let qs = {}
       if (this.currentPage > 1) qs.page = this.currentPage
 
       this.$router.push({query: {...this.$route.query, page: qs.page}})
       let data = {
-        q: "shiraz",
+        q: "tehran",
         "Accept-Language": "fa",
         page: this.currentPage,
         sort: "popular"
       }
-
       SearchServices.searchResults(data).then(res => {
         this.setSearchResult(res.data)
+        this.$nuxt.$loading.finish()
       })
     },
     listView() {

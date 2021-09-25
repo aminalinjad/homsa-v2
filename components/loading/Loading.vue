@@ -27,7 +27,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(159, 69, 69, 0.8);
+  background: rgba(69, 159, 114, 0.8);
   text-align: center;
   padding-top: 200px;
   font-size: 30px;
