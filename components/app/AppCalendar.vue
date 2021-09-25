@@ -1,7 +1,7 @@
 <template>
   <v-card
     width="864"
-    :height="checkIn.day && checkOut.day ? 434 : 415"
+    :height="checkIn.day && checkOut.day ? 436 : 415"
     class="py-9 px-11 calenderClass"
     style="transition: all 0.5s"
   >
@@ -54,7 +54,7 @@
 
         <!-- body  -->
         <v-row>
-          <v-col class="pt-0">
+          <v-col class="py-0">
             <v-card flat width="327" class="mx-auto">
               <!-- weeks head  -->
               <v-row>
@@ -89,11 +89,11 @@
                         'lastDay selected'
                       ? 'ms-1 ps-0'
                       : 'ps-1',
-                      $vuetify.rtl
+                    $vuetify.rtl
                       ? btnColClass(dayInfo, calendarMonth.id) ===
                         'lastDay selected'
                         ? 'me-2 pe-0'
-                      : 'pe-2'
+                        : 'pe-2'
                       : btnColClass(dayInfo, calendarMonth.id) ===
                         'firstDay selected'
                       ? 'me-2 pe-0'
@@ -167,64 +167,78 @@
 
     <!-- bottom section  -->
     <v-scroll-y-transition>
-      <v-row class="ma-0 mt-5">
-        <v-col class="pa-0">
-          <v-row
-            align="center"
-            class="greenDark8--text"
-            v-show="checkIn.day && checkOut.day"
-          >
-            <v-col cols="auto">
-              <span :class="$vuetify.rtl? 'font-FaNummedium-12': 'font-medium-12'">{{ selectedDays }}</span>
-              <span class="font-medium-12">
-                {{ $t("header.bottom.calendar.night") }}
-              </span>
-            </v-col>
-            <v-col class="text-center font-regular-14">
-              <v-btn
-                text
-                small
-                color="greenDark8"
-                class="px-2 font-medium-14 text-lowercase"
-                @click="setSelectedDaysFlexibility(1)"
+      <v-row
+        align="center"
+        class="greenDark8--text mt-n4 mb-6"
+        v-show="checkIn.day && checkOut.day"
+      >
+        <v-col cols="auto">
+          <v-row class="ma-0">
+            <v-btn
+              depressed
+              small
+              :color="selectedDaysFlexibility=== dateRanges[0]? '#3591380D' : 'greyLight1'"
+              :class="selectedDaysFlexibility=== dateRanges[0]? 'primary--text' : 'greenDark8--text'"
+              class="px-2 font-medium-14 text-lowercase"
+              @click="setSelectedDaysFlexibility(dateRanges[0])"
+            >
+              <v-icon small v-if="selectedDaysFlexibility=== dateRanges[0]">$plusMinusPrimary</v-icon>
+              <v-icon small v-else>$plusMinus</v-icon>
+              <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
+                >{{ dateRanges[0] }}</span
               >
-                <v-icon small>$plusMinus</v-icon>
-                <span
-                  :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
-                  >1</span
-                >
-                <span>{{ $t("header.bottom.calendar.day") }}</span>
-              </v-btn>
-              <v-btn
-                text
-                small
-                color="greenDark8"
-                class="px-2 font-medium-14 text-lowercase"
-                @click="setSelectedDaysFlexibility(3)"
+              <span>{{ $t("header.bottom.calendar.day") }}</span>
+            </v-btn>
+            <v-btn
+              depressed
+              small
+              :color="selectedDaysFlexibility=== dateRanges[1]? '#3591380D' : 'greyLight1'"
+              :class="selectedDaysFlexibility=== dateRanges[1]? 'primary--text' : 'greenDark8--text'"
+              class="mx-4 px-2 font-medium-14 text-lowercase"
+              @click="setSelectedDaysFlexibility(dateRanges[1])"
+            >
+              <v-icon small v-if="selectedDaysFlexibility=== dateRanges[1]">$plusMinusPrimary</v-icon>
+              <v-icon small v-else>$plusMinus</v-icon>
+
+              <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
+                >{{ dateRanges[1] }}</span
               >
-                <v-icon small>$plusMinus</v-icon>
-                <span
-                  :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
-                  >3</span
-                >
-                <span>{{ $t("header.bottom.calendar.day") }}</span>
-              </v-btn>
-              <v-btn
-                text
-                small
-                color="greenDark8"
-                class="px-2 font-medium-14 text-lowercase"
-                @click="setSelectedDaysFlexibility(7)"
+              <span>{{ $t("header.bottom.calendar.day") }}</span>
+            </v-btn>
+            <v-btn
+              depressed
+              small
+              :color="selectedDaysFlexibility=== dateRanges[2]? '#3591380D' : 'greyLight1'"
+              :class="selectedDaysFlexibility=== dateRanges[2]? 'primary--text' : 'greenDark8--text'"
+              class="px-2 font-medium-14 text-lowercase"
+              @click="setSelectedDaysFlexibility(dateRanges[2])"
+            >
+              <v-icon small v-if="selectedDaysFlexibility=== dateRanges[2]">$plusMinusPrimary</v-icon>
+              <v-icon small v-else>$plusMinus</v-icon>
+              <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
+                >{{ dateRanges[2] }}</span
               >
-                <v-icon small>$plusMinus</v-icon>
-                <span
-                  :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
-                  >7</span
-                >
-                <span>{{ $t("header.bottom.calendar.day") }}</span>
-              </v-btn>
-            </v-col>
+              <span>{{ $t("header.bottom.calendar.day") }}</span>
+            </v-btn>
           </v-row>
+          <v-row class="ma-0 align-center">
+            <v-icon small class="mb-n1 me-1">$information</v-icon>
+            <span class="pt-2 font-regular-10 primary--text">{{ $t("header.bottom.calendar.tips") }}</span>
+          </v-row>
+        </v-col>
+        <v-col
+          class="font-regular-14"
+          :class="$vuetify.rtl ? 'text-left' : 'text-right'"
+        >
+          <v-btn depressed color="primary" class="font-medium-12" width="160" height="46">
+            <span
+              :class="$vuetify.rtl ? 'font-FaNummedium-12' : 'font-medium-12'"
+              >{{ selectedDays }}</span
+            >
+            <span class="font-medium-12">
+              {{ $t("header.bottom.calendar.night") }} - {{ $t("header.bottom.calendar.confirm") }}
+            </span>
+          </v-btn>
         </v-col>
       </v-row>
     </v-scroll-y-transition>
@@ -238,6 +252,7 @@ export default {
   data() {
     return {
       selectedDaysFlexibility: null,
+      dateRanges: [],
       prevDisable: true,
       nextDisable: false,
       checkIn: {
@@ -344,9 +359,9 @@ export default {
     },
     prev(monthId) {
       if (monthId !== 0) {
-        this.setDisplayedCalendar(monthId-1, monthId);
+        this.setDisplayedCalendar(monthId - 1, monthId);
         this.nextDisable = false;
-        if( monthId === 1) {
+        if (monthId === 1) {
           this.prevDisable = true;
         }
       }
@@ -354,15 +369,15 @@ export default {
     next(monthId) {
       let calendarLength = this.calendar.length;
       if (monthId !== calendarLength - 1) {
-        this.setDisplayedCalendar(monthId, monthId+1);
+        this.setDisplayedCalendar(monthId, monthId + 1);
         this.prevDisable = false;
-        if(monthId === calendarLength - 2) {
+        if (monthId === calendarLength - 2) {
           this.nextDisable = true;
         }
       }
     },
     setSelectedDaysFlexibility(value) {
-      this.selectedDaysFlexibility = value;
+      this.selectedDaysFlexibility === value ? this.selectedDaysFlexibility = null : this.selectedDaysFlexibility = value;
     },
     btnClass(value, monthId) {
       let valueDay = value.day;
@@ -384,10 +399,9 @@ export default {
       let checkOutDay = this.checkOut.day;
       let checkOutMonthId = this.checkOut.monthId;
       if (checkInDay === valueDay && checkInMonthId === monthId) {
-        if(checkOutDay) {
+        if (checkOutDay) {
           return this.$vuetify.rtl ? "firstDay selected" : "lastDay selected";
         }
-
       } else if (checkOutDay === valueDay && checkOutMonthId === monthId) {
         return this.$vuetify.rtl ? "lastDay selected" : "firstDay selected";
       } else if (monthId === checkInMonthId) {
@@ -414,7 +428,7 @@ export default {
         .then(res => {
           this.calendar = res.data.data.calendars;
           this.calendarDaysName = res.data.calendar_days_name;
-          console.log("calendar", res.data.data.calendars);
+          this.dateRanges= res.data.date_ranges;
           this.setDisplayedCalendar(0, 1);
         })
         .catch(err => {

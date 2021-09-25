@@ -20,7 +20,10 @@ import arrowLine from "@/assets/AppIcons/arrowLine.vue";
 import arrowLineRight from "@/assets/AppIcons/arrowLineRight.vue";
 import plusMinus from "@/assets/AppIcons/plusMinus.vue";
 import plusMinusGrey from "@/assets/AppIcons/plusMinusGrey.vue";
+import plusMinusPrimary from "@/assets/AppIcons/plusMinusPrimary.vue";
 import location from "@/assets/AppIcons/location";
+import information from "@/assets/AppIcons/information";
+
 
 const CustomIcons = {
     arrowLeft: {
@@ -89,8 +92,14 @@ const CustomIcons = {
   plusMinusGrey: {
     component: plusMinusGrey,
   },
+  plusMinusPrimary: {
+    component: plusMinusPrimary,
+  },
   location: {
       component: location
+  },
+  information: {
+    component: information
   }
 };
 
