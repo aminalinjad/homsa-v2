@@ -8,10 +8,10 @@
       ></v-breadcrumbs>
     </div>
     <div class="d-flex align-center">
-      <p class="font-regular-18 mb-0 greenDark8--text">اجاره اقامتگاه در شهر رشت</p>
+      <p class="font-regular-18 mb-0 greenDark8--text">{{ getSearchResult.title }}</p>
       <span class="ms-2 font-regular-12 secondary--text" v-if="!isFilter">
         (
-          <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''">34</span>
+          <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''">{{ getSearchResult.total }}</span>
           <span>{{$t('search.main.resultsTotal')}}</span>
           )
         </span>
@@ -54,6 +54,7 @@ export default {
   computed: {
     ...mapGetters({
       mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
+      getSearchResult: `modules/search/${types.search.getters.GET_SEARCH_RESULTS}`
     }),
   },
 };

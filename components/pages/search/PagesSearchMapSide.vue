@@ -94,7 +94,6 @@
         </v-row>
 
         <!-- pagination  -->
-        {{getSearchResult.current_page}}
         <v-row class="paginationContainer justify-center mt-6">
           <v-pagination
             @input="changePagination"
@@ -173,19 +172,21 @@ export default {
       setHoveredItem: `modules/search/${types.search.actions.SET_HOVERED_ITEM}`,
     }),
     changePagination() {
+      setTimeout(() => {
+        this.$nuxt.$loading.start()
+      } , 1)
       let qs = {}
       if (this.currentPage > 1) qs.page = this.currentPage
 
       this.$router.push({query: {...this.$route.query, page: qs.page}})
       let data = {
-        q: "shiraz",
+        q: "tehran",
         "Accept-Language": "fa",
         page: this.currentPage,
         sort: "popular"
       }
-      console.log(data)
-
       SearchServices.searchResults(data).then(res => {
+        this.$nuxt.$loading.finish()
         this.setSearchResult(res.data)
       })
     },
