@@ -196,7 +196,21 @@ export default {
       getSearchResult: `modules/search/${types.search.getters.GET_SEARCH_RESULTS}`,
     }),
   },
-
+  watch: {
+    // for fitBounds the map when change the pagination in map side component
+    'getSearchResult.current_page': {
+      immediate: false,
+      handler(newValue) {
+        if (newValue) {
+          this.$refs.map.mapObject.fitBounds(
+            this.getSearchResult.data.map((m) => {
+              return [m.latitude, m.longitude];
+            }),
+          )
+        }
+      }
+    }
+  },
   methods: {
     ...mapActions({
       setHoveredItem: `modules/search/${types.search.actions.SET_HOVERED_ITEM}`,
