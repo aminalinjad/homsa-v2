@@ -26,7 +26,7 @@
 
         <!--    get user location button    -->
         <l-control position="topright">
-          <v-btn depressed fab small @click="getUserLocation">
+          <v-btn color="whiteColor" depressed fab small @click="getUserLocation">
             <v-icon x-large> $location</v-icon>
           </v-btn>
         </l-control>
