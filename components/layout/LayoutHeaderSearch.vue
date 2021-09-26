@@ -245,7 +245,7 @@
             :placeholder="`${$t('header.bottom.destination.place-holder')}`"
             persistent-placeholder
             :items="
-              homsaSuggestion
+              suggestion
                 ? destinationSuggestions.items
                 : destinationSearchResult
             "
@@ -257,7 +257,7 @@
             prepend-inner-icon="$pinLocation"
             no-data-text="No data available"
             :menu-props="{ minWidth: 410, left: $vuetify.rtl }"
-            :class="hover ? 'boxShadow' : ''"
+            :class="hover ? 'searchInputBoxShadow' : ''"
             class="me-2 rounded searchDestination font-regular-14"
             @click="destinationSuggestion"
             @click:clear="clearDestination"
@@ -266,7 +266,7 @@
             <!-- title in suggestion mode -->
             <template v-slot:prepend-item>
               <v-list-item-title
-                v-if="homsaSuggestion"
+                v-if="suggestion"
                 class="ms-6 mt-4 font-medium-14 greenDark8--text"
                 >{{ destinationSuggestions.title }}</v-list-item-title
               >
@@ -293,7 +293,7 @@
         <!-- date range  -->
         <v-hover v-slot="{ hover }">
           <v-row
-            :class="hover ? 'boxShadow' : ''"
+            :class="hover ? 'searchInputBoxShadow' : ''"
             class="ma-0 me-2 searchDateRange whiteColor rounded justify-sm-space-between align-center"
           >
             <v-row class="my-0 mx-3" @click="showCalendar">
@@ -327,44 +327,11 @@
             </v-btn>
           </v-row>
         </v-hover>
-        <!--        <v-hover v-slot="{ hover }">-->
-        <!--          <v-text-field-->
-        <!--            filled-->
-        <!--            readonly-->
-        <!--            height="66"-->
-        <!--            background-color="whiteColor"-->
-        <!--            :label="`${$t('header.bottom.check-in.label')}`"-->
-        <!--            :placeholder="`${$t('header.bottom.check-in.place-holder')}`"-->
-        <!--            persistent-placeholder-->
-        <!--            v-model="searchForm.checkIn"-->
-        <!--            :class="hover ? 'boxShadow' : ''"-->
-        <!--            class="me-2 rounded searchCheckIn font-regular-14"-->
-        <!--            @click="showCalendar"-->
-        <!--          >-->
-        <!--          </v-text-field>-->
-        <!--        </v-hover>-->
-
-        <!--        <v-hover v-slot="{ hover }">-->
-        <!--          <v-text-field-->
-        <!--            filled-->
-        <!--            readonly-->
-        <!--            height="66"-->
-        <!--            background-color="whiteColor"-->
-        <!--            :label="`${$t('header.bottom.check-out.label')}`"-->
-        <!--            :placeholder="`${$t('header.bottom.check-out.place-holder')}`"-->
-        <!--            persistent-placeholder-->
-        <!--            v-model="searchForm.checkOut"-->
-        <!--            :class="hover ? 'boxShadow' : ''"-->
-        <!--            class="me-2 rounded searchCheckOut font-regular-14"-->
-        <!--            @click="showCalendar"-->
-        <!--          >-->
-        <!--          </v-text-field>-->
-        <!--        </v-hover>-->
 
         <!-- count / guest -->
         <v-hover v-slot="{ hover }">
           <v-row
-            :class="hover ? 'boxShadow' : ''"
+            :class="hover ? 'searchInputBoxShadow' : ''"
             class="ma-0 me-2 searchCount whiteColor rounded"
           >
             <v-col cols="9" class="pa-0">
@@ -568,10 +535,6 @@ export default {
     ...mapGetters({
       mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`
     }),
-
-    homsaSuggestion() {
-      return this.suggestion === true;
-    }
   },
   mounted() {
     window.addEventListener("scroll", this.scrollPage, { passive: true });
@@ -695,7 +658,7 @@ export default {
       max-width: min-content;
       max-height: 66px;
 
-      .boxShadow {
+      .searchInputBoxShadow {
         box-shadow: 0px 4px 10px #0000001a;
       }
 
@@ -716,6 +679,7 @@ export default {
       .searchDateRange {
         width: 255px;
         height: 66px;
+        cursor: text;
       }
 
       .searchCheckIn,
