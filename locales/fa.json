@@ -18,6 +18,10 @@
         "label": "مقصد، اقامتگاه",
         "place-holder": "کجا می‌خواهید بروید؟"
       },
+      "date-range": {
+        "date-range": "بازه ورود و خروج",
+        "place-holder": "انتخاب کنید"
+      },
       "check-in": {
         "label": "تاریخ ورود",
         "place-holder": "انتخاب کنید"

@@ -23,85 +23,104 @@ import plusMinusGrey from "@/assets/AppIcons/plusMinusGrey.vue";
 import plusMinusPrimary from "@/assets/AppIcons/plusMinusPrimary.vue";
 import location from "@/assets/AppIcons/location";
 import information from "@/assets/AppIcons/information";
+import pinLocation from "@/assets/AppIcons/pinLocation";
+import usersProfile from "@/assets/AppIcons/usersProfile";
+import calendar from "@/assets/AppIcons/calendar";
+import arrowLineDark from "@/assets/AppIcons/arrowLineDark";
+import arrowLineDarkRight from "@/assets/AppIcons/arrowLineDarkRight";
 
 
 const CustomIcons = {
-    arrowLeft: {
+  arrowLeft: {
     component: arrowLeft
   },
-    arrowRight: {
+  arrowRight: {
     component: arrowRight
   },
-    close: {
+  close: {
     component: close
   },
-    filter: {
+  filter: {
     component: filter
   },
-    filter2: {
+  filter2: {
     component: filter2
   },
-    lightning: {
+  lightning: {
     component: lightning
   },
-    star: {
-    component: star,
+  star: {
+    component: star
   },
   searchLeft: {
-    component: searchLeft,
+    component: searchLeft
   },
   search: {
-    component: search,
+    component: search
   },
   add: {
-    component: add,
+    component: add
   },
   minus: {
-    component: minus,
+    component: minus
   },
   profile: {
-    component: profile,
+    component: profile
   },
   language: {
-    component: language,
+    component: language
   },
   grid: {
-    component: grid,
+    component: grid
   },
   list: {
-    component: list,
+    component: list
   },
   heart: {
-    component: heart,
+    component: heart
   },
   checkBox: {
-    component: checkBox,
+    component: checkBox
   },
   checkBoxActive: {
-    component: checkBoxActive,
+    component: checkBoxActive
   },
   arrowLine: {
-    component: arrowLine,
+    component: arrowLine
   },
   arrowLineRight: {
-    component: arrowLineRight,
+    component: arrowLineRight
   },
   plusMinus: {
-    component: plusMinus,
+    component: plusMinus
   },
   plusMinusGrey: {
-    component: plusMinusGrey,
+    component: plusMinusGrey
   },
   plusMinusPrimary: {
-    component: plusMinusPrimary,
+    component: plusMinusPrimary
   },
   location: {
-      component: location
+    component: location
   },
   information: {
     component: information
+  },
+  pinLocation: {
+    component: pinLocation
+  },
+  usersProfile: {
+    component: usersProfile
+  },
+  calendar: {
+    component: calendar
+  },
+  arrowLineDark: {
+    component: arrowLineDark
+  },
+  arrowLineDarkRight: {
+    component: arrowLineDarkRight
   }
 };
 
- export default CustomIcons;
-
+export default CustomIcons;

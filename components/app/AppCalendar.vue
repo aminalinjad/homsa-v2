@@ -230,7 +230,7 @@
           class="font-regular-14"
           :class="$vuetify.rtl ? 'text-left' : 'text-right'"
         >
-          <v-btn depressed color="primary" class="font-medium-12" width="160" height="46">
+          <v-btn depressed color="primary" class="font-medium-12" width="160" height="46" @click="submitDate">
             <span
               :class="$vuetify.rtl ? 'font-FaNummedium-12' : 'font-medium-12'"
               >{{ selectedDays }}</span
@@ -249,6 +249,10 @@
 import { CalendarService } from "@/services";
 
 export default {
+  props: [
+    "checkInDate",
+    "checkOutDate"
+  ],
   data() {
     return {
       selectedDaysFlexibility: null,
@@ -320,25 +324,30 @@ export default {
         this.checkIn = value;
         this.checkIn.month = month;
         this.checkIn.monthId = monthId;
+        this.$emit("setCheckInDate", value.date);
       } else if (!this.checkOut.day) {
         if (monthId === this.checkIn.monthId) {
           if (value.day <= this.checkIn.day) {
             this.checkIn = value;
             this.checkIn.month = month;
             this.checkIn.monthId = monthId;
+            this.$emit("setCheckInDate", value.date);
           } else {
             this.checkOut = value;
             this.checkOut.month = month;
             this.checkOut.monthId = monthId;
+            this.$emit("setCheckOutDate", value.date);
           }
         } else if (monthId < this.checkIn.monthId) {
           this.checkIn = value;
           this.checkIn.month = month;
           this.checkIn.monthId = monthId;
+          this.$emit("setCheckInDate", value.date);
         } else {
           this.checkOut = value;
           this.checkOut.month = month;
           this.checkOut.monthId = monthId;
+          this.$emit("setCheckOutDate", value.date);
         }
       } else {
         this.checkIn = {};
@@ -434,6 +443,9 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    submitDate() {
+      this.$emit('submitCalendarDate')
     }
   }
 };
