@@ -52,7 +52,8 @@ export default {
       q: "tehran",
       "Accept-Language": "fa",
       page: Number(route.query.page) || 1,
-      sort: "popular"
+      sort: "popular",
+      guest: 5
     }
     return SearchServices.searchResults(data).then(res => {
       console.log(res.data)

@@ -2,10 +2,21 @@
   <div>
     <div class="breadCrumbs">
       <v-breadcrumbs
-        :items="breadcrumbs"
+        :nuxt="true"
+        :items="getSearchResult.filters.breadcrumbs"
         class="pt-0"
         :class="mapLayout ? 'pb-1' : 'pb-2'"
-      ></v-breadcrumbs>
+      >
+      <template v-slot:item="{ item }">
+      <v-breadcrumbs-item
+        :href="item.type ? `https://homsa.net/${item.type}-${item.slug}` : 'https://homsa.net'"
+        :disabled="item.disable"
+      >
+        {{ item.title }}
+        {{  }}
+      </v-breadcrumbs-item>
+    </template>
+      </v-breadcrumbs>
     </div>
     <div class="d-flex align-center">
       <p class="font-regular-18 mb-0 greenDark8--text">{{ getSearchResult.title }}</p>
@@ -29,27 +40,6 @@ export default {
       type: Boolean,
       default: false,
     },
-  },
-  data() {
-    return {
-      breadcrumbs: [
-        {
-          text: "هومسا",
-          disabled: false,
-          href: "",
-        },
-        {
-          text: "اقامتگاه های استان گیلان",
-          disabled: false,
-          href: "",
-        },
-        {
-          text: "شهر رشت",
-          disabled: true,
-          href: "",
-        },
-      ],
-    };
   },
   computed: {
     ...mapGetters({

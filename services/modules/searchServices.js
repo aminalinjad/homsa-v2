@@ -7,6 +7,7 @@ class SearchServices {
       page: data.page,
       sort: data.sort,
       boundaries: data.boundaries,
+      guest: data.guest
     })
 
   }
