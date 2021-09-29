@@ -13,7 +13,6 @@
         :disabled="item.disable"
       >
         {{ item.title }}
-        {{  }}
       </v-breadcrumbs-item>
     </template>
       </v-breadcrumbs>
