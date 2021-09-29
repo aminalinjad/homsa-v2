@@ -96,7 +96,7 @@
                     :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
                     >(
                     <v-icon small>$plusMinusGrey</v-icon>
-                    {{ searchFormValue.flexiblity }}
+                    {{ searchFormValue.flexibility }}
                     {{ $t("header.top.input.day") }})
                   </span>
                 </div>
@@ -246,29 +246,28 @@
             persistent-placeholder
             :items="
               suggestion
-                ? destinationSuggestions.items
+                ? destinationSuggestionsDefault.items
                 : destinationSearchResult
             "
+            :search-input.sync="userDestinationSearch"
             item-text="city"
             item-value="city"
             :default="searchForm.destination"
             v-model="searchForm.destination"
             append-icon=""
             prepend-inner-icon="$pinLocation"
-            no-data-text="No data available"
+            hide-no-data
             :menu-props="{ minWidth: 410, left: $vuetify.rtl }"
             :class="hover ? 'searchInputBoxShadow' : ''"
             class="me-2 rounded searchDestination font-regular-14"
-            @click="destinationSuggestion"
             @click:clear="clearDestination"
-            @update:search-input="destinationSearch"
           >
             <!-- title in suggestion mode -->
             <template v-slot:prepend-item>
               <v-list-item-title
                 v-if="suggestion"
                 class="ms-6 mt-4 font-medium-14 greenDark8--text"
-                >{{ destinationSuggestions.title }}</v-list-item-title
+                >{{ destinationSuggestionsDefault.title }}</v-list-item-title
               >
               <!--destination result -->
             </template>
@@ -327,6 +326,39 @@
             </v-btn>
           </v-row>
         </v-hover>
+        <!--        <v-hover v-slot="{ hover }">-->
+        <!--          <v-text-field-->
+        <!--            filled-->
+        <!--            readonly-->
+        <!--            height="66"-->
+        <!--            background-color="whiteColor"-->
+        <!--            :label="`${$t('header.bottom.check-in.label')}`"-->
+        <!--            :placeholder="`${$t('header.bottom.check-in.place-holder')}`"-->
+        <!--            persistent-placeholder-->
+        <!--            v-model="searchForm.checkIn"-->
+        <!--            :class="hover ? 'searchInputBoxShadow' : ''"-->
+        <!--            class="me-2 rounded searchCheckIn font-regular-14"-->
+        <!--            @click="showCalendar"-->
+        <!--          >-->
+        <!--          </v-text-field>-->
+        <!--        </v-hover>-->
+
+        <!--        <v-hover v-slot="{ hover }">-->
+        <!--          <v-text-field-->
+        <!--            filled-->
+        <!--            readonly-->
+        <!--            height="66"-->
+        <!--            background-color="whiteColor"-->
+        <!--            :label="`${$t('header.bottom.check-out.label')}`"-->
+        <!--            :placeholder="`${$t('header.bottom.check-out.place-holder')}`"-->
+        <!--            persistent-placeholder-->
+        <!--            v-model="searchForm.checkOut"-->
+        <!--            :class="hover ? 'searchInputBoxShadow' : ''"-->
+        <!--            class="me-2 rounded searchCheckOut font-regular-14"-->
+        <!--            @click="showCalendar"-->
+        <!--          >-->
+        <!--          </v-text-field>-->
+        <!--        </v-hover>-->
 
         <!-- count / guest -->
         <v-hover v-slot="{ hover }">
@@ -435,6 +467,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { SearchServices } from "@/services";
 import * as types from "@/store/types.js";
 import MinusIcon from "@/assets/AppIcons/minus.vue";
 import AddIcon from "@/assets/AppIcons/add.vue";
@@ -467,6 +500,7 @@ export default {
           { name: "خروج", link: "#6" }
         ]
       },
+      userDestinationSearch: "",
       searchForm: {
         destination: "",
         checkIn: "",
@@ -478,11 +512,11 @@ export default {
         destination: "کهگیلویه و بویراحمد",
         checkIn: "12/08",
         checkOut: "12/31",
-        flexiblity: 1,
+        flexibility: 1,
         count: 1
       },
       suggestion: true,
-      destinationSuggestions: {
+      destinationSuggestionsDefault: {
         title: "پیشنهاد هومسا",
         items: [
           {
@@ -531,13 +565,22 @@ export default {
       ]
     };
   },
+
+  watch: {
+    userDestinationSearch(val) {
+      this.destinationSearch(val);
+    }
+  },
+
   computed: {
     ...mapGetters({
       mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`
     }),
   },
+
   mounted() {
     window.addEventListener("scroll", this.scrollPage, { passive: true });
+    this.destinationSuggestionDefault();
   },
 
   destroyed() {
@@ -571,18 +614,55 @@ export default {
         this.fixedHeader = false;
       }
     },
-    destinationSuggestion() {
+    destinationSuggestionDefault() {
       this.suggestion = true;
+      console.log('destinationSuggestion', this.searchForm.destination);
+      return SearchServices.destinationSuggestionsDefault()
+      .then( res => {
+        console.log('default res', res);
+      })
+      .catch( err => {
+        console.log(err);
+      })
     },
-    destinationSearch() {
+    destinationSearch(userDestination) {
+      console.log('destinationSuggestion', this.searchForm.destination);
       if (
-        this.searchForm.destination !== "کجا می‌خواهید بروید؟" ||
-        this.searchForm.destination !== ""
+        userDestination === null ||
+        userDestination === "کجا می‌خواهید بروید؟" ||
+        userDestination === ""
       ) {
-        this.suggestion = false;
-      } else {
         this.suggestion = true;
+        console.log('Suggestion', this.searchForm.destination);
+      } else {
+        this.suggestion = false;
+        console.log('search', this.searchForm.destination);
+        return SearchServices.destinationSuggestions(userDestination)
+          .then( res => {
+            console.log('ff', res);
+          })
+          .catch( err => {
+            console.log( err );
+          })
       }
+      // if (
+      //   this.searchForm.destination === null ||
+      //   this.searchForm.destination === "کجا می‌خواهید بروید؟" ||
+      //   this.searchForm.destination === ""
+      // ) {
+      //   this.suggestion = true;
+      //    console.log('Suggestion', this.searchForm.destination);
+      // } else {
+      //   this.suggestion = false;
+      //    console.log('search', this.searchForm.destination);
+      //    return SearchServices.destinationSearch(this.searchForm.destination)
+      //   .then( res => {
+      //     console.log('ff', res);
+      //   })
+      //   .catch( err => {
+      //     console.log( err );
+      //   })
+      // }
     },
     clearDestination() {
       this.searchForm.destination = "کجا می‌خواهید بروید؟";

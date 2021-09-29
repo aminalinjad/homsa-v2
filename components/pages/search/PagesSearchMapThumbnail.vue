@@ -6,7 +6,8 @@
       </div>
       <div class="thumbnailMapContainer__text text-center py-5 rounded-b-lg cursorPointer" @click="mapLayoutMode">
         <span class="greenDark8--text">
-          {{ $t('search.filters.map-thumbnail') }}
+<!--          {{ $t('search.filters.map-thumbnail') }}-->
+          {{ mapText }}
         </span>
       </div>
     </div>
@@ -16,6 +17,14 @@
 <script>
 
 export default {
+  props: {
+    mapText: {
+      type: String,
+      default() {
+        return this.$t('search.filters.map-thumbnail');
+      }
+    }
+  },
   methods: {
     mapLayoutMode() {
       this.$router.push({query: {...this.$route.query, showMap: 'true'}})

@@ -8,7 +8,14 @@ class SearchServices {
       sort: data.sort,
       boundaries: data.boundaries,
     })
+  }
 
+  destinationSuggestionsDefault() {
+    return API_V1.get(`/search/suggestions/default`)
+  }
+
+  destinationSuggestions(destination) {
+    return API_V1.get(`/search/suggestions?term=${destination}`)
   }
 
 }
