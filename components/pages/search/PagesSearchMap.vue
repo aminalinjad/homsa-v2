@@ -217,7 +217,7 @@ export default {
       setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
     }),
     getData() {
-      if (this.dragMapCheckbox) {
+      if (this.dragMapCheckbox && this.bounds) {
         this.$nuxt.$loading.start()
         let data = {
           "Accept-Language": "fa",
@@ -243,11 +243,14 @@ export default {
       }
     },
     mapInitials() {
-      this.$refs.map.mapObject.fitBounds(
-        this.getSearchResult.data.map((m) => {
-          return [m.latitude, m.longitude];
-        }),
-      )
+      if (this.getSearchResult.data.length !== 0) {
+        this.$refs.map.mapObject.fitBounds(
+          this.getSearchResult.data.map((m) => {
+            return [m.latitude, m.longitude];
+          }),
+        )
+      }
+
       setTimeout(() => {
         this.$refs.map.mapObject.invalidateSize()
       }, 100)
