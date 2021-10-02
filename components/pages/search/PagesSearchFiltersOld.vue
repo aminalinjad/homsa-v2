@@ -102,20 +102,50 @@
         </v-card>
       </div>
       <!-- count -->
-      <div v-else-if="filter.type === 'count'" class="mb-3">
-        <!-- count with title -->
-        <div v-if="filter.title">
-          <v-expansion-panels multiple flat>
-            <v-expansion-panel class="rounded-lg countTitle">
-              <v-expansion-panel-header
-                class="font-regular-14 navyDark--text"
-                >{{ filter.title }}</v-expansion-panel-header
-              >
-              <v-expansion-panel-content class="mt-n4">
-                <v-row
-                  v-for="(item, index) in filter.options"
-                  :key="index"
-                  class="
+      <div v-else-if="filter.type === 'counter'" class="mb-3">
+        <v-card flat class="rounded-lg">
+          <v-card-text class="py-3">
+            <div
+              class="d-flex justify-space-between px-2"
+            >
+              <div>
+                  <span class="greenDark8--text font-regular-14">{{
+                      filter.name
+                    }}</span>
+              </div>
+              <div>
+                <v-btn small icon depressed>
+                  <AddIcon
+                    size="16"
+                    :clr="$vuetify.theme.themes.light.greenDark8"
+                  />
+                </v-btn>
+                <span class="px-2 greenDark8--text" :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''">1</span>
+                <v-btn small class="me-n3" icon depressed>
+                  <MinusIcon
+                    size="16"
+                    :clr="$vuetify.theme.themes.light.greenDark8"
+                  />
+                </v-btn>
+              </div>
+            </div>
+          </v-card-text>
+        </v-card>
+      </div>
+
+      <!-- count list-->
+      <div v-else-if="filter.type === 'list_counter'" class="mb-3">
+        <v-expansion-panels multiple flat>
+          <v-expansion-panel class="rounded-lg countTitle">
+            <v-expansion-panel-header
+              class="font-regular-14 navyDark--text"
+            >{{ filter.name }}</v-expansion-panel-header
+            >
+            <v-expansion-panel-content class="mt-n4">
+              <v-row
+                v-for="(item, index) in filter.children"
+                :key="index"
+                class="
                     ma-1
                     mb-n1
                     d-flex
@@ -123,72 +153,37 @@
                     align-center
                     font-light-14
                   "
-                >
-                  <div class="font-regular-12 greenDark8--text">{{ item }}</div>
-                  <div class="font-medium-12">
-                    <v-btn small icon depressed>
-                      <AddIcon
-                        size="16"
-                        :clr="$vuetify.theme.themes.dark.greenDark8"
-                      />
-                    </v-btn>
-                    <span class="px-2 greenDark8--text" :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''">1</span>
-                    <v-btn small class="me-n3" icon depressed>
-                      <MinusIcon
-                        size="16"
-                        :clr="$vuetify.theme.themes.dark.greenDark8"
-                      />
-                    </v-btn>
-                  </div>
-                </v-row>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
-        </div>
-
-        <!-- count without title -->
-        <div v-else>
-          <v-card flat class="rounded-lg">
-            <v-card-text class="py-3">
-              <div
-                v-for="(item, index) in filter.options"
-                :key="index"
-                class="d-flex justify-space-between px-2"
               >
-                <div>
-                  <span class="greenDark8--text font-regular-14">{{
-                    item
-                  }}</span>
-                </div>
-                <div>
+                <div class="font-regular-12 greenDark8--text">{{ item.name }}</div>
+                <div class="font-medium-12">
                   <v-btn small icon depressed>
                     <AddIcon
                       size="16"
-                      :clr="$vuetify.theme.themes.light.greenDark8"
+                      :clr="$vuetify.theme.themes.dark.greenDark8"
                     />
                   </v-btn>
-                  <span class="px-2 greenDark8--text" :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''">1</span>
+                  <span class="px-2 greenDark8--text" :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''">1</span>
                   <v-btn small class="me-n3" icon depressed>
                     <MinusIcon
                       size="16"
-                      :clr="$vuetify.theme.themes.light.greenDark8"
+                      :clr="$vuetify.theme.themes.dark.greenDark8"
                     />
                   </v-btn>
                 </div>
-              </div>
-            </v-card-text>
-          </v-card>
-        </div>
+              </v-row>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
       </div>
 
       <!-- boolean -->
-      <div v-else-if="filter.type === 'boolean'" class="mb-3">
+      <div v-else-if="filter.type === 'switch'" class="mb-3">
         <v-card flat class="rounded-lg" height="46">
           <v-card-text class="py-1 filterBoolean">
             <v-switch
               inset
               dense
-              :label="filter.label"
+              :label="filter.name"
               class="pt-0 mt-2"
             ></v-switch>
           </v-card-text>
@@ -196,16 +191,16 @@
       </div>
 
       <!-- select -->
-      <div v-else-if="filter.type === 'select'" class="mb-3">
+      <div v-else-if="filter.type === 'list_checkbox'" class="mb-3">
         <v-expansion-panels multiple flat>
           <v-expansion-panel class="rounded-lg filterSelect">
             <v-expansion-panel-header
               class="navyDark--text py-3 px-4 font-regular-14"
-              >{{ filter.title }}</v-expansion-panel-header
+              >{{ filter.name }}</v-expansion-panel-header
             >
             <v-expansion-panel-content class="mx-n2 mb-n3">
               <v-row
-                v-for="(item, index) in filter.options"
+                v-for="(item, index) in filter.children"
                 :key="index"
                 class="ma-0 mb-2 font-light-14"
               >
@@ -213,8 +208,8 @@
                   off-icon="$checkBox"
                   on-icon="$checkBoxActive"
                   class="mt-0 mb-n5 pa-0 checkBoxClass"
-                  :label="item"
-                  @change="filterCheckBox(filter.title, item)"
+                  :label="item.name"
+                  @change="filterCheckBox(filter.name, item)"
                 ></v-checkbox>
               </v-row>
             </v-expansion-panel-content>
@@ -223,13 +218,13 @@
       </div>
 
       <!-- selectGroup -->
-      <div v-else-if="filter.type === 'selectGroup'" class="mb-3">
+      <div v-else-if="filter.type === 'list'" class="mb-3">
         <v-card flat class="rounded-t-lg mb-n1">
           <v-card-title class="pt-3 pb-0 font-medium-14 greenDark8--text">
-            {{ filter.title }}</v-card-title
+            {{ filter.name }}</v-card-title
           >
         </v-card>
-        <div v-for="(item, index) in filter.options" :key="index" class="mb-1">
+        <div v-for="(item, index) in filter.children" :key="index" class="mb-1">
           <v-expansion-panels multiple flat>
             <v-expansion-panel
               class="filterSelect"
@@ -237,11 +232,11 @@
             >
               <v-expansion-panel-header
                 class="px-4 navyDark--text font-regular-14"
-                >{{ item.title }}</v-expansion-panel-header
+                >{{ item.name }}</v-expansion-panel-header
               >
               <v-expansion-panel-content class="mx-n2 mb-n3">
                 <v-row
-                  v-for="(value, index) in item.options"
+                  v-for="(value, index) in item.children"
                   :key="index"
                   class="ma-0 mb-2 font-light-14"
                 >
@@ -249,7 +244,7 @@
                     off-icon="$checkBox"
                     on-icon="$checkBoxActive"
                     class="mt-0 mb-n5 pa-0 checkBoxClass"
-                    :label="value"
+                    :label="value.name"
                   ></v-checkbox>
                 </v-row>
               </v-expansion-panel-content>
@@ -334,7 +329,9 @@ export default {
     },
     calculateSectionWidth() {
       let width = document.getElementById("histogramSection");
-      this.histogramSectionWidth = width.clientWidth;
+      if(width) {
+        this.histogramSectionWidth = width.clientWidth;
+      }
     },
     filterPrice() {},
     filterCheckBox(filterTitle,checkBoxItem) {

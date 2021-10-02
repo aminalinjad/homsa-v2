@@ -17,7 +17,6 @@ class SearchServices {
   destinationSuggestions(destination) {
     return API_V1.get(`/search/suggestions?term=${destination}`)
   }
-
 }
 
 export default new SearchServices();
