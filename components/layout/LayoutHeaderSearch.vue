@@ -2,7 +2,10 @@
   <header
     id="headerSearch"
     class="headerCls"
-    :class="[searchSection || !fixedHeader ? 'pa-4 mb-0' : '', fixedHeader ? 'fixedHeader':'']"
+    :class="[
+      searchSection || !fixedHeader ? 'pa-4 mb-0' : '',
+      fixedHeader ? 'fixedHeader' : ''
+    ]"
   >
     <!-- header top section -->
     <v-row
@@ -14,7 +17,11 @@
     >
       <v-container
         class="pa-4"
-        :fluid="$vuetify.breakpoint.md || $route.query.showMap === 'true' ? true : false"
+        :fluid="
+          $vuetify.breakpoint.md || $route.query.showMap === 'true'
+            ? true
+            : false
+        "
       >
         <v-row>
           <!-- header logo -->
@@ -73,7 +80,10 @@
                 <div class="pe-3">{{ searchFormValue.destination }}</div>
                 <v-divider vertical></v-divider>
                 <div class="px-3">
-                  <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''">{{ searchFormValue.checkIn }}</span>
+                  <span
+                    :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
+                    >{{ searchFormValue.checkIn }}</span
+                  >
                   <v-icon v-if="$vuetify.rtl">$arrowLine</v-icon>
                   <v-icon v-else>$arrowLineRight</v-icon>
 
@@ -86,7 +96,7 @@
                     :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
                     >(
                     <v-icon small>$plusMinusGrey</v-icon>
-                    {{ searchFormValue.flexiblity }}
+                    {{ searchFormValue.flexibility }}
                     {{ $t("header.top.input.day") }})
                   </span>
                 </div>
@@ -129,13 +139,14 @@
               </div>
               <v-divider vertical class="mx-3 greyLight4"></v-divider>
               <div>
-                <v-menu ref="menuRef"
-                        fixed
-                        :left="$vuetify.rtl"
-                        bottom
-                        offset-y
-                        min-width="184"
-                        content-class="headerUserMenu"
+                <v-menu
+                  ref="menuRef"
+                  fixed
+                  :left="$vuetify.rtl"
+                  bottom
+                  offset-y
+                  min-width="184"
+                  content-class="headerUserMenu"
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
@@ -234,29 +245,29 @@
             :placeholder="`${$t('header.bottom.destination.place-holder')}`"
             persistent-placeholder
             :items="
-              homsaSuggestion
-                ? destinationSuggestions.items
+              suggestion
+                ? destinationSuggestionsDefault.items
                 : destinationSearchResult
             "
+            :search-input.sync="userDestinationSearch"
             item-text="city"
             item-value="city"
             :default="searchForm.destination"
             v-model="searchForm.destination"
             append-icon=""
-            no-data-text="No data available"
-            :menu-props="{ minWidth: 410, left: $vuetify.rtl}"
-            :class="hover ? 'bxShadow' : ''"
-            class="me-2 rounded srchDestination font-regular-14"
-            @click="destinationSuggestion"
+            prepend-inner-icon="$pinLocation"
+            hide-no-data
+            :menu-props="{ minWidth: 410, left: $vuetify.rtl }"
+            :class="hover ? 'searchInputBoxShadow' : ''"
+            class="me-2 rounded searchDestination font-regular-14"
             @click:clear="clearDestination"
-            @update:search-input="destinationSearch"
           >
             <!-- title in suggestion mode -->
             <template v-slot:prepend-item>
               <v-list-item-title
-                v-if="homsaSuggestion"
+                v-if="suggestion"
                 class="ms-6 mt-4 font-medium-14 greenDark8--text"
-                >{{ destinationSuggestions.title }}</v-list-item-title
+                >{{ destinationSuggestionsDefault.title }}</v-list-item-title
               >
               <!--destination result -->
             </template>
@@ -280,44 +291,80 @@
 
         <!-- date range  -->
         <v-hover v-slot="{ hover }">
-          <v-text-field
-            filled
-            readonly
-            height="66"
-            background-color="whiteColor"
-            :label="`${$t('header.bottom.check-in.label')}`"
-            :placeholder="`${$t('header.bottom.check-in.place-holder')}`"
-            persistent-placeholder
-            v-model="searchForm.checkIn"
-            :class="hover ? 'bxShadow' : ''"
-            class="me-2 rounded srchCheckIn font-regular-14"
-            @click="showCalendar"
+          <v-row
+            :class="hover ? 'searchInputBoxShadow' : ''"
+            class="ma-0 me-2 searchDateRange whiteColor rounded justify-sm-space-between align-center"
           >
-          </v-text-field>
+            <v-row class="my-0 mx-3" @click="showCalendar">
+              <v-icon>$calendar</v-icon>
+              <v-col class="my-0 py-0">
+                <p class="my-0 font-medium-12 greenDark8--text">
+                  {{ $t("header.bottom.date-range.date-range") }}
+                </p>
+                <v-row class="ma-0">
+                  <span v-if="checkInDate" class="greenDark8--text">
+                    <span
+                      :class="$vuetify.rtl ? 'font-FaNumregular-14': 'font-regular-14'"
+                      >{{ checkInDate }}</span
+                    >
+                    <span>
+                      <v-icon small v-if="$vuetify.rtl">$arrowLineDark</v-icon>
+                      <v-icon small v-else>$arrowLineDarkRight</v-icon>
+                    </span>
+                    <span v-if="checkOutDate" :class="$vuetify.rtl ? 'font-FaNumregular-14': 'font-regular-14'">
+                      {{ checkOutDate }}
+                    </span>
+                  </span>
+                  <span class="font-regular-14 greyLight2--text" v-else>
+                    {{ $t("header.bottom.date-range.place-holder") }}
+                  </span>
+                </v-row>
+              </v-col>
+            </v-row>
+            <v-btn small icon class="me-3" @click="clearDateRange" v-if="checkInDate">
+              <v-icon>$close</v-icon>
+            </v-btn>
+          </v-row>
         </v-hover>
+        <!--        <v-hover v-slot="{ hover }">-->
+        <!--          <v-text-field-->
+        <!--            filled-->
+        <!--            readonly-->
+        <!--            height="66"-->
+        <!--            background-color="whiteColor"-->
+        <!--            :label="`${$t('header.bottom.check-in.label')}`"-->
+        <!--            :placeholder="`${$t('header.bottom.check-in.place-holder')}`"-->
+        <!--            persistent-placeholder-->
+        <!--            v-model="searchForm.checkIn"-->
+        <!--            :class="hover ? 'searchInputBoxShadow' : ''"-->
+        <!--            class="me-2 rounded searchCheckIn font-regular-14"-->
+        <!--            @click="showCalendar"-->
+        <!--          >-->
+        <!--          </v-text-field>-->
+        <!--        </v-hover>-->
 
-        <v-hover v-slot="{ hover }">
-          <v-text-field
-            filled
-            readonly
-            height="66"
-            background-color="whiteColor"
-            :label="`${$t('header.bottom.check-out.label')}`"
-            :placeholder="`${$t('header.bottom.check-out.place-holder')}`"
-            persistent-placeholder
-            v-model="searchForm.checkOut"
-            :class="hover ? 'bxShadow' : ''"
-            class="me-2 rounded srchCheckOut font-regular-14"
-            @click="showCalendar"
-          >
-          </v-text-field>
-        </v-hover>
+        <!--        <v-hover v-slot="{ hover }">-->
+        <!--          <v-text-field-->
+        <!--            filled-->
+        <!--            readonly-->
+        <!--            height="66"-->
+        <!--            background-color="whiteColor"-->
+        <!--            :label="`${$t('header.bottom.check-out.label')}`"-->
+        <!--            :placeholder="`${$t('header.bottom.check-out.place-holder')}`"-->
+        <!--            persistent-placeholder-->
+        <!--            v-model="searchForm.checkOut"-->
+        <!--            :class="hover ? 'searchInputBoxShadow' : ''"-->
+        <!--            class="me-2 rounded searchCheckOut font-regular-14"-->
+        <!--            @click="showCalendar"-->
+        <!--          >-->
+        <!--          </v-text-field>-->
+        <!--        </v-hover>-->
 
-        <!-- count -->
+        <!-- count / guest -->
         <v-hover v-slot="{ hover }">
           <v-row
-            :class="hover ? 'bxShadow' : ''"
-            class="ma-0 me-2 srchCount whiteColor rounded"
+            :class="hover ? 'searchInputBoxShadow' : ''"
+            class="ma-0 me-2 searchCount whiteColor rounded"
           >
             <v-col cols="9" class="pa-0">
               <v-text-field
@@ -325,11 +372,14 @@
                 readonly
                 height="66"
                 background-color="whiteColor"
+                prepend-inner-icon="$usersProfile"
                 :suffix="`${$t('header.bottom.count.suffix')}`"
                 :label="`${$t('header.bottom.count.label')}`"
                 v-model="searchForm.count"
                 class="rounded"
-                :class="$i18n.locale === 'fa' ? 'farsiFontCountInput' : 'inputRight'"
+                :class="
+                  $i18n.locale === 'fa' ? 'farsiFontCountInput' : 'inputRight'
+                "
               >
               </v-text-field>
             </v-col>
@@ -397,15 +447,27 @@
     </v-row>
 
     <!-- calendar  -->
-    <AppCalendar class="appCalendar" v-if="calendar" />
-
+    <AppCalendar
+      class="appCalendar"
+      v-if="calendar"
+      :checkInDate="checkInDate"
+      :checkOutDate="checkOutDate"
+      @setCheckInDate="setCheckInDate"
+      @setCheckOutDate="setCheckOutDate"
+      @submitCalendarDate="submitCalendarDate"
+    />
     <!-- overlay  -->
-    <v-overlay :value="overlay"  @click.native="closeSearchSection" z-index="-1"></v-overlay>
+    <v-overlay
+      :value="overlay"
+      @click.native="closeSearchSection"
+      z-index="-1"
+    ></v-overlay>
   </header>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import { SearchServices } from "@/services";
 import * as types from "@/store/types.js";
 import MinusIcon from "@/assets/AppIcons/minus.vue";
 import AddIcon from "@/assets/AppIcons/add.vue";
@@ -413,11 +475,13 @@ import AddIcon from "@/assets/AppIcons/add.vue";
 export default {
   components: {
     MinusIcon,
-    AddIcon,
+    AddIcon
   },
   data() {
     return {
       calendar: false,
+      checkInDate: null,
+      checkOutDate: null,
       fixedHeader: false,
       searchSection: false,
       searchResult: false,
@@ -429,88 +493,94 @@ export default {
           { name: "اقامتگاه‌های من", link: "#1" },
           { name: "رزروهای من", link: "#2" },
           { name: "لیست اعلان‌ها", link: "#3" },
-          { name: "لیست علاقه مندی‌ها", link: "#4" },
+          { name: "لیست علاقه مندی‌ها", link: "#4" }
         ],
         menuFooter: [
           { name: "پشتیبانی", link: "#5" },
-          { name: "خروج", link: "#6" },
-        ],
+          { name: "خروج", link: "#6" }
+        ]
       },
+      userDestinationSearch: "",
       searchForm: {
         destination: "",
         checkIn: "",
         checkOut: "",
-        count: 1,
+        count: 1
       },
       searchFormValue: {
         destination: "یزد",
         destination: "کهگیلویه و بویراحمد",
         checkIn: "12/08",
         checkOut: "12/31",
-        flexiblity: 1,
-        count: 1,
+        flexibility: 1,
+        count: 1
       },
       suggestion: true,
-      destinationSuggestions: {
+      destinationSuggestionsDefault: {
         title: "پیشنهاد هومسا",
         items: [
           {
             city: "کرج",
             state: "استان البرز",
-            img: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
+            img: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
           },
           {
             city: "کردان",
             state: "ساوجبلاغ، استان البرز",
-            img: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
+            img: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
           },
           {
             city: "تهران",
             state: "تهران",
-            img: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
+            img: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
           },
           {
             city: "کیش",
             state: "هرمزگان",
-            img: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          },
-        ],
+            img: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
+          }
+        ]
       },
       destinationSearchResult: [
         {
           city: "یزد",
           state: "استان یزد",
-          img: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
+          img: "https://cdn.vuetifyjs.com/images/lists/4.jpg"
         },
         {
           city: "ایزدشهر",
           state: "نور، استان مازندران",
-          img: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
+          img: "https://cdn.vuetifyjs.com/images/lists/4.jpg"
         },
         {
           city: "مهریز",
           state: "یزد، استان یزد",
-          img: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
+          img: "https://cdn.vuetifyjs.com/images/lists/4.jpg"
         },
         {
           city: "استان یزد",
           state: "",
-          img: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-        },
-      ],
+          img: "https://cdn.vuetifyjs.com/images/lists/4.jpg"
+        }
+      ]
     };
   },
+
+  watch: {
+    userDestinationSearch(val) {
+      this.destinationSearch(val);
+    }
+  },
+
   computed: {
     ...mapGetters({
-      mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
+      mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`
     }),
-
-    homsaSuggestion() {
-        return this.suggestion === true;
-    },
   },
+
   mounted() {
     window.addEventListener("scroll", this.scrollPage, { passive: true });
+    this.destinationSuggestionDefault();
   },
 
   destroyed() {
@@ -523,7 +593,7 @@ export default {
     },
     closeSearchSection() {
       this.searchSection = !this.searchSection;
-      this.calendar = false
+      this.calendar = false;
       this.searchResult = !this.searchResult;
       this.overlay = !this.overlay;
     },
@@ -533,10 +603,10 @@ export default {
     },
     scrollPage() {
       if (this.$refs.cityAutocomplete) {
-        this.$refs.cityAutocomplete.isMenuActive = false
+        this.$refs.cityAutocomplete.isMenuActive = false;
       }
       if (this.$refs.menuRef) {
-        this.$refs.menuRef.isActive = false
+        this.$refs.menuRef.isActive = false;
       }
       if (window.scrollY > 0) {
         this.fixedHeader = true;
@@ -544,15 +614,55 @@ export default {
         this.fixedHeader = false;
       }
     },
-    destinationSuggestion() {
+    destinationSuggestionDefault() {
       this.suggestion = true;
+      console.log('destinationSuggestion', this.searchForm.destination);
+      return SearchServices.destinationSuggestionsDefault()
+      .then( res => {
+        console.log('default res', res);
+      })
+      .catch( err => {
+        console.log(err);
+      })
     },
-    destinationSearch() {
-      if (this.searchForm.destination !== "کجا می‌خواهید بروید؟" || this.searchForm.destination !== "") {
-        this.suggestion = false;
-      } else {
+    destinationSearch(userDestination) {
+      console.log('destinationSuggestion', this.searchForm.destination);
+      if (
+        userDestination === null ||
+        userDestination === "کجا می‌خواهید بروید؟" ||
+        userDestination === ""
+      ) {
         this.suggestion = true;
+        console.log('Suggestion', this.searchForm.destination);
+      } else {
+        this.suggestion = false;
+        console.log('search', this.searchForm.destination);
+        return SearchServices.destinationSuggestions(userDestination)
+          .then( res => {
+            console.log('ff', res);
+          })
+          .catch( err => {
+            console.log( err );
+          })
       }
+      // if (
+      //   this.searchForm.destination === null ||
+      //   this.searchForm.destination === "کجا می‌خواهید بروید؟" ||
+      //   this.searchForm.destination === ""
+      // ) {
+      //   this.suggestion = true;
+      //    console.log('Suggestion', this.searchForm.destination);
+      // } else {
+      //   this.suggestion = false;
+      //    console.log('search', this.searchForm.destination);
+      //    return SearchServices.destinationSearch(this.searchForm.destination)
+      //   .then( res => {
+      //     console.log('ff', res);
+      //   })
+      //   .catch( err => {
+      //     console.log( err );
+      //   })
+      // }
     },
     clearDestination() {
       this.searchForm.destination = "کجا می‌خواهید بروید؟";
@@ -579,7 +689,21 @@ export default {
     showCalendar() {
       this.calendar = true;
     },
-  },
+    setCheckInDate(checkInDate) {
+      this.checkInDate = checkInDate;
+    },
+    setCheckOutDate(checkOutDate) {
+      this.checkOutDate = checkOutDate;
+    },
+    clearDateRange() {
+      this.checkInDate = null;
+      this.checkOutDate = null;
+      this.calendar = false;
+    },
+    submitCalendarDate() {
+      this.calendar = !this.calendar;
+    }
+  }
 };
 </script>
 
@@ -614,11 +738,11 @@ export default {
       max-width: min-content;
       max-height: 66px;
 
-      .bxShadow {
+      .searchInputBoxShadow {
         box-shadow: 0px 4px 10px #0000001a;
       }
 
-      .srchDestination.v-autocomplete {
+      .searchDestination.v-autocomplete {
         .v-select {
           &__slot {
             input {
@@ -628,13 +752,19 @@ export default {
         }
       }
 
-      .srchDestination {
+      .searchDestination {
         width: 270px;
       }
 
-      .srchCheckIn,
-      .srchCheckOut,
-      .srchCount {
+      .searchDateRange {
+        width: 255px;
+        height: 66px;
+        cursor: text;
+      }
+
+      .searchCheckIn,
+      .searchCheckOut,
+      .searchCount {
         width: 165px;
         height: 66px;
 
@@ -647,14 +777,14 @@ export default {
         .v-input.farsiFontCountInput {
           input,
           textarea {
-            text-align: left!important;
+            text-align: left !important;
           }
         }
 
         .v-input.inputRight {
           input,
           textarea {
-            text-align: right!important;
+            text-align: right !important;
           }
         }
       }

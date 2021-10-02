@@ -9,7 +9,14 @@ class SearchServices {
       boundaries: data.boundaries,
       guest: data.guest
     })
+  }
 
+  destinationSuggestionsDefault() {
+    return API_V1.get(`/search/suggestions/default`)
+  }
+
+  destinationSuggestions(destination) {
+    return API_V1.get(`/search/suggestions?term=${destination}`)
   }
 
 }

@@ -19,6 +19,10 @@
         "label": "Location",
         "place-holder": "Where are you going?"
       },
+      "date-range": {
+        "date-range": "Date range",
+        "place-holder": "Add dates"
+      },
       "check-in": {
         "label": "Check in",
         "place-holder": "Add dates"
