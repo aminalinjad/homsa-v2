@@ -2,7 +2,10 @@
   <div>
     <div v-for="(filter, filterIndex) in filters" :key="filterIndex">
       <!-- map -->
-      <div v-if="filter.type === 'map' && $route.query.showMap !== 'true'" class="mb-3">
+      <div
+        v-if="filter.type === 'map' && $route.query.showMap !== 'true'"
+        class="mb-3"
+      >
         <PagesSearchMapThumbnail />
       </div>
       <!-- price -->
@@ -24,8 +27,16 @@
                   :bar-height="26"
                   primaryColor="#3591384D"
                   holderColor="#35913826"
-                  :handleColor="$vuetify.theme.dark? $vuetify.theme.themes.dark.primary : $vuetify.theme.themes.light.primary"
-                  :gridTextColor="$vuetify.theme.dark? $vuetify.theme.themes.dark.primary : $vuetify.theme.themes.light.primary"
+                  :handleColor="
+                    $vuetify.theme.dark
+                      ? $vuetify.theme.themes.dark.primary
+                      : $vuetify.theme.themes.light.primary
+                  "
+                  :gridTextColor="
+                    $vuetify.theme.dark
+                      ? $vuetify.theme.themes.dark.primary
+                      : $vuetify.theme.themes.light.primary
+                  "
                   :handleSize="10"
                   :barGap="1"
                   :barRadius="0"
@@ -105,22 +116,26 @@
       <div v-else-if="filter.type === 'counter'" class="mb-3">
         <v-card flat class="rounded-lg">
           <v-card-text class="py-3">
-            <div
-              class="d-flex justify-space-between px-2"
-            >
+            <div class="d-flex justify-space-between px-2">
               <div>
-                  <span class="greenDark8--text font-regular-14">{{
-                      filter.name
-                    }}</span>
+                <span class="greenDark8--text font-regular-14">{{
+                  filter.name
+                }}</span>
               </div>
               <div>
                 <v-btn small icon depressed>
                   <AddIcon
                     size="16"
                     :clr="$vuetify.theme.themes.light.greenDark8"
+
                   />
                 </v-btn>
-                <span class="px-2 greenDark8--text" :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''">1</span>
+                <span
+                  class="px-2 greenDark8--text"
+                  :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
+                  v-if="filterPanelSettings[filterIndex]"
+                  >{{ filterPanelSettings[filterIndex].count }}</span
+                >
                 <v-btn small class="me-n3" icon depressed>
                   <MinusIcon
                     size="16"
@@ -135,12 +150,15 @@
 
       <!-- counter list-->
       <div v-else-if="filter.type === 'list_counter'" class="mb-3">
-        <v-expansion-panels flat v-model="openExpansionPanels[filterIndex]">
+        <v-expansion-panels
+          flat
+          v-model="filterPanelSettings[filterIndex].expand"
+          v-if="filterPanelSettings[filterIndex]"
+        >
           <v-expansion-panel class="rounded-lg countTitle">
-            <v-expansion-panel-header
-              class="font-regular-14 navyDark--text"
-            >{{ filter.name }}</v-expansion-panel-header
-            >
+            <v-expansion-panel-header class="font-regular-14 navyDark--text">{{
+              filter.name
+            }}</v-expansion-panel-header>
             <v-expansion-panel-content class="mt-n4">
               <v-row
                 v-for="(item, index) in filter.children"
@@ -154,7 +172,9 @@
                     font-light-14
                   "
               >
-                <div class="font-regular-12 greenDark8--text">{{ item.name }}</div>
+                <div class="font-regular-12 greenDark8--text">
+                  {{ item.name }}
+                </div>
                 <div class="font-medium-12">
                   <v-btn small icon depressed>
                     <AddIcon
@@ -162,7 +182,15 @@
                       :clr="$vuetify.theme.themes.dark.greenDark8"
                     />
                   </v-btn>
-                  <span class="px-2 greenDark8--text" :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''">1</span>
+                  <span
+                    class="px-2 greenDark8--text"
+                    :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
+                    v-if="filterPanelSettings[filterIndex]"
+                  >
+                    {{
+                      filterPanelSettings[filterIndex].ItemCounts[index].count
+                    }}
+                  </span>
                   <v-btn small class="me-n3" icon depressed>
                     <MinusIcon
                       size="16"
@@ -192,11 +220,15 @@
 
       <!-- select -->
       <div v-else-if="filter.type === 'list_checkbox'" class="mb-3">
-        <v-expansion-panels flat v-model="openExpansionPanels[filterIndex]">
+        <v-expansion-panels
+          flat
+          v-model="filterPanelSettings[filterIndex].expand"
+          v-if="filterPanelSettings[filterIndex]"
+        >
           <v-expansion-panel class="rounded-lg filterSelect">
             <v-expansion-panel-header
               class="navyDark--text py-3 px-4 font-regular-14"
-            >{{ filter.name }}</v-expansion-panel-header
+              >{{ filter.name }}</v-expansion-panel-header
             >
             <v-expansion-panel-content class="mx-n2 mb-n3">
               <v-row
@@ -224,16 +256,24 @@
             {{ filter.name }}</v-card-title
           >
         </v-card>
-        <div v-for="(item, index) in filter.children" :key="index" class="mb-1" v-if="openExpansionPanels[filterIndex]">
-          <v-expansion-panels  flat v-model="openExpansionPanels[filterIndex][index]" >
+        <div
+          v-for="(item, index) in filter.children"
+          :key="index"
+          class="mb-1"
+          v-if="filterPanelSettings[filterIndex]"
+        >
+          <v-expansion-panels
+            flat
+            v-model="filterPanelSettings[filterIndex][index].expand"
+          >
             <v-expansion-panel
               class="filterSelect"
               :class="index === 0 ? 'rounded-0' : ''"
             >
               <v-expansion-panel-header
                 class="px-4 navyDark--text font-regular-14"
-              >{{ item.name }} </v-expansion-panel-header
-              >
+                >{{ item.name }}
+              </v-expansion-panel-header>
               <v-expansion-panel-content class="mx-n2 mb-n3">
                 <v-row
                   v-for="(value, index) in item.children"
@@ -266,26 +306,36 @@ export default {
   props: {},
   components: {
     MinusIcon,
-    AddIcon,
+    AddIcon
   },
   data() {
     return {
-      openExpansionPanels: [],
       filterPanelSettings: [],
       data: [
-        20012, 33012, 35012, 44012, 48012, 49812, 50012, 50122, 50212, 51012,
-        51412, 56012, 60012,
+        20012,
+        33012,
+        35012,
+        44012,
+        48012,
+        49812,
+        50012,
+        50122,
+        50212,
+        51012,
+        51412,
+        56012,
+        60012
       ],
       rangeSliderFrom: null,
       rangeSliderTo: null,
       histogramSectionWidth: null,
-      rangeBtnDisable: true,
+      rangeBtnDisable: true
     };
   },
   computed: {
     ...mapGetters({
       filters: `modules/filters/${types.filters.getters.GET_FILTERS}`,
-      mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
+      mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`
     }),
     histogramWidth() {
       return this.histogramSectionWidth;
@@ -304,36 +354,61 @@ export default {
           return histogramArray;
         }
       }
-    },
+    }
   },
   mounted() {
     this.calculateSectionWidth();
-    this.openExpansionPanelsHandler();
     this.filterPanelSettingsHandler();
     window.addEventListener("resize", this.calculateSectionWidth);
-    console.log('filters', this.filters)
+    console.log("filters", this.filters);
   },
   destroyed() {
     window.removeEventListener("resize", this.calculateSectionWidth);
   },
   methods: {
-    openExpansionPanelsHandler() {
-      for(let filterIndex=0; filterIndex< this.filters.length; filterIndex++) {
-        if(this.filters[filterIndex].type=== 'list') {
-          let openGroupExpansionPanels = []
-          console.log('jjj', filterIndex)
-          for(let listItemIndex=0; listItemIndex< this.filters[filterIndex].children.length; listItemIndex++) {
-            console.log('list index', listItemIndex)
-            openGroupExpansionPanels.push(0)
+    filterPanelSettingsHandler() {
+      let filters = this.filters;
+      let filtersLength = filters.length;
+      for (let filterIndex = 0; filterIndex < filtersLength; filterIndex++) {
+        if (filters[filterIndex].type === "counter") {
+          this.filterPanelSettings.push({
+            expand: 0,
+            count: 1
+          });
+        } else if (filters[filterIndex].type === "list_counter") {
+          let listCounterItemCounts = [];
+          for (
+            let listCounterItemIndex = 0;
+            listCounterItemIndex < filters[filterIndex].children.length;
+            listCounterItemIndex++
+          ) {
+            listCounterItemCounts.push({ count: 1 });
           }
-          this.openExpansionPanels.push(openGroupExpansionPanels);
+          this.filterPanelSettings.push({
+            expand: 0,
+            ItemCounts: listCounterItemCounts
+          });
+        } else if (this.filters[filterIndex].type === "list") {
+          let openGroupExpansionPanels = [];
+          console.log("jjj", filterIndex);
+          for (
+            let listItemIndex = 0;
+            listItemIndex < this.filters[filterIndex].children.length;
+            listItemIndex++
+          ) {
+            console.log("list index", listItemIndex);
+            openGroupExpansionPanels.push({
+              expand: 0
+            });
+          }
+          this.filterPanelSettings.push(openGroupExpansionPanels);
         } else {
-          this.openExpansionPanels.push(0);
+          this.filterPanelSettings.push({
+            expand: 0
+          });
         }
       }
-      console.log('filter expansion', this.openExpansionPanels);
     },
-    filterPanelSettingsHandler(){},
     inputRange() {
       if (this.rangeSliderFrom && this.rangeSliderTo) {
         this.rangeBtnDisable = false;
@@ -348,16 +423,15 @@ export default {
     },
     calculateSectionWidth() {
       let width = document.getElementById("histogramSection");
-      if(width) {
+      if (width) {
         this.histogramSectionWidth = width.clientWidth;
       }
     },
     filterPrice() {},
-    filterCheckBox(filterTitle,checkBoxItem) {
-      console.log('filterTitle, checkBoxItem', filterTitle, checkBoxItem);
-    },
-
-  },
+    filterCheckBox(filterTitle, checkBoxItem) {
+      console.log("filterTitle, checkBoxItem", filterTitle, checkBoxItem);
+    }
+  }
 };
 </script>
 
