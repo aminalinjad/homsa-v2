@@ -18,7 +18,7 @@
       </v-breadcrumbs>
     </div>
     <div class="d-flex align-center">
-      <p class="font-regular-18 mb-0 greenDark8--text">{{ getSearchResult.title }}</p>
+      <p class="font-regular-18 mb-0 greenDark8--text">{{ getSearchResult.filters.breadcrumbs[getSearchResult.filters.breadcrumbs.length - 1].title }}</p>
       <span class="ms-2 font-regular-12 secondary--text" v-if="!isFilter">
         (
           <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''">{{ getSearchResult.total }}</span>

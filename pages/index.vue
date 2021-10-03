@@ -40,6 +40,11 @@ import {SearchServices} from "@/services"
 export default {
   layout: "search",
   props: [],
+  head() {
+    return {
+      title: this.getSearchResult.title,
+    }
+  },
   data() {
     return {
       id: 444,
@@ -49,7 +54,7 @@ export default {
   asyncData({params, app, store , route}) {
     let result
     let data = {
-      q: "tehran",
+      q: "اجاره ویلا استخردار رامسر",
       "Accept-Language": "fa",
       page: Number(route.query.page) || 1,
       sort: "popular",
@@ -68,6 +73,7 @@ export default {
   computed: {
     ...mapGetters({
       mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
+      getSearchResult: `modules/search/${types.search.getters.GET_SEARCH_RESULTS}`,
     }),
   },
   mounted() {

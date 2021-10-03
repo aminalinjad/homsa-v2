@@ -7,16 +7,18 @@ class SearchServices {
       page: data.page,
       sort: data.sort,
       boundaries: data.boundaries,
-      guest: data.guest
+      guests: data.guest,
+      slugs: data.slugs,
+      checkin: data.checkin,
+      checkout: data.checkout
     })
   }
-
-  destinationSuggestionsDefault() {
-    return API_V1.get(`/search/suggestions/default`)
-  }
-
   destinationSuggestions(destination) {
-    return API_V1.get(`/search/suggestions?term=${destination}`)
+    return API_V1.get(`/search/suggestions` , {
+      params: {
+        term: destination.term
+      }
+    })
   }
 
 }
