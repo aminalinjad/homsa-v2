@@ -1,21 +1,17 @@
 <template>
   <div>
-    <div v-for="(filter, index) in filters" :key="index">
+    <div v-for="(filter, filterIndex) in filters" :key="filterIndex">
       <!-- map -->
-      <div
-        v-if="filter.type === 'map' && $route.query.showMap !== 'true'"
-        class="mb-3"
-      >
-        <PagesSearchMapThumbnail :mapText="filter.name" />
+      <div v-if="filter.type === 'map' && $route.query.showMap !== 'true'" class="mb-3">
+        <PagesSearchMapThumbnail />
       </div>
       <!-- price -->
-      <div v-if="filter.type === 'price_range'" class="mb-3">
+      <div v-if="filter.type === 'price'" class="mb-3">
         <v-card flat class="rounded-lg py-3 px-5 histogramSectionCard">
           <div id="histogramSection">
             <div>
               <span class="font-regular-14">
-                <!--                {{ $t("search.filters.price.title") }}-->
-                {{ filter.name }}
+                {{ $t("search.filters.price.title") }}
               </span>
             </div>
             <div class="d-flex justify-center mt-2 rangeSlider">
@@ -28,24 +24,16 @@
                   :bar-height="26"
                   primaryColor="#3591384D"
                   holderColor="#35913826"
-                  :handleColor="
-                    $vuetify.theme.dark
-                      ? $vuetify.theme.themes.dark.primary
-                      : $vuetify.theme.themes.light.primary
-                  "
-                  :gridTextColor="
-                    $vuetify.theme.dark
-                      ? $vuetify.theme.themes.dark.primary
-                      : $vuetify.theme.themes.light.primary
-                  "
+                  :handleColor="$vuetify.theme.dark? $vuetify.theme.themes.dark.primary : $vuetify.theme.themes.light.primary"
+                  :gridTextColor="$vuetify.theme.dark? $vuetify.theme.themes.dark.primary : $vuetify.theme.themes.light.primary"
                   :handleSize="10"
                   :barGap="1"
                   :barRadius="0"
                   :histSliderGap="0"
-                  :min="2"
-                  :max="100"
-                  :step="2"
-                  :data="data"
+                  :min="filter.min"
+                  :max="filter.max"
+                  :step="filter.step"
+                  :data="histogramData"
                   :clip="false"
                   class="histogramStyle"
                   @finish="selectRange"
@@ -113,162 +101,157 @@
           </div>
         </v-card>
       </div>
-      <!--      &lt;!&ndash; count &ndash;&gt;-->
-      <!--      <div v-else-if="filter.type === 'count'" class="mb-3">-->
-      <!--        &lt;!&ndash; count with title &ndash;&gt;-->
-      <!--        <div v-if="filter.title">-->
-      <!--          <v-expansion-panels multiple flat>-->
-      <!--            <v-expansion-panel class="rounded-lg countTitle">-->
-      <!--              <v-expansion-panel-header-->
-      <!--                class="font-regular-14 navyDark&#45;&#45;text"-->
-      <!--                >{{ filter.title }}</v-expansion-panel-header-->
-      <!--              >-->
-      <!--              <v-expansion-panel-content class="mt-n4">-->
-      <!--                <v-row-->
-      <!--                  v-for="(item, index) in filter.options"-->
-      <!--                  :key="index"-->
-      <!--                  class="-->
-      <!--                    ma-1-->
-      <!--                    mb-n1-->
-      <!--                    d-flex-->
-      <!--                    justify-space-between-->
-      <!--                    align-center-->
-      <!--                    font-light-14-->
-      <!--                  "-->
-      <!--                >-->
-      <!--                  <div class="font-regular-12 greenDark8&#45;&#45;text">{{ item }}</div>-->
-      <!--                  <div class="font-medium-12">-->
-      <!--                    <v-btn small icon depressed>-->
-      <!--                      <AddIcon-->
-      <!--                        size="16"-->
-      <!--                        :clr="$vuetify.theme.themes.dark.greenDark8"-->
-      <!--                      />-->
-      <!--                    </v-btn>-->
-      <!--                    <span class="px-2 greenDark8&#45;&#45;text" :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''">1</span>-->
-      <!--                    <v-btn small class="me-n3" icon depressed>-->
-      <!--                      <MinusIcon-->
-      <!--                        size="16"-->
-      <!--                        :clr="$vuetify.theme.themes.dark.greenDark8"-->
-      <!--                      />-->
-      <!--                    </v-btn>-->
-      <!--                  </div>-->
-      <!--                </v-row>-->
-      <!--              </v-expansion-panel-content>-->
-      <!--            </v-expansion-panel>-->
-      <!--          </v-expansion-panels>-->
-      <!--        </div>-->
+      <!-- counter -->
+      <div v-else-if="filter.type === 'counter'" class="mb-3">
+        <v-card flat class="rounded-lg">
+          <v-card-text class="py-3">
+            <div
+              class="d-flex justify-space-between px-2"
+            >
+              <div>
+                  <span class="greenDark8--text font-regular-14">{{
+                      filter.name
+                    }}</span>
+              </div>
+              <div>
+                <v-btn small icon depressed>
+                  <AddIcon
+                    size="16"
+                    :clr="$vuetify.theme.themes.light.greenDark8"
+                  />
+                </v-btn>
+                <span class="px-2 greenDark8--text" :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''">1</span>
+                <v-btn small class="me-n3" icon depressed>
+                  <MinusIcon
+                    size="16"
+                    :clr="$vuetify.theme.themes.light.greenDark8"
+                  />
+                </v-btn>
+              </div>
+            </div>
+          </v-card-text>
+        </v-card>
+      </div>
 
-      <!--        &lt;!&ndash; count without title &ndash;&gt;-->
-      <!--        <div v-else>-->
-      <!--          <v-card flat class="rounded-lg">-->
-      <!--            <v-card-text class="py-3">-->
-      <!--              <div-->
-      <!--                v-for="(item, index) in filter.options"-->
-      <!--                :key="index"-->
-      <!--                class="d-flex justify-space-between px-2"-->
-      <!--              >-->
-      <!--                <div>-->
-      <!--                  <span class="greenDark8&#45;&#45;text font-regular-14">{{-->
-      <!--                    item-->
-      <!--                  }}</span>-->
-      <!--                </div>-->
-      <!--                <div>-->
-      <!--                  <v-btn small icon depressed>-->
-      <!--                    <AddIcon-->
-      <!--                      size="16"-->
-      <!--                      :clr="$vuetify.theme.themes.light.greenDark8"-->
-      <!--                    />-->
-      <!--                  </v-btn>-->
-      <!--                  <span class="px-2 greenDark8&#45;&#45;text" :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''">1</span>-->
-      <!--                  <v-btn small class="me-n3" icon depressed>-->
-      <!--                    <MinusIcon-->
-      <!--                      size="16"-->
-      <!--                      :clr="$vuetify.theme.themes.light.greenDark8"-->
-      <!--                    />-->
-      <!--                  </v-btn>-->
-      <!--                </div>-->
-      <!--              </div>-->
-      <!--            </v-card-text>-->
-      <!--          </v-card>-->
-      <!--        </div>-->
-      <!--      </div>-->
+      <!-- counter list-->
+      <div v-else-if="filter.type === 'list_counter'" class="mb-3">
+        <v-expansion-panels flat v-model="openExpansionPanels[filterIndex]">
+          <v-expansion-panel class="rounded-lg countTitle">
+            <v-expansion-panel-header
+              class="font-regular-14 navyDark--text"
+            >{{ filter.name }}</v-expansion-panel-header
+            >
+            <v-expansion-panel-content class="mt-n4">
+              <v-row
+                v-for="(item, index) in filter.children"
+                :key="index"
+                class="
+                    ma-1
+                    mb-n1
+                    d-flex
+                    justify-space-between
+                    align-center
+                    font-light-14
+                  "
+              >
+                <div class="font-regular-12 greenDark8--text">{{ item.name }}</div>
+                <div class="font-medium-12">
+                  <v-btn small icon depressed>
+                    <AddIcon
+                      size="16"
+                      :clr="$vuetify.theme.themes.dark.greenDark8"
+                    />
+                  </v-btn>
+                  <span class="px-2 greenDark8--text" :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''">1</span>
+                  <v-btn small class="me-n3" icon depressed>
+                    <MinusIcon
+                      size="16"
+                      :clr="$vuetify.theme.themes.dark.greenDark8"
+                    />
+                  </v-btn>
+                </div>
+              </v-row>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </div>
 
-      <!--      &lt;!&ndash; boolean &ndash;&gt;-->
-      <!--      <div v-else-if="filter.type === 'boolean'" class="mb-3">-->
-      <!--        <v-card flat class="rounded-lg" height="46">-->
-      <!--          <v-card-text class="py-1 filterBoolean">-->
-      <!--            <v-switch-->
-      <!--              inset-->
-      <!--              dense-->
-      <!--              :label="filter.label"-->
-      <!--              class="pt-0 mt-2"-->
-      <!--            ></v-switch>-->
-      <!--          </v-card-text>-->
-      <!--        </v-card>-->
-      <!--      </div>-->
+      <!-- boolean -->
+      <div v-else-if="filter.type === 'switch'" class="mb-3">
+        <v-card flat class="rounded-lg" height="46">
+          <v-card-text class="py-1 filterBoolean">
+            <v-switch
+              inset
+              dense
+              :label="filter.name"
+              class="pt-0 mt-2"
+            ></v-switch>
+          </v-card-text>
+        </v-card>
+      </div>
 
-      <!--      &lt;!&ndash; select &ndash;&gt;-->
-      <!--      <div v-else-if="filter.type === 'select'" class="mb-3">-->
-      <!--        <v-expansion-panels multiple flat>-->
-      <!--          <v-expansion-panel class="rounded-lg filterSelect">-->
-      <!--            <v-expansion-panel-header-->
-      <!--              class="navyDark&#45;&#45;text py-3 px-4 font-regular-14"-->
-      <!--              >{{ filter.title }}</v-expansion-panel-header-->
-      <!--            >-->
-      <!--            <v-expansion-panel-content class="mx-n2 mb-n3">-->
-      <!--              <v-row-->
-      <!--                v-for="(item, index) in filter.options"-->
-      <!--                :key="index"-->
-      <!--                class="ma-0 mb-2 font-light-14"-->
-      <!--              >-->
-      <!--                <v-checkbox-->
-      <!--                  off-icon="$checkBox"-->
-      <!--                  on-icon="$checkBoxActive"-->
-      <!--                  class="mt-0 mb-n5 pa-0 checkBoxClass"-->
-      <!--                  :label="item"-->
-      <!--                  @change="filterCheckBox(filter.title, item)"-->
-      <!--                ></v-checkbox>-->
-      <!--              </v-row>-->
-      <!--            </v-expansion-panel-content>-->
-      <!--          </v-expansion-panel>-->
-      <!--        </v-expansion-panels>-->
-      <!--      </div>-->
+      <!-- select -->
+      <div v-else-if="filter.type === 'list_checkbox'" class="mb-3">
+        <v-expansion-panels flat v-model="openExpansionPanels[filterIndex]">
+          <v-expansion-panel class="rounded-lg filterSelect">
+            <v-expansion-panel-header
+              class="navyDark--text py-3 px-4 font-regular-14"
+            >{{ filter.name }}</v-expansion-panel-header
+            >
+            <v-expansion-panel-content class="mx-n2 mb-n3">
+              <v-row
+                v-for="(item, index) in filter.children"
+                :key="index"
+                class="ma-0 mb-2 font-light-14"
+              >
+                <v-checkbox
+                  off-icon="$checkBox"
+                  on-icon="$checkBoxActive"
+                  class="mt-0 mb-n5 pa-0 checkBoxClass"
+                  :label="item.name"
+                  @change="filterCheckBox(filter.name, item)"
+                ></v-checkbox>
+              </v-row>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </div>
 
-      <!--      &lt;!&ndash; selectGroup &ndash;&gt;-->
-      <!--      <div v-else-if="filter.type === 'selectGroup'" class="mb-3">-->
-      <!--        <v-card flat class="rounded-t-lg mb-n1">-->
-      <!--          <v-card-title class="pt-3 pb-0 font-medium-14 greenDark8&#45;&#45;text">-->
-      <!--            {{ filter.title }}</v-card-title-->
-      <!--          >-->
-      <!--        </v-card>-->
-      <!--        <div v-for="(item, index) in filter.options" :key="index" class="mb-1">-->
-      <!--          <v-expansion-panels multiple flat>-->
-      <!--            <v-expansion-panel-->
-      <!--              class="filterSelect"-->
-      <!--              :class="index === 0 ? 'rounded-0' : ''"-->
-      <!--            >-->
-      <!--              <v-expansion-panel-header-->
-      <!--                class="px-4 navyDark&#45;&#45;text font-regular-14"-->
-      <!--                >{{ item.title }}</v-expansion-panel-header-->
-      <!--              >-->
-      <!--              <v-expansion-panel-content class="mx-n2 mb-n3">-->
-      <!--                <v-row-->
-      <!--                  v-for="(value, index) in item.options"-->
-      <!--                  :key="index"-->
-      <!--                  class="ma-0 mb-2 font-light-14"-->
-      <!--                >-->
-      <!--                  <v-checkbox-->
-      <!--                    off-icon="$checkBox"-->
-      <!--                    on-icon="$checkBoxActive"-->
-      <!--                    class="mt-0 mb-n5 pa-0 checkBoxClass"-->
-      <!--                    :label="value"-->
-      <!--                  ></v-checkbox>-->
-      <!--                </v-row>-->
-      <!--              </v-expansion-panel-content>-->
-      <!--            </v-expansion-panel>-->
-      <!--          </v-expansion-panels>-->
-      <!--        </div>-->
-      <!--      </div>-->
+      <!-- selectGroup -->
+      <div v-else-if="filter.type === 'list'" class="mb-3">
+        <v-card flat class="rounded-t-lg mb-n1">
+          <v-card-title class="pt-3 pb-0 font-medium-14 greenDark8--text">
+            {{ filter.name }}</v-card-title
+          >
+        </v-card>
+        <div v-for="(item, index) in filter.children" :key="index" class="mb-1" v-if="openExpansionPanels[filterIndex]">
+          <v-expansion-panels  flat v-model="openExpansionPanels[filterIndex][index]" >
+            <v-expansion-panel
+              class="filterSelect"
+              :class="index === 0 ? 'rounded-0' : ''"
+            >
+              <v-expansion-panel-header
+                class="px-4 navyDark--text font-regular-14"
+              >{{ item.name }} </v-expansion-panel-header
+              >
+              <v-expansion-panel-content class="mx-n2 mb-n3">
+                <v-row
+                  v-for="(value, index) in item.children"
+                  :key="index"
+                  class="ma-0 mb-2 font-light-14"
+                >
+                  <v-checkbox
+                    off-icon="$checkBox"
+                    on-icon="$checkBoxActive"
+                    class="mt-0 mb-n5 pa-0 checkBoxClass"
+                    :label="value.name"
+                  ></v-checkbox>
+                </v-row>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -283,73 +266,74 @@ export default {
   props: {},
   components: {
     MinusIcon,
-    AddIcon
+    AddIcon,
   },
   data() {
     return {
-      expansionOpen: [0],
-      expansionclose: [],
+      openExpansionPanels: [],
+      filterPanelSettings: [],
       data: [
-        1,
-        1,
-        5,5,5,5,5,5,5,5,5,5,5,5,5,5,
-        5,
-        10,
-        20,20,20,20,20,20,
-        50,
-        70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,
-        90,
-        100
+        20012, 33012, 35012, 44012, 48012, 49812, 50012, 50122, 50212, 51012,
+        51412, 56012, 60012,
       ],
       rangeSliderFrom: null,
       rangeSliderTo: null,
       histogramSectionWidth: null,
-      rangeBtnDisable: true
+      rangeBtnDisable: true,
     };
   },
   computed: {
     ...mapGetters({
       filters: `modules/filters/${types.filters.getters.GET_FILTERS}`,
-      histogramPrices: `modules/filters/${types.filters.getters.GET_HISTOGRAM_PRICES}`,
-      mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`
+      mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
     }),
     histogramWidth() {
       return this.histogramSectionWidth;
     },
     histogramData() {
-      console.log("histogram prices in log", this.histogramPrices);
-      let data = this.histogramPrices;
-      let histogramArray = [
-        1,
-        1,
-        5,5,5,5,5,5,5,5,5,5,5,5,5,5,
-        5,
-        10,
-        20,20,20,20,20,20,
-        50,
-        70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,
-        90,
-        100
-      ];
-      // for (let j = 0; j < data.length; j++) {
-      //   for (let x = 0; x < data[j].doc_count; x++) {
-      //     histogramArray.push(data[j].key);
-      //   }
-      // }
-
-      console.log("histogram array after change", histogramArray);
-      return histogramArray;
-    }
+      let filters = this.filters;
+      for (let i = 0; i < filters.length; i++) {
+        if (filters[i].type === "price") {
+          let data = filters[i].options;
+          let histogramArray = [];
+          for (let j = 0; j < data.length; j++) {
+            for (let x = 0; x < data[j].count; x++) {
+              histogramArray.push(data[j].price);
+            }
+          }
+          return histogramArray;
+        }
+      }
+    },
   },
   mounted() {
-    // this.calculateSectionWidth();
+    this.calculateSectionWidth();
+    this.openExpansionPanelsHandler();
+    this.filterPanelSettingsHandler();
     window.addEventListener("resize", this.calculateSectionWidth);
-    console.log("filters", this.filters);
+    console.log('filters', this.filters)
   },
   destroyed() {
     window.removeEventListener("resize", this.calculateSectionWidth);
   },
   methods: {
+    openExpansionPanelsHandler() {
+      for(let filterIndex=0; filterIndex< this.filters.length; filterIndex++) {
+        if(this.filters[filterIndex].type=== 'list') {
+          let openGroupExpansionPanels = []
+          console.log('jjj', filterIndex)
+          for(let listItemIndex=0; listItemIndex< this.filters[filterIndex].children.length; listItemIndex++) {
+            console.log('list index', listItemIndex)
+            openGroupExpansionPanels.push(0)
+          }
+          this.openExpansionPanels.push(openGroupExpansionPanels);
+        } else {
+          this.openExpansionPanels.push(0);
+        }
+      }
+      console.log('filter expansion', this.openExpansionPanels);
+    },
+    filterPanelSettingsHandler(){},
     inputRange() {
       if (this.rangeSliderFrom && this.rangeSliderTo) {
         this.rangeBtnDisable = false;
@@ -364,13 +348,16 @@ export default {
     },
     calculateSectionWidth() {
       let width = document.getElementById("histogramSection");
-      this.histogramSectionWidth = width.clientWidth;
+      if(width) {
+        this.histogramSectionWidth = width.clientWidth;
+      }
     },
     filterPrice() {},
-    filterCheckBox(filterTitle, checkBoxItem) {
-      console.log("filterTitle, checkBoxItem", filterTitle, checkBoxItem);
-    }
-  }
+    filterCheckBox(filterTitle,checkBoxItem) {
+      console.log('filterTitle, checkBoxItem', filterTitle, checkBoxItem);
+    },
+
+  },
 };
 </script>
 

@@ -6,7 +6,7 @@
       <v-container class="" :fluid="$vuetify.breakpoint.md">
         <v-row class="justify-center">
           <v-col class="filterContainer">
-            <PagesSearchFiltersOld />
+            <PagesSearchFilters />
           </v-col>
           <v-col class="resultContainer">
             <PagesSearchContent/>
