@@ -34,8 +34,7 @@
 <script>
 import {mapGetters, mapActions} from "vuex";
 import * as types from "@/store/types.js";
-
-import {SearchServices} from "@/services"
+import {SearchServices} from "@/services";
 
 export default {
   layout: "search",
@@ -50,7 +49,7 @@ export default {
     let result
     let data = {
       q: "tehran",
-      "Accept-Language": "fa",
+      // "Accept-Language": "fa",
       page: Number(route.query.page) || 1,
       sort: "popular"
     }

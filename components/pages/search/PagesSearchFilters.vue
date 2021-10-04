@@ -123,11 +123,15 @@
                 }}</span>
               </div>
               <div>
-                <v-btn small icon depressed>
+                <v-btn
+                  small
+                  icon
+                  depressed
+                  @click="addCounter(filter.slug, filterIndex)"
+                >
                   <AddIcon
                     size="16"
                     :clr="$vuetify.theme.themes.light.greenDark8"
-
                   />
                 </v-btn>
                 <span
@@ -136,7 +140,13 @@
                   v-if="filterPanelSettings[filterIndex]"
                   >{{ filterPanelSettings[filterIndex].count }}</span
                 >
-                <v-btn small class="me-n3" icon depressed>
+                <v-btn
+                  small
+                  class="me-n3"
+                  icon
+                  depressed
+                  @click="minusCounter(filter.slug, filterIndex)"
+                >
                   <MinusIcon
                     size="16"
                     :clr="$vuetify.theme.themes.light.greenDark8"
@@ -176,7 +186,14 @@
                   {{ item.name }}
                 </div>
                 <div class="font-medium-12">
-                  <v-btn small icon depressed>
+                  <v-btn
+                    small
+                    icon
+                    depressed
+                    @click="
+                      addCounterList(filter.slug, filterIndex, item, index)
+                    "
+                  >
                     <AddIcon
                       size="16"
                       :clr="$vuetify.theme.themes.dark.greenDark8"
@@ -191,7 +208,15 @@
                       filterPanelSettings[filterIndex].ItemCounts[index].count
                     }}
                   </span>
-                  <v-btn small class="me-n3" icon depressed>
+                  <v-btn
+                    small
+                    class="me-n3"
+                    icon
+                    depressed
+                    @click="
+                      minusCounterList(filter.slug, filterIndex, item, index)
+                    "
+                  >
                     <MinusIcon
                       size="16"
                       :clr="$vuetify.theme.themes.dark.greenDark8"
@@ -297,8 +322,9 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import {mapGetters, mapActions} from "vuex";
 import * as types from "@/store/types.js";
+import {SearchServices} from "@/services";
 import MinusIcon from "@/assets/AppIcons/minus.vue";
 import AddIcon from "@/assets/AppIcons/add.vue";
 
@@ -366,6 +392,9 @@ export default {
     window.removeEventListener("resize", this.calculateSectionWidth);
   },
   methods: {
+    ...mapActions({
+      setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`
+    }),
     filterPanelSettingsHandler() {
       let filters = this.filters;
       let filtersLength = filters.length;
@@ -390,13 +419,11 @@ export default {
           });
         } else if (this.filters[filterIndex].type === "list") {
           let openGroupExpansionPanels = [];
-          console.log("jjj", filterIndex);
           for (
             let listItemIndex = 0;
             listItemIndex < this.filters[filterIndex].children.length;
             listItemIndex++
           ) {
-            console.log("list index", listItemIndex);
             openGroupExpansionPanels.push({
               expand: 0
             });
@@ -428,6 +455,39 @@ export default {
       }
     },
     filterPrice() {},
+    addCounter(filterSlug, filterIndex) {
+      this.filterPanelSettings[filterIndex].count++;
+      this.filterCounter(filterSlug, this.filterPanelSettings[filterIndex].count)
+    },
+    minusCounter(filterSlug, filterIndex) {
+      if (this.filterPanelSettings[filterIndex].count > 0) {
+        this.filterPanelSettings[filterIndex].count--;
+      }
+    },
+    addCounterList(filterSlug, filterIndex, item, itemIndex) {
+      this.filterPanelSettings[filterIndex].ItemCounts[itemIndex].count++;
+    },
+    minusCounterList(filterSlug, filterIndex, item, itemIndex) {
+      if (this.filterPanelSettings[filterIndex].ItemCounts[itemIndex].count > 0) {
+        this.filterPanelSettings[filterIndex].ItemCounts[itemIndex].count--;
+      }
+    },
+    filterCounter(filterSlug, value) {
+      console.log(filterSlug)
+      let data = {
+        q: "tehran",
+        page: 1,
+        sort: "popular",
+        filterSlug: value
+      }
+      return SearchServices.searchResults(data).then(res => {
+        console.log(res.data)
+        this.setSearchResult(res.data);
+      })
+    },
+    filterCounterList(filter, option) {
+      console.log("filterTitle, checkBoxItem", filterTitle, checkBoxItem);
+    },
     filterCheckBox(filterTitle, checkBoxItem) {
       console.log("filterTitle, checkBoxItem", filterTitle, checkBoxItem);
     }
