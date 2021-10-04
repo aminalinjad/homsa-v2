@@ -55,7 +55,6 @@ export default {
     let result
     let data = {
       q: "اجاره ویلا استخردار رامسر",
-      "Accept-Language": "fa",
       page: Number(route.query.page) || 1,
       sort: "popular",
       guest: 5

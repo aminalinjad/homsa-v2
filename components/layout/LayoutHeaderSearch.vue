@@ -508,7 +508,7 @@ export default {
         guest: 1
       },
       searchFormValue: {
-        destination: "کهگیلویه و بویراحمد",
+        destination: null,
         checkIn: "12/08",
         checkOut: "12/31",
         flexibility: 1,
@@ -563,13 +563,17 @@ export default {
       this.$nuxt.$loading.start()
       let data = {
         page: 1,
-        sort: this.$route.query.sort,
+        sort: this.$route.query.sort ? this.$route.query.sort: 'popular',
         guest: this.searchForm.guest,
-        checkin: this.searchForm.checkIn,
-        checkout: this.searchForm.checkOut,
       }
-      console.log(this.searchForm.destination)
-      if (this.searchForm.destination.type) {
+      if (this.searchForm.checkIn) {
+        data.checkin = this.searchForm.checkIn
+      }
+      if (this.searchForm.checkOut) {
+        data.checkout = this.searchForm.checkOut
+      }
+        console.log(this.searchForm.destination)
+      if (this.searchForm.destination && this.searchForm.destination.type) {
         data.slugs = [{
           value: this.searchForm.destination.slug,
           type: this.searchForm.destination.type
@@ -578,7 +582,9 @@ export default {
         data.q = this.userDestinationSearch
       }
       console.log(data)
-      this.$router.push({query: {...this.$route.query, guest: this.searchForm.guest}})
+      this.$router.push({query: {...this.$route.query, guest: this.searchForm.guest , q: data.q}})
+      this.searchFormValue.destination = this.userDestinationSearch
+      this.searchFormValue.guest = this.searchForm.guest
       SearchServices.searchResults(data).then(res => {
         this.$nuxt.$loading.finish()
         console.log(res.data)
