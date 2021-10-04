@@ -6,7 +6,7 @@
       <v-container class="" :fluid="$vuetify.breakpoint.md">
         <v-row class="justify-center">
           <v-col class="filterContainer">
-            <PagesSearchFiltersOld/>
+            <PagesSearchFilters />
           </v-col>
           <v-col class="resultContainer">
             <PagesSearchContent/>
@@ -34,8 +34,7 @@
 <script>
 import {mapGetters, mapActions} from "vuex";
 import * as types from "@/store/types.js";
-
-import {SearchServices} from "@/services"
+import {SearchServices} from "@/services";
 
 export default {
   layout: "search",
@@ -54,6 +53,7 @@ export default {
   asyncData({params, app, store , route}) {
     let result
     let data = {
+      // "Accept-Language": "fa",
       q: "اجاره ویلا استخردار رامسر",
       page: Number(route.query.page) || 1,
       sort: "popular",
@@ -62,8 +62,8 @@ export default {
     return SearchServices.searchResults(data).then(res => {
       console.log(res.data)
       store.dispatch('modules/search/SET_SEARCH_RESULTS', res.data)
-      // store.dispatch('modules/filters/SET_FILTERS', res.data.filters.filters)
-      // store.dispatch('modules/filters/SET_HISTOGRAM_PRICES', res.data.histogram_prices.prices)
+      store.dispatch('modules/filters/SET_FILTERS', res.data.filters.filters)
+      store.dispatch('modules/filters/SET_HISTOGRAM_PRICES', res.data.histogram_prices.prices)
       return {
         results: res.data.data
       }
@@ -76,7 +76,7 @@ export default {
     }),
   },
   mounted() {
-    this.getFilterData();
+    // this.getFilterData();
   },
   methods: {
     ...mapActions({
