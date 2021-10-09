@@ -13,14 +13,14 @@ class SearchServices {
   searchResults(data) {
     return API_V1.post("/search", data)
   }
-
-  destinationSuggestionsDefault() {
-    return API_V1.get(`/search/suggestions/default`)
-  }
-
   destinationSuggestions(destination) {
-    return API_V1.get(`/search/suggestions?term=${destination}`)
+    return API_V1.get(`/search/suggestions` , {
+      params: {
+        term: destination.term
+      }
+    })
   }
+
 }
 
 export default new SearchServices();

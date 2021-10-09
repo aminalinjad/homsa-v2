@@ -2,10 +2,10 @@
   <v-container class="px-md-0 pt-0">
     <!-- Top Section Start  -->
     <v-row class="mb-3 align-center">
-      <v-col>
+      <v-col lg="7">
         <PagesSearchResultTitle />
       </v-col>
-      <v-col>
+      <v-col lg="5">
         <div class="d-flex align-center justify-end">
           <div class="d-flex align-center">
             <span class="font-regular-12 secondary--text">
@@ -14,6 +14,9 @@
             <div class="sortByInput ms-3 mb-n7">
               <v-select
                 :items="sortBy"
+                @change="changeTheSortSelect"
+                item-text="text"
+                item-value="value"
                 v-model="sortByDefault"
                 solo
                 flat
@@ -146,24 +149,12 @@ export default {
       totalPages: 5,
       currentPage: Number(this.$route.query.page) || 1,
       gridViewResult: true,
-      sortByDefault: "بهترین تجربه",
-      sortBy: ["گران ترین", "بهترین تجربه"],
-      breadcrumbs: [
-        {
-          text: "هومسا",
-          disabled: false,
-          href: "",
-        },
-        {
-          text: "اقامتگاه های استان گیلان",
-          disabled: false,
-          href: "",
-        },
-        {
-          text: "شهر رشت",
-          disabled: true,
-          href: "",
-        },
+      sortByDefault: "popular",
+      sortBy: [
+        { text: 'بهترین تجربه', value: 'popular' },
+        { text: 'ارزان ترین', value: 'cheapest' },
+        { text: 'گران ترین', value: 'priciest' },
+        { text: 'تخفیف دار', value: 'discount' },
       ],
     };
   },
@@ -186,6 +177,22 @@ export default {
     ...mapActions({
       setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
     }),
+    changeTheSortSelect() {
+      setTimeout(() => {
+        this.$nuxt.$loading.start()
+      } , 1)
+
+      this.$router.push({query: {...this.$route.query, sort: this.sortByDefault}})
+      let data = {
+        q: "اجاره ویلا رامسر",
+        page: this.currentPage,
+        sort: this.sortByDefault
+      }
+      SearchServices.searchResults(data).then(res => {
+        this.setSearchResult(res.data)
+        this.$nuxt.$loading.finish()
+      })
+    },
     changePagination() {
       setTimeout(() => {
         this.$nuxt.$loading.start()

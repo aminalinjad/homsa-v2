@@ -1,12 +1,13 @@
 import axios from "axios";
 
-// const headers = {
-//   "Content-Type": "application/json",
-//   Accept: "application/json",
-// };
+const headers = {
+  "Content-Type": "application/json",
+  Accept: "application/json",
+  'Accept-Language' : 'fa'
+};
 const API_V1 = axios.create({
   baseURL: "https://new-homsa-dev.ernyka.com/api/website/v1",
-//   headers: headers
+  headers: headers
 });
 
 API_V1.interceptors.response.use(

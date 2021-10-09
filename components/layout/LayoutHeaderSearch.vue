@@ -82,19 +82,19 @@
                 <div class="px-3">
                   <span
                     :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
-                    >{{ searchFormValue.checkIn }}</span
+                  >{{ searchFormValue.checkIn }}</span
                   >
                   <v-icon v-if="$vuetify.rtl">$arrowLine</v-icon>
                   <v-icon v-else>$arrowLineRight</v-icon>
 
                   <span
                     :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
-                    >{{ searchFormValue.checkOut }}</span
+                  >{{ searchFormValue.checkOut }}</span
                   >
                   <span
                     class="ps-1 font-regular-12 greyLight2--text"
                     :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
-                    >(
+                  >(
                     <v-icon small>$plusMinusGrey</v-icon>
                     {{ searchFormValue.flexibility }}
                     {{ $t("header.top.input.day") }})
@@ -111,8 +111,8 @@
                     {{ $t("header.top.input.unit") }}
                   </span>
                   <span class="font-regular-14 secondary--text" v-else>{{
-                    $t("header.top.input.count")
-                  }}</span>
+                      $t("header.top.input.count")
+                    }}</span>
                 </div>
                 <v-btn fab color="primary" elevation="0" width="32" height="32">
                   <v-icon>$searchLeft</v-icon>
@@ -173,7 +173,7 @@
                   <v-list class="cursorPointer">
                     <v-list-item link to="">
                       <v-list-item-subtitle class="greenDark8--text"
-                        >{{ userMenu.menuTitle }}
+                      >{{ userMenu.menuTitle }}
                       </v-list-item-subtitle>
                     </v-list-item>
                     <v-divider class="greyLight4"></v-divider>
@@ -184,7 +184,7 @@
                       :to="item.link"
                     >
                       <v-list-item-subtitle class="secondary--text"
-                        >{{ item.name }}
+                      >{{ item.name }}
                       </v-list-item-subtitle>
                     </v-list-item>
                     <v-divider class="greyLight4"></v-divider>
@@ -195,7 +195,7 @@
                       :to="item.link"
                     >
                       <v-list-item-subtitle class="secondary--text"
-                        >{{ item.name }}
+                      >{{ item.name }}
                       </v-list-item-subtitle>
                     </v-list-item>
                   </v-list>
@@ -235,7 +235,7 @@
       <div class="d-flex headerCls__bottom__content">
         <!-- destination  -->
         <v-hover v-slot="{ hover }">
-          <v-autocomplete
+          <v-combobox
             ref="cityAutocomplete"
             filled
             clearable
@@ -244,15 +244,10 @@
             :label="`${$t('header.bottom.destination.label')}`"
             :placeholder="`${$t('header.bottom.destination.place-holder')}`"
             persistent-placeholder
-            :items="
-              suggestion
-                ? destinationSuggestionsDefault.items
-                : destinationSearchResult
-            "
+            :items="suggestionsDefault"
             :search-input.sync="userDestinationSearch"
-            item-text="city"
-            item-value="city"
-            :default="searchForm.destination"
+            item-text="title"
+            item-value="title"
             v-model="searchForm.destination"
             append-icon=""
             prepend-inner-icon="$pinLocation"
@@ -261,32 +256,36 @@
             :class="hover ? 'searchInputBoxShadow' : ''"
             class="me-2 rounded searchDestination font-regular-14"
             @click:clear="clearDestination"
+            return-object
+            no-filter
+            :value="userDestinationSearch"
           >
             <!-- title in suggestion mode -->
             <template v-slot:prepend-item>
               <v-list-item-title
-                v-if="suggestion"
+                v-if="userDestinationSearch === ''"
                 class="ms-6 mt-4 font-medium-14 greenDark8--text"
-                >{{ destinationSuggestionsDefault.title }}</v-list-item-title
+              >پیشنهاد هومسا
+              </v-list-item-title
               >
               <!--destination result -->
             </template>
             <template v-slot:item="data">
               <v-list-item-avatar rounded width="48" height="48" class="ms-2">
-                <img :src="data.item.img" />
+                <img :src="data.item.image"/>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title
-                  v-html="data.item.city"
+                  v-html="data.item.title"
                   class="font-regular-14 greenDark8--text"
                 ></v-list-item-title>
                 <v-list-item-subtitle
-                  v-html="data.item.state"
+                  v-html="data.item.sub_title"
                   class="font-regular-12 greyLight2--text"
                 ></v-list-item-subtitle>
               </v-list-item-content>
             </template>
-          </v-autocomplete>
+          </v-combobox>
         </v-hover>
 
         <!-- date range  -->
@@ -305,7 +304,7 @@
                   <span v-if="checkInDate" class="greenDark8--text">
                     <span
                       :class="$vuetify.rtl ? 'font-FaNumregular-14': 'font-regular-14'"
-                      >{{ checkInDate }}</span
+                    >{{ checkInDate }}</span
                     >
                     <span>
                       <v-icon small v-if="$vuetify.rtl">$arrowLineDark</v-icon>
@@ -375,7 +374,7 @@
                 prepend-inner-icon="$usersProfile"
                 :suffix="`${$t('header.bottom.count.suffix')}`"
                 :label="`${$t('header.bottom.count.label')}`"
-                v-model="searchForm.count"
+                v-model="searchForm.guest"
                 class="rounded"
                 :class="
                   $i18n.locale === 'fa' ? 'farsiFontCountInput' : 'inputRight'
@@ -392,7 +391,7 @@
               <v-row class="ma-0" v-if="hover">
                 <v-col class="pt-2 pb-1 px-0">
                   <v-hover v-slot="{ hover }">
-                    <v-btn small icon depressed @click="addCount">
+                    <v-btn small icon depressed @click="addGuest">
                       <AddIcon
                         :clr="
                           hover
@@ -411,12 +410,12 @@
                       small
                       icon
                       depressed
-                      @click="minusCount"
-                      :disabled="searchForm.count === 1"
+                      @click="minusGuest"
+                      :disabled="searchForm.guest === 1"
                     >
                       <MinusIcon
                         :clr="
-                          searchForm.count === 1
+                          searchForm.guest === 1
                             ? null
                             : hover
                             ? $vuetify.theme.dark
@@ -466,8 +465,8 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { SearchServices } from "@/services";
+import {mapActions, mapGetters} from "vuex";
+import {SearchServices} from "@/services";
 import * as types from "@/store/types.js";
 import MinusIcon from "@/assets/AppIcons/minus.vue";
 import AddIcon from "@/assets/AppIcons/add.vue";
@@ -479,6 +478,7 @@ export default {
   },
   data() {
     return {
+      test: '',
       calendar: false,
       checkInDate: null,
       checkOutDate: null,
@@ -490,85 +490,42 @@ export default {
       userMenu: {
         menuTitle: "مشاهده حساب کاربری",
         menuBody: [
-          { name: "اقامتگاه‌های من", link: "#1" },
-          { name: "رزروهای من", link: "#2" },
-          { name: "لیست اعلان‌ها", link: "#3" },
-          { name: "لیست علاقه مندی‌ها", link: "#4" }
+          {name: "اقامتگاه‌های من", link: "#1"},
+          {name: "رزروهای من", link: "#2"},
+          {name: "لیست اعلان‌ها", link: "#3"},
+          {name: "لیست علاقه مندی‌ها", link: "#4"}
         ],
         menuFooter: [
-          { name: "پشتیبانی", link: "#5" },
-          { name: "خروج", link: "#6" }
+          {name: "پشتیبانی", link: "#5"},
+          {name: "خروج", link: "#6"}
         ]
       },
       userDestinationSearch: "",
       searchForm: {
         destination: "",
-        checkIn: "",
-        checkOut: "",
-        count: 1
+        checkIn: null,
+        checkOut: null,
+        guest: 1
       },
       searchFormValue: {
-        destination: "یزد",
-        destination: "کهگیلویه و بویراحمد",
+        destination: null,
         checkIn: "12/08",
         checkOut: "12/31",
         flexibility: 1,
         count: 1
       },
+      suggestionsDefault: [],
       suggestion: true,
-      destinationSuggestionsDefault: {
-        title: "پیشنهاد هومسا",
-        items: [
-          {
-            city: "کرج",
-            state: "استان البرز",
-            img: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
-          },
-          {
-            city: "کردان",
-            state: "ساوجبلاغ، استان البرز",
-            img: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
-          },
-          {
-            city: "تهران",
-            state: "تهران",
-            img: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
-          },
-          {
-            city: "کیش",
-            state: "هرمزگان",
-            img: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
-          }
-        ]
-      },
-      destinationSearchResult: [
-        {
-          city: "یزد",
-          state: "استان یزد",
-          img: "https://cdn.vuetifyjs.com/images/lists/4.jpg"
-        },
-        {
-          city: "ایزدشهر",
-          state: "نور، استان مازندران",
-          img: "https://cdn.vuetifyjs.com/images/lists/4.jpg"
-        },
-        {
-          city: "مهریز",
-          state: "یزد، استان یزد",
-          img: "https://cdn.vuetifyjs.com/images/lists/4.jpg"
-        },
-        {
-          city: "استان یزد",
-          state: "",
-          img: "https://cdn.vuetifyjs.com/images/lists/4.jpg"
-        }
-      ]
     };
   },
 
   watch: {
-    userDestinationSearch(val) {
-      this.destinationSearch(val);
+    userDestinationSearch: {
+      immediate: true,
+      deep: true,
+      handler(val) {
+        this.destinationSearch(val);
+      }
     }
   },
 
@@ -579,14 +536,17 @@ export default {
   },
 
   mounted() {
-    window.addEventListener("scroll", this.scrollPage, { passive: true });
-    this.destinationSuggestionDefault();
+    window.addEventListener("scroll", this.scrollPage, {passive: true});
+    this.destinationSearch('');
   },
 
   destroyed() {
     window.removeEventListener("scroll", this.scrollPage);
   },
   methods: {
+    ...mapActions({
+      setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
+    }),
     showSearchSection() {
       this.searchSection = true;
       this.overlay = !this.overlay;
@@ -600,6 +560,39 @@ export default {
     SearchServices() {
       this.calendar = false;
       this.closeSearchSection();
+      this.$nuxt.$loading.start()
+      let data = {
+        page: 1,
+        sort: this.$route.query.sort ? this.$route.query.sort: 'popular',
+        guest: this.searchForm.guest,
+      }
+      if (this.searchForm.checkIn) {
+        data.checkin = this.searchForm.checkIn
+      }
+      if (this.searchForm.checkOut) {
+        data.checkout = this.searchForm.checkOut
+      }
+        console.log(this.searchForm.destination)
+      if (this.searchForm.destination && this.searchForm.destination.type) {
+        data.slugs = [{
+          value: this.searchForm.destination.slug,
+          type: this.searchForm.destination.type
+        }]
+      } else {
+        data.q = this.userDestinationSearch
+      }
+      console.log(data)
+      this.$router.push({query: {...this.$route.query, guest: this.searchForm.guest , q: data.q}})
+      this.searchFormValue.destination = this.userDestinationSearch
+      this.searchFormValue.guest = this.searchForm.guest
+      SearchServices.searchResults(data).then(res => {
+        this.$nuxt.$loading.finish()
+        console.log(res.data)
+        this.setSearchResult(res.data)
+      }).catch(err => {
+        this.$nuxt.$loading.finish()
+        alert('err dare')
+      })
     },
     scrollPage() {
       if (this.$refs.cityAutocomplete) {
@@ -614,66 +607,26 @@ export default {
         this.fixedHeader = false;
       }
     },
-    destinationSuggestionDefault() {
-      this.suggestion = true;
-      console.log('destinationSuggestion', this.searchForm.destination);
-      return SearchServices.destinationSuggestionsDefault()
-      .then( res => {
-        console.log('default res', res);
-      })
-      .catch( err => {
-        console.log(err);
-      })
-    },
     destinationSearch(userDestination) {
-      console.log('destinationSuggestion', this.searchForm.destination);
-      if (
-        userDestination === null ||
-        userDestination === "کجا می‌خواهید بروید؟" ||
-        userDestination === ""
-      ) {
-        this.suggestion = true;
-        console.log('Suggestion', this.searchForm.destination);
-      } else {
-        this.suggestion = false;
-        console.log('search', this.searchForm.destination);
-        return SearchServices.destinationSuggestions(userDestination)
-          .then( res => {
-            console.log('ff', res);
-          })
-          .catch( err => {
-            console.log( err );
-          })
+      let data = {
+        term: userDestination
       }
-      // if (
-      //   this.searchForm.destination === null ||
-      //   this.searchForm.destination === "کجا می‌خواهید بروید؟" ||
-      //   this.searchForm.destination === ""
-      // ) {
-      //   this.suggestion = true;
-      //    console.log('Suggestion', this.searchForm.destination);
-      // } else {
-      //   this.suggestion = false;
-      //    console.log('search', this.searchForm.destination);
-      //    return SearchServices.destinationSearch(this.searchForm.destination)
-      //   .then( res => {
-      //     console.log('ff', res);
-      //   })
-      //   .catch( err => {
-      //     console.log( err );
-      //   })
-      // }
+      return SearchServices.destinationSuggestions(data)
+        .then(res => {
+          this.suggestionsDefault = res.data.data
+        })
+        .catch(err => {
+          console.log(err);
+        })
     },
     clearDestination() {
-      this.searchForm.destination = "کجا می‌خواهید بروید؟";
-      this.suggestion = true;
     },
-    addCount() {
-      this.searchForm.count++;
+    addGuest() {
+      this.searchForm.guest++;
     },
-    minusCount() {
-      if (this.searchForm.count > 1) {
-        this.searchForm.count--;
+    minusGuest() {
+      if (this.searchForm.guest > 1) {
+        this.searchForm.guest--;
       }
     },
     changeLang() {
@@ -690,10 +643,10 @@ export default {
       this.calendar = true;
     },
     setCheckInDate(checkInDate) {
-      this.checkInDate = checkInDate;
+      this.searchForm.checkIn = checkInDate;
     },
     setCheckOutDate(checkOutDate) {
-      this.checkOutDate = checkOutDate;
+      this.searchForm.checkOut = checkOutDate;
     },
     clearDateRange() {
       this.checkInDate = null;
