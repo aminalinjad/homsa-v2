@@ -582,10 +582,10 @@ export default {
         data.q = this.userDestinationSearch
       }
       console.log(data)
-      this.$router.push({query: {...this.$route.query, guest: this.searchForm.guest , q: data.q}})
       this.searchFormValue.destination = this.userDestinationSearch
       this.searchFormValue.guest = this.searchForm.guest
       SearchServices.searchResults(data).then(res => {
+        this.$router.push({query: {...this.$route.query, guest: this.searchForm.guest , q: data.q}})
         this.$nuxt.$loading.finish()
         console.log(res.data)
         this.setSearchResult(res.data)

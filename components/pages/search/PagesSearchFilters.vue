@@ -122,7 +122,7 @@
                   filter.name
                 }}</span>
               </div>
-              <div>
+              <div v-if="filterPanelSettings[filterIndex]">
                 <v-btn
                   small
                   icon
@@ -149,7 +149,11 @@
                 >
                   <MinusIcon
                     size="16"
-                    :clr="$vuetify.theme.themes.light.greenDark8"
+                    :clr="
+                      filterPanelSettings[filterIndex].count === 0
+                        ? $vuetify.theme.themes.light.secondary
+                        : $vuetify.theme.themes.light.greenDark8
+                    "
                   />
                 </v-btn>
               </div>
@@ -219,7 +223,12 @@
                   >
                     <MinusIcon
                       size="16"
-                      :clr="$vuetify.theme.themes.dark.greenDark8"
+                      :clr="
+                        filterPanelSettings[filterIndex].ItemCounts[index]
+                          .count === 0
+                          ? $vuetify.theme.themes.light.secondary
+                          : $vuetify.theme.themes.light.greenDark8
+                      "
                     />
                   </v-btn>
                 </div>
@@ -322,9 +331,9 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import * as types from "@/store/types.js";
-import {SearchServices} from "@/services";
+import { SearchServices } from "@/services";
 import MinusIcon from "@/assets/AppIcons/minus.vue";
 import AddIcon from "@/assets/AppIcons/add.vue";
 
@@ -457,36 +466,115 @@ export default {
     filterPrice() {},
     addCounter(filterSlug, filterIndex) {
       this.filterPanelSettings[filterIndex].count++;
-      this.filterCounter(filterSlug, this.filterPanelSettings[filterIndex].count)
+      this.filterCounter(
+        filterSlug,
+        this.filterPanelSettings[filterIndex].count
+      );
     },
     minusCounter(filterSlug, filterIndex) {
       if (this.filterPanelSettings[filterIndex].count > 0) {
         this.filterPanelSettings[filterIndex].count--;
+        this.filterCounter(
+          filterSlug,
+          this.filterPanelSettings[filterIndex].count
+        );
       }
     },
     addCounterList(filterSlug, filterIndex, item, itemIndex) {
       this.filterPanelSettings[filterIndex].ItemCounts[itemIndex].count++;
+      this.filterCounterList(
+        filterSlug,
+        item.id,
+        this.filterPanelSettings[filterIndex].ItemCounts[itemIndex].count
+      );
     },
     minusCounterList(filterSlug, filterIndex, item, itemIndex) {
-      if (this.filterPanelSettings[filterIndex].ItemCounts[itemIndex].count > 0) {
+      if (
+        this.filterPanelSettings[filterIndex].ItemCounts[itemIndex].count > 0
+      ) {
         this.filterPanelSettings[filterIndex].ItemCounts[itemIndex].count--;
+        this.filterCounterList(
+          filterSlug,
+          item.id,
+          this.filterPanelSettings[filterIndex].ItemCounts[itemIndex].count
+        );
       }
     },
     filterCounter(filterSlug, value) {
-      console.log(filterSlug)
+      console.log(filterSlug);
+      this.$nuxt.$loading.start();
+      console.log("Object.keys", Object.keys(this.$route.query));
       let data = {
         q: "tehran",
         page: 1,
         sort: "popular",
         [filterSlug]: value
-      }
+      };
       return SearchServices.searchResults(data).then(res => {
-        console.log(res.data)
+        this.$router.push({
+          query: { ...this.$route.query, [filterSlug]: value }
+        });
+        console.log(res.data);
         this.setSearchResult(res.data);
-      })
+        this.$nuxt.$loading.finish();
+      });
     },
-    filterCounterList(filter, option) {
-      console.log("filterTitle, checkBoxItem", filterTitle, checkBoxItem);
+    filterCounterList(filterSlug, itemId, itemCount) {
+      console.log("filterSlug, itemId &count", filterSlug, itemId, itemCount);
+      this.$nuxt.$loading.start();
+      let filterCounterListItems = [];
+      let routeQueryKeys = Object.keys(this.$route.query);
+      console.log("routeQueryKeys", routeQueryKeys);
+      for (
+        let routeQueryKeyIndex = 0;
+        routeQueryKeyIndex < routeQueryKeys.length;
+        routeQueryKeyIndex++
+      ) {
+        if (routeQueryKeys[routeQueryKeyIndex].includes(filterSlug)) {
+          console.log(
+            routeQueryKeys[routeQueryKeyIndex],
+            routeQueryKeys[routeQueryKeyIndex].length,
+            this.$route.query[routeQueryKeys[routeQueryKeyIndex]]
+          );
+          let previousItemId = parseInt(routeQueryKeys[routeQueryKeyIndex].substring(
+            filterSlug.length + 1,
+            routeQueryKeys[routeQueryKeyIndex].length - 1
+          ));
+          console.log(previousItemId);
+          if (previousItemId !== itemId) {
+            let previousItemCount = this.$route.query[
+              routeQueryKeys[routeQueryKeyIndex]
+            ];
+            filterCounterListItems.push({
+              id: previousItemId,
+              count: previousItemCount
+            });
+          }
+        }
+      }
+      filterCounterListItems.push({
+        id: itemId,
+        count: itemCount
+      });
+
+
+      let data = {
+        q: "tehran",
+        page: 1,
+        sort: "popular",
+        [filterSlug]: filterCounterListItems
+      };
+      return SearchServices.searchResults(data).then(res => {
+        console.log(res.data);
+        this.$router.push({
+          query: {
+            ...this.$route.query,
+            [`${filterSlug}[${itemId}]`]: itemCount
+          }
+        });
+        this.setSearchResult(res.data);
+        this.$nuxt.$loading.finish();
+      });
     },
     filterCheckBox(filterTitle, checkBoxItem) {
       console.log("filterTitle, checkBoxItem", filterTitle, checkBoxItem);
