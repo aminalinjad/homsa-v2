@@ -96,6 +96,7 @@
         <!-- pagination  -->
         <v-row class="paginationContainer justify-center mt-6">
           <v-pagination
+            v-if="getSearchResult.last_page > 1"
             @input="changePagination"
             v-model="currentPage"
             :total-visible="7"
@@ -135,7 +136,6 @@ export default {
       filterAdded: false,
       ifGridView: false,
       page: 1,
-      totalPages: 5,
       currentPage: Number(this.$route.query.page) || 1,
       settings: {
         suppressScrollY: false,
@@ -162,9 +162,6 @@ export default {
         }
       }
     }
-  },
-  created() {
-    this.totalPages = this.getSearchResult.last_page
   },
   methods: {
     ...mapActions({
