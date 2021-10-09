@@ -478,7 +478,7 @@ export default {
         q: "tehran",
         page: 1,
         sort: "popular",
-        filterSlug: value
+        [filterSlug]: value
       }
       return SearchServices.searchResults(data).then(res => {
         console.log(res.data)
