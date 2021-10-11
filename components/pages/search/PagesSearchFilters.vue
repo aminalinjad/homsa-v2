@@ -265,7 +265,7 @@
         </v-card>
       </div>
 
-      <!-- select -->
+      <!-- select / checkbox -->
       <div v-else-if="filter.type === 'list_checkbox'" class="mb-3">
         <v-expansion-panels
           flat
@@ -293,10 +293,7 @@
                   on-icon="$checkBoxActive"
                   class="mt-0 mb-n5 pa-0 checkBoxClass"
                   :label="item.name"
-                  v-model="
-                    filterPanelSettings[filterIndex].listCheckBoxValues[index]
-                      .value
-                  "
+                  v-model="filterPanelSettings[filterIndex].listCheckBoxValues[index].value"
                   @change="
                     filterCheckBox(
                       filter.slug,
@@ -320,41 +317,50 @@
           >
         </v-card>
         <div
-          v-for="(item, index) in filter.children"
-          :key="index"
+          v-for="(filterChild, filterChildIndex) in filter.children"
+          :key="filterChildIndex"
           class="mb-1"
           v-if="filterPanelSettings[filterIndex]"
         >
           <v-expansion-panels
             flat
-            v-model="filterPanelSettings[filterIndex][index].expand"
+            v-model="filterPanelSettings[filterIndex][filterChildIndex].expand"
           >
             <v-expansion-panel
               class="filterSelect"
-              :class="index === 0 ? 'rounded-0' : ''"
+              :class="filterChildIndex === 0 ? 'rounded-0' : ''"
             >
               <v-expansion-panel-header
                 class="px-4 navyDark--text font-regular-14"
-                >{{ item.name }}
+                >{{ filterChild.name }}
               </v-expansion-panel-header>
               <v-expansion-panel-content
                 class="mx-n2 "
                 :class="
-                  filterPanelSettings[filterIndex][index].expand === 0
+                  filterPanelSettings[filterIndex][filterChildIndex].expand === 0
                     ? 'mb-n3'
                     : ''
                 "
               >
                 <v-row
-                  v-for="(value, index) in item.children"
-                  :key="index"
+                  v-for="(filterChildItem, filterChildItemIndex) in filterChild.children"
+                  :key="filterChildItemIndex"
                   class="ma-0 mb-2 font-light-14"
                 >
+                  {{filterPanelSettings[filterIndex][filterChildIndex].listCheckBoxValues[filterChildItemIndex].value}}
                   <v-checkbox
                     off-icon="$checkBox"
                     on-icon="$checkBoxActive"
                     class="mt-0 mb-n5 pa-0 checkBoxClass"
-                    :label="value.name"
+                    :label="filterChildItem.name"
+                    v-model="filterPanelSettings[filterIndex][filterChildIndex].listCheckBoxValues[filterChildItemIndex].value"
+                    @change="
+                    filterCheckBox(
+                      filter.slug,
+                      filterChildItem.id,
+                      filterPanelSettings[filterIndex][filterChildIndex].listCheckBoxValues[filterChildItemIndex].value
+                    )
+                  "
                   ></v-checkbox>
                 </v-row>
               </v-expansion-panel-content>
@@ -382,7 +388,7 @@ export default {
   data() {
     return {
       filterPanelSettings: [],
-      data: [
+      dataHistogram: [
         20012,
         33012,
         35012,
@@ -475,7 +481,7 @@ export default {
             listItemIndex++
           ) {
             listCheckBoxValue.push({
-              value: false
+              value: this.$route.query[`${this.filters[filterIndex].slug}[${this.filters[filterIndex].children[listItemIndex].id}]`] ? true : false
             });
           }
           this.filterPanelSettings.push({
@@ -484,13 +490,21 @@ export default {
           });
         } else if (this.filters[filterIndex].type === "list") {
           let openGroupExpansionPanels = [];
+          let listCheckBoxValue = [];
           for (
             let listItemIndex = 0;
             listItemIndex < this.filters[filterIndex].children.length;
             listItemIndex++
           ) {
+            for(let listItemChildIndex = 0; listItemChildIndex < this.filters[filterIndex].children[listItemIndex].children.length; listItemChildIndex++) {
+              console.log('bbnm chi log migiram', `${this.filters[filterIndex].slug}[${this.filters[filterIndex].children[listItemIndex].children[listItemChildIndex].id}]`, this.$route.query)
+              listCheckBoxValue.push({
+                value: this.$route.query[`${this.filters[filterIndex].slug}[${this.filters[filterIndex].children[listItemIndex].children[listItemChildIndex].id}]`] ? true : false
+              });
+            }
             openGroupExpansionPanels.push({
-              expand: 0
+              expand: 0,
+              listCheckBoxValues: listCheckBoxValue
             });
           }
           this.filterPanelSettings.push(openGroupExpansionPanels);
@@ -657,82 +671,72 @@ export default {
       });
     },
     filterCheckBox(filterSlug, checkBoxItemId, checkBoxValue) {
-      console.log(
-        "filterSlug, checkBoxItemId  checkBoxValue",
-        filterSlug,
-        checkBoxItemId,
-        checkBoxValue
-      );
-      // this.$nuxt.$loading.start();
+      console.log('check the value',filterSlug, checkBoxItemId, checkBoxValue)
+      this.$nuxt.$loading.start();
       let data = {
         q: "tehran",
         page: 1,
         sort: "popular"
       };
       let filterCheckBoxItems = [];
+
+      // if the value is true so the item should be add in array for adding to data later
+      if(checkBoxValue) {
+        filterCheckBoxItems.push(checkBoxItemId);
+      }
+
+      // get add queries
       let routeQueryKeys = Object.keys(this.$route.query);
-      let currentCheckBoxItemIndex = null;
-      for (
-        let routeQueryKeyIndex = 0;
-        routeQueryKeyIndex < routeQueryKeys.length;
-        routeQueryKeyIndex++
-      ) {
-        if (routeQueryKeys[routeQueryKeyIndex].includes(filterSlug)) {
-          // filterCheckBoxItems.push({
-          //   itemSlug: routeQueryKeys[routeQueryKeyIndex],
-          //   itemId: this.$route.query[routeQueryKeys[routeQueryKeyIndex]]
-          // });
-          // filterCheckBoxItems.push(this.$route.query[routeQueryKeys[routeQueryKeyIndex]]);
-          // console.log("sahar", filterCheckBoxItems);
+      if(routeQueryKeys.length > 0) {
+        for (
+          let routeQueryKeyIndex = 0;
+          routeQueryKeyIndex < routeQueryKeys.length;
+          routeQueryKeyIndex++
+        ) {
+          let routeQueryValue = parseInt(this.$route.query[routeQueryKeys[routeQueryKeyIndex]]);
 
-          console.log('here in equal', parseInt(this.$route.query[routeQueryKeys[routeQueryKeyIndex]]) ===
-            checkBoxItemId , this.$route.query[routeQueryKeys[routeQueryKeyIndex]] , checkBoxItemId )
-          if (
-            parseInt(this.$route.query[routeQueryKeys[routeQueryKeyIndex]]) ===
-            checkBoxItemId
-          ) {
-            currentCheckBoxItemIndex = parseInt(
-              routeQueryKeys[routeQueryKeyIndex].substring(
-                filterSlug.length + 1,
-                routeQueryKeys[routeQueryKeyIndex].length - 1
-              )
-            );
+          // check if this filter slug exist in queries
+          if (routeQueryKeys[routeQueryKeyIndex].includes(filterSlug)) {
 
-            // filterCheckBoxItems.push(checkBoxItemId);
-            filterCheckBoxItems.splice(filterCheckBoxItems.indexOf(checkBoxItemId), 1);
+            // check if this selected item in this filter added before, It should be removed from query
+            if (
+              routeQueryValue ===
+              checkBoxItemId
+            ) {
+              this.$router.push({
+                query: {
+                  ...this.$route.query,
+                  [routeQueryKeys[routeQueryKeyIndex]]: undefined
+                }
+              });
 
-            // data[filterSlug] = filterCheckBoxItems;
+            } else {
+              // add other previous item of this filter to array
+              if(routeQueryValue) {
+                filterCheckBoxItems.push(routeQueryValue);
+              }
+            }
           } else {
-            // data[routeQueryKeys[routeQueryKeyIndex]] = this.$route.query[
-            //   routeQueryKeys[routeQueryKeyIndex]
-            // ];
-            filterCheckBoxItems.push(parseInt(this.$route.query[routeQueryKeys[routeQueryKeyIndex]]));
-            // console.log("hey you ", data[filterSlug]);
+            // this filter slug does not exist in queries before
+            filterCheckBoxItems.push(checkBoxItemId);
           }
-        } else {
-          filterCheckBoxItems.push(checkBoxItemId);
-
         }
       }
-      if(filterCheckBoxItems.length === 0) {
-        filterCheckBoxItems.push(checkBoxItemId);
 
-
-      }
-      data[filterSlug] = filterCheckBoxItems;
-      if (currentCheckBoxItemIndex === null) {
-        currentCheckBoxItemIndex = filterCheckBoxItems.length;
+      // check if this filter item array is not empty, so add it to data
+      if(filterCheckBoxItems.length > 0) {
+        data[filterSlug] = filterCheckBoxItems;
       }
 
-      console.log("data is here", data);
       return SearchServices.searchResults(data).then(res => {
-        this.$router.push({
-          query: {
-            ...this.$route.query,
-            [`${filterSlug}[${currentCheckBoxItemIndex}]`]: checkBoxItemId
-          }
-        });
-        console.log(res.data);
+        if(checkBoxValue) {
+          this.$router.push({
+            query: {
+              ...this.$route.query,
+              [`${filterSlug}[${checkBoxItemId}]`]: checkBoxItemId
+            }
+          });
+        }
         this.setSearchResult(res.data);
         this.$nuxt.$loading.finish();
       });
