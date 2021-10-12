@@ -51,7 +51,6 @@ export default {
     };
   },
   asyncData({params, app, store , route}) {
-    let result
     let data = {
       // "Accept-Language": "fa",
       q: "اجاره ویلا استخردار رامسر",

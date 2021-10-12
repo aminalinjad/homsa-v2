@@ -91,7 +91,7 @@
       <!-- Top Sec End -->
 
       <!-- Result Sec Start -->
-      <v-row class="ma-0">
+      <v-row v-if="getSearchResult.data.length !== 0" class="ma-0">
         <v-col
           cols="12"
           :md="ifGridView ? 4 : 12"
@@ -109,6 +109,11 @@
           <PagesSearchResultItem :place="result" :ifGridView="ifGridView" :index="index"/>
 
         </v-col>
+      </v-row>
+
+      <v-row style="min-height: 400px" v-else class="text-center justify-center align-content-center align-center fill-height flex-column">
+        <v-icon size="126">$noResults</v-icon>
+        <div class="font-regular-14 secondary--text>">اقامتگاهی یافت نشد!</div>
       </v-row>
       <!-- Result Sec End -->
     </div>

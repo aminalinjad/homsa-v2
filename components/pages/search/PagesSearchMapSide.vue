@@ -79,8 +79,8 @@
       scrollYMarginOffset="20"
     >
       <PagesSearchFilters v-if="isFilter"/>
-      <v-card flat class="rounded-0" v-else>
-        <v-row class="ma-0">
+      <v-card flat class="rounded-0 fill-height" v-else>
+        <v-row v-if="getSearchResult.data.length !== 0" class="ma-0">
           <v-col
             cols="12"
             v-for="(result, index) in getSearchResult.data"
@@ -91,6 +91,10 @@
           >
             <PagesSearchResultItemMap :place="result" :index="index"/>
           </v-col>
+        </v-row>
+        <v-row v-else class="text-center justify-center align-content-center align-center fill-height flex-column">
+          <v-icon size="126">$noResults</v-icon>
+          <div class="font-regular-14 secondary--text>">اقامتگاهی یافت نشد!</div>
         </v-row>
 
         <!-- pagination  -->

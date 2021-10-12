@@ -28,6 +28,7 @@ import usersProfile from "@/assets/AppIcons/usersProfile";
 import calendar from "@/assets/AppIcons/calendar";
 import arrowLineDark from "@/assets/AppIcons/arrowLineDark";
 import arrowLineDarkRight from "@/assets/AppIcons/arrowLineDarkRight";
+import noResults from "@/assets/AppIcons/noResults";
 
 
 const CustomIcons = {
@@ -120,6 +121,9 @@ const CustomIcons = {
   },
   arrowLineDarkRight: {
     component: arrowLineDarkRight
+  },
+  noResults: {
+    component: noResults
   }
 };
 
