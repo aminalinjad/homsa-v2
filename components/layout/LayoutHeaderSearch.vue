@@ -104,10 +104,10 @@
 
                 <div class="px-3">
                   <span
-                    v-if="searchFormValue.count"
+                    v-if="searchFormValue.guest"
                     :class="$i18n.locale === 'fa' ? 'font-FaNummedium-14' : ''"
                   >
-                    {{ searchFormValue.count }}
+                    {{ searchFormValue.guest }}
                     {{ $t("header.top.input.unit") }}
                   </span>
                   <span class="font-regular-14 secondary--text" v-else>{{
@@ -512,7 +512,7 @@ export default {
         checkIn: "12/08",
         checkOut: "12/31",
         flexibility: 1,
-        count: 1
+        guest: 1
       },
       suggestionsDefault: [],
       suggestion: true,

@@ -3,7 +3,7 @@
     <!-- Top Section Start  -->
     <v-row class="mb-3 align-center">
       <v-col lg="7">
-        <PagesSearchResultTitle />
+        <PagesSearchResultTitle/>
       </v-col>
       <v-col lg="5">
         <div class="d-flex align-center justify-end">
@@ -82,7 +82,7 @@
           </v-col>
           <v-col cols="11" class="pa-0">
             <div>
-              <AppItemCarousel />
+              <AppItemCarousel/>
             </div>
           </v-col>
         </v-row>
@@ -91,7 +91,7 @@
       <!-- Top Sec End -->
 
       <!-- Result Sec Start -->
-      <v-row class="ma-0">
+      <v-row v-if="getSearchResult.data.length !== 0" class="ma-0">
         <v-col
           cols="12"
           :md="ifGridView ? 4 : 12"
@@ -106,27 +106,33 @@
         >
           <!-- item component -->
 
-            <PagesSearchResultItem :place="result" :ifGridView="ifGridView" :index="index" />
+          <PagesSearchResultItem :place="result" :ifGridView="ifGridView" :index="index"/>
 
         </v-col>
+      </v-row>
+
+      <v-row style="min-height: 400px" v-else class="text-center justify-center align-content-center align-center fill-height flex-column">
+        <v-icon size="126">$noResults</v-icon>
+        <div class="font-regular-14 secondary--text>">اقامتگاهی یافت نشد!</div>
       </v-row>
       <!-- Result Sec End -->
     </div>
     <!-- Main Section End  -->
 
     <!-- Bottom Section Start  -->
-    <v-row  class="paginationContainer justify-center mt-6">
+    <v-row class="paginationContainer justify-center mt-6">
       <v-pagination
+        v-if="getSearchResult.last_page > 1"
         @input="changePagination()"
         v-model="currentPage"
         class="paginationWidth46"
         :total-visible="7"
-        :length="totalPages"
+        :length="getSearchResult.last_page"
         :class="[$i18n.locale == 'fa' ? 'farsiFontPagination' : '',]"
       ></v-pagination>
     </v-row>
 
-    <PagesSearchRelatedSearch />
+    <PagesSearchRelatedSearch/>
     <!-- Bottom Section End  -->
   </v-container>
 </template>
@@ -146,17 +152,27 @@ export default {
   data() {
     return {
       page: 1,
-      totalPages: 5,
       currentPage: Number(this.$route.query.page) || 1,
       gridViewResult: true,
       sortByDefault: "popular",
       sortBy: [
-        { text: 'بهترین تجربه', value: 'popular' },
-        { text: 'ارزان ترین', value: 'cheapest' },
-        { text: 'گران ترین', value: 'priciest' },
-        { text: 'تخفیف دار', value: 'discount' },
+        {text: 'بهترین تجربه', value: 'popular'},
+        {text: 'ارزان ترین', value: 'cheapest'},
+        {text: 'گران ترین', value: 'priciest'},
+        {text: 'تخفیف دار', value: 'discount'},
       ],
     };
+  },
+  watch: {
+    getSearchResult: {
+      immediate: false,
+      deep: true,
+      handler(newValue) {
+        if (newValue) {
+          this.currentPage = newValue.current_page
+        }
+      }
+    }
   },
   computed: {
     ...mapGetters({
@@ -170,9 +186,6 @@ export default {
       }
     },
   },
-  created() {
-    this.totalPages = this.getSearchResult.last_page
-  },
   methods: {
     ...mapActions({
       setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
@@ -180,7 +193,7 @@ export default {
     changeTheSortSelect() {
       setTimeout(() => {
         this.$nuxt.$loading.start()
-      } , 1)
+      }, 1)
 
       this.$router.push({query: {...this.$route.query, sort: this.sortByDefault}})
       let data = {
@@ -196,7 +209,7 @@ export default {
     changePagination() {
       setTimeout(() => {
         this.$nuxt.$loading.start()
-      } , 1)
+      }, 1)
 
       let qs = {}
       if (this.currentPage > 1) qs.page = this.currentPage
@@ -230,6 +243,7 @@ export default {
 .sortByInput {
   width: 134px;
 }
+
 .resultBorder {
   border-bottom: var(--v-greyLight4-base) solid 1px;
 }

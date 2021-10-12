@@ -79,8 +79,8 @@
       scrollYMarginOffset="20"
     >
       <PagesSearchFilters v-if="isFilter"/>
-      <v-card flat class="rounded-0" v-else>
-        <v-row class="ma-0">
+      <v-card flat class="rounded-0 fill-height" v-else>
+        <v-row v-if="getSearchResult.data.length !== 0" class="ma-0">
           <v-col
             cols="12"
             v-for="(result, index) in getSearchResult.data"
@@ -92,10 +92,15 @@
             <PagesSearchResultItemMap :place="result" :index="index"/>
           </v-col>
         </v-row>
+        <v-row v-else class="text-center justify-center align-content-center align-center fill-height flex-column">
+          <v-icon size="126">$noResults</v-icon>
+          <div class="font-regular-14 secondary--text>">اقامتگاهی یافت نشد!</div>
+        </v-row>
 
         <!-- pagination  -->
         <v-row class="paginationContainer justify-center mt-6">
           <v-pagination
+            v-if="getSearchResult.last_page > 1"
             @input="changePagination"
             v-model="currentPage"
             :total-visible="7"
@@ -135,7 +140,6 @@ export default {
       filterAdded: false,
       ifGridView: false,
       page: 1,
-      totalPages: 5,
       currentPage: Number(this.$route.query.page) || 1,
       settings: {
         suppressScrollY: false,
@@ -162,9 +166,6 @@ export default {
         }
       }
     }
-  },
-  created() {
-    this.totalPages = this.getSearchResult.last_page
   },
   methods: {
     ...mapActions({
