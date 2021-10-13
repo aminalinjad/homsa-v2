@@ -50,7 +50,7 @@
             >
               <div
                 class="d-flex justify-space-between align-center"
-                v-if="!searchResult"
+                v-if="!searchFormValue.destination"
               >
                 <div
                   class="
@@ -484,7 +484,6 @@ export default {
       checkOutDate: null,
       fixedHeader: false,
       searchSection: false,
-      searchResult: false,
       overlay: false,
       minusCountDisable: true,
       userMenu: {
@@ -554,7 +553,6 @@ export default {
     closeSearchSection() {
       this.searchSection = !this.searchSection;
       this.calendar = false;
-      this.searchResult = !this.searchResult;
       this.overlay = !this.overlay;
     },
     SearchServices() {
