@@ -396,6 +396,11 @@ export default {
     return {
       filterPanelSettings: [],
       filterTypes: [],
+      data: {
+        q: "tehran",
+        page: 1,
+        sort: "popular"
+      },
       dataHistogram: [
         20012,
         33012,
@@ -439,18 +444,6 @@ export default {
           return histogramArray;
         }
       }
-    },
-    setDataFromUrlQueries() {
-      let routeQueries = this.$route.query;
-      let filterTypes = this.filterTypes;
-      for(let[routeQueryKey, routeQueryValue] of Object.entries(routeQueries)) {
-        for(let filterTypeIndex; filterTypeIndex < filterTypes.length; filterTypeIndex ++ ) {
-          if(routeQueryKey.includes(filterTypes[filterTypeIndex].slug)) {
-            console.log('sahar nasri',routeQueryKey, filterTypes[filterTypeIndex].slug, filterTypes[filterTypeIndex].type)
-          }
-        }
-      }
-      return this.$route.query;
     }
   },
   mounted() {
@@ -472,11 +465,13 @@ export default {
         this.filterTypes.push({
           slug: filters[filterIndex].slug,
           type: filters[filterIndex].type
-        })
+        });
         if (filters[filterIndex].type === "counter") {
           this.filterPanelSettings.push({
             expand: 0,
-            count: this.$route.query[this.filters[filterIndex].slug] ? this.$route.query[this.filters[filterIndex].slug] : 0
+            count: this.$route.query[this.filters[filterIndex].slug]
+              ? this.$route.query[this.filters[filterIndex].slug]
+              : 0
           });
         } else if (filters[filterIndex].type === "list_counter") {
           let listCounterItemCounts = [];
@@ -502,7 +497,9 @@ export default {
         } else if (this.filters[filterIndex].type === "switch") {
           this.filterPanelSettings.push({
             expand: 0,
-            value: this.$route.query[this.filters[filterIndex].slug] ? this.$route.query[this.filters[filterIndex].slug] : false
+            value: this.$route.query[this.filters[filterIndex].slug]
+              ? this.$route.query[this.filters[filterIndex].slug]
+              : false
           });
         } else if (this.filters[filterIndex].type === "list_checkbox") {
           let listCheckBoxValue = [];
@@ -514,7 +511,7 @@ export default {
             listCheckBoxValue.push({
               value: !!this.$route.query[
                 `${this.filters[filterIndex].slug}[${this.filters[filterIndex].children[listItemIndex].id}]`
-                ]
+              ]
             });
           }
           this.filterPanelSettings.push({
@@ -538,7 +535,7 @@ export default {
               listCheckBoxValue.push({
                 value: !!this.$route.query[
                   `${this.filters[filterIndex].slug}[${this.filters[filterIndex].children[listItemIndex].children[listItemChildIndex].id}]`
-                  ]
+                ]
               });
             }
             openGroupExpansionPanels.push({
@@ -553,6 +550,72 @@ export default {
           });
         }
       }
+    },
+    setDataFromUrlQueries() {
+      let routeQueries = this.$route.query;
+      let filterTypes = this.filterTypes;
+
+      filterTypes.forEach((filterType, filterTypeIndex) => {
+        if (filterType.type === "counter") {
+          for (let [routeQueryKey, routeQueryValue] of Object.entries(
+            routeQueries
+          )) {
+            if (routeQueryKey.includes(filterType.slug)) {
+              this.data[filterType.slug] = routeQueryValue
+                ? parseInt(routeQueryValue)
+                : 0;
+            }
+          }
+        } else if (filterTypes[filterTypeIndex].type === "list_counter") {
+          let filterListCounterItems = [];
+          for (let [routeQueryKey, routeQueryValue] of Object.entries(
+            routeQueries
+          )) {
+            if (routeQueryKey.includes(filterType.slug)) {
+              let routeQueryId = parseInt(
+                routeQueryKey.substring(
+                  filterType.slug.length + 1,
+                  routeQueryKey.length - 1
+                )
+              );
+              filterListCounterItems.push({
+                id: routeQueryId,
+                count: routeQueryValue ? parseInt(routeQueryValue) : 0
+              });
+            }
+          }
+
+          if (filterListCounterItems.length > 0) {
+            this.data[filterType.slug] = filterListCounterItems;
+          }
+        } else if (filterTypes[filterTypeIndex].type === "switch") {
+          for (let [routeQueryKey, routeQueryValue] of Object.entries(
+            routeQueries
+          )) {
+            if (routeQueryKey.includes(filterType.slug)) {
+              this.data[filterType.slug] = routeQueryValue === "true";
+            }
+          }
+        } else if (
+          filterTypes[filterTypeIndex].type === "list" ||
+          filterTypes[filterTypeIndex].type === "list_checkbox"
+        ) {
+          let filterCheckBoxItems = [];
+          for (let [routeQueryKey, routeQueryValue] of Object.entries(
+            routeQueries
+          )) {
+            if (routeQueryKey.includes(filterType.slug)) {
+              if (routeQueryValue) {
+                filterCheckBoxItems.push(parseInt(routeQueryValue));
+              }
+            }
+          }
+          if (filterCheckBoxItems.length > 0) {
+            this.data[filterType.slug] = filterCheckBoxItems;
+          }
+          console.log(this.data);
+        }
+      });
     },
     inputRange() {
       if (this.rangeSliderFrom && this.rangeSliderTo) {
@@ -610,14 +673,10 @@ export default {
       }
     },
     filterCounter(filterSlug, count) {
+      this.setDataFromUrlQueries();
       this.$nuxt.$loading.start();
-      let data = {
-        q: "tehran",
-        page: 1,
-        sort: "popular",
-        [filterSlug]: count
-      };
-      return SearchServices.searchResults(data).then(res => {
+      this.data[filterSlug] = count
+      return SearchServices.searchResults(this.data).then(res => {
         if (count > 0) {
           this.$router.push({
             query: { ...this.$route.query, [filterSlug]: count }
@@ -690,14 +749,10 @@ export default {
       });
     },
     filterSwitch(filterSlug, switchValue) {
+      this.setDataFromUrlQueries();
       this.$nuxt.$loading.start();
-      let data = {
-        q: "tehran",
-        page: 1,
-        sort: "popular"
-      };
-      data[filterSlug] = switchValue;
-      return SearchServices.searchResults(data).then(res => {
+      this.data[filterSlug] = switchValue;
+      return SearchServices.searchResults(this.data).then(res => {
         if (switchValue) {
           this.$router.push({
             query: { ...this.$route.query, [filterSlug]: switchValue }
@@ -713,59 +768,76 @@ export default {
       });
     },
     filterCheckBox(filterSlug, checkBoxItemId, checkBoxValue) {
+      this.setDataFromUrlQueries();
+      if (!checkBoxValue) {
+        this.$router.push({
+          query: {
+            ...this.$route.query,
+            [`${filterSlug}[${checkBoxItemId}]`]: undefined
+          }
+        });
+        console.log('check fdefdfdfdfdf',this.data[filterSlug], this.data[filterSlug].indexOf(checkBoxItemId))
+        this.data[filterSlug].splice(this.data[filterSlug].indexOf(checkBoxItemId),1);
+        console.log('s',this.data[filterSlug])
+      }
       this.$nuxt.$loading.start();
-      let data = {
-        q: "tehran",
-        page: 1,
-        sort: "popular"
-      };
-      let filterCheckBoxItems = [];
+      // let data = {
+      //   q: "tehran",
+      //   page: 1,
+      //   sort: "popular"
+      // };
+      // let filterCheckBoxItems = [];
 
       // if the value is true so the item should be add in array for adding to data later
       if (checkBoxValue) {
-        filterCheckBoxItems.push(checkBoxItemId);
-      }
-
-      // get all queries
-      let routeQueryKeys = Object.keys(this.$route.query);
-      if (routeQueryKeys.length > 0) {
-        for (
-          let routeQueryKeyIndex = 0;
-          routeQueryKeyIndex < routeQueryKeys.length;
-          routeQueryKeyIndex++
-        ) {
-          let routeQueryValue = parseInt(
-            this.$route.query[routeQueryKeys[routeQueryKeyIndex]]
-          );
-          // check if this filter slug exist in queries
-          if (routeQueryKeys[routeQueryKeyIndex].includes(filterSlug)) {
-            // check if this selected item in this filter added before, It should be removed from query
-            if (routeQueryValue === checkBoxItemId) {
-              this.$router.push({
-                query: {
-                  ...this.$route.query,
-                  [routeQueryKeys[routeQueryKeyIndex]]: undefined
-                }
-              });
-            } else {
-              // add other previous item of this filter to array
-              if (routeQueryValue) {
-                filterCheckBoxItems.push(routeQueryValue);
-              }
-            }
-          } else {
-            // this filter slug does not exist in queries before
-            filterCheckBoxItems.push(checkBoxItemId);
-          }
+        // filterCheckBoxItems.push(checkBoxItemId);
+        if (this.data[filterSlug]) {
+          this.data[filterSlug].push(checkBoxItemId);
+        } else {
+          this.data[filterSlug] = [checkBoxItemId];
         }
       }
 
-      // check if this filter item array is not empty, so add it to data
-      if (filterCheckBoxItems.length > 0) {
-        data[filterSlug] = filterCheckBoxItems;
-      }
+      // get all queries
+      // let routeQueryKeys = Object.keys(this.$route.query);
+      // if (routeQueryKeys.length > 0) {
+      //   for (
+      //     let routeQueryKeyIndex = 0;
+      //     routeQueryKeyIndex < routeQueryKeys.length;
+      //     routeQueryKeyIndex++
+      //   ) {
+      //     let routeQueryValue = parseInt(
+      //       this.$route.query[routeQueryKeys[routeQueryKeyIndex]]
+      //     );
+      //     // check if this filter slug exist in queries
+      //     if (routeQueryKeys[routeQueryKeyIndex].includes(filterSlug)) {
+      //       // check if this selected item in this filter added before, It should be removed from query
+      //       if (routeQueryValue === checkBoxItemId) {
+      //         this.$router.push({
+      //           query: {
+      //             ...this.$route.query,
+      //             [routeQueryKeys[routeQueryKeyIndex]]: undefined
+      //           }
+      //         });
+      //       } else {
+      //         // add other previous item of this filter to array
+      //         if (routeQueryValue) {
+      //           filterCheckBoxItems.push(routeQueryValue);
+      //         }
+      //       }
+      //     } else {
+      //       // this filter slug does not exist in queries before
+      //       filterCheckBoxItems.push(checkBoxItemId);
+      //     }
+      //   }
+      // }
+      //
+      // // check if this filter item array is not empty, so add it to data
+      // if (filterCheckBoxItems.length > 0) {
+      //   data[filterSlug] = filterCheckBoxItems;
+      // }
 
-      return SearchServices.searchResults(data).then(res => {
+      return SearchServices.searchResults(this.data).then(res => {
         if (checkBoxValue) {
           this.$router.push({
             query: {
