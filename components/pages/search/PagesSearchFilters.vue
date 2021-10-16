@@ -578,13 +578,14 @@ export default {
                   routeQueryKey.length - 1
                 )
               );
-              filterListCounterItems.push({
-                id: routeQueryId,
-                count: routeQueryValue ? parseInt(routeQueryValue) : 0
-              });
+              if(routeQueryValue) {
+                filterListCounterItems.push({
+                  id: routeQueryId,
+                  count: parseInt(routeQueryValue)
+                });
+              }
             }
           }
-
           if (filterListCounterItems.length > 0) {
             this.data[filterType.slug] = filterListCounterItems;
           }
@@ -613,7 +614,6 @@ export default {
           if (filterCheckBoxItems.length > 0) {
             this.data[filterType.slug] = filterCheckBoxItems;
           }
-          console.log(this.data);
         }
       });
     },
@@ -673,8 +673,8 @@ export default {
       }
     },
     filterCounter(filterSlug, count) {
-      this.setDataFromUrlQueries();
       this.$nuxt.$loading.start();
+      this.setDataFromUrlQueries();
       this.data[filterSlug] = count
       return SearchServices.searchResults(this.data).then(res => {
         if (count > 0) {
@@ -691,56 +691,50 @@ export default {
       });
     },
     filterCounterList(filterSlug, itemId, itemCount) {
-      this.$nuxt.$loading.start();
-      let filterCounterListItems = [];
-      let routeQueryKeys = Object.keys(this.$route.query);
-      for (
-        let routeQueryKeyIndex = 0;
-        routeQueryKeyIndex < routeQueryKeys.length;
-        routeQueryKeyIndex++
-      ) {
-        if (routeQueryKeys[routeQueryKeyIndex].includes(filterSlug)) {
-          let previousItemId = parseInt(
-            routeQueryKeys[routeQueryKeyIndex].substring(
-              filterSlug.length + 1,
-              routeQueryKeys[routeQueryKeyIndex].length - 1
-            )
-          );
-          if (previousItemId !== itemId) {
-            let previousItemCount = this.$route.query[
-              routeQueryKeys[routeQueryKeyIndex]
-            ];
-            filterCounterListItems.push({
-              id: previousItemId,
-              count: previousItemCount
+      setTimeout(() => {
+        this.$nuxt.$loading.start();
+      } , 1);
+      this.setDataFromUrlQueries();
+      if (itemCount > 0) {
+        if (this.data[filterSlug]) {
+          let selectedItemExist = false;
+          this.data[filterSlug].forEach((item, itemIndex) => {
+            if( item.id === itemId) {
+              selectedItemExist = true;
+              this.data[filterSlug][itemIndex].count = itemCount;
+            }
+          });
+          if(!selectedItemExist) {
+            this.data[filterSlug].push({
+              id: itemId,
+              count: itemCount
             });
           }
+        } else {
+          this.data[filterSlug] = [{
+            id: itemId,
+            count: itemCount
+          }];
         }
+      } else {
+        this.$router.push({
+          query: {
+            ...this.$route.query,
+            [`${filterSlug}[${itemId}]`]: undefined
+          }
+        });
+        this.data[filterSlug].forEach((item, itemIndex) => {
+          if( item.id === itemId) {
+            this.data[filterSlug].splice(itemIndex,1);
+          }
+        });
       }
-      filterCounterListItems.push({
-        id: itemId,
-        count: itemCount
-      });
-
-      let data = {
-        q: "tehran",
-        page: 1,
-        sort: "popular",
-        [filterSlug]: filterCounterListItems
-      };
-      return SearchServices.searchResults(data).then(res => {
+      return SearchServices.searchResults(this.data).then(res => {
         if (itemCount > 0) {
           this.$router.push({
             query: {
               ...this.$route.query,
               [`${filterSlug}[${itemId}]`]: itemCount
-            }
-          });
-        } else {
-          this.$router.push({
-            query: {
-              ...this.$route.query,
-              [`${filterSlug}[${itemId}]`]: undefined
             }
           });
         }
@@ -749,8 +743,8 @@ export default {
       });
     },
     filterSwitch(filterSlug, switchValue) {
-      this.setDataFromUrlQueries();
       this.$nuxt.$loading.start();
+      this.setDataFromUrlQueries();
       this.data[filterSlug] = switchValue;
       return SearchServices.searchResults(this.data).then(res => {
         if (switchValue) {
@@ -768,6 +762,9 @@ export default {
       });
     },
     filterCheckBox(filterSlug, checkBoxItemId, checkBoxValue) {
+      setTimeout(() => {
+        this.$nuxt.$loading.start();
+      } , 1);
       this.setDataFromUrlQueries();
       if (!checkBoxValue) {
         this.$router.push({
@@ -776,66 +773,15 @@ export default {
             [`${filterSlug}[${checkBoxItemId}]`]: undefined
           }
         });
-        console.log('check fdefdfdfdfdf',this.data[filterSlug], this.data[filterSlug].indexOf(checkBoxItemId))
         this.data[filterSlug].splice(this.data[filterSlug].indexOf(checkBoxItemId),1);
-        console.log('s',this.data[filterSlug])
-      }
-      this.$nuxt.$loading.start();
-      // let data = {
-      //   q: "tehran",
-      //   page: 1,
-      //   sort: "popular"
-      // };
-      // let filterCheckBoxItems = [];
-
-      // if the value is true so the item should be add in array for adding to data later
-      if (checkBoxValue) {
-        // filterCheckBoxItems.push(checkBoxItemId);
+      } else {
+        // if the value is true so the item should be add in array for adding to data
         if (this.data[filterSlug]) {
           this.data[filterSlug].push(checkBoxItemId);
         } else {
           this.data[filterSlug] = [checkBoxItemId];
         }
       }
-
-      // get all queries
-      // let routeQueryKeys = Object.keys(this.$route.query);
-      // if (routeQueryKeys.length > 0) {
-      //   for (
-      //     let routeQueryKeyIndex = 0;
-      //     routeQueryKeyIndex < routeQueryKeys.length;
-      //     routeQueryKeyIndex++
-      //   ) {
-      //     let routeQueryValue = parseInt(
-      //       this.$route.query[routeQueryKeys[routeQueryKeyIndex]]
-      //     );
-      //     // check if this filter slug exist in queries
-      //     if (routeQueryKeys[routeQueryKeyIndex].includes(filterSlug)) {
-      //       // check if this selected item in this filter added before, It should be removed from query
-      //       if (routeQueryValue === checkBoxItemId) {
-      //         this.$router.push({
-      //           query: {
-      //             ...this.$route.query,
-      //             [routeQueryKeys[routeQueryKeyIndex]]: undefined
-      //           }
-      //         });
-      //       } else {
-      //         // add other previous item of this filter to array
-      //         if (routeQueryValue) {
-      //           filterCheckBoxItems.push(routeQueryValue);
-      //         }
-      //       }
-      //     } else {
-      //       // this filter slug does not exist in queries before
-      //       filterCheckBoxItems.push(checkBoxItemId);
-      //     }
-      //   }
-      // }
-      //
-      // // check if this filter item array is not empty, so add it to data
-      // if (filterCheckBoxItems.length > 0) {
-      //   data[filterSlug] = filterCheckBoxItems;
-      // }
 
       return SearchServices.searchResults(this.data).then(res => {
         if (checkBoxValue) {
