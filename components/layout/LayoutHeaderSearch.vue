@@ -561,7 +561,7 @@ export default {
       this.$nuxt.$loading.start()
       let data = {
         page: 1,
-        sort: this.$route.query.sort ? this.$route.query.sort: 'popular',
+        sort: this.$route.query.sort ? this.$route.query.sort : 'popular',
         guest: this.searchForm.guest,
       }
       if (this.searchForm.checkIn) {
@@ -570,20 +570,27 @@ export default {
       if (this.searchForm.checkOut) {
         data.checkout = this.searchForm.checkOut
       }
-        console.log(this.searchForm.destination)
+      console.log(this.searchForm.destination)
       if (this.searchForm.destination && this.searchForm.destination.type) {
         data.slugs = [{
           value: this.searchForm.destination.slug,
           type: this.searchForm.destination.type
         }]
+        this.$router.push({
+          path: `${this.searchForm.destination.type}-${this.searchForm.destination.slug}`,
+          query: {...this.$route.query, guest: this.searchForm.guest}
+        })
       } else {
         data.q = this.userDestinationSearch
+        this.$router.push({
+          path: 'search',
+          query: {...this.$route.query, guest: this.searchForm.guest, q: data.q}
+        })
       }
       console.log(data)
       this.searchFormValue.destination = this.userDestinationSearch
       this.searchFormValue.guest = this.searchForm.guest
       SearchServices.searchResults(data).then(res => {
-        this.$router.push({query: {...this.$route.query, guest: this.searchForm.guest , q: data.q}})
         this.$nuxt.$loading.finish()
         console.log(res.data)
         this.setSearchResult(res.data)
