@@ -9,7 +9,7 @@
         <PagesSearchMapThumbnail />
       </div>
       <!-- price -->
-      <div v-if="filter.type === 'price'" class="mb-3">
+      <div v-if="filter.type === 'price_range'" class="mb-3">
         <v-card flat class="rounded-lg py-3 px-5 histogramSectionCard">
           <div id="histogramSection">
             <div>
@@ -41,14 +41,44 @@
                   :barGap="1"
                   :barRadius="0"
                   :histSliderGap="0"
-                  :min="filter.min"
-                  :max="filter.max"
+                  :min="filter.min_price"
+                  :max="filter.max_price"
                   :step="filter.step"
                   :data="histogramData"
                   :clip="false"
                   class="histogramStyle"
                   @finish="selectRange"
                 />
+<!--                <HistogramSlider-->
+<!--                  :width="histogramWidth"-->
+<!--                  :hideFromTo="true"-->
+<!--                  :dragInterval="true"-->
+<!--                  :grid="false"-->
+<!--                  :bar-height="26"-->
+<!--                  primaryColor="#3591384D"-->
+<!--                  holderColor="#35913826"-->
+<!--                  :handleColor="-->
+<!--                    $vuetify.theme.dark-->
+<!--                      ? $vuetify.theme.themes.dark.primary-->
+<!--                      : $vuetify.theme.themes.light.primary-->
+<!--                  "-->
+<!--                  :gridTextColor="-->
+<!--                    $vuetify.theme.dark-->
+<!--                      ? $vuetify.theme.themes.dark.primary-->
+<!--                      : $vuetify.theme.themes.light.primary-->
+<!--                  "-->
+<!--                  :handleSize="10"-->
+<!--                  :barGap="1"-->
+<!--                  :barRadius="0"-->
+<!--                  :histSliderGap="0"-->
+<!--                  :min="filter.min"-->
+<!--                  :max="filter.max"-->
+<!--                  :step="filter.step"-->
+<!--                  :data="histogramData"-->
+<!--                  :clip="false"-->
+<!--                  class="histogramStyle"-->
+<!--                  @finish="selectRange"-->
+<!--                />-->
               </client-only>
             </div>
 
@@ -402,20 +432,175 @@ export default {
         sort: "popular"
       },
       dataHistogram: [
-        20012,
-        33012,
-        35012,
-        44012,
-        48012,
-        49812,
-        50012,
-        50122,
-        50212,
-        51012,
-        51412,
-        56012,
-        60012
+        0,
+        1600000.4,
+        1600000.4,
+        1600000.4,
+        1600000,
+        1600000,
+        1600000,
+        1600000,
+        1600000,
+        1600000,
+        1600000,
+        1600000,
+        1600000,
+        1600000,
+        1600000,
+        1600000,
+        1600000,
+        1600000,
+        1600000,
+        1600000,
+        1600000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        3200000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        4800000,
+        6400000,
+        6400000,
+        6400000,
+        6400000,
+        6400000,
+        6400000,
+        6400000,
+        6400000,
+        6400000,
+        6400000,
+        6400000,
+        8000000,
+        8000000,
+        8000000,
+        8000000,
+        8000000,
+        8000000,
+        8000000,
+        8000000,
+        11200000,
+        11200000,
+        11200000,
+        14400000,
+        14400000,
+        16000000,
+        16000000,
+        16000000,
+        80000000
       ],
+      // dataHistogram: [
+      //   100,
+      //   500,
+      //   500,
+      //   500,
+      //   500,
+      //   1000,
+      //   1000,
+      //   1000,
+      //   10000,
+      //   10000,
+      //   10000,
+      //   10000,
+      //   10000,
+      //   10000,
+      //   10000,
+      //   20012,
+      //   20012,
+      //   20012,
+      //   20012,
+      //   33012,
+      //   35012,
+      //   44012,
+      //   48012,
+      //   49812,
+      //   50012,
+      //   50122,
+      //   50212,
+      //   51012,
+      //   51412,
+      //   56012,
+      //   60012,
+      //   80000,
+      //   80000,
+      //   80000,
+      //   80000,
+      //   80000,
+      //   100000
+      // ],
       rangeSliderFrom: null,
       rangeSliderTo: null,
       histogramSectionWidth: null,
@@ -425,25 +610,41 @@ export default {
   computed: {
     ...mapGetters({
       filters: `modules/filters/${types.filters.getters.GET_FILTERS}`,
+      histogramPrices: `modules/filters/${types.filters.getters.GET_HISTOGRAM_PRICES}`,
       mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`
     }),
     histogramWidth() {
       return this.histogramSectionWidth;
     },
     histogramData() {
-      let filters = this.filters;
-      for (let i = 0; i < filters.length; i++) {
-        if (filters[i].type === "price") {
-          let data = filters[i].options;
-          let histogramArray = [];
-          for (let j = 0; j < data.length; j++) {
-            for (let x = 0; x < data[j].count; x++) {
-              histogramArray.push(data[j].price);
-            }
-          }
-          return histogramArray;
+      let filterHistogramPrices = this.histogramPrices;
+      let histogramData = [];
+
+      console.log('check data from store', filterHistogramPrices)
+
+      filterHistogramPrices.forEach((histogramPriceObject, histogramPriceIndex) => {
+        // console.log('checkkkkkkkkkkkkkkkk', histogramPriceIndex, histogramPriceObject, histogramPriceObject.key, histogramPriceObject.doc_count)
+        for(let priceCount=0; priceCount < histogramPriceObject.doc_count; priceCount++) {
+          histogramData.push(histogramPriceObject.key);
         }
-      }
+      })
+
+      // console.log('check histogram prices data', histogramData)
+      return histogramData;
+
+      // let filters = this.filters;
+      // for (let i = 0; i < filters.length; i++) {
+      //   if (filters[i].type === "price") {
+      //     let data = filters[i].options;
+      //     let histogramArray = [];
+      //     for (let j = 0; j < data.length; j++) {
+      //       for (let x = 0; x < data[j].count; x++) {
+      //         histogramArray.push(data[j].price);
+      //       }
+      //     }
+      //     return histogramArray;
+      //   }
+      // }
     }
   },
   mounted() {
