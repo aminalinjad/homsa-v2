@@ -53,7 +53,7 @@ export default {
   asyncData({params, app, store , route}) {
     let data = {
       page: Number(route.query.page) || 1,
-      sort: this.$route.query.sort ? this.$route.query.sort : 'popular',
+      sort: route.query.sort ? route.query.sort : 'popular',
       guest:  Number(route.query.guest) || 1,
       checkin: route.query.checkInDate,
       checkout: route.query.checkOutDate,

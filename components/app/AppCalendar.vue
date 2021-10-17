@@ -251,7 +251,8 @@ import { CalendarService } from "@/services";
 export default {
   props: [
     "checkInDate",
-    "checkOutDate"
+    "checkOutDate",
+    "clearCalendarData"
   ],
   data() {
     return {
@@ -315,6 +316,11 @@ export default {
       }
     }
   },
+  watch: {
+    clearCalendarData() {
+      this.clearCalendar();
+    }
+  },
   created() {
     this.getCalendar();
   },
@@ -324,40 +330,46 @@ export default {
         this.checkIn = value;
         this.checkIn.month = month;
         this.checkIn.monthId = monthId;
-        this.$emit("setCheckInDate", value.date);
+        this.$emit("setCheckInDate", value);
       } else if (!this.checkOut.day) {
         if (monthId === this.checkIn.monthId) {
           if (value.day <= this.checkIn.day) {
             this.checkIn = value;
             this.checkIn.month = month;
             this.checkIn.monthId = monthId;
-            this.$emit("setCheckInDate", value.date);
+            this.$emit("setCheckInDate", value);
           } else {
             this.checkOut = value;
             this.checkOut.month = month;
             this.checkOut.monthId = monthId;
-            this.$emit("setCheckOutDate", value.date);
+            this.$emit("setCheckOutDate", value);
           }
         } else if (monthId < this.checkIn.monthId) {
           this.checkIn = value;
           this.checkIn.month = month;
           this.checkIn.monthId = monthId;
-          this.$emit("setCheckInDate", value.date);
+          this.$emit("setCheckInDate", value);
         } else {
           this.checkOut = value;
           this.checkOut.month = month;
           this.checkOut.monthId = monthId;
-          this.$emit("setCheckOutDate", value.date);
+          this.$emit("setCheckOutDate", value);
         }
       } else {
-        this.checkIn = {};
-        this.checkIn.day = null;
-        this.checkIn.monthId = null;
-        this.checkOut = {};
-        this.checkOut.day = null;
-        this.checkOut.monthId = null;
+        this.clearCalendar();
+        this.$emit("setCheckInDate", null);
+        this.$emit("setCheckOutDate", null);
         this.datePick(value, month, monthId);
+
       }
+    },
+    clearCalendar() {
+      this.checkIn = {};
+      this.checkIn.day = null;
+      this.checkIn.monthId = null;
+      this.checkOut = {};
+      this.checkOut.day = null;
+      this.checkOut.monthId = null;
     },
     setDisplayedCalendar(firstDisplayedMonth, secondDisplayedMonth) {
       this.displayedCalendar = [];
@@ -445,7 +457,7 @@ export default {
         });
     },
     submitDate() {
-      this.$emit('submitCalendarDate')
+      this.$emit('submitCalendarDate', this.selectedDaysFlexibility);
     }
   }
 };
