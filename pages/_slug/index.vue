@@ -53,10 +53,13 @@ export default {
   asyncData({params, app, store , route}) {
     let data = {
       page: Number(route.query.page) || 1,
-      sort: "popular",
+      sort: this.$route.query.sort ? this.$route.query.sort : 'popular',
       guest:  Number(route.query.guest) || 1,
+      checkin: route.query.checkInDate,
+      checkout: route.query.checkOutDate,
     }
     let splitSlug = params.slug.split('-')
+
     data.slugs = [{
       value: splitSlug[1],
       type: splitSlug[0]
@@ -67,6 +70,7 @@ export default {
       store.dispatch('modules/search/SET_SEARCH_RESULTS', res.data)
       store.dispatch('modules/filters/SET_FILTERS', res.data.filters.filters)
       store.dispatch('modules/filters/SET_HISTOGRAM_PRICES', res.data.histogram_prices.prices)
+
       return {
         results: res.data.data
       }
