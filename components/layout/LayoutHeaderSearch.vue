@@ -248,7 +248,7 @@
             :search-input.sync="userDestinationSearch"
             item-text="title"
             item-value="title"
-            v-model="searchForm.destination"
+            v-model="searchFormValue.destination"
             append-icon=""
             prepend-inner-icon="$pinLocation"
             hide-no-data
@@ -301,17 +301,17 @@
                   {{ $t("header.bottom.date-range.date-range") }}
                 </p>
                 <v-row class="ma-0">
-                  <span v-if="checkInDate" class="greenDark8--text">
+                  <span v-if="searchFormValue.checkIn" class="greenDark8--text">
                     <span
                       :class="$vuetify.rtl ? 'font-FaNumregular-14': 'font-regular-14'"
-                    >{{ checkInDate }}</span
+                    >{{ searchFormValue.checkIn }}</span
                     >
                     <span>
                       <v-icon small v-if="$vuetify.rtl">$arrowLineDark</v-icon>
                       <v-icon small v-else>$arrowLineDarkRight</v-icon>
                     </span>
-                    <span v-if="checkOutDate" :class="$vuetify.rtl ? 'font-FaNumregular-14': 'font-regular-14'">
-                      {{ checkOutDate }}
+                    <span v-if="searchFormValue.checkOut" :class="$vuetify.rtl ? 'font-FaNumregular-14': 'font-regular-14'">
+                      {{ searchFormValue.checkOut }}
                     </span>
                   </span>
                   <span class="font-regular-14 greyLight2--text" v-else>
@@ -325,40 +325,6 @@
             </v-btn>
           </v-row>
         </v-hover>
-        <!--        <v-hover v-slot="{ hover }">-->
-        <!--          <v-text-field-->
-        <!--            filled-->
-        <!--            readonly-->
-        <!--            height="66"-->
-        <!--            background-color="whiteColor"-->
-        <!--            :label="`${$t('header.bottom.check-in.label')}`"-->
-        <!--            :placeholder="`${$t('header.bottom.check-in.place-holder')}`"-->
-        <!--            persistent-placeholder-->
-        <!--            v-model="searchForm.checkIn"-->
-        <!--            :class="hover ? 'searchInputBoxShadow' : ''"-->
-        <!--            class="me-2 rounded searchCheckIn font-regular-14"-->
-        <!--            @click="showCalendar"-->
-        <!--          >-->
-        <!--          </v-text-field>-->
-        <!--        </v-hover>-->
-
-        <!--        <v-hover v-slot="{ hover }">-->
-        <!--          <v-text-field-->
-        <!--            filled-->
-        <!--            readonly-->
-        <!--            height="66"-->
-        <!--            background-color="whiteColor"-->
-        <!--            :label="`${$t('header.bottom.check-out.label')}`"-->
-        <!--            :placeholder="`${$t('header.bottom.check-out.place-holder')}`"-->
-        <!--            persistent-placeholder-->
-        <!--            v-model="searchForm.checkOut"-->
-        <!--            :class="hover ? 'searchInputBoxShadow' : ''"-->
-        <!--            class="me-2 rounded searchCheckOut font-regular-14"-->
-        <!--            @click="showCalendar"-->
-        <!--          >-->
-        <!--          </v-text-field>-->
-        <!--        </v-hover>-->
-
         <!-- count / guest -->
         <v-hover v-slot="{ hover }">
           <v-row
@@ -374,7 +340,7 @@
                 prepend-inner-icon="$usersProfile"
                 :suffix="`${$t('header.bottom.count.suffix')}`"
                 :label="`${$t('header.bottom.count.label')}`"
-                v-model="searchForm.guest"
+                v-model="searchFormValue.guest"
                 class="rounded"
                 :class="
                   $i18n.locale === 'fa' ? 'farsiFontCountInput' : 'inputRight'
@@ -411,11 +377,11 @@
                       icon
                       depressed
                       @click="minusGuest"
-                      :disabled="searchForm.guest === 1"
+                      :disabled="searchFormValue.guest === 1"
                     >
                       <MinusIcon
                         :clr="
-                          searchForm.guest === 1
+                          searchFormValue.guest === 1
                             ? null
                             : hover
                             ? $vuetify.theme.dark
@@ -500,16 +466,10 @@ export default {
         ]
       },
       userDestinationSearch: "",
-      searchForm: {
-        destination: "",
-        checkIn: null,
-        checkOut: null,
-        guest: 1
-      },
       searchFormValue: {
         destination: null,
-        checkIn: "12/08",
-        checkOut: "12/31",
+        checkIn: null,
+        checkOut: null,
         flexibility: 1,
         guest: 1
       },
@@ -562,42 +522,32 @@ export default {
       let data = {
         page: 1,
         sort: this.$route.query.sort ? this.$route.query.sort : 'popular',
-        guest: this.searchForm.guest,
+        guest: this.searchFormValue.guest,
       }
-      if (this.searchForm.checkIn) {
-        data.checkin = this.searchForm.checkIn
+      if (this.searchFormValue.checkIn) {
+        data.checkin = this.searchFormValue.checkIn
       }
-      if (this.searchForm.checkOut) {
-        data.checkout = this.searchForm.checkOut
+      if (this.searchFormValue.checkOut) {
+        data.checkout = this.searchFormValue.checkOut
       }
-      console.log(this.searchForm.destination)
-      if (this.searchForm.destination && this.searchForm.destination.type) {
+      console.log(this.searchFormValue.destination)
+      if (this.searchFormValue.destination && this.searchFormValue.destination.type) {
         data.slugs = [{
-          value: this.searchForm.destination.slug,
-          type: this.searchForm.destination.type
+          value: this.searchFormValue.destination.slug,
+          type: this.searchFormValue.destination.type
         }]
         this.$router.push({
-          path: `${this.searchForm.destination.type}-${this.searchForm.destination.slug}`,
-          query: {...this.$route.query, guest: this.searchForm.guest}
+          path: `${this.searchFormValue.destination.type}-${this.searchFormValue.destination.slug}`,
+          query: {...this.$route.query, guest: this.searchFormValue.guest , checkInDate: this.searchFormValue.checkIn , checkOutDate:this.searchFormValue.checkOut}
         })
       } else {
         data.q = this.userDestinationSearch
         this.$router.push({
           path: 'search',
-          query: {...this.$route.query, guest: this.searchForm.guest, q: data.q}
+          query: {...this.$route.query, guest: this.searchFormValue.guest, q: data.q}
         })
       }
-      console.log(data)
       this.searchFormValue.destination = this.userDestinationSearch
-      this.searchFormValue.guest = this.searchForm.guest
-      SearchServices.searchResults(data).then(res => {
-        this.$nuxt.$loading.finish()
-        console.log(res.data)
-        this.setSearchResult(res.data)
-      }).catch(err => {
-        this.$nuxt.$loading.finish()
-        alert('err dare')
-      })
     },
     scrollPage() {
       if (this.$refs.cityAutocomplete) {
@@ -627,11 +577,11 @@ export default {
     clearDestination() {
     },
     addGuest() {
-      this.searchForm.guest++;
+      this.searchFormValue.guest++;
     },
     minusGuest() {
-      if (this.searchForm.guest > 1) {
-        this.searchForm.guest--;
+      if (this.searchFormValue.guest > 1) {
+        this.searchFormValue.guest--;
       }
     },
     changeLang() {
@@ -648,10 +598,10 @@ export default {
       this.calendar = true;
     },
     setCheckInDate(checkInDate) {
-      this.searchForm.checkIn = checkInDate;
+      this.searchFormValue.checkIn = checkInDate;
     },
     setCheckOutDate(checkOutDate) {
-      this.searchForm.checkOut = checkOutDate;
+      this.searchFormValue.checkOut = checkOutDate;
     },
     clearDateRange() {
       this.checkInDate = null;

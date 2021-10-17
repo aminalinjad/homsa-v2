@@ -220,9 +220,11 @@ export default {
       if (this.dragMapCheckbox && this.bounds) {
         this.$nuxt.$loading.start()
         let data = {
-          "Accept-Language": "fa",
           page: 1,
-          sort: "popular",
+          sort: this.$route.query.sort ? this.$route.query.sort : 'popular',
+          guest:  Number(this.$route.query.guest) || 1,
+          checkin: this.$route.query.checkInDate,
+          checkout: this.$route.query.checkOutDate,
           "boundaries": {
             "max_lat": this.bounds._northEast.lat,
             "max_long": this.bounds._northEast.lng,
