@@ -104,7 +104,7 @@
                 class="font-medium-14"
                 outlined
                 :disabled="rangeBtnDisable"
-                @click="filterPrice"
+                @click="filterPrice(rangeSliderFrom, rangeSliderTo)"
               >
                 {{ $t("search.filters.price.btn") }}
               </v-btn>
@@ -401,8 +401,8 @@ export default {
         page: 1,
         sort: "popular"
       },
-      rangeSliderFrom: null,
-      rangeSliderTo: null,
+      rangeSliderFrom: this.$route.query.min_price ? this.$route.query.min_price : null,
+      rangeSliderTo: this.$route.query.max_price ? this.$route.query.max_price : null,
       histogramSectionWidth: null,
       rangeBtnDisable: true
     };
@@ -426,22 +426,8 @@ export default {
         }
       })
 
-      // console.log('check histogram prices data', histogramData)
       return histogramData;
 
-      // let filters = this.filters;
-      // for (let i = 0; i < filters.length; i++) {
-      //   if (filters[i].type === "price") {
-      //     let data = filters[i].options;
-      //     let histogramArray = [];
-      //     for (let j = 0; j < data.length; j++) {
-      //       for (let x = 0; x < data[j].count; x++) {
-      //         histogramArray.push(data[j].price);
-      //       }
-      //     }
-      //     return histogramArray;
-      //   }
-      // }
     }
   },
   mounted() {
@@ -554,7 +540,14 @@ export default {
       let filterTypes = this.filterTypes;
 
       filterTypes.forEach((filterType, filterTypeIndex) => {
-        if (filterType.type === "counter") {
+        if(filterType.type === "price_range") {
+          if(routeQueries.min_price) {
+            this.data.min_price = parseInt(routeQueries.min_price);
+          }
+          if(routeQueries.max_price) {
+            this.data.max_price = parseInt(routeQueries.max_price);
+          }
+        } else if (filterType.type === "counter") {
           for (let [routeQueryKey, routeQueryValue] of Object.entries(
             routeQueries
           )) {
@@ -617,14 +610,35 @@ export default {
     },
     inputRange() {
       if (this.rangeSliderFrom && this.rangeSliderTo) {
+        // this.$router.push({
+        //   query: {
+        //     ...this.$route.query,
+        //     min_price: this.rangeSliderFrom,
+        //     max_price: this.rangeSliderTo
+        //   }
+        // });
         this.rangeBtnDisable = false;
       } else {
+        this.$router.push({
+          query: {
+            ...this.$route.query,
+            min_price: undefined,
+            max_price: undefined
+          }
+        });
         this.rangeBtnDisable = true;
       }
     },
     selectRange(e) {
       this.rangeSliderFrom = e.from;
       this.rangeSliderTo = e.to;
+      // this.$router.push({
+      //   query: {
+      //     ...this.$route.query,
+      //     min_price: e.from,
+      //     max_price: e.to
+      //   }
+      // });
       this.rangeBtnDisable = false;
     },
     calculateSectionWidth() {
@@ -633,7 +647,28 @@ export default {
         this.histogramSectionWidth = width.clientWidth;
       }
     },
-    filterPrice() {},
+    filterPrice(rangeSliderFrom, rangeSliderTo) {
+      setTimeout(() => {
+        this.$nuxt.$loading.start();
+      } , 1);
+      this.setDataFromUrlQueries();
+      if(rangeSliderFrom >= 0   && rangeSliderTo > 0) {
+        this.$router.push({
+          query: {
+            ...this.$route.query,
+            min_price: rangeSliderFrom,
+           max_price: rangeSliderTo
+          }
+        });
+        this.data.min_price = rangeSliderFrom;
+        this.data.max_price = rangeSliderTo;
+      }
+      return SearchServices.searchResults(this.data).then(res => {
+        this.setSearchResult(res.data);
+        this.$nuxt.$loading.finish();
+      });
+
+    },
     addCounter(filterSlug, filterIndex) {
       this.filterPanelSettings[filterIndex].count++;
       this.filterCounter(
