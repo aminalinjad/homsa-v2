@@ -610,13 +610,6 @@ export default {
     },
     inputRange() {
       if (this.rangeSliderFrom && this.rangeSliderTo) {
-        // this.$router.push({
-        //   query: {
-        //     ...this.$route.query,
-        //     min_price: this.rangeSliderFrom,
-        //     max_price: this.rangeSliderTo
-        //   }
-        // });
         this.rangeBtnDisable = false;
       } else {
         this.$router.push({
@@ -626,19 +619,14 @@ export default {
             max_price: undefined
           }
         });
+        this.data.min_price = null;
+        this.data.max_price = null;
         this.rangeBtnDisable = true;
       }
     },
     selectRange(e) {
       this.rangeSliderFrom = e.from;
       this.rangeSliderTo = e.to;
-      // this.$router.push({
-      //   query: {
-      //     ...this.$route.query,
-      //     min_price: e.from,
-      //     max_price: e.to
-      //   }
-      // });
       this.rangeBtnDisable = false;
     },
     calculateSectionWidth() {

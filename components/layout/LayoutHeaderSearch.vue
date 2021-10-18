@@ -19,8 +19,6 @@
         class="pa-4"
         :fluid="
           $vuetify.breakpoint.md || $route.query.showMap === 'true'
-            ? true
-            : false
         "
       >
         <v-row>
@@ -259,6 +257,7 @@
             return-object
             no-filter
             :value="userDestinationSearch"
+            @click.native="closeCalendar"
           >
             <!-- title in suggestion mode -->
             <template v-slot:prepend-item>
@@ -301,18 +300,17 @@
                   {{ $t("header.bottom.date-range.date-range") }}
                 </p>
                 <v-row class="ma-0">
-                  <span v-if="searchFormValue.checkIn" class="greenDark8--text">
+                  <span v-if="checkInDate" class="greenDark8--text">
                     <span
                       :class="$vuetify.rtl ? 'font-FaNumregular-14': 'font-regular-14'"
-                    >{{ searchFormValue.checkIn }}</span
+                    >{{ checkInDate }}</span
                     >
                     <span>
                       <v-icon small v-if="$vuetify.rtl">$arrowLineDark</v-icon>
                       <v-icon small v-else>$arrowLineDarkRight</v-icon>
                     </span>
-                    <span v-if="searchFormValue.checkOut"
-                          :class="$vuetify.rtl ? 'font-FaNumregular-14': 'font-regular-14'">
-                      {{ searchFormValue.checkOut }}
+                    <span v-if="checkOutDate" :class="$vuetify.rtl ? 'font-FaNumregular-14': 'font-regular-14'">
+                      {{ checkOutDate }}
                     </span>
                   </span>
                   <span class="font-regular-14 greyLight2--text" v-else>
@@ -321,7 +319,7 @@
                 </v-row>
               </v-col>
             </v-row>
-            <v-btn small icon class="me-3" @click="clearDateRange" v-if="checkInDate">
+            <v-btn small icon class="me-0" @click="clearDateRange" v-if="checkInDate">
               <v-icon>$close</v-icon>
             </v-btn>
           </v-row>
@@ -415,9 +413,10 @@
     <!-- calendar  -->
     <AppCalendar
       class="appCalendar"
-      v-if="calendar"
+      v-show="calendar"
       :checkInDate="checkInDate"
       :checkOutDate="checkOutDate"
+      :clearCalendarData="clearCalendar"
       @setCheckInDate="setCheckInDate"
       @setCheckOutDate="setCheckOutDate"
       @submitCalendarDate="submitCalendarDate"
@@ -447,6 +446,7 @@ export default {
     return {
       test: '',
       calendar: false,
+      clearCalendar: false,
       checkInDate: null,
       checkOutDate: null,
       fixedHeader: false,
@@ -591,17 +591,39 @@ export default {
       this.calendar = true;
     },
     setCheckInDate(checkInDate) {
-      this.searchFormValue.checkIn = checkInDate;
+      if(checkInDate) {
+        this.clearCalendar = false;
+        this.searchFormValue.checkIn = checkInDate.date;
+        this.$i18n.locale === 'fa' ? this.checkInDate = checkInDate.jalali_date : this.checkInDate = checkInDate.date;
+      } else {
+        this.searchFormValue.checkIn = null;
+        this.checkInDate = null;
+      }
     },
     setCheckOutDate(checkOutDate) {
-      this.searchFormValue.checkOut = checkOutDate;
+      if(checkOutDate) {
+        this.searchFormValue.checkOut = checkOutDate.date;
+        this.$i18n.locale === 'fa' ? this.checkOutDate = checkOutDate.jalali_date : this.checkOutDate = checkOutDate.date;
+      } else {
+        this.searchFormValue.checkOut = null;
+        this.checkOutDate = null;
+      }
     },
     clearDateRange() {
       this.checkInDate = null;
       this.checkOutDate = null;
+      this.searchFormValue.checkIn = null;
+      this.searchFormValue.checkOut = null;
       this.calendar = false;
+      this.clearCalendar = true;
     },
-    submitCalendarDate() {
+    closeCalendar() {
+      if(this.calendar) {
+        this.clearDateRange()
+      }
+    },
+    submitCalendarDate(flexibility) {
+      this.searchFormValue.flexibility = flexibility;
       this.calendar = !this.calendar;
     }
   }
