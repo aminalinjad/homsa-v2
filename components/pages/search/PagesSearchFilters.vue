@@ -17,7 +17,7 @@
               {{ $t("search.filters.all-filters.clear-all") }}
             </v-btn>
           </v-card-title>
-          <v-cart-text class="px-4">
+          <v-card-text class="px-4">
             <v-chip
               small
               v-for="(appliedFilter, appliedFilterIndex) in appliedFilterList"
@@ -25,13 +25,14 @@
               color="greyLight1"
               text-color="secondary"
               close-icon="$close"
-              class="me-3"
+              class="me-3 mb-3"
               close
+              @click:close="clearFilter(appliedFilter, appliedFilterIndex)"
             >
-              {{ appliedFilter }}
+              <span class="pe-1" :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''">{{ appliedFilter.count }}</span>
+              <span>{{ appliedFilter.name }}</span>
             </v-chip>
-
-          </v-cart-text>
+          </v-card-text>
         </v-card>
       </div>
       <!-- price -->
@@ -153,7 +154,7 @@
                   small
                   icon
                   depressed
-                  @click="addCounter(filter.slug, filterIndex)"
+                  @click="addCounter(filter, filterIndex)"
                 >
                   <AddIcon
                     size="16"
@@ -171,7 +172,7 @@
                   class="me-n3"
                   icon
                   depressed
-                  @click="minusCounter(filter.slug, filterIndex)"
+                  @click="minusCounter(filter, filterIndex)"
                 >
                   <MinusIcon
                     size="16"
@@ -420,7 +421,7 @@ export default {
   },
   data() {
     return {
-      appliedFilterList: ['عهاهبعاخ', 'بعاخ'],
+      appliedFilterList: [],
       filterPanelSettings: [],
       filterTypes: [],
       data: {
@@ -682,18 +683,18 @@ export default {
         this.$nuxt.$loading.finish();
       });
     },
-    addCounter(filterSlug, filterIndex) {
+    addCounter(filter, filterIndex) {
       this.filterPanelSettings[filterIndex].count++;
       this.filterCounter(
-        filterSlug,
+        filter,
         this.filterPanelSettings[filterIndex].count
       );
     },
-    minusCounter(filterSlug, filterIndex) {
+    minusCounter(filter, filterIndex) {
       if (this.filterPanelSettings[filterIndex].count > 0) {
         this.filterPanelSettings[filterIndex].count--;
         this.filterCounter(
-          filterSlug,
+          filter,
           this.filterPanelSettings[filterIndex].count
         );
       }
@@ -718,19 +719,41 @@ export default {
         );
       }
     },
-    filterCounter(filterSlug, count) {
+    filterCounter(filter, count) {
       this.$nuxt.$loading.start();
       this.setDataFromUrlQueries();
-      this.data[filterSlug] = count
+      if (count > 0) {
+
+        this.data[filter.slug] = count
+      } else {
+        delete this.data[filter.slug];
+      }
       return SearchServices.searchResults(this.data).then(res => {
         if (count > 0) {
           this.$router.push({
-            query: { ...this.$route.query, [filterSlug]: count }
+            query: { ...this.$route.query, [filter.slug]: count }
           });
         } else {
           this.$router.push({
-            query: { ...this.$route.query, [filterSlug]: undefined }
+            query: { ...this.$route.query, [filter.slug]: undefined }
           });
+        }
+
+
+        let appliedFilterExist;
+        this.appliedFilterList.forEach((appliedFilter, appliedFilterIndex) => {
+          if(appliedFilter.slug === filter.slug) {
+            appliedFilterExist = true;
+            this.appliedFilterList[appliedFilterIndex].count = count;
+          }
+        })
+        if(!appliedFilterExist) {
+          this.appliedFilterList.push({
+            type: filter.type,
+            slug: filter.slug,
+            name: filter.name,
+            count: count
+          })
         }
         this.setSearchResult(res.data);
         this.$nuxt.$loading.finish();
@@ -770,7 +793,7 @@ export default {
           }
         });
         this.data[filterSlug].forEach((item, itemIndex) => {
-          if( item.id === itemId) {
+          if(item.id === itemId) {
             this.data[filterSlug].splice(itemIndex,1);
           }
         });
@@ -841,6 +864,18 @@ export default {
         this.setSearchResult(res.data);
         this.$nuxt.$loading.finish();
       });
+    },
+    clearFilter(appliedFilter, appliedFilterIndex) {
+      // this.$nuxt.$loading.start();
+      console.log('aaaaaaa', appliedFilter, appliedFilterIndex)
+      if(appliedFilter.type === 'counter') {
+        delete this.data[appliedFilter.slug];
+        this.appliedFilterList.splice(appliedFilterIndex,1);
+      }
+      // return SearchServices.searchResults(this.data).then(res => {
+      //   this.setSearchResult(res.data);
+      //   // this.$nuxt.$loading.finish();
+      // });
     }
   }
 };
