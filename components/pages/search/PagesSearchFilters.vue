@@ -8,6 +8,32 @@
       >
         <PagesSearchMapThumbnail />
       </div>
+      <!-- applied filters-->
+      <div v-if="filterIndex===0 && appliedFilterList.length > 0" class="mb-3">
+        <v-card flat class="pb-3 rounded-lg">
+          <v-card-title class="py-3 justify-space-between">
+            <span class="font-regular-14">{{ $t("search.filters.all-filters.title") }}</span>
+            <v-btn small text class="font-regular-12">
+              {{ $t("search.filters.all-filters.clear-all") }}
+            </v-btn>
+          </v-card-title>
+          <v-cart-text class="px-4">
+            <v-chip
+              small
+              v-for="(appliedFilter, appliedFilterIndex) in appliedFilterList"
+              :key="appliedFilterIndex"
+              color="greyLight1"
+              text-color="secondary"
+              close-icon="$close"
+              class="me-3"
+              close
+            >
+              {{ appliedFilter }}
+            </v-chip>
+
+          </v-cart-text>
+        </v-card>
+      </div>
       <!-- price -->
       <div v-if="filter.type === 'price_range'" class="mb-3">
         <v-card flat class="rounded-lg py-3 px-5 histogramSectionCard">
@@ -394,6 +420,7 @@ export default {
   },
   data() {
     return {
+      appliedFilterList: ['عهاهبعاخ', 'بعاخ'],
       filterPanelSettings: [],
       filterTypes: [],
       data: {
@@ -427,7 +454,6 @@ export default {
       })
 
       return histogramData;
-
     }
   },
   mounted() {
@@ -655,7 +681,6 @@ export default {
         this.setSearchResult(res.data);
         this.$nuxt.$loading.finish();
       });
-
     },
     addCounter(filterSlug, filterIndex) {
       this.filterPanelSettings[filterIndex].count++;
