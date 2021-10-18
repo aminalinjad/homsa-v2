@@ -77,7 +77,7 @@
                 "
                 v-else
               >
-                <div class="pe-3">{{ searchFormValue.destination }}</div>
+                <div class="pe-3">{{ searchFormValue.destination.title }}</div>
                 <v-divider vertical></v-divider>
                 <div class="px-3">
                   <span
@@ -310,7 +310,8 @@
                       <v-icon small v-if="$vuetify.rtl">$arrowLineDark</v-icon>
                       <v-icon small v-else>$arrowLineDarkRight</v-icon>
                     </span>
-                    <span v-if="searchFormValue.checkOut" :class="$vuetify.rtl ? 'font-FaNumregular-14': 'font-regular-14'">
+                    <span v-if="searchFormValue.checkOut"
+                          :class="$vuetify.rtl ? 'font-FaNumregular-14': 'font-regular-14'">
                       {{ searchFormValue.checkOut }}
                     </span>
                   </span>
@@ -518,36 +519,28 @@ export default {
     SearchServices() {
       this.calendar = false;
       this.closeSearchSection();
-      this.$nuxt.$loading.start()
-      let data = {
-        page: 1,
-        sort: this.$route.query.sort ? this.$route.query.sort : 'popular',
-        guest: this.searchFormValue.guest,
-      }
-      if (this.searchFormValue.checkIn) {
-        data.checkin = this.searchFormValue.checkIn
-      }
-      if (this.searchFormValue.checkOut) {
-        data.checkout = this.searchFormValue.checkOut
-      }
-      console.log(this.searchFormValue.destination)
+
+      //check send request or not
+// if(`${this.searchFormValue.destination.type}-${this.searchFormValue.destination.slug}` === th)
+
+      //end check request
       if (this.searchFormValue.destination && this.searchFormValue.destination.type) {
-        data.slugs = [{
-          value: this.searchFormValue.destination.slug,
-          type: this.searchFormValue.destination.type
-        }]
+
+        let queryData = {
+          guest: this.searchFormValue.guest,
+          checkInDate: this.searchFormValue.checkIn ? this.searchFormValue.checkIn : undefined,
+          checkOutDate: this.searchFormValue.checkOut ? this.searchFormValue.checkOut : undefined
+        }
         this.$router.push({
           path: `${this.searchFormValue.destination.type}-${this.searchFormValue.destination.slug}`,
-          query: {...this.$route.query, guest: this.searchFormValue.guest , checkInDate: this.searchFormValue.checkIn , checkOutDate:this.searchFormValue.checkOut}
+          query: {...this.$route.query, ...queryData}
         })
       } else {
-        data.q = this.userDestinationSearch
         this.$router.push({
           path: 'search',
-          query: {...this.$route.query, guest: this.searchFormValue.guest, q: data.q}
+          query: {...this.$route.query, guest: this.searchFormValue.guest, q: this.userDestinationSearch}
         })
       }
-      this.searchFormValue.destination = this.userDestinationSearch
     },
     scrollPage() {
       if (this.$refs.cityAutocomplete) {
