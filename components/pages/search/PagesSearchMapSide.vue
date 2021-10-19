@@ -78,8 +78,8 @@
       :settings="settings"
       scrollYMarginOffset="20"
     >
-      <PagesSearchFilters v-if="isFilter"/>
-      <v-card flat class="rounded-0" v-else>
+      <PagesSearchFilters v-show="isFilter"/>
+      <v-card flat class="rounded-0" v-show="!isFilter">
         <v-row v-if="getSearchResult.data.length !== 0" class="ma-0">
           <v-col
             cols="12"
