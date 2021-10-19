@@ -9,10 +9,15 @@
         <PagesSearchMapThumbnail />
       </div>
       <!-- applied filters-->
-      <div v-if="filterIndex===0 && appliedFilterList.length > 0" class="mb-3">
+      <div
+        v-if="filterIndex === 0 && appliedFilterList.length > 0"
+        class="mb-3"
+      >
         <v-card flat class="pb-3 rounded-lg">
           <v-card-title class="py-3 justify-space-between">
-            <span class="font-regular-14">{{ $t("search.filters.all-filters.title") }}</span>
+            <span class="font-regular-14">{{
+              $t("search.filters.all-filters.title")
+            }}</span>
             <v-btn small text class="font-regular-12">
               {{ $t("search.filters.all-filters.clear-all") }}
             </v-btn>
@@ -29,7 +34,12 @@
               close
               @click:close="clearFilter(appliedFilter, appliedFilterIndex)"
             >
-              <span class="pe-1" :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''">{{ appliedFilter.count }}</span>
+              <span
+                v-if="appliedFilter.count"
+                class="pe-1"
+                :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
+                >{{ appliedFilter.count }}</span
+              >
               <span>{{ appliedFilter.name }}</span>
             </v-chip>
           </v-card-text>
@@ -209,13 +219,13 @@
                 v-for="(item, index) in filter.children"
                 :key="index"
                 class="
-                    ma-1
-                    mb-n1
-                    d-flex
-                    justify-space-between
-                    align-center
-                    font-light-14
-                  "
+                  ma-1
+                  mb-n1
+                  d-flex
+                  justify-space-between
+                  align-center
+                  font-light-14
+                "
               >
                 <div class="font-regular-12 greenDark8--text">
                   {{ item.name }}
@@ -225,9 +235,7 @@
                     small
                     icon
                     depressed
-                    @click="
-                      addCounterList(filter.slug, filterIndex, item, index)
-                    "
+                    @click="addCounterList(filter, filterIndex, item, index)"
                   >
                     <AddIcon
                       size="16"
@@ -248,9 +256,7 @@
                     class="me-n3"
                     icon
                     depressed
-                    @click="
-                      minusCounterList(filter.slug, filterIndex, item, index)
-                    "
+                    @click="minusCounterList(filter, filterIndex, item, index)"
                   >
                     <MinusIcon
                       size="16"
@@ -349,9 +355,9 @@
           v-for="(filterChild, filterChildIndex) in filter.children"
           :key="filterChildIndex"
           class="mb-1"
-          v-if="filterPanelSettings[filterIndex]"
         >
           <v-expansion-panels
+            v-if="filterPanelSettings[filterIndex]"
             flat
             v-model="filterPanelSettings[filterIndex][filterChildIndex].expand"
           >
@@ -364,7 +370,7 @@
                 >{{ filterChild.name }}
               </v-expansion-panel-header>
               <v-expansion-panel-content
-                class="mx-n2 "
+                class="mx-n2"
                 :class="
                   filterPanelSettings[filterIndex][filterChildIndex].expand ===
                   0
@@ -373,8 +379,9 @@
                 "
               >
                 <v-row
-                  v-for="(filterChildItem,
-                  filterChildItemIndex) in filterChild.children"
+                  v-for="(
+                    filterChildItem, filterChildItemIndex
+                  ) in filterChild.children"
                   :key="filterChildItemIndex"
                   class="ma-0 mb-2 font-light-14"
                 >
@@ -417,7 +424,7 @@ export default {
   props: {},
   components: {
     MinusIcon,
-    AddIcon
+    AddIcon,
   },
   data() {
     return {
@@ -427,19 +434,23 @@ export default {
       data: {
         q: "tehran",
         page: 1,
-        sort: "popular"
+        sort: "popular",
       },
-      rangeSliderFrom: this.$route.query.min_price ? this.$route.query.min_price : null,
-      rangeSliderTo: this.$route.query.max_price ? this.$route.query.max_price : null,
+      rangeSliderFrom: this.$route.query.min_price
+        ? this.$route.query.min_price
+        : null,
+      rangeSliderTo: this.$route.query.max_price
+        ? this.$route.query.max_price
+        : null,
       histogramSectionWidth: null,
-      rangeBtnDisable: true
+      rangeBtnDisable: true,
     };
   },
   computed: {
     ...mapGetters({
       filters: `modules/filters/${types.filters.getters.GET_FILTERS}`,
       histogramPrices: `modules/filters/${types.filters.getters.GET_HISTOGRAM_PRICES}`,
-      mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`
+      mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
     }),
     histogramWidth() {
       return this.histogramSectionWidth;
@@ -448,18 +459,25 @@ export default {
       let filterHistogramPrices = this.histogramPrices;
       let histogramData = [];
 
-      filterHistogramPrices.forEach((histogramPriceObject, histogramPriceIndex) => {
-        for(let priceCount=0; priceCount < histogramPriceObject.doc_count; priceCount++) {
-          histogramData.push(histogramPriceObject.key);
+      filterHistogramPrices.forEach(
+        (histogramPriceObject, histogramPriceIndex) => {
+          for (
+            let priceCount = 0;
+            priceCount < histogramPriceObject.doc_count;
+            priceCount++
+          ) {
+            histogramData.push(histogramPriceObject.key);
+          }
         }
-      })
+      );
 
       return histogramData;
-    }
+    },
   },
   mounted() {
     this.calculateSectionWidth();
     this.filterPanelSettingsHandler();
+    this.setDataFromUrlQueries();
     window.addEventListener("resize", this.calculateSectionWidth);
   },
   destroyed() {
@@ -467,7 +485,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`
+      setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
     }),
     filterPanelSettingsHandler() {
       let filters = this.filters;
@@ -475,14 +493,14 @@ export default {
       for (let filterIndex = 0; filterIndex < filtersLength; filterIndex++) {
         this.filterTypes.push({
           slug: filters[filterIndex].slug,
-          type: filters[filterIndex].type
+          type: filters[filterIndex].type,
         });
         if (filters[filterIndex].type === "counter") {
           this.filterPanelSettings.push({
             expand: 0,
             count: this.$route.query[this.filters[filterIndex].slug]
               ? this.$route.query[this.filters[filterIndex].slug]
-              : 0
+              : 0,
           });
         } else if (filters[filterIndex].type === "list_counter") {
           let listCounterItemCounts = [];
@@ -498,19 +516,19 @@ export default {
                 ? this.$route.query[
                     `${this.filters[filterIndex].slug}[${this.filters[filterIndex].children[listCounterItemIndex].id}]`
                   ]
-                : 0
+                : 0,
             });
           }
           this.filterPanelSettings.push({
             expand: 0,
-            ItemCounts: listCounterItemCounts
+            ItemCounts: listCounterItemCounts,
           });
         } else if (this.filters[filterIndex].type === "switch") {
           this.filterPanelSettings.push({
             expand: 0,
             value: this.$route.query[this.filters[filterIndex].slug]
               ? this.$route.query[this.filters[filterIndex].slug]
-              : false
+              : false,
           });
         } else if (this.filters[filterIndex].type === "list_checkbox") {
           let listCheckBoxValue = [];
@@ -520,14 +538,15 @@ export default {
             listItemIndex++
           ) {
             listCheckBoxValue.push({
-              value: !!this.$route.query[
-                `${this.filters[filterIndex].slug}[${this.filters[filterIndex].children[listItemIndex].id}]`
-              ]
+              value:
+                !!this.$route.query[
+                  `${this.filters[filterIndex].slug}[${this.filters[filterIndex].children[listItemIndex].id}]`
+                ],
             });
           }
           this.filterPanelSettings.push({
             expand: 0,
-            listCheckBoxValues: listCheckBoxValue
+            listCheckBoxValues: listCheckBoxValue,
           });
         } else if (this.filters[filterIndex].type === "list") {
           let openGroupExpansionPanels = [];
@@ -544,20 +563,21 @@ export default {
               listItemChildIndex++
             ) {
               listCheckBoxValue.push({
-                value: !!this.$route.query[
-                  `${this.filters[filterIndex].slug}[${this.filters[filterIndex].children[listItemIndex].children[listItemChildIndex].id}]`
-                ]
+                value:
+                  !!this.$route.query[
+                    `${this.filters[filterIndex].slug}[${this.filters[filterIndex].children[listItemIndex].children[listItemChildIndex].id}]`
+                  ],
               });
             }
             openGroupExpansionPanels.push({
               expand: 0,
-              listCheckBoxValues: listCheckBoxValue
+              listCheckBoxValues: listCheckBoxValue,
             });
           }
           this.filterPanelSettings.push(openGroupExpansionPanels);
         } else {
           this.filterPanelSettings.push({
-            expand: 0
+            expand: 0,
           });
         }
       }
@@ -567,11 +587,11 @@ export default {
       let filterTypes = this.filterTypes;
 
       filterTypes.forEach((filterType, filterTypeIndex) => {
-        if(filterType.type === "price_range") {
-          if(routeQueries.min_price) {
+        if (filterType.type === "price_range") {
+          if (routeQueries.min_price) {
             this.data.min_price = parseInt(routeQueries.min_price);
           }
-          if(routeQueries.max_price) {
+          if (routeQueries.max_price) {
             this.data.max_price = parseInt(routeQueries.max_price);
           }
         } else if (filterType.type === "counter") {
@@ -582,6 +602,34 @@ export default {
               this.data[filterType.slug] = routeQueryValue
                 ? parseInt(routeQueryValue)
                 : 0;
+
+              // push it in appliedFilterList Array
+              let filterIndex = this.filters
+                .map(function (filter) {
+                  return filter.slug;
+                })
+                .indexOf(filterType.slug);
+              let appliedFilterExist;
+              this.appliedFilterList.forEach(
+                (appliedFilter, appliedFilterIndex) => {
+                  if (appliedFilter.slug === this.filters[filterIndex].slug) {
+                    appliedFilterExist = true;
+                    parseInt(routeQueryValue) > 0
+                      ? (this.appliedFilterList[appliedFilterIndex].count =
+                          parseInt(routeQueryValue))
+                      : this.clearFilter(appliedFilter, appliedFilterIndex);
+                  }
+                }
+              );
+              if (!appliedFilterExist && routeQueryValue) {
+                this.appliedFilterList.push({
+                  type: this.filters[filterIndex].type,
+                  slug: this.filters[filterIndex].slug,
+                  name: this.filters[filterIndex].name,
+                  count: parseInt(routeQueryValue),
+                  indexInFilterPanelSettings: filterIndex,
+                });
+              }
             }
           }
         } else if (filterTypes[filterTypeIndex].type === "list_counter") {
@@ -596,10 +644,51 @@ export default {
                   routeQueryKey.length - 1
                 )
               );
-              if(routeQueryValue) {
+              if (routeQueryValue) {
                 filterListCounterItems.push({
                   id: routeQueryId,
-                  count: parseInt(routeQueryValue)
+                  count: parseInt(routeQueryValue),
+                });
+              }
+
+              // push it in appliedFilterList Array
+              let filterIndex = this.filters
+                .map(function (filter) {
+                  return filter.slug;
+                })
+                .indexOf(filterType.slug);
+              let appliedFilterExist;
+              this.appliedFilterList.forEach(
+                (appliedFilter, appliedFilterIndex) => {
+                  if (
+                    appliedFilter.slug === this.filters[filterIndex].slug &&
+                    appliedFilter.id === routeQueryId
+                  ) {
+                    appliedFilterExist = true;
+                    parseInt(routeQueryValue) > 0
+                      ? (this.appliedFilterList[appliedFilterIndex].count =
+                          parseInt(routeQueryValue))
+                      : this.clearFilter(appliedFilter, appliedFilterIndex);
+                  }
+                }
+              );
+              if (!appliedFilterExist && routeQueryValue) {
+                // search in children of this filter to find index of a child that it`s id is equal to routeQueryId
+                let itemIndex = this.filters[filterIndex].children
+                  .map(function (child) {
+                    return child.id;
+                  })
+                  .indexOf(routeQueryId);
+
+                //so I have all needed values to push them fo applied filter list
+                this.appliedFilterList.push({
+                  type: this.filters[filterIndex].type,
+                  slug: this.filters[filterIndex].slug,
+                  id: routeQueryId,
+                  name: this.filters[filterIndex].children[itemIndex].name,
+                  count: parseInt(routeQueryValue),
+                  indexInFilterPanelSettings: filterIndex,
+                  itemIndexInFilterPanelSettings: itemIndex,
                 });
               }
             }
@@ -643,8 +732,8 @@ export default {
           query: {
             ...this.$route.query,
             min_price: undefined,
-            max_price: undefined
-          }
+            max_price: undefined,
+          },
         });
         this.data.min_price = null;
         this.data.max_price = null;
@@ -665,20 +754,20 @@ export default {
     filterPrice(rangeSliderFrom, rangeSliderTo) {
       setTimeout(() => {
         this.$nuxt.$loading.start();
-      } , 1);
+      }, 1);
       this.setDataFromUrlQueries();
-      if(rangeSliderFrom >= 0   && rangeSliderTo > 0) {
+      if (rangeSliderFrom >= 0 && rangeSliderTo > 0) {
         this.$router.push({
           query: {
             ...this.$route.query,
             min_price: rangeSliderFrom,
-           max_price: rangeSliderTo
-          }
+            max_price: rangeSliderTo,
+          },
         });
         this.data.min_price = rangeSliderFrom;
         this.data.max_price = rangeSliderTo;
       }
-      return SearchServices.searchResults(this.data).then(res => {
+      return SearchServices.searchResults(this.data).then((res) => {
         this.setSearchResult(res.data);
         this.$nuxt.$loading.finish();
       });
@@ -687,7 +776,8 @@ export default {
       this.filterPanelSettings[filterIndex].count++;
       this.filterCounter(
         filter,
-        this.filterPanelSettings[filterIndex].count
+        this.filterPanelSettings[filterIndex].count,
+        filterIndex
       );
     },
     minusCounter(filter, filterIndex) {
@@ -695,118 +785,154 @@ export default {
         this.filterPanelSettings[filterIndex].count--;
         this.filterCounter(
           filter,
-          this.filterPanelSettings[filterIndex].count
+          this.filterPanelSettings[filterIndex].count,
+          filterIndex
         );
       }
     },
-    addCounterList(filterSlug, filterIndex, item, itemIndex) {
+    addCounterList(filter, filterIndex, item, itemIndex) {
       this.filterPanelSettings[filterIndex].ItemCounts[itemIndex].count++;
       this.filterCounterList(
-        filterSlug,
-        item.id,
-        this.filterPanelSettings[filterIndex].ItemCounts[itemIndex].count
+        filter,
+        item,
+        this.filterPanelSettings[filterIndex].ItemCounts[itemIndex].count,
+        filterIndex,
+        itemIndex
       );
     },
-    minusCounterList(filterSlug, filterIndex, item, itemIndex) {
+    minusCounterList(filter, filterIndex, item, itemIndex) {
       if (
         this.filterPanelSettings[filterIndex].ItemCounts[itemIndex].count > 0
       ) {
         this.filterPanelSettings[filterIndex].ItemCounts[itemIndex].count--;
         this.filterCounterList(
-          filterSlug,
-          item.id,
-          this.filterPanelSettings[filterIndex].ItemCounts[itemIndex].count
+          filter,
+          item,
+          this.filterPanelSettings[filterIndex].ItemCounts[itemIndex].count,
+          filterIndex,
+          itemIndex
         );
       }
     },
-    filterCounter(filter, count) {
+    filterCounter(filter, count, filterIndex) {
       this.$nuxt.$loading.start();
       this.setDataFromUrlQueries();
       if (count > 0) {
-
-        this.data[filter.slug] = count
+        this.data[filter.slug] = count;
       } else {
         delete this.data[filter.slug];
       }
-      return SearchServices.searchResults(this.data).then(res => {
+      return SearchServices.searchResults(this.data).then((res) => {
         if (count > 0) {
           this.$router.push({
-            query: { ...this.$route.query, [filter.slug]: count }
+            query: { ...this.$route.query, [filter.slug]: count },
           });
         } else {
           this.$router.push({
-            query: { ...this.$route.query, [filter.slug]: undefined }
+            query: { ...this.$route.query, [filter.slug]: undefined },
           });
         }
 
-
+        // add this filter to applied filter
         let appliedFilterExist;
         this.appliedFilterList.forEach((appliedFilter, appliedFilterIndex) => {
-          if(appliedFilter.slug === filter.slug) {
+          if (appliedFilter.slug === filter.slug) {
             appliedFilterExist = true;
-            this.appliedFilterList[appliedFilterIndex].count = count;
+            count > 0
+              ? (this.appliedFilterList[appliedFilterIndex].count = count)
+              : this.clearFilter(appliedFilter, appliedFilterIndex);
           }
-        })
-        if(!appliedFilterExist) {
+        });
+        if (!appliedFilterExist) {
           this.appliedFilterList.push({
             type: filter.type,
             slug: filter.slug,
             name: filter.name,
-            count: count
-          })
+            count: count,
+            indexInFilterPanelSettings: filterIndex,
+          });
         }
+
         this.setSearchResult(res.data);
         this.$nuxt.$loading.finish();
       });
     },
-    filterCounterList(filterSlug, itemId, itemCount) {
+    filterCounterList(filter, item, itemCount, filterIndex, itemIndex) {
       setTimeout(() => {
         this.$nuxt.$loading.start();
-      } , 1);
+      }, 1);
       this.setDataFromUrlQueries();
       if (itemCount > 0) {
-        if (this.data[filterSlug]) {
+        if (this.data[filter.slug]) {
           let selectedItemExist = false;
-          this.data[filterSlug].forEach((item, itemIndex) => {
-            if( item.id === itemId) {
+          this.data[filter.slug].forEach((itemObject, itemObjectIndex) => {
+            if (itemObject.id === item.id) {
               selectedItemExist = true;
-              this.data[filterSlug][itemIndex].count = itemCount;
+              this.data[filter.slug][itemObjectIndex].count = itemCount;
             }
           });
-          if(!selectedItemExist) {
-            this.data[filterSlug].push({
-              id: itemId,
-              count: itemCount
+          if (!selectedItemExist) {
+            this.data[filter.slug].push({
+              id: item.id,
+              count: itemCount,
             });
           }
         } else {
-          this.data[filterSlug] = [{
-            id: itemId,
-            count: itemCount
-          }];
+          this.data[filter.slug] = [
+            {
+              id: item.id,
+              count: itemCount,
+            },
+          ];
         }
       } else {
         this.$router.push({
           query: {
             ...this.$route.query,
-            [`${filterSlug}[${itemId}]`]: undefined
-          }
+            [`${filter.slug}[${item.id}]`]: undefined,
+          },
         });
-        this.data[filterSlug].forEach((item, itemIndex) => {
-          if(item.id === itemId) {
-            this.data[filterSlug].splice(itemIndex,1);
+        this.data[filter.slug].forEach((itemObject, itemObjectIndex) => {
+          if (itemObject.id === item.id) {
+            this.data[filter.slug].splice(itemObjectIndex, 1);
           }
         });
       }
-      return SearchServices.searchResults(this.data).then(res => {
+      return SearchServices.searchResults(this.data).then((res) => {
         if (itemCount > 0) {
           this.$router.push({
             query: {
               ...this.$route.query,
-              [`${filterSlug}[${itemId}]`]: itemCount
-            }
+              [`${filter.slug}[${item.id}]`]: itemCount,
+            },
           });
         }
+
+        // add this filter to applied filter
+        let appliedFilterExist;
+        this.appliedFilterList.forEach((appliedFilter, appliedFilterIndex) => {
+          if (
+            appliedFilter.slug === filter.slug &&
+            appliedFilter.id === item.id
+          ) {
+            appliedFilterExist = true;
+            itemCount > 0
+              ? (this.appliedFilterList[appliedFilterIndex].count = itemCount)
+              : this.clearFilter(appliedFilter, appliedFilterIndex);
+          }
+        });
+        if (!appliedFilterExist) {
+          this.appliedFilterList.push({
+            type: filter.type,
+            slug: filter.slug,
+            id: item.id,
+            name: item.name,
+            count: itemCount,
+            indexInFilterPanelSettings: filterIndex,
+            itemIndexInFilterPanelSettings: itemIndex,
+          });
+        }
+
         this.setSearchResult(res.data);
         this.$nuxt.$loading.finish();
       });
@@ -815,14 +941,14 @@ export default {
       this.$nuxt.$loading.start();
       this.setDataFromUrlQueries();
       this.data[filterSlug] = switchValue;
-      return SearchServices.searchResults(this.data).then(res => {
+      return SearchServices.searchResults(this.data).then((res) => {
         if (switchValue) {
           this.$router.push({
-            query: { ...this.$route.query, [filterSlug]: switchValue }
+            query: { ...this.$route.query, [filterSlug]: switchValue },
           });
         } else {
           this.$router.push({
-            query: { ...this.$route.query, [filterSlug]: undefined }
+            query: { ...this.$route.query, [filterSlug]: undefined },
           });
         }
 
@@ -833,16 +959,19 @@ export default {
     filterCheckBox(filterSlug, checkBoxItemId, checkBoxValue) {
       setTimeout(() => {
         this.$nuxt.$loading.start();
-      } , 1);
+      }, 1);
       this.setDataFromUrlQueries();
       if (!checkBoxValue) {
         this.$router.push({
           query: {
             ...this.$route.query,
-            [`${filterSlug}[${checkBoxItemId}]`]: undefined
-          }
+            [`${filterSlug}[${checkBoxItemId}]`]: undefined,
+          },
         });
-        this.data[filterSlug].splice(this.data[filterSlug].indexOf(checkBoxItemId),1);
+        this.data[filterSlug].splice(
+          this.data[filterSlug].indexOf(checkBoxItemId),
+          1
+        );
       } else {
         // if the value is true so the item should be add in array for adding to data
         if (this.data[filterSlug]) {
@@ -852,13 +981,13 @@ export default {
         }
       }
 
-      return SearchServices.searchResults(this.data).then(res => {
+      return SearchServices.searchResults(this.data).then((res) => {
         if (checkBoxValue) {
           this.$router.push({
             query: {
               ...this.$route.query,
-              [`${filterSlug}[${checkBoxItemId}]`]: checkBoxItemId
-            }
+              [`${filterSlug}[${checkBoxItemId}]`]: checkBoxItemId,
+            },
           });
         }
         this.setSearchResult(res.data);
@@ -866,18 +995,55 @@ export default {
       });
     },
     clearFilter(appliedFilter, appliedFilterIndex) {
-      // this.$nuxt.$loading.start();
-      console.log('aaaaaaa', appliedFilter, appliedFilterIndex)
-      if(appliedFilter.type === 'counter') {
+      setTimeout(() => {
+        this.$nuxt.$loading.start();
+      }, 1);
+      if (appliedFilter.type === "counter") {
+        // delete it from data send in api
         delete this.data[appliedFilter.slug];
-        this.appliedFilterList.splice(appliedFilterIndex,1);
+
+        // remove it from applied filter list
+        this.appliedFilterList.splice(appliedFilterIndex, 1);
+
+        // reset its value in filterpanelsetting array
+        this.filterPanelSettings[
+          appliedFilter.indexInFilterPanelSettings
+        ].count = 0;
+
+        //remove it  from url query
+        this.$router.push({
+          query: { ...this.$route.query, [appliedFilter.slug]: undefined },
+        });
+      } else if (appliedFilter.type === "list_counter") {
+        // delete it from data send in api
+        this.data[appliedFilter.slug].forEach((itemObject, itemObjectIndex) => {
+          if (itemObject.id === appliedFilter.id) {
+            this.data[appliedFilter.slug].splice(itemObjectIndex, 1);
+          }
+        });
+
+        // remove it from applied filter list
+        this.appliedFilterList.splice(appliedFilterIndex, 1);
+
+        // reset its value in filterpanelsetting array
+        (this.filterPanelSettings[
+          appliedFilter.indexInFilterPanelSettings
+        ].ItemCounts[appliedFilter.itemIndexInFilterPanelSettings].count = 0),
+          //remove it  from url query
+          this.$router.push({
+            query: {
+              ...this.$route.query,
+              [`${appliedFilter.slug}[${appliedFilter.id}]`]: undefined,
+            },
+          });
       }
-      // return SearchServices.searchResults(this.data).then(res => {
-      //   this.setSearchResult(res.data);
-      //   // this.$nuxt.$loading.finish();
-      // });
-    }
-  }
+
+      return SearchServices.searchResults(this.data).then((res) => {
+        this.setSearchResult(res.data);
+        this.$nuxt.$loading.finish();
+      });
+    },
+  },
 };
 </script>
 
