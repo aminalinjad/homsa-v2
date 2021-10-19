@@ -50,7 +50,7 @@ export default {
       propsPagination: null
     };
   },
-  asyncData({params, app, store , route}) {
+  asyncData({params, app, store , route , router}) {
     let data = {
       page: Number(route.query.page) || 1,
       sort: route.query.sort ? route.query.sort : 'popular',
@@ -64,7 +64,6 @@ export default {
       value: splitSlug[1],
       type: splitSlug[0]
     }]
-    console.log(splitSlug)
     return SearchServices.searchResults(data).then(res => {
       // console.log(res.data)
       store.dispatch('modules/search/SET_SEARCH_RESULTS', res.data)

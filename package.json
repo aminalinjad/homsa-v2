@@ -20,6 +20,7 @@
     "vue-custom-scrollbar": "^1.4.1",
     "vue-histogram-slider": "^0.3.8",
     "vue-owl-carousel2": "^2.0.7",
+    "vue-toastification": "^1.7.14",
     "vue2-leaflet": "^2.7.1",
     "vuetify": "^2.5.5"
   },

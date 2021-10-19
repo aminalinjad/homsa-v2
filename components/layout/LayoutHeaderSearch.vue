@@ -75,9 +75,9 @@
                 "
                 v-else
               >
-                <div class="pe-3">{{ searchFormValue.destination.title }}</div>
+                <div class="pe-3">{{ userDestinationSearch }}</div>
                 <v-divider vertical></v-divider>
-                <div class="px-3">
+                <div v-if="searchFormValue.checkIn" class="px-3">
                   <span
                     :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
                   >{{ searchFormValue.checkIn }}</span
@@ -98,6 +98,7 @@
                     {{ $t("header.top.input.day") }})
                   </span>
                 </div>
+                <div v-else>تاریخ را انتخاب کنید</div>
                 <v-divider vertical></v-divider>
 
                 <div class="px-3">
@@ -249,7 +250,6 @@
             v-model="searchFormValue.destination"
             append-icon=""
             prepend-inner-icon="$pinLocation"
-            hide-no-data
             :menu-props="{ minWidth: 410, left: $vuetify.rtl }"
             :class="hover ? 'searchInputBoxShadow' : ''"
             class="me-2 rounded searchDestination font-regular-14"
@@ -262,13 +262,32 @@
             <!-- title in suggestion mode -->
             <template v-slot:prepend-item>
               <v-list-item-title
-                v-if="userDestinationSearch === ''"
+                v-if="userDestinationSearch === '' || userDestinationSearch === null"
                 class="ms-6 mt-4 font-medium-14 greenDark8--text"
               >پیشنهاد هومسا
               </v-list-item-title
               >
+              <div class="font-medium-14 greenDark8--text cursorPointer pa-5" v-else-if="suggestionsDefault.length !== 0">
+                  <v-list-item-title
+                    @click="clickOnUserSuggestion"
+                    v-html="`جستجوی ${userDestinationSearch} در هومسا`"
+                    class="font-regular-14 greenDark8--text"
+                  ></v-list-item-title>
+              </div>
               <!--destination result -->
             </template>
+
+            <template v-slot:no-data>
+              <div class="font-medium-14 greenDark8--text cursorPointer pa-5">
+                <v-list-item-title
+                  @click="clickOnUserSuggestion"
+                  v-html="`جستجوی ${userDestinationSearch} در هومسا`"
+                  class="font-regular-14 greenDark8--text"
+                ></v-list-item-title>
+              </div>
+
+            </template>
+
             <template v-slot:item="data">
               <v-list-item-avatar rounded width="48" height="48" class="ms-2">
                 <img :src="data.item.image"/>
@@ -466,7 +485,7 @@ export default {
           {name: "خروج", link: "#6"}
         ]
       },
-      userDestinationSearch: "",
+      userDestinationSearch: '',
       searchFormValue: {
         destination: null,
         checkIn: null,
@@ -507,6 +526,11 @@ export default {
     ...mapActions({
       setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
     }),
+    clickOnUserSuggestion() {
+      if (this.$refs.cityAutocomplete) {
+        this.$refs.cityAutocomplete.isMenuActive = false;
+      }
+    },
     showSearchSection() {
       this.searchSection = true;
       this.overlay = !this.overlay;
@@ -517,30 +541,91 @@ export default {
       this.overlay = !this.overlay;
     },
     SearchServices() {
-      this.calendar = false;
-      this.closeSearchSection();
+      if (this.userDestinationSearch === '' || this.userDestinationSearch === null) {
+        this.$toast.error('جستجو بدون پارامتر امکانپذیر نیست')
+      }else  {
+        this.calendar = false;
+        this.closeSearchSection();
 
-      //check send request or not
-// if(`${this.searchFormValue.destination.type}-${this.searchFormValue.destination.slug}` === th)
+        if (this.searchFormValue.destination && this.searchFormValue.destination.type) {
+          //check send request or not
+          if (`${this.searchFormValue.destination.type}-${this.searchFormValue.destination.slug}` === this.$route.params.slug) {
+            setTimeout(() => {
+              this.$nuxt.$loading.start()
+            } , 1)
+            let data = {
+              page: Number(this.$route.query.page) || 1,
+              sort: this.$route.query.sort ? this.$route.query.sort : 'popular',
+              guest: this.searchFormValue.guest,
+            }
+            if (this.searchFormValue.checkIn) {
+              data.checkin = this.searchFormValue.checkIn
+            }
+            if (this.searchFormValue.checkOut) {
+              data.checkout = this.searchFormValue.checkOut
+            }
 
-      //end check request
-      if (this.searchFormValue.destination && this.searchFormValue.destination.type) {
+            let splitSlug = this.$route.params.slug.split('-')
 
-        let queryData = {
-          guest: this.searchFormValue.guest,
-          checkInDate: this.searchFormValue.checkIn ? this.searchFormValue.checkIn : undefined,
-          checkOutDate: this.searchFormValue.checkOut ? this.searchFormValue.checkOut : undefined
+            data.slugs = [{
+              value: splitSlug[1],
+              type: splitSlug[0]
+            }]
+            SearchServices.searchResults(data).then(res => {
+              this.$nuxt.$loading.finish()
+              console.log(res.data)
+              this.setSearchResult(res.data)
+            }).catch(err => {
+              this.$nuxt.$loading.finish()
+              alert('err dare')
+            })
+          }
+          //end check request
+          let queryData = {
+            guest: this.searchFormValue.guest,
+            checkInDate: this.searchFormValue.checkIn ? this.searchFormValue.checkIn : undefined,
+            checkOutDate: this.searchFormValue.checkOut ? this.searchFormValue.checkOut : undefined,
+            q: undefined
+          }
+          this.$router.push({
+            path: `${this.searchFormValue.destination.type}-${this.searchFormValue.destination.slug}`,
+            query: {...this.$route.query, ...queryData}
+          })
+        } else {
+          //check send request or not
+          if (this.userDestinationSearch === this.$route.query.q) {
+            setTimeout(() => {
+              this.$nuxt.$loading.start()
+            } , 1)
+            let data = {
+              page: Number(this.$route.query.page) || 1,
+              sort: this.$route.query.sort ? this.$route.query.sort : 'popular',
+              guest: this.searchFormValue.guest,
+              q: this.userDestinationSearch
+            }
+            if (this.searchFormValue.checkIn) {
+              data.checkin = this.searchFormValue.checkIn
+            }
+            if (this.searchFormValue.checkOut) {
+              data.checkout = this.searchFormValue.checkOut
+            }
+            SearchServices.searchResults(data).then(res => {
+              this.$nuxt.$loading.finish()
+              console.log(res.data)
+              this.setSearchResult(res.data)
+            }).catch(err => {
+              this.$nuxt.$loading.finish()
+              alert('err dare')
+            })
+          }
+          //end check request
+          this.$router.push({
+            path: 'search',
+            query: {...this.$route.query, guest: this.searchFormValue.guest, q: this.userDestinationSearch}
+          })
         }
-        this.$router.push({
-          path: `${this.searchFormValue.destination.type}-${this.searchFormValue.destination.slug}`,
-          query: {...this.$route.query, ...queryData}
-        })
-      } else {
-        this.$router.push({
-          path: 'search',
-          query: {...this.$route.query, guest: this.searchFormValue.guest, q: this.userDestinationSearch}
-        })
       }
+
     },
     scrollPage() {
       if (this.$refs.cityAutocomplete) {
@@ -591,7 +676,7 @@ export default {
       this.calendar = true;
     },
     setCheckInDate(checkInDate) {
-      if(checkInDate) {
+      if (checkInDate) {
         this.clearCalendar = false;
         this.searchFormValue.checkIn = checkInDate.date;
         this.$i18n.locale === 'fa' ? this.checkInDate = checkInDate.jalali_date : this.checkInDate = checkInDate.date;
@@ -601,7 +686,7 @@ export default {
       }
     },
     setCheckOutDate(checkOutDate) {
-      if(checkOutDate) {
+      if (checkOutDate) {
         this.searchFormValue.checkOut = checkOutDate.date;
         this.$i18n.locale === 'fa' ? this.checkOutDate = checkOutDate.jalali_date : this.checkOutDate = checkOutDate.date;
       } else {
@@ -618,7 +703,7 @@ export default {
       this.clearCalendar = true;
     },
     closeCalendar() {
-      if(this.calendar) {
+      if (this.calendar) {
         this.clearDateRange()
       }
     },

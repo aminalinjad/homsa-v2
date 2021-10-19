@@ -79,7 +79,7 @@
       scrollYMarginOffset="20"
     >
       <PagesSearchFilters v-if="isFilter"/>
-      <v-card flat class="rounded-0 fill-height" v-else>
+      <v-card flat class="rounded-0" v-else>
         <v-row v-if="getSearchResult.data.length !== 0" class="ma-0">
           <v-col
             cols="12"
@@ -182,7 +182,6 @@ export default {
       this.$router.push({query: {...this.$route.query, page: qs.page}})
       let data = {
         q: "tehran",
-        "Accept-Language": "fa",
         page: this.currentPage,
         sort: "popular"
       }
