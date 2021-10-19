@@ -544,8 +544,6 @@ export default {
       if (this.userDestinationSearch === '' || this.userDestinationSearch === null) {
         this.$toast.error('جستجو بدون پارامتر امکانپذیر نیست')
       }else  {
-        this.calendar = false;
-        this.closeSearchSection();
 
         if (this.searchFormValue.destination && this.searchFormValue.destination.type) {
           //check send request or not
@@ -572,13 +570,17 @@ export default {
               type: splitSlug[0]
             }]
             SearchServices.searchResults(data).then(res => {
+              this.calendar = false;
+              this.closeSearchSection();
               this.$nuxt.$loading.finish()
               console.log(res.data)
               this.setSearchResult(res.data)
             }).catch(err => {
               this.$nuxt.$loading.finish()
-              alert('err dare')
             })
+          }else {
+            this.calendar = false;
+            this.closeSearchSection();
           }
           //end check request
           let queryData = {
@@ -610,13 +612,17 @@ export default {
               data.checkout = this.searchFormValue.checkOut
             }
             SearchServices.searchResults(data).then(res => {
+              this.calendar = false;
+              this.closeSearchSection();
               this.$nuxt.$loading.finish()
               console.log(res.data)
               this.setSearchResult(res.data)
             }).catch(err => {
               this.$nuxt.$loading.finish()
-              alert('err dare')
             })
+          }else {
+            this.calendar = false;
+            this.closeSearchSection();
           }
           //end check request
           this.$router.push({

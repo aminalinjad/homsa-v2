@@ -240,7 +240,6 @@ export default {
           this.setSearchResult(res.data)
         }).catch(err => {
           this.$nuxt.$loading.finish()
-          alert('err dare')
         })
       }
     },

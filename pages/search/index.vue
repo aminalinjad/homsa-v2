@@ -68,6 +68,8 @@ export default {
       return {
         results: res.data.data
       }
+    }).catch(err => {
+
     })
   },
   computed: {
