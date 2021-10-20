@@ -755,6 +755,83 @@ export default {
             if (routeQueryKey.includes(filterType.slug)) {
               if (routeQueryValue) {
                 filterCheckBoxItems.push(parseInt(routeQueryValue));
+
+                // push it in appliedFilterList Array
+                let routeQueryId = parseInt(
+                  routeQueryKey.substring(
+                    filterType.slug.length + 1,
+                    routeQueryKey.length - 1
+                  )
+                );
+
+                let filterIndex = this.filters
+                  .map(function (filter) {
+                    return filter.slug;
+                  })
+                  .indexOf(filterType.slug);
+                let appliedFilterExist;
+                this.appliedFilterList.forEach(
+                  (appliedFilter, appliedFilterIndex) => {
+                    if (
+                      appliedFilter.slug === this.filters[filterIndex].slug &&
+                      appliedFilter.id === routeQueryId
+                    ) {
+                      appliedFilterExist = true;
+                      routeQueryValue
+                        ? (this.appliedFilterList[appliedFilterIndex].value =
+                            routeQueryValue)
+                        : this.clearFilter(appliedFilter, appliedFilterIndex);
+                    }
+                  }
+                );
+                if (!appliedFilterExist) {
+                  if (filterTypes[filterTypeIndex].type === "list") {
+                    // search in children of this filter to find index of a child that it`s id is equal to routeQueryId
+                    let childIndex = null;
+                    let childItemIndex = null;
+
+                     this.filters[filterIndex].children.forEach((child, index) => {
+                       child.children.forEach((childItem, i) => {
+                         if(childItem.id === routeQueryId) {
+                           childItemIndex = i;
+                           childIndex = index;
+                         }
+                       });
+                     })  
+
+                     console.log('i wanna test', childIndex, childItemIndex);
+
+                    //so I have all needed values to push them fo applied filter list
+                    this.appliedFilterList.push({
+                      type: this.filters[filterIndex].type,
+                      slug: this.filters[filterIndex].slug,
+                      id: routeQueryId,
+                      name: this.filters[filterIndex].children[childIndex].children[childItemIndex].name,
+                      value: routeQueryValue,
+                      indexInFilterPanelSettings: filterIndex,
+                      childIndexInFilterPanelSettings: childIndex,
+                      childItemIndexInFilterPanelSettings: childItemIndex,
+                    });
+                  } else {
+                    // search in children of this filter to find index of a child that it`s id is equal to routeQueryId
+                    let childIndex = this.filters[filterIndex].children
+                      .map(function (child) {
+                        return child.id;
+                      })
+                      .indexOf(routeQueryId);
+
+                    //so I have all needed values to push them fo applied filter list
+                    this.appliedFilterList.push({
+                      type: this.filters[filterIndex].type,
+                      slug: this.filters[filterIndex].slug,
+                      id: routeQueryId,
+                      name: this.filters[filterIndex].children[childIndex].name,
+                      value: routeQueryValue,
+                      indexInFilterPanelSettings: filterIndex,
+                      childIndexInFilterPanelSettings: childIndex,
+                    });
+                  }
+                }
               }
             }
             SearchServices;
@@ -1197,9 +1274,9 @@ export default {
             appliedFilter.childIndexInFilterPanelSettings
           ].value = false;
         } else {
-          this.filterPanelSettings[
-            appliedFilter.indexInFilterPanelSettings
-          ][appliedFilter.childIndexInFilterPanelSettings].listCheckBoxValues[
+          this.filterPanelSettings[appliedFilter.indexInFilterPanelSettings][
+            appliedFilter.childIndexInFilterPanelSettings
+          ].listCheckBoxValues[
             appliedFilter.childItemIndexInFilterPanelSettings
           ].value = false;
         }
