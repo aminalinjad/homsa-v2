@@ -111,7 +111,8 @@
         </v-col>
       </v-row>
 
-      <v-row style="min-height: 400px" v-else class="text-center justify-center align-content-center align-center fill-height flex-column">
+      <v-row style="min-height: 400px" v-else
+             class="text-center justify-center align-content-center align-center fill-height flex-column">
         <v-icon size="126">$noResults</v-icon>
         <div class="font-regular-14 secondary--text>">اقامتگاهی یافت نشد!</div>
       </v-row>
@@ -197,13 +198,28 @@ export default {
 
       this.$router.push({query: {...this.$route.query, sort: this.sortByDefault}})
       let data = {
-        q: "اجاره ویلا رامسر",
         page: this.currentPage,
-        sort: this.sortByDefault
+        sort: this.sortByDefault,
+        guest: Number(this.$route.query.guest) || 1,
+        checkin: this.$route.query.checkInDate,
+        checkout: this.$route.query.checkOutDate,
+      }
+
+      if (this.$route.params.slug) {
+        let splitSlug = this.$route.params.slug.split('-')
+
+        data.slugs = [{
+          value: splitSlug[1],
+          type: splitSlug[0]
+        }]
+      }
+      if (this.$route.query.q) {
+        data.q = this.$route.query.q
       }
       SearchServices.searchResults(data).then(res => {
         this.setSearchResult(res.data)
         this.$nuxt.$loading.finish()
+      }).catch(err => {
       })
     },
     changePagination() {
@@ -216,14 +232,29 @@ export default {
 
       this.$router.push({query: {...this.$route.query, page: qs.page}})
       let data = {
-        q: "tehran",
-        "Accept-Language": "fa",
         page: this.currentPage,
-        sort: "popular"
+        sort: this.$route.query.sort ? this.$route.query.sort : 'popular',
+        guest: Number(this.$route.query.guest) || 1,
+        checkin: this.$route.query.checkInDate,
+        checkout: this.$route.query.checkOutDate,
+      }
+
+      if (this.$route.params.slug) {
+        let splitSlug = this.$route.params.slug.split('-')
+
+        data.slugs = [{
+          value: splitSlug[1],
+          type: splitSlug[0]
+        }]
+      }
+      if (this.$route.query.q) {
+        data.q = this.$route.query.q
       }
       SearchServices.searchResults(data).then(res => {
         this.setSearchResult(res.data)
         this.$nuxt.$loading.finish()
+      }).catch(err => {
+
       })
     },
     listView() {
