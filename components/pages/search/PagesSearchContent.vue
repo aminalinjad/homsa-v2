@@ -220,7 +220,6 @@ export default {
         this.setSearchResult(res.data)
         this.$nuxt.$loading.finish()
       }).catch(err => {
-        
       })
     },
     changePagination() {
