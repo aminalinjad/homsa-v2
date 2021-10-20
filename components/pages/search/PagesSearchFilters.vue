@@ -287,8 +287,9 @@
               v-model="filterPanelSettings[filterIndex].value"
               @change="
                 filterSwitch(
-                  filter.slug,
-                  filterPanelSettings[filterIndex].value
+                  filter,
+                  filterPanelSettings[filterIndex].value,
+                  filterIndex
                 )
               "
               v-if="filterPanelSettings[filterIndex]"
@@ -316,25 +317,29 @@
               "
             >
               <v-row
-                v-for="(item, index) in filter.children"
-                :key="index"
+                v-for="(filterChild, filterChildIndex) in filter.children"
+                :key="filterChildIndex"
                 class="ma-0 mb-2 font-light-14"
               >
                 <v-checkbox
                   off-icon="$checkBox"
                   on-icon="$checkBoxActive"
                   class="mt-0 mb-n5 pa-0 checkBoxClass"
-                  :label="item.name"
+                  :label="filterChild.name"
                   v-model="
-                    filterPanelSettings[filterIndex].listCheckBoxValues[index]
-                      .value
+                    filterPanelSettings[filterIndex].listCheckBoxValues[
+                      filterChildIndex
+                    ].value
                   "
                   @change="
                     filterCheckBox(
-                      filter.slug,
-                      item.id,
-                      filterPanelSettings[filterIndex].listCheckBoxValues[index]
-                        .value
+                      filter,
+                      filterChild,
+                      filterPanelSettings[filterIndex].listCheckBoxValues[
+                        filterChildIndex
+                      ].value,
+                      filterIndex,
+                      { filterChildIndex: filterChildIndex }
                     )
                   "
                 ></v-checkbox>
@@ -396,10 +401,15 @@
                     "
                     @change="
                       filterCheckBox(
-                        filter.slug,
-                        filterChildItem.id,
+                        filter,
+                        filterChildItem,
                         filterPanelSettings[filterIndex][filterChildIndex]
-                          .listCheckBoxValues[filterChildItemIndex].value
+                          .listCheckBoxValues[filterChildItemIndex].value,
+                        filterIndex,
+                        {
+                          filterChildIndex: filterChildIndex,
+                          filterChildItemIndex: filterChildItemIndex,
+                        }
                       )
                     "
                   ></v-checkbox>
@@ -477,6 +487,8 @@ export default {
   mounted() {
     this.calculateSectionWidth();
     this.filterPanelSettingsHandler();
+
+    //get and set previous filter
     this.setDataFromUrlQueries();
     window.addEventListener("resize", this.calculateSectionWidth);
   },
@@ -702,6 +714,34 @@ export default {
           )) {
             if (routeQueryKey.includes(filterType.slug)) {
               this.data[filterType.slug] = routeQueryValue === "true";
+
+              // push it in appliedFilterList Array
+              let filterIndex = this.filters
+                .map(function (filter) {
+                  return filter.slug;
+                })
+                .indexOf(filterType.slug);
+              let appliedFilterExist;
+              this.appliedFilterList.forEach(
+                (appliedFilter, appliedFilterIndex) => {
+                  if (appliedFilter.slug === this.filters[filterIndex].slug) {
+                    appliedFilterExist = true;
+                    routeQueryValue
+                      ? (this.appliedFilterList[appliedFilterIndex].value =
+                          routeQueryValue)
+                      : this.clearFilter(appliedFilter, appliedFilterIndex);
+                  }
+                }
+              );
+              if (!appliedFilterExist && routeQueryValue) {
+                this.appliedFilterList.push({
+                  type: this.filters[filterIndex].type,
+                  slug: this.filters[filterIndex].slug,
+                  name: this.filters[filterIndex].name,
+                  value: routeQueryValue,
+                  indexInFilterPanelSettings: filterIndex,
+                });
+              }
             }
           }
         } else if (
@@ -717,6 +757,7 @@ export default {
                 filterCheckBoxItems.push(parseInt(routeQueryValue));
               }
             }
+            SearchServices;
           }
           if (filterCheckBoxItems.length > 0) {
             this.data[filterType.slug] = filterCheckBoxItems;
@@ -755,6 +796,8 @@ export default {
       setTimeout(() => {
         this.$nuxt.$loading.start();
       }, 1);
+
+      //get and set previous filter
       this.setDataFromUrlQueries();
       if (rangeSliderFrom >= 0 && rangeSliderTo > 0) {
         this.$router.push({
@@ -816,6 +859,8 @@ export default {
     },
     filterCounter(filter, count, filterIndex) {
       this.$nuxt.$loading.start();
+
+      //get and set previous filter
       this.setDataFromUrlQueries();
       if (count > 0) {
         this.data[filter.slug] = count;
@@ -833,7 +878,7 @@ export default {
           });
         }
 
-        // add this filter to applied filter
+        // add this filter to applied filter list
         let appliedFilterExist;
         this.appliedFilterList.forEach((appliedFilter, appliedFilterIndex) => {
           if (appliedFilter.slug === filter.slug) {
@@ -861,6 +906,8 @@ export default {
       setTimeout(() => {
         this.$nuxt.$loading.start();
       }, 1);
+
+      //get and set previous filter
       this.setDataFromUrlQueries();
       if (itemCount > 0) {
         if (this.data[filter.slug]) {
@@ -937,18 +984,41 @@ export default {
         this.$nuxt.$loading.finish();
       });
     },
-    filterSwitch(filterSlug, switchValue) {
+    filterSwitch(filter, switchValue, filterIndex) {
       this.$nuxt.$loading.start();
+
+      //get and set previous filter
       this.setDataFromUrlQueries();
-      this.data[filterSlug] = switchValue;
+
+      this.data[filter.slug] = switchValue;
       return SearchServices.searchResults(this.data).then((res) => {
         if (switchValue) {
           this.$router.push({
-            query: { ...this.$route.query, [filterSlug]: switchValue },
+            query: { ...this.$route.query, [filter.slug]: switchValue },
           });
         } else {
           this.$router.push({
-            query: { ...this.$route.query, [filterSlug]: undefined },
+            query: { ...this.$route.query, [filter.slug]: undefined },
+          });
+        }
+
+        // add this filter to applied filter list
+        let appliedFilterExist;
+        this.appliedFilterList.forEach((appliedFilter, appliedFilterIndex) => {
+          if (appliedFilter.slug === filter.slug) {
+            appliedFilterExist = true;
+            switchValue
+              ? (this.appliedFilterList[appliedFilterIndex].value = switchValue)
+              : this.clearFilter(appliedFilter, appliedFilterIndex);
+          }
+        });
+        if (!appliedFilterExist && switchValue) {
+          this.appliedFilterList.push({
+            type: filter.type,
+            slug: filter.slug,
+            name: filter.name,
+            value: switchValue,
+            indexInFilterPanelSettings: filterIndex,
           });
         }
 
@@ -956,28 +1026,37 @@ export default {
         this.$nuxt.$loading.finish();
       });
     },
-    filterCheckBox(filterSlug, checkBoxItemId, checkBoxValue) {
+    filterCheckBox(
+      filter,
+      checkBoxItem,
+      checkBoxValue,
+      filterIndex,
+      filterChildIndexObject
+    ) {
       setTimeout(() => {
         this.$nuxt.$loading.start();
       }, 1);
+
+      //get and set previous filter
       this.setDataFromUrlQueries();
+
       if (!checkBoxValue) {
         this.$router.push({
           query: {
             ...this.$route.query,
-            [`${filterSlug}[${checkBoxItemId}]`]: undefined,
+            [`${filter.slug}[${checkBoxItem.id}]`]: undefined,
           },
         });
-        this.data[filterSlug].splice(
-          this.data[filterSlug].indexOf(checkBoxItemId),
+        this.data[filter.slug].splice(
+          this.data[filter.slug].indexOf(checkBoxItem.id),
           1
         );
       } else {
         // if the value is true so the item should be add in array for adding to data
-        if (this.data[filterSlug]) {
-          this.data[filterSlug].push(checkBoxItemId);
+        if (this.data[filter.slug]) {
+          this.data[filter.slug].push(checkBoxItem.id);
         } else {
-          this.data[filterSlug] = [checkBoxItemId];
+          this.data[filter.slug] = [checkBoxItem.id];
         }
       }
 
@@ -986,10 +1065,53 @@ export default {
           this.$router.push({
             query: {
               ...this.$route.query,
-              [`${filterSlug}[${checkBoxItemId}]`]: checkBoxItemId,
+              [`${filter.slug}[${checkBoxItem.id}]`]: checkBoxItem.id,
             },
           });
         }
+
+        // add this filter to applied filter
+        let appliedFilterExist;
+        this.appliedFilterList.forEach((appliedFilter, appliedFilterIndex) => {
+          if (
+            appliedFilter.slug === filter.slug &&
+            appliedFilter.id === checkBoxItem.id
+          ) {
+            appliedFilterExist = true;
+            checkBoxValue
+              ? (this.appliedFilterList[appliedFilterIndex].value =
+                  checkBoxValue)
+              : this.clearFilter(appliedFilter, appliedFilterIndex);
+          }
+        });
+        if (!appliedFilterExist && checkBoxValue) {
+          if (filter.type === "list") {
+            this.appliedFilterList.push({
+              type: filter.type,
+              slug: filter.slug,
+              id: checkBoxItem.id,
+              name: checkBoxItem.name,
+              value: checkBoxValue,
+              indexInFilterPanelSettings: filterIndex,
+              childIndexInFilterPanelSettings:
+                filterChildIndexObject.filterChildIndex,
+              childItemIndexInFilterPanelSettings:
+                filterChildIndexObject.filterChildItemIndex,
+            });
+          } else {
+            this.appliedFilterList.push({
+              type: filter.type,
+              slug: filter.slug,
+              id: checkBoxItem.id,
+              name: checkBoxItem.name,
+              value: checkBoxValue,
+              indexInFilterPanelSettings: filterIndex,
+              childIndexInFilterPanelSettings:
+                filterChildIndexObject.filterChildIndex,
+            });
+          }
+        }
+
         this.setSearchResult(res.data);
         this.$nuxt.$loading.finish();
       });
@@ -1026,16 +1148,69 @@ export default {
         this.appliedFilterList.splice(appliedFilterIndex, 1);
 
         // reset its value in filterpanelsetting array
-        (this.filterPanelSettings[
+        this.filterPanelSettings[
           appliedFilter.indexInFilterPanelSettings
-        ].ItemCounts[appliedFilter.itemIndexInFilterPanelSettings].count = 0),
-          //remove it  from url query
-          this.$router.push({
-            query: {
-              ...this.$route.query,
-              [`${appliedFilter.slug}[${appliedFilter.id}]`]: undefined,
-            },
-          });
+        ].ItemCounts[appliedFilter.itemIndexInFilterPanelSettings].count = 0;
+
+        //remove it  from url query
+        this.$router.push({
+          query: {
+            ...this.$route.query,
+            [`${appliedFilter.slug}[${appliedFilter.id}]`]: undefined,
+          },
+        });
+      } else if (appliedFilter.type === "switch") {
+        // delete it from data send in api
+        delete this.data[appliedFilter.slug];
+
+        // remove it from applied filter list
+        this.appliedFilterList.splice(appliedFilterIndex, 1);
+
+        // reset its value in filterpanelsetting array
+        this.filterPanelSettings[
+          appliedFilter.indexInFilterPanelSettings
+        ].value = false;
+
+        //remove it from url query
+        this.$router.push({
+          query: { ...this.$route.query, [appliedFilter.slug]: undefined },
+        });
+      } else if (
+        appliedFilter.type === "list_checkbox" ||
+        appliedFilter.type === "list"
+      ) {
+        // delete it from data send in api
+        this.data[appliedFilter.slug].forEach((item, itemIndex) => {
+          if (item === appliedFilter.id) {
+            this.data[appliedFilter.slug].splice(itemIndex, 1);
+          }
+        });
+
+        // remove it from applied filter list
+        this.appliedFilterList.splice(appliedFilterIndex, 1);
+
+        // reset its value in filterpanelsetting array
+        if (appliedFilter.type === "list_checkbox") {
+          this.filterPanelSettings[
+            appliedFilter.indexInFilterPanelSettings
+          ].listCheckBoxValues[
+            appliedFilter.childIndexInFilterPanelSettings
+          ].value = false;
+        } else {
+          this.filterPanelSettings[
+            appliedFilter.indexInFilterPanelSettings
+          ][appliedFilter.childIndexInFilterPanelSettings].listCheckBoxValues[
+            appliedFilter.childItemIndexInFilterPanelSettings
+          ].value = false;
+        }
+
+        //remove it  from url query
+        this.$router.push({
+          query: {
+            ...this.$route.query,
+            [`${appliedFilter.slug}[${appliedFilter.id}]`]: undefined,
+          },
+        });
       }
 
       return SearchServices.searchResults(this.data).then((res) => {
