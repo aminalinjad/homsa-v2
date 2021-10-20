@@ -46,6 +46,10 @@
   "search": {
     "filters": {
       "map-thumbnail": "نمایش روی نقشه",
+      "all-filters": {
+        "title": "فیلترهای اعمال شده",
+        "clear-all": "حذف همه"
+      },
       "price": {
           "title": "محدوده قیمت",
           "from": "از",

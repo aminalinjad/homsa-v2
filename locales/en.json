@@ -48,6 +48,10 @@
   "search": {
     "filters": {
       "map-thumbnail": "Show map",
+      "all-filters": {
+        "title": "Filters",
+        "clear-all": "Clear All"
+      },
       "price": {
           "title": "Price range",
           "from": "min price",
