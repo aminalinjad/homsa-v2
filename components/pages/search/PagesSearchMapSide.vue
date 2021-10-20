@@ -175,19 +175,35 @@ export default {
     changePagination() {
       setTimeout(() => {
         this.$nuxt.$loading.start()
-      } , 1)
+      }, 1)
       let qs = {}
       if (this.currentPage > 1) qs.page = this.currentPage
 
       this.$router.push({query: {...this.$route.query, page: qs.page}})
       let data = {
-        q: "tehran",
         page: this.currentPage,
-        sort: "popular"
+        sort: this.$route.query.sort ? this.$route.query.sort : 'popular',
+        guest: Number(this.$route.query.guest) || 1,
+        checkin: this.$route.query.checkInDate,
+        checkout: this.$route.query.checkOutDate,
+      }
+
+      if (this.$route.params.slug) {
+        let splitSlug = this.$route.params.slug.split('-')
+
+        data.slugs = [{
+          value: splitSlug[1],
+          type: splitSlug[0]
+        }]
+      }
+      if (this.$route.query.q) {
+        data.q = this.$route.query.q
       }
       SearchServices.searchResults(data).then(res => {
         this.$nuxt.$loading.finish()
         this.setSearchResult(res.data)
+      }).catch(err => {
+
       })
     },
     toggleFilter() {
