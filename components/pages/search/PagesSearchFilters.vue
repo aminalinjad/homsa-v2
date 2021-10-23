@@ -18,7 +18,7 @@
             <span class="font-regular-14">{{
               $t("search.filters.all-filters.title")
             }}</span>
-            <v-btn small text class="font-regular-12">
+            <v-btn small text class="font-regular-12" @click="clearAllFilter(appliedFilterList)">
               {{ $t("search.filters.all-filters.clear-all") }}
             </v-btn>
           </v-card-title>
@@ -37,10 +37,17 @@
               <span
                 v-if="appliedFilter.count"
                 class="pe-1"
-                :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
+                :class="{ 'font-FaNumregular-14': $i18n.locale === 'fa' }"
                 >{{ appliedFilter.count }}</span
               >
-              <span>{{ appliedFilter.name }}</span>
+              <span v-if="appliedFilter.name">{{ appliedFilter.name }}</span>
+              <span v-if="appliedFilter.type === 'price_range'">
+                <span>{{ $t("search.filters.price.from") }}</span>
+                <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''">{{ appliedFilter.minPrice }}</span>
+                <span>{{ $t("search.filters.price.to") }}</span>
+                <span :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''">{{ appliedFilter.maxPrice }}</span>
+                <span>{{ $t("search.filters.price.unit") }}</span>
+                 </span>
             </v-chip>
           </v-card-text>
         </v-card>
@@ -141,7 +148,7 @@
                 class="font-medium-14"
                 outlined
                 :disabled="rangeBtnDisable"
-                @click="filterPrice(rangeSliderFrom, rangeSliderTo)"
+                @click="filterPrice(filter, rangeSliderFrom, rangeSliderTo, filterIndex)"
               >
                 {{ $t("search.filters.price.btn") }}
               </v-btn>
@@ -538,7 +545,7 @@ export default {
         } else if (this.filters[filterIndex].type === "switch") {
           this.filterPanelSettings.push({
             expand: 0,
-            value: this.$route.query[this.filters[filterIndex].slug]
+            value: this.$route.query[this.filters[filterIndex].slug] 
               ? this.$route.query[this.filters[filterIndex].slug]
               : false,
           });
@@ -606,6 +613,31 @@ export default {
           if (routeQueries.max_price) {
             this.data.max_price = parseInt(routeQueries.max_price);
           }
+
+          // push it in appliedFilterList Array
+              let filterIndex = this.filters
+                .map(function (filter) {
+                  return filter.slug;
+                })
+                .indexOf(filterType.slug);
+              let appliedFilterExist;
+              this.appliedFilterList.forEach(
+                (appliedFilter, appliedFilterIndex) => {
+                  if (appliedFilter.slug === this.filters[filterIndex].slug) {
+                    appliedFilterExist = true;
+                  }
+                }
+              );
+              if (!appliedFilterExist && routeQueries.min_price) {
+                this.appliedFilterList.push({
+                  type: this.filters[filterIndex].type,
+                  slug: this.filters[filterIndex].slug,
+                  minPrice: routeQueries.min_price,
+                  maxPrice: routeQueries.max_price,
+                  indexInFilterPanelSettings: filterIndex,
+                });
+              }
+
         } else if (filterType.type === "counter") {
           for (let [routeQueryKey, routeQueryValue] of Object.entries(
             routeQueries
@@ -796,7 +828,7 @@ export default {
                            childItemIndex = i;
                            childIndex = index;
                          }
-                       });
+                       }); 
                      })  
 
                      console.log('i wanna test', childIndex, childItemIndex);
@@ -869,7 +901,7 @@ export default {
         this.histogramSectionWidth = width.clientWidth;
       }
     },
-    filterPrice(rangeSliderFrom, rangeSliderTo) {
+    filterPrice(filter,rangeSliderFrom, rangeSliderTo, filterIndex) {
       setTimeout(() => {
         this.$nuxt.$loading.start();
       }, 1);
@@ -888,6 +920,26 @@ export default {
         this.data.max_price = rangeSliderTo;
       }
       return SearchServices.searchResults(this.data).then((res) => {
+        // add this filter to applied filter list
+        let appliedFilterExist;
+        this.appliedFilterList.forEach((appliedFilter, appliedFilterIndex) => {
+          if (appliedFilter.slug === filter.slug) {
+            appliedFilterExist = true;
+            appliedFilter.minPrice = rangeSliderFrom;
+            appliedFilter.maxPrice = rangeSliderTo;
+            console.log('here when its ', rangeSliderFrom, rangeSliderTo);
+          }
+        });
+        if (!appliedFilterExist) {
+          console.log('here before push', rangeSliderFrom, rangeSliderTo);
+          this.appliedFilterList.push({
+            type: filter.type,
+            slug: filter.slug,
+            minPrice: rangeSliderFrom,
+            maxPrice: rangeSliderTo,
+            indexInFilterPanelSettings: filterIndex,
+          });
+        }
         this.setSearchResult(res.data);
         this.$nuxt.$loading.finish();
       });
@@ -1197,7 +1249,26 @@ export default {
       setTimeout(() => {
         this.$nuxt.$loading.start();
       }, 1);
-      if (appliedFilter.type === "counter") {
+      if(appliedFilter.type === "price_range") {
+        // delete it from data send in api
+        delete this.data.min_price;
+        delete this.data.max_price;
+
+        // remove it from applied filter list
+        this.appliedFilterList.splice(appliedFilterIndex, 1);
+
+        // reset its values
+        this.rangeSliderFrom = null;
+        this.rangeSliderTo = null;
+
+        //remove it  from url query
+        this.$router.push({
+          query: { ...this.$route.query, min_price: undefined, max_price: undefined },
+        });
+
+        this.rangeBtnDisable = true;
+
+      } else if (appliedFilter.type === "counter") {
         // delete it from data send in api
         delete this.data[appliedFilter.slug];
 
@@ -1295,6 +1366,65 @@ export default {
         this.$nuxt.$loading.finish();
       });
     },
+    clearAllFilter(appliedFilterList) {
+      let routeQueries = this.$route.query;
+      console.log('route query before', routeQueries);
+      // let startIndex = appliedFilterList.length-1;
+      // //here I need the exact appliedFilterIndex and I can`t use for each in an reverse array
+      // for(let appliedFilterIndex = startIndex ; appliedFilterIndex >= 0 ; appliedFilterIndex-- ) {
+      //   // console.log('sahar',appliedFilterList[appliedFilterIndex].slug);
+      //   this.clearFilter(appliedFilterList[appliedFilterIndex], appliedFilterIndex);
+      //   for (let [routeQueryKey, routeQueryValue] of Object.entries(
+      //       routeQueries
+      //     )) {
+      //       console.log('sahar',appliedFilterList[appliedFilterIndex].slug);
+      //       console.log('sahar', routeQueryKey, appliedFilterList[appliedFilterIndex].slug, routeQueryKey === appliedFilterList[appliedFilterIndex].slug);
+      //       if(routeQueryKey === appliedFilterList[appliedFilterIndex].slug) {
+      //         delete routeQueries[routeQueryKey];
+      //       } else if (routeQueryKey === 'min_price' || routeQueryKey === 'max_price') {
+      //         delete routeQueries[routeQueryKey];
+      //       }
+      //     }
+      // }
+
+      // clear add applied filter from data 
+      appliedFilterList.forEach((appliedFilter, appliedFilterIndex) => {
+
+        //مقدار هارو ریست نمیکنه این روش 
+        // if(appliedFilter.slug === "price_range") {
+        //   delete this.data.min_price;
+        //   delete this.data.max_price;
+        // } else {
+        //   delete this.data[appliedFilter.slug];
+        // }
+        this.clearFilter(appliedFilter, appliedFilterIndex);
+      })
+      
+
+      // clear all appliedFilterList
+      this.appliedFilterList = [];
+
+
+
+      // clear all filter form query 
+      appliedFilterList.forEach((appliedFilter, appliedFilterIndex) => {
+        for (let [routeQueryKey, routeQueryValue] of Object.entries(
+            routeQueries
+          )) {
+            console.log('appliedFilter slug', appliedFilter.slug);
+            console.log('appliedFilterIndex', appliedFilterIndex );
+            if(routeQueryKey.includes(appliedFilter.slug)) {
+              routeQueries[routeQueryKey] = undefined;
+            } else if (routeQueryKey === 'min_price' || routeQueryKey === 'max_price') {
+              routeQueries[routeQueryKey] = undefined;
+            }
+          }
+      })
+      console.log('routeQueries all night', routeQueries); 
+      this.$router.push({
+          routeQueries
+        });
+    }
   },
 };
 </script>
