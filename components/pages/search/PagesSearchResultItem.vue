@@ -115,7 +115,7 @@
               :class="
                 $i18n.locale === 'fa' ? 'font-FaNumbold-14' : 'font-bold-14'
               "
-              >{{ place.night }}</span
+              >{{ place.night | comma }}</span
             >
             <span>{{ $t("search.main.item.unit") }}</span>
           </div>
