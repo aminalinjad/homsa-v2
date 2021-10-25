@@ -50,12 +50,12 @@
                 <span>{{ $t("search.filters.price.from") }}</span>
                 <span
                   :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
-                  >{{ appliedFilter.minPrice | comma}}</span
+                  >{{ appliedFilter.minPrice | comma }}</span
                 >
                 <span>{{ $t("search.filters.price.to") }}</span>
                 <span
                   :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
-                  >{{ appliedFilter.maxPrice | comma}}</span
+                  >{{ appliedFilter.maxPrice | comma }}</span
                 >
                 <span>{{ $t("search.filters.price.unit") }}</span>
               </span>
@@ -523,6 +523,8 @@ export default {
   methods: {
     ...mapActions({
       setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
+      setFilters: `modules/filters/${types.filters.actions.SET_FILTERS}`,
+      setHistogramPrices: `modules/filters/${types.filters.actions.SET_HISTOGRAM_PRICES}`,
     }),
     filterPanelSettingsHandler() {
       let filters = this.filters;
@@ -922,13 +924,13 @@ export default {
       }
     },
     filterPrice(filter, rangeSliderFrom, rangeSliderTo, filterIndex) {
-      setTimeout(() => {
-        this.$nuxt.$loading.start();
-      }, 1);
-
-      //get and set previous filter
-      this.setDataFromUrlQueries();
       if (rangeSliderFrom >= 0 && rangeSliderTo > 0) {
+        setTimeout(() => {
+          this.$nuxt.$loading.start();
+        }, 1);
+
+        //get and set previous filter
+        this.setDataFromUrlQueries();
         this.$router.push({
           query: {
             ...this.$route.query,
@@ -938,31 +940,36 @@ export default {
         });
         this.data.min_price = rangeSliderFrom;
         this.data.max_price = rangeSliderTo;
-      }
-      return SearchServices.searchResults(this.data).then((res) => {
-        // add this filter to applied filter list
-        let appliedFilterExist;
-        this.appliedFilterList.forEach((appliedFilter, appliedFilterIndex) => {
-          if (appliedFilter.slug === filter.slug) {
-            appliedFilterExist = true;
-            appliedFilter.minPrice = rangeSliderFrom;
-            appliedFilter.maxPrice = rangeSliderTo;
-            console.log("here when its ", rangeSliderFrom, rangeSliderTo);
+
+        return SearchServices.searchResults(this.data).then((res) => {
+          // add this filter to applied filter list
+          let appliedFilterExist;
+          this.appliedFilterList.forEach(
+            (appliedFilter, appliedFilterIndex) => {
+              if (appliedFilter.slug === filter.slug) {
+                appliedFilterExist = true;
+                appliedFilter.minPrice = rangeSliderFrom;
+                appliedFilter.maxPrice = rangeSliderTo;
+                console.log("here when its ", rangeSliderFrom, rangeSliderTo);
+              }
+            }
+          );
+          if (!appliedFilterExist) {
+            console.log("here before push", rangeSliderFrom, rangeSliderTo);
+            this.appliedFilterList.push({
+              type: filter.type,
+              slug: filter.slug,
+              minPrice: rangeSliderFrom,
+              maxPrice: rangeSliderTo,
+              indexInFilterPanelSettings: filterIndex,
+            });
           }
+          this.setSearchResult(res.data);
+          this.setFilters(res.data.filters.filters);
+          this.setHistogramPrices(res.data.histogram_prices.prices);
+          this.$nuxt.$loading.finish();
         });
-        if (!appliedFilterExist) {
-          console.log("here before push", rangeSliderFrom, rangeSliderTo);
-          this.appliedFilterList.push({
-            type: filter.type,
-            slug: filter.slug,
-            minPrice: rangeSliderFrom,
-            maxPrice: rangeSliderTo,
-            indexInFilterPanelSettings: filterIndex,
-          });
-        }
-        this.setSearchResult(res.data);
-        this.$nuxt.$loading.finish();
-      });
+      } 
     },
     addCounter(filter, filterIndex) {
       this.filterPanelSettings[filterIndex].count++;
@@ -1048,6 +1055,8 @@ export default {
         }
 
         this.setSearchResult(res.data);
+        this.setFilters(res.data.filters.filters);
+          this.setHistogramPrices(res.data.histogram_prices.prices);
         this.$nuxt.$loading.finish();
       });
     },
@@ -1130,6 +1139,8 @@ export default {
         }
 
         this.setSearchResult(res.data);
+        this.setFilters(res.data.filters.filters);
+          this.setHistogramPrices(res.data.histogram_prices.prices);
         this.$nuxt.$loading.finish();
       });
     },
@@ -1172,6 +1183,8 @@ export default {
         }
 
         this.setSearchResult(res.data);
+        this.setFilters(res.data.filters.filters);
+          this.setHistogramPrices(res.data.histogram_prices.prices);
         this.$nuxt.$loading.finish();
       });
     },
@@ -1262,6 +1275,8 @@ export default {
         }
 
         this.setSearchResult(res.data);
+        this.setFilters(res.data.filters.filters);
+          this.setHistogramPrices(res.data.histogram_prices.prices);
         this.$nuxt.$loading.finish();
       });
     },
@@ -1314,6 +1329,8 @@ export default {
             this.data[appliedFilter.slug].splice(itemObjectIndex, 1);
           }
         });
+        if(this.data[appliedFilter.slug].length === 0) delete this.data[appliedFilter.slug];
+        
 
         // remove it from applied filter list
         this.appliedFilterList.splice(appliedFilterIndex, 1);
@@ -1356,6 +1373,7 @@ export default {
             this.data[appliedFilter.slug].splice(itemIndex, 1);
           }
         });
+        if(this.data[appliedFilter.slug].length === 0) delete this.data[appliedFilter.slug];
 
         // remove it from applied filter list
         this.appliedFilterList.splice(appliedFilterIndex, 1);
@@ -1386,6 +1404,8 @@ export default {
 
       return SearchServices.searchResults(this.data).then((res) => {
         this.setSearchResult(res.data);
+        this.setFilters(res.data.filters.filters);
+          this.setHistogramPrices(res.data.histogram_prices.prices);
         this.$nuxt.$loading.finish();
       });
     },
@@ -1407,7 +1427,7 @@ export default {
         } else {
           delete this.data[appliedFilter.slug];
 
-           // reset its values
+          // reset its values
           if (appliedFilter.type === "counter") {
             this.filterPanelSettings[
               appliedFilter.indexInFilterPanelSettings
@@ -1436,7 +1456,6 @@ export default {
             ].value = false;
           }
         }
-        
       });
 
       // clear all appliedFilterList
@@ -1457,13 +1476,15 @@ export default {
           }
         }
       });
-       this.$router.push({
-          query: routeQueries,
-        });
+      this.$router.push({
+        query: routeQueries,
+      });
       // this.$router.replace({ query: routeQueries });
 
       return SearchServices.searchResults(this.data).then((res) => {
         this.setSearchResult(res.data);
+        this.setFilters(res.data.filters.filters);
+          this.setHistogramPrices(res.data.histogram_prices.prices);
         this.$nuxt.$loading.finish();
       });
     },
