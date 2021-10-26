@@ -2,10 +2,7 @@
   <header
     id="headerSearch"
     class="headerCls"
-    :class="[
-      searchSection || !fixedHeader ? 'pa-4 mb-0' : '',
-      fixedHeader ? 'fixedHeader' : ''
-    ]"
+    :class="{ 'pa-4 mb-0' : searchSection || !fixedHeader, 'fixedHeader' : fixedHeader }"
   >
     <!-- header top section -->
     <v-row
