@@ -6,7 +6,7 @@
         v-if="filter.type === 'map' && $route.query.showMap !== 'true'"
         class="mb-3"
       >
-        <PagesSearchMapThumbnail/>
+        <PagesSearchMapThumbnail />
       </div>
       <!-- applied filters-->
       <div
@@ -16,9 +16,14 @@
         <v-card flat class="pb-3 rounded-lg">
           <v-card-title class="py-3 justify-space-between">
             <span class="font-regular-14">{{
-                $t("search.filters.all-filters.title")
-              }}</span>
-            <v-btn small text class="font-regular-12">
+              $t("search.filters.all-filters.title")
+            }}</span>
+            <v-btn
+              small
+              text
+              class="font-regular-12"
+              @click="clearAllFilter(appliedFilterList)"
+            >
               {{ $t("search.filters.all-filters.clear-all") }}
             </v-btn>
           </v-card-title>
@@ -37,10 +42,23 @@
               <span
                 v-if="appliedFilter.count"
                 class="pe-1"
-                :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
-              >{{ appliedFilter.count }}</span
+                :class="{ 'font-FaNumregular-14': $i18n.locale === 'fa' }"
+                >{{ appliedFilter.count }}</span
               >
-              <span>{{ appliedFilter.name }}</span>
+              <span v-if="appliedFilter.name">{{ appliedFilter.name }}</span>
+              <span v-if="appliedFilter.type === 'price_range'">
+                <span>{{ $t("search.filters.price.from") }}</span>
+                <span
+                  :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
+                  >{{ appliedFilter.minPrice | comma }}</span
+                >
+                <span>{{ $t("search.filters.price.to") }}</span>
+                <span
+                  :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
+                  >{{ appliedFilter.maxPrice | comma }}</span
+                >
+                <span>{{ $t("search.filters.price.unit") }}</span>
+              </span>
             </v-chip>
           </v-card-text>
         </v-card>
@@ -100,7 +118,7 @@
             >
               <div class="mx-5">
                 <div>{{ $t("search.filters.price.from") }}</div>
-                <div class="mt-1 mb-n6 centeredInput">
+                <div class="mt-1 mb-n6">
                   <v-text-field
                     filled
                     dense
@@ -141,7 +159,14 @@
                 class="font-medium-14"
                 outlined
                 :disabled="rangeBtnDisable"
-                @click="filterPrice(rangeSliderFrom, rangeSliderTo)"
+                @click="
+                  filterPrice(
+                    filter,
+                    rangeSliderFrom,
+                    rangeSliderTo,
+                    filterIndex
+                  )
+                "
               >
                 {{ $t("search.filters.price.btn") }}
               </v-btn>
@@ -175,7 +200,7 @@
                   class="px-2 greenDark8--text"
                   :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
                   v-if="filterPanelSettings[filterIndex]"
-                >{{ filterPanelSettings[filterIndex].count }}</span
+                  >{{ filterPanelSettings[filterIndex].count }}</span
                 >
                 <v-btn
                   small
@@ -375,7 +400,7 @@
             >
               <v-expansion-panel-header
                 class="px-4 navyDark--text font-regular-14"
-              >{{ filterChild.name }}
+                >{{ filterChild.name }}
               </v-expansion-panel-header>
               <v-expansion-panel-content
                 class="mx-n2"
@@ -496,6 +521,8 @@ export default {
   methods: {
     ...mapActions({
       setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
+      setFilters: `modules/filters/${types.filters.actions.SET_FILTERS}`,
+      setHistogramPrices: `modules/filters/${types.filters.actions.SET_HISTOGRAM_PRICES}`,
     }),
     filterPanelSettingsHandler() {
       let filters = this.filters;
@@ -603,6 +630,30 @@ export default {
           }
           if (routeQueries.max_price) {
             this.data.max_price = parseInt(routeQueries.max_price);
+          }
+
+          // push it in appliedFilterList Array
+          let filterIndex = this.filters
+            .map(function (filter) {
+              return filter.slug;
+            })
+            .indexOf(filterType.slug);
+          let appliedFilterExist;
+          this.appliedFilterList.forEach(
+            (appliedFilter, appliedFilterIndex) => {
+              if (appliedFilter.slug === this.filters[filterIndex].slug) {
+                appliedFilterExist = true;
+              }
+            }
+          );
+          if (!appliedFilterExist && routeQueries.min_price) {
+            this.appliedFilterList.push({
+              type: this.filters[filterIndex].type,
+              slug: this.filters[filterIndex].slug,
+              minPrice: routeQueries.min_price,
+              maxPrice: routeQueries.max_price,
+              indexInFilterPanelSettings: filterIndex,
+            });
           }
         } else if (filterType.type === "counter") {
           for (let [routeQueryKey, routeQueryValue] of Object.entries(
@@ -753,6 +804,86 @@ export default {
             if (routeQueryKey.includes(filterType.slug)) {
               if (routeQueryValue) {
                 filterCheckBoxItems.push(parseInt(routeQueryValue));
+
+                // push it in appliedFilterList Array
+                let routeQueryId = parseInt(
+                  routeQueryKey.substring(
+                    filterType.slug.length + 1,
+                    routeQueryKey.length - 1
+                  )
+                );
+
+                let filterIndex = this.filters
+                  .map(function (filter) {
+                    return filter.slug;
+                  })
+                  .indexOf(filterType.slug);
+                let appliedFilterExist;
+                this.appliedFilterList.forEach(
+                  (appliedFilter, appliedFilterIndex) => {
+                    if (
+                      appliedFilter.slug === this.filters[filterIndex].slug &&
+                      appliedFilter.id === routeQueryId
+                    ) {
+                      appliedFilterExist = true;
+                      routeQueryValue
+                        ? (this.appliedFilterList[appliedFilterIndex].value =
+                            routeQueryValue)
+                        : this.clearFilter(appliedFilter, appliedFilterIndex);
+                    }
+                  }
+                );
+                if (!appliedFilterExist) {
+                  if (filterTypes[filterTypeIndex].type === "list") {
+                    // search in children of this filter to find index of a child that it`s id is equal to routeQueryId
+                    let childIndex = null;
+                    let childItemIndex = null;
+
+                    this.filters[filterIndex].children.forEach(
+                      (child, index) => {
+                        child.children.forEach((childItem, i) => {
+                          if (childItem.id === routeQueryId) {
+                            childItemIndex = i;
+                            childIndex = index;
+                          }
+                        });
+                      }
+                    );
+
+                    console.log("i wanna test", childIndex, childItemIndex);
+
+                    //so I have all needed values to push them fo applied filter list
+                    this.appliedFilterList.push({
+                      type: this.filters[filterIndex].type,
+                      slug: this.filters[filterIndex].slug,
+                      id: routeQueryId,
+                      name: this.filters[filterIndex].children[childIndex]
+                        .children[childItemIndex].name,
+                      value: routeQueryValue,
+                      indexInFilterPanelSettings: filterIndex,
+                      childIndexInFilterPanelSettings: childIndex,
+                      childItemIndexInFilterPanelSettings: childItemIndex,
+                    });
+                  } else {
+                    // search in children of this filter to find index of a child that it`s id is equal to routeQueryId
+                    let childIndex = this.filters[filterIndex].children
+                      .map(function (child) {
+                        return child.id;
+                      })
+                      .indexOf(routeQueryId);
+
+                    //so I have all needed values to push them fo applied filter list
+                    this.appliedFilterList.push({
+                      type: this.filters[filterIndex].type,
+                      slug: this.filters[filterIndex].slug,
+                      id: routeQueryId,
+                      name: this.filters[filterIndex].children[childIndex].name,
+                      value: routeQueryValue,
+                      indexInFilterPanelSettings: filterIndex,
+                      childIndexInFilterPanelSettings: childIndex,
+                    });
+                  }
+                }
               }
             }
             SearchServices;
@@ -789,14 +920,14 @@ export default {
         this.histogramWidth = this.$refs.histogramParentDiv[0].clientWidth;
       }
     },
-    filterPrice(rangeSliderFrom, rangeSliderTo) {
-      setTimeout(() => {
-        this.$nuxt.$loading.start();
-      }, 1);
-
-      //get and set previous filter
-      this.setDataFromUrlQueries();
+    filterPrice(filter, rangeSliderFrom, rangeSliderTo, filterIndex) {
       if (rangeSliderFrom >= 0 && rangeSliderTo > 0) {
+        setTimeout(() => {
+          this.$nuxt.$loading.start();
+        }, 1);
+
+        //get and set previous filter
+        this.setDataFromUrlQueries();
         this.$router.push({
           query: {
             ...this.$route.query,
@@ -806,11 +937,36 @@ export default {
         });
         this.data.min_price = rangeSliderFrom;
         this.data.max_price = rangeSliderTo;
+
+        return SearchServices.searchResults(this.data).then((res) => {
+          // add this filter to applied filter list
+          let appliedFilterExist;
+          this.appliedFilterList.forEach(
+            (appliedFilter, appliedFilterIndex) => {
+              if (appliedFilter.slug === filter.slug) {
+                appliedFilterExist = true;
+                appliedFilter.minPrice = rangeSliderFrom;
+                appliedFilter.maxPrice = rangeSliderTo;
+                console.log("here when its ", rangeSliderFrom, rangeSliderTo);
+              }
+            }
+          );
+          if (!appliedFilterExist) {
+            console.log("here before push", rangeSliderFrom, rangeSliderTo);
+            this.appliedFilterList.push({
+              type: filter.type,
+              slug: filter.slug,
+              minPrice: rangeSliderFrom,
+              maxPrice: rangeSliderTo,
+              indexInFilterPanelSettings: filterIndex,
+            });
+          }
+          this.setSearchResult(res.data);
+          this.setFilters(res.data.filters.filters);
+          this.setHistogramPrices(res.data.histogram_prices.prices);
+          this.$nuxt.$loading.finish();
+        });
       }
-      return SearchServices.searchResults(this.data).then((res) => {
-        this.setSearchResult(res.data);
-        this.$nuxt.$loading.finish();
-      });
     },
     addCounter(filter, filterIndex) {
       this.filterPanelSettings[filterIndex].count++;
@@ -896,6 +1052,8 @@ export default {
         }
 
         this.setSearchResult(res.data);
+        this.setFilters(res.data.filters.filters);
+          this.setHistogramPrices(res.data.histogram_prices.prices);
         this.$nuxt.$loading.finish();
       });
     },
@@ -978,6 +1136,8 @@ export default {
         }
 
         this.setSearchResult(res.data);
+        this.setFilters(res.data.filters.filters);
+          this.setHistogramPrices(res.data.histogram_prices.prices);
         this.$nuxt.$loading.finish();
       });
     },
@@ -991,11 +1151,11 @@ export default {
       return SearchServices.searchResults(this.data).then((res) => {
         if (switchValue) {
           this.$router.push({
-            query: {...this.$route.query, [filter.slug]: switchValue},
+            query: { ...this.$route.query, [filter.slug]: switchValue },
           });
         } else {
           this.$router.push({
-            query: {...this.$route.query, [filter.slug]: undefined},
+            query: { ...this.$route.query, [filter.slug]: undefined },
           });
         }
 
@@ -1020,6 +1180,8 @@ export default {
         }
 
         this.setSearchResult(res.data);
+        this.setFilters(res.data.filters.filters);
+          this.setHistogramPrices(res.data.histogram_prices.prices);
         this.$nuxt.$loading.finish();
       });
     },
@@ -1077,7 +1239,7 @@ export default {
             appliedFilterExist = true;
             checkBoxValue
               ? (this.appliedFilterList[appliedFilterIndex].value =
-                checkBoxValue)
+                  checkBoxValue)
               : this.clearFilter(appliedFilter, appliedFilterIndex);
           }
         });
@@ -1110,6 +1272,8 @@ export default {
         }
 
         this.setSearchResult(res.data);
+        this.setFilters(res.data.filters.filters);
+          this.setHistogramPrices(res.data.histogram_prices.prices);
         this.$nuxt.$loading.finish();
       });
     },
@@ -1117,7 +1281,29 @@ export default {
       setTimeout(() => {
         this.$nuxt.$loading.start();
       }, 1);
-      if (appliedFilter.type === "counter") {
+      if (appliedFilter.type === "price_range") {
+        // delete it from data send in api
+        delete this.data.min_price;
+        delete this.data.max_price;
+
+        // remove it from applied filter list
+        this.appliedFilterList.splice(appliedFilterIndex, 1);
+
+        // reset its values
+        this.rangeSliderFrom = null;
+        this.rangeSliderTo = null;
+
+        //remove it  from url query
+        this.$router.push({
+          query: {
+            ...this.$route.query,
+            min_price: undefined,
+            max_price: undefined,
+          },
+        });
+
+        this.rangeBtnDisable = true;
+      } else if (appliedFilter.type === "counter") {
         // delete it from data send in api
         delete this.data[appliedFilter.slug];
 
@@ -1140,6 +1326,8 @@ export default {
             this.data[appliedFilter.slug].splice(itemObjectIndex, 1);
           }
         });
+        if(this.data[appliedFilter.slug].length === 0) delete this.data[appliedFilter.slug];
+
 
         // remove it from applied filter list
         this.appliedFilterList.splice(appliedFilterIndex, 1);
@@ -1166,11 +1354,11 @@ export default {
         // reset its value in filterpanelsetting array
         this.filterPanelSettings[
           appliedFilter.indexInFilterPanelSettings
-          ].value = false;
+        ].value = false;
 
         //remove it from url query
         this.$router.push({
-          query: {...this.$route.query, [appliedFilter.slug]: undefined},
+          query: { ...this.$route.query, [appliedFilter.slug]: undefined },
         });
       } else if (
         appliedFilter.type === "list_checkbox" ||
@@ -1182,6 +1370,7 @@ export default {
             this.data[appliedFilter.slug].splice(itemIndex, 1);
           }
         });
+        if(this.data[appliedFilter.slug].length === 0) delete this.data[appliedFilter.slug];
 
         // remove it from applied filter list
         this.appliedFilterList.splice(appliedFilterIndex, 1);
@@ -1190,13 +1379,13 @@ export default {
         if (appliedFilter.type === "list_checkbox") {
           this.filterPanelSettings[
             appliedFilter.indexInFilterPanelSettings
-            ].listCheckBoxValues[
+          ].listCheckBoxValues[
             appliedFilter.childIndexInFilterPanelSettings
-            ].value = false;
+          ].value = false;
         } else {
-          this.filterPanelSettings[
-            appliedFilter.indexInFilterPanelSettings
-            ][appliedFilter.childIndexInFilterPanelSettings].listCheckBoxValues[
+          this.filterPanelSettings[appliedFilter.indexInFilterPanelSettings][
+            appliedFilter.childIndexInFilterPanelSettings
+          ].listCheckBoxValues[
             appliedFilter.childItemIndexInFilterPanelSettings
             ].value = false;
         }
@@ -1212,6 +1401,87 @@ export default {
 
       return SearchServices.searchResults(this.data).then((res) => {
         this.setSearchResult(res.data);
+        this.setFilters(res.data.filters.filters);
+          this.setHistogramPrices(res.data.histogram_prices.prices);
+        this.$nuxt.$loading.finish();
+      });
+    },
+    clearAllFilter(appliedFilterList) {
+      setTimeout(() => {
+        this.$nuxt.$loading.start();
+      }, 1);
+      const routeQueries = Object.assign({}, this.$route.query);
+
+      // clear add applied filter from data
+      appliedFilterList.forEach((appliedFilter, appliedFilterIndex) => {
+        if (appliedFilter.slug === "price_range") {
+          delete this.data.min_price;
+          delete this.data.max_price;
+
+          // reset its values
+          this.rangeSliderFrom = null;
+          this.rangeSliderTo = null;
+        } else {
+          delete this.data[appliedFilter.slug];
+
+          // reset its values
+          if (appliedFilter.type === "counter") {
+            this.filterPanelSettings[
+              appliedFilter.indexInFilterPanelSettings
+            ].count = 0;
+          } else if (appliedFilter.type === "list_counter") {
+            this.filterPanelSettings[
+              appliedFilter.indexInFilterPanelSettings
+            ].ItemCounts[
+              appliedFilter.itemIndexInFilterPanelSettings
+            ].count = 0;
+          } else if (appliedFilter.type === "switch") {
+            this.filterPanelSettings[
+              appliedFilter.indexInFilterPanelSettings
+            ].value = false;
+          } else if (appliedFilter.type === "list_checkbox") {
+            this.filterPanelSettings[
+              appliedFilter.indexInFilterPanelSettings
+            ].listCheckBoxValues[
+              appliedFilter.childIndexInFilterPanelSettings
+            ].value = false;
+          } else if (appliedFilter.type === "list") {
+            this.filterPanelSettings[appliedFilter.indexInFilterPanelSettings][
+              appliedFilter.childIndexInFilterPanelSettings
+            ].listCheckBoxValues[
+              appliedFilter.childItemIndexInFilterPanelSettings
+            ].value = false;
+          }
+        }
+      });
+
+      // clear all appliedFilterList
+      this.appliedFilterList = [];
+
+      // clear all filter form query
+      appliedFilterList.forEach((appliedFilter, appliedFilterIndex) => {
+        for (let [routeQueryKey, routeQueryValue] of Object.entries(
+          routeQueries
+        )) {
+          if (routeQueryKey.includes(appliedFilter.slug)) {
+            delete routeQueries[routeQueryKey];
+          } else if (
+            routeQueryKey === "min_price" ||
+            routeQueryKey === "max_price"
+          ) {
+            delete routeQueries[routeQueryKey];
+          }
+        }
+      });
+      this.$router.push({
+        query: routeQueries,
+      });
+      // this.$router.replace({ query: routeQueries });
+
+      return SearchServices.searchResults(this.data).then((res) => {
+        this.setSearchResult(res.data);
+        this.setFilters(res.data.filters.filters);
+          this.setHistogramPrices(res.data.histogram_prices.prices);
         this.$nuxt.$loading.finish();
       });
     },
