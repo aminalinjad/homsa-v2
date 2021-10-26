@@ -6,7 +6,7 @@
         v-if="filter.type === 'map' && $route.query.showMap !== 'true'"
         class="mb-3"
       >
-        <PagesSearchMapThumbnail />
+        <PagesSearchMapThumbnail/>
       </div>
       <!-- applied filters-->
       <div
@@ -16,8 +16,8 @@
         <v-card flat class="pb-3 rounded-lg">
           <v-card-title class="py-3 justify-space-between">
             <span class="font-regular-14">{{
-              $t("search.filters.all-filters.title")
-            }}</span>
+                $t("search.filters.all-filters.title")
+              }}</span>
             <v-btn small text class="font-regular-12">
               {{ $t("search.filters.all-filters.clear-all") }}
             </v-btn>
@@ -38,7 +38,7 @@
                 v-if="appliedFilter.count"
                 class="pe-1"
                 :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
-                >{{ appliedFilter.count }}</span
+              >{{ appliedFilter.count }}</span
               >
               <span>{{ appliedFilter.name }}</span>
             </v-chip>
@@ -54,7 +54,7 @@
                 {{ $t("search.filters.price.title") }}
               </span>
             </div>
-            <div class="d-flex justify-center mt-2 rangeSlider">
+            <div ref="histogramParentDiv" class="d-flex justify-center mt-2 rangeSlider">
               <client-only>
                 <HistogramSlider
                   :width="histogramWidth"
@@ -156,8 +156,8 @@
             <div class="d-flex justify-space-between px-2">
               <div>
                 <span class="greenDark8--text font-regular-14">{{
-                  filter.name
-                }}</span>
+                    filter.name
+                  }}</span>
               </div>
               <div v-if="filterPanelSettings[filterIndex]">
                 <v-btn
@@ -175,7 +175,7 @@
                   class="px-2 greenDark8--text"
                   :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
                   v-if="filterPanelSettings[filterIndex]"
-                  >{{ filterPanelSettings[filterIndex].count }}</span
+                >{{ filterPanelSettings[filterIndex].count }}</span
                 >
                 <v-btn
                   small
@@ -208,8 +208,9 @@
         >
           <v-expansion-panel class="rounded-lg countTitle">
             <v-expansion-panel-header class="font-regular-14 navyDark--text">{{
-              filter.name
-            }}</v-expansion-panel-header>
+                filter.name
+              }}
+            </v-expansion-panel-header>
             <v-expansion-panel-content
               :class="
                 filterPanelSettings[filterIndex].expand === 0 ? 'mt-n4' : ''
@@ -308,7 +309,8 @@
           <v-expansion-panel class="rounded-lg filterSelect">
             <v-expansion-panel-header
               class="navyDark--text py-3 px-4 font-regular-14"
-              >{{ filter.name }}</v-expansion-panel-header
+            >{{ filter.name }}
+            </v-expansion-panel-header
             >
             <v-expansion-panel-content
               class="mx-n2"
@@ -353,7 +355,8 @@
       <div v-else-if="filter.type === 'list'" class="mb-3">
         <v-card flat class="rounded-t-lg mb-n1">
           <v-card-title class="pt-3 pb-0 font-medium-14 greenDark8--text">
-            {{ filter.name }}</v-card-title
+            {{ filter.name }}
+          </v-card-title
           >
         </v-card>
         <div
@@ -372,7 +375,7 @@
             >
               <v-expansion-panel-header
                 class="px-4 navyDark--text font-regular-14"
-                >{{ filterChild.name }}
+              >{{ filterChild.name }}
               </v-expansion-panel-header>
               <v-expansion-panel-content
                 class="mx-n2"
@@ -424,9 +427,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import {mapGetters, mapActions} from "vuex";
 import * as types from "@/store/types.js";
-import { SearchServices } from "@/services";
+import {SearchServices} from "@/services";
 import MinusIcon from "@/assets/AppIcons/minus.vue";
 import AddIcon from "@/assets/AppIcons/add.vue";
 
@@ -438,6 +441,7 @@ export default {
   },
   data() {
     return {
+      histogramWidth: 272,
       appliedFilterList: [],
       filterPanelSettings: [],
       filterTypes: [],
@@ -462,9 +466,6 @@ export default {
       histogramPrices: `modules/filters/${types.filters.getters.GET_HISTOGRAM_PRICES}`,
       mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
     }),
-    histogramWidth() {
-      return this.histogramSectionWidth;
-    },
     histogramData() {
       let filterHistogramPrices = this.histogramPrices;
       let histogramData = [];
@@ -482,18 +483,15 @@ export default {
       );
 
       return histogramData;
-    },
+    }
   },
   mounted() {
-    this.calculateSectionWidth();
     this.filterPanelSettingsHandler();
-
-    //get and set previous filter
     this.setDataFromUrlQueries();
-    window.addEventListener("resize", this.calculateSectionWidth);
+    window.addEventListener("resize", this.checkSize);
   },
   destroyed() {
-    window.removeEventListener("resize", this.calculateSectionWidth);
+    window.removeEventListener("resize", this.checkSize);
   },
   methods: {
     ...mapActions({
@@ -524,9 +522,9 @@ export default {
             listCounterItemCounts.push({
               count: this.$route.query[
                 `${this.filters[filterIndex].slug}[${this.filters[filterIndex].children[listCounterItemIndex].id}]`
-              ]
+                ]
                 ? this.$route.query[
-                    `${this.filters[filterIndex].slug}[${this.filters[filterIndex].children[listCounterItemIndex].id}]`
+                  `${this.filters[filterIndex].slug}[${this.filters[filterIndex].children[listCounterItemIndex].id}]`
                   ]
                 : 0,
             });
@@ -553,7 +551,7 @@ export default {
               value:
                 !!this.$route.query[
                   `${this.filters[filterIndex].slug}[${this.filters[filterIndex].children[listItemIndex].id}]`
-                ],
+                  ],
             });
           }
           this.filterPanelSettings.push({
@@ -578,7 +576,7 @@ export default {
                 value:
                   !!this.$route.query[
                     `${this.filters[filterIndex].slug}[${this.filters[filterIndex].children[listItemIndex].children[listItemChildIndex].id}]`
-                  ],
+                    ],
               });
             }
             openGroupExpansionPanels.push({
@@ -628,7 +626,7 @@ export default {
                     appliedFilterExist = true;
                     parseInt(routeQueryValue) > 0
                       ? (this.appliedFilterList[appliedFilterIndex].count =
-                          parseInt(routeQueryValue))
+                        parseInt(routeQueryValue))
                       : this.clearFilter(appliedFilter, appliedFilterIndex);
                   }
                 }
@@ -679,7 +677,7 @@ export default {
                     appliedFilterExist = true;
                     parseInt(routeQueryValue) > 0
                       ? (this.appliedFilterList[appliedFilterIndex].count =
-                          parseInt(routeQueryValue))
+                        parseInt(routeQueryValue))
                       : this.clearFilter(appliedFilter, appliedFilterIndex);
                   }
                 }
@@ -728,7 +726,7 @@ export default {
                     appliedFilterExist = true;
                     routeQueryValue
                       ? (this.appliedFilterList[appliedFilterIndex].value =
-                          routeQueryValue)
+                        routeQueryValue)
                       : this.clearFilter(appliedFilter, appliedFilterIndex);
                   }
                 }
@@ -786,10 +784,9 @@ export default {
       this.rangeSliderTo = e.to;
       this.rangeBtnDisable = false;
     },
-    calculateSectionWidth() {
-      let width = document.getElementById("histogramSection");
-      if (width) {
-        this.histogramSectionWidth = width.clientWidth;
+    checkSize() {
+      if (Object.entries(this.$refs.histogramParentDiv).length !== 0) {
+        this.histogramWidth = this.$refs.histogramParentDiv[0].clientWidth;
       }
     },
     filterPrice(rangeSliderFrom, rangeSliderTo) {
@@ -870,11 +867,11 @@ export default {
       return SearchServices.searchResults(this.data).then((res) => {
         if (count > 0) {
           this.$router.push({
-            query: { ...this.$route.query, [filter.slug]: count },
+            query: {...this.$route.query, [filter.slug]: count},
           });
         } else {
           this.$router.push({
-            query: { ...this.$route.query, [filter.slug]: undefined },
+            query: {...this.$route.query, [filter.slug]: undefined},
           });
         }
 
@@ -994,11 +991,11 @@ export default {
       return SearchServices.searchResults(this.data).then((res) => {
         if (switchValue) {
           this.$router.push({
-            query: { ...this.$route.query, [filter.slug]: switchValue },
+            query: {...this.$route.query, [filter.slug]: switchValue},
           });
         } else {
           this.$router.push({
-            query: { ...this.$route.query, [filter.slug]: undefined },
+            query: {...this.$route.query, [filter.slug]: undefined},
           });
         }
 
@@ -1080,7 +1077,7 @@ export default {
             appliedFilterExist = true;
             checkBoxValue
               ? (this.appliedFilterList[appliedFilterIndex].value =
-                  checkBoxValue)
+                checkBoxValue)
               : this.clearFilter(appliedFilter, appliedFilterIndex);
           }
         });
@@ -1094,9 +1091,9 @@ export default {
               value: checkBoxValue,
               indexInFilterPanelSettings: filterIndex,
               childIndexInFilterPanelSettings:
-                filterChildIndexObject.filterChildIndex,
+              filterChildIndexObject.filterChildIndex,
               childItemIndexInFilterPanelSettings:
-                filterChildIndexObject.filterChildItemIndex,
+              filterChildIndexObject.filterChildItemIndex,
             });
           } else {
             this.appliedFilterList.push({
@@ -1107,7 +1104,7 @@ export default {
               value: checkBoxValue,
               indexInFilterPanelSettings: filterIndex,
               childIndexInFilterPanelSettings:
-                filterChildIndexObject.filterChildIndex,
+              filterChildIndexObject.filterChildIndex,
             });
           }
         }
@@ -1130,11 +1127,11 @@ export default {
         // reset its value in filterpanelsetting array
         this.filterPanelSettings[
           appliedFilter.indexInFilterPanelSettings
-        ].count = 0;
+          ].count = 0;
 
         //remove it  from url query
         this.$router.push({
-          query: { ...this.$route.query, [appliedFilter.slug]: undefined },
+          query: {...this.$route.query, [appliedFilter.slug]: undefined},
         });
       } else if (appliedFilter.type === "list_counter") {
         // delete it from data send in api
@@ -1150,7 +1147,7 @@ export default {
         // reset its value in filterpanelsetting array
         this.filterPanelSettings[
           appliedFilter.indexInFilterPanelSettings
-        ].ItemCounts[appliedFilter.itemIndexInFilterPanelSettings].count = 0;
+          ].ItemCounts[appliedFilter.itemIndexInFilterPanelSettings].count = 0;
 
         //remove it  from url query
         this.$router.push({
@@ -1169,11 +1166,11 @@ export default {
         // reset its value in filterpanelsetting array
         this.filterPanelSettings[
           appliedFilter.indexInFilterPanelSettings
-        ].value = false;
+          ].value = false;
 
         //remove it from url query
         this.$router.push({
-          query: { ...this.$route.query, [appliedFilter.slug]: undefined },
+          query: {...this.$route.query, [appliedFilter.slug]: undefined},
         });
       } else if (
         appliedFilter.type === "list_checkbox" ||
@@ -1193,15 +1190,15 @@ export default {
         if (appliedFilter.type === "list_checkbox") {
           this.filterPanelSettings[
             appliedFilter.indexInFilterPanelSettings
-          ].listCheckBoxValues[
+            ].listCheckBoxValues[
             appliedFilter.childIndexInFilterPanelSettings
-          ].value = false;
+            ].value = false;
         } else {
           this.filterPanelSettings[
             appliedFilter.indexInFilterPanelSettings
-          ][appliedFilter.childIndexInFilterPanelSettings].listCheckBoxValues[
+            ][appliedFilter.childIndexInFilterPanelSettings].listCheckBoxValues[
             appliedFilter.childItemIndexInFilterPanelSettings
-          ].value = false;
+            ].value = false;
         }
 
         //remove it  from url query
@@ -1235,6 +1232,7 @@ export default {
         }
       }
     }
+
     &--solo {
       .v-input {
         &__control input {
@@ -1243,6 +1241,7 @@ export default {
       }
     }
   }
+
   .v-input {
     &__slot {
       min-height: 24px !important;
@@ -1280,6 +1279,7 @@ export default {
           }
         }
       }
+
       &--inset {
         .v-input {
           &--switch {
@@ -1310,6 +1310,7 @@ export default {
 .filterSelect {
   .v-expansion-panel-header {
     min-height: 46px !important;
+
     .v-icon {
       font-size: 18px !important;
     }

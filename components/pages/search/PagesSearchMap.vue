@@ -215,6 +215,8 @@ export default {
     ...mapActions({
       setHoveredItem: `modules/search/${types.search.actions.SET_HOVERED_ITEM}`,
       setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
+      setHistogram: `modules/filters/${types.filters.actions.SET_HISTOGRAM_PRICES}`,
+      setFilters: `modules/filters/${types.filters.actions.SET_FILTERS}`,
     }),
     getData() {
       if (this.dragMapCheckbox && this.bounds) {
@@ -236,8 +238,9 @@ export default {
         this.$router.push({query: {...this.$route.query, page: undefined}})
         SearchServices.searchResults(data).then(res => {
           this.$nuxt.$loading.finish()
-          console.log(res.data)
           this.setSearchResult(res.data)
+          this.setHistogram(res.data.histogram_prices.prices)
+          this.setFilters(res.data.filters.filters)
         }).catch(err => {
           this.$nuxt.$loading.finish()
         })

@@ -77,17 +77,17 @@
               >
                 <div class="pe-3">{{ userDestinationSearch }}</div>
                 <v-divider vertical></v-divider>
-                <div v-if="searchFormValue.checkIn" class="px-3">
+                <div v-if="checkInDate" class="px-3">
                   <span
                     :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
-                  >{{ searchFormValue.checkIn }}</span
+                  >{{ checkInDate }}</span
                   >
                   <v-icon v-if="$vuetify.rtl">$arrowLine</v-icon>
                   <v-icon v-else>$arrowLineRight</v-icon>
 
                   <span
                     :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
-                  >{{ searchFormValue.checkOut }}</span
+                  >{{ checkOutDate }}</span
                   >
                   <span
                     class="ps-1 font-regular-12 greyLight2--text"
@@ -714,7 +714,7 @@ export default {
       }
     },
     submitCalendarDate(flexibility) {
-      this.searchFormValue.flexibility = flexibility;
+      this.searchFormValue.flexibility = flexibility ? flexibility : 1;
       this.calendar = !this.calendar;
     }
   }
