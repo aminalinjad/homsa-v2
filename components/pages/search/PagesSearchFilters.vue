@@ -72,7 +72,7 @@
                 {{ $t("search.filters.price.title") }}
               </span>
             </div>
-            <div class="d-flex justify-center mt-2 rangeSlider">
+            <v-row justify="center" class="mt-2 rangeSlider">
               <client-only>
                 <HistogramSlider
                   :width="histogramWidth"
@@ -105,7 +105,7 @@
                   @finish="selectRange"
                 />
               </client-only>
-            </div>
+            </v-row>
 
             <div
               class="
@@ -118,7 +118,7 @@
             >
               <div class="mx-5">
                 <div>{{ $t("search.filters.price.from") }}</div>
-                <div class="mt-1 mb-n6 centeredInput">
+                <div class="mt-1 mb-n6">
                   <v-text-field
                     filled
                     dense
