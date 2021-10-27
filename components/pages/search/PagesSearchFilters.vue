@@ -42,19 +42,19 @@
               <span
                 v-if="appliedFilter.count"
                 class="pe-1"
-                :class="{ 'font-FaNumregular-14': $i18n.locale === 'fa' }"
+                :class="{ 'font-FaNumregular-14': $vuetify.rtl }"
                 >{{ appliedFilter.count }}</span
               >
               <span v-if="appliedFilter.name">{{ appliedFilter.name }}</span>
               <span v-if="appliedFilter.type === 'price_range'">
                 <span>{{ $t("search.filters.price.from") }}</span>
                 <span
-                  :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
+                  :class="{ 'font-FaNumregular-14' : $vuetify.rtl }"
                   >{{ appliedFilter.minPrice | comma }}</span
                 >
                 <span>{{ $t("search.filters.price.to") }}</span>
                 <span
-                  :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
+                  :class="{ 'font-FaNumregular-14' : $vuetify.rtl }"
                   >{{ appliedFilter.maxPrice | comma }}</span
                 >
                 <span>{{ $t("search.filters.price.unit") }}</span>
@@ -67,12 +67,10 @@
       <div v-if="filter.type === 'price_range'" class="mb-3">
         <v-card flat class="rounded-lg py-3 px-5 histogramSectionCard">
           <div id="histogramSection">
-            <div>
-              <span class="font-regular-14">
-                {{ $t("search.filters.price.title") }}
-              </span>
-            </div>
-            <div ref="histogramParentDiv" class="d-flex justify-center mt-2 rangeSlider">
+            <h6 class="font-weight-regular font-regular-14">
+              {{ $t("search.filters.price.title") }}
+            </h6>
+            <v-row ref="histogramParentDiv" justify="center" class="ma-0 mt-2 rangeSlider">
               <client-only>
                 <HistogramSlider
                   :width="histogramWidth"
@@ -105,18 +103,18 @@
                   @finish="selectRange"
                 />
               </client-only>
-            </div>
+            </v-row>
 
-            <div
+            <v-row
+              justify="space-around"
               class="
-                d-flex
-                justify-space-around
+              ma-0
                 mt-4
                 text-center
                 font-regular-12
               "
             >
-              <div class="mx-5">
+              <v-col class="mx-5 pa-0">
                 <div>{{ $t("search.filters.price.from") }}</div>
                 <div class="mt-1 mb-n6">
                   <v-text-field
@@ -133,8 +131,8 @@
                   </v-text-field>
                 </div>
                 <div>{{ $t("search.filters.price.unit") }}</div>
-              </div>
-              <div class="mx-5">
+              </v-col>
+              <v-col class="mx-5 pa-0">
                 <div>{{ $t("search.filters.price.to") }}</div>
                 <div class="mt-1 mb-n6">
                   <v-text-field
@@ -150,10 +148,10 @@
                   </v-text-field>
                 </div>
                 <div>{{ $t("search.filters.price.unit") }}</div>
-              </div>
-            </div>
+              </v-col>
+            </v-row>
 
-            <div class="d-flex justify-center mt-5">
+            <v-row justify="center" class="ma-0 mt-5">
               <v-btn
                 color="primary"
                 class="font-medium-14"
@@ -170,7 +168,7 @@
               >
                 {{ $t("search.filters.price.btn") }}
               </v-btn>
-            </div>
+            </v-row>
           </div>
         </v-card>
       </div>
@@ -178,12 +176,8 @@
       <div v-else-if="filter.type === 'counter'" class="mb-3">
         <v-card flat class="rounded-lg">
           <v-card-text class="py-3">
-            <div class="d-flex justify-space-between px-2">
-              <div>
-                <span class="greenDark8--text font-regular-14">{{
-                    filter.name
-                  }}</span>
-              </div>
+            <v-row justify="space-between" class="ma-0 px-2">
+              <h6 class="greenDark8--text font-weight-regular font-regular-14">{{ filter.name }}</h6>
               <div v-if="filterPanelSettings[filterIndex]">
                 <v-btn
                   small
@@ -198,7 +192,7 @@
                 </v-btn>
                 <span
                   class="px-2 greenDark8--text"
-                  :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
+                  :class="{ 'font-FaNumregular-14' : $vuetify.rtl }"
                   v-if="filterPanelSettings[filterIndex]"
                   >{{ filterPanelSettings[filterIndex].count }}</span
                 >
@@ -219,7 +213,7 @@
                   />
                 </v-btn>
               </div>
-            </div>
+            </v-row>
           </v-card-text>
         </v-card>
       </div>
@@ -237,19 +231,16 @@
               }}
             </v-expansion-panel-header>
             <v-expansion-panel-content
-              :class="
-                filterPanelSettings[filterIndex].expand === 0 ? 'mt-n4' : ''
-              "
+              :class="{'mt-n4' : filterPanelSettings[filterIndex].expand === 0 }"
             >
               <v-row
                 v-for="(item, index) in filter.children"
                 :key="index"
+                justify="space-between"
+                align="center"
                 class="
                   ma-1
                   mb-n1
-                  d-flex
-                  justify-space-between
-                  align-center
                   font-light-14
                 "
               >
@@ -270,7 +261,7 @@
                   </v-btn>
                   <span
                     class="px-2 greenDark8--text"
-                    :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
+                    :class="{ 'font-FaNumregular-12' : $vuetify.rtl }"
                     v-if="filterPanelSettings[filterIndex]"
                   >
                     {{
@@ -339,9 +330,7 @@
             >
             <v-expansion-panel-content
               class="mx-n2"
-              :class="
-                filterPanelSettings[filterIndex].expand === 0 ? 'mb-n3' : ''
-              "
+              :class="{ 'mb-n3' : filterPanelSettings[filterIndex].expand === 0 }"
             >
               <v-row
                 v-for="(filterChild, filterChildIndex) in filter.children"
@@ -396,7 +385,7 @@
           >
             <v-expansion-panel
               class="filterSelect"
-              :class="filterChildIndex === 0 ? 'rounded-0' : ''"
+              :class="{ 'rounded-0' : filterChildIndex === 0 }"
             >
               <v-expansion-panel-header
                 class="px-4 navyDark--text font-regular-14"
@@ -404,12 +393,7 @@
               </v-expansion-panel-header>
               <v-expansion-panel-content
                 class="mx-n2"
-                :class="
-                  filterPanelSettings[filterIndex][filterChildIndex].expand ===
-                  0
-                    ? 'mb-n3'
-                    : ''
-                "
+                :class="{ 'mb-n3' : filterPanelSettings[filterIndex][filterChildIndex].expand === 0 }"
               >
                 <v-row
                   v-for="(
@@ -475,12 +459,8 @@ export default {
         page: 1,
         sort: "popular",
       },
-      rangeSliderFrom: this.$route.query.min_price
-        ? this.$route.query.min_price
-        : null,
-      rangeSliderTo: this.$route.query.max_price
-        ? this.$route.query.max_price
-        : null,
+      rangeSliderFrom: null,
+      rangeSliderTo: null,
       histogramSectionWidth: null,
       rangeBtnDisable: true,
     };
@@ -626,15 +606,17 @@ export default {
       filterTypes.forEach((filterType, filterTypeIndex) => {
         if (filterType.type === "price_range") {
           if (routeQueries.min_price) {
+            this.rangeSliderFrom = this.$route.query.min_price;
             this.data.min_price = parseInt(routeQueries.min_price);
           }
           if (routeQueries.max_price) {
+            this.rangeSliderTo = this.$route.query.max_price;
             this.data.max_price = parseInt(routeQueries.max_price);
           }
 
           // push it in appliedFilterList Array
           let filterIndex = this.filters
-            .map(function (filter) {
+            .map(filter => {
               return filter.slug;
             })
             .indexOf(filterType.slug);
@@ -666,7 +648,7 @@ export default {
 
               // push it in appliedFilterList Array
               let filterIndex = this.filters
-                .map(function (filter) {
+                .map(filter => {
                   return filter.slug;
                 })
                 .indexOf(filterType.slug);
@@ -714,7 +696,7 @@ export default {
 
               // push it in appliedFilterList Array
               let filterIndex = this.filters
-                .map(function (filter) {
+                .map(filter => {
                   return filter.slug;
                 })
                 .indexOf(filterType.slug);
@@ -736,7 +718,7 @@ export default {
               if (!appliedFilterExist && routeQueryValue) {
                 // search in children of this filter to find index of a child that it`s id is equal to routeQueryId
                 let itemIndex = this.filters[filterIndex].children
-                  .map(function (child) {
+                  .map(child => {
                     return child.id;
                   })
                   .indexOf(routeQueryId);
@@ -766,7 +748,7 @@ export default {
 
               // push it in appliedFilterList Array
               let filterIndex = this.filters
-                .map(function (filter) {
+                .map(filter => {
                   return filter.slug;
                 })
                 .indexOf(filterType.slug);
@@ -814,7 +796,7 @@ export default {
                 );
 
                 let filterIndex = this.filters
-                  .map(function (filter) {
+                  .map(filter => {
                     return filter.slug;
                   })
                   .indexOf(filterType.slug);
@@ -849,9 +831,6 @@ export default {
                         });
                       }
                     );
-
-                    console.log("i wanna test", childIndex, childItemIndex);
-
                     //so I have all needed values to push them fo applied filter list
                     this.appliedFilterList.push({
                       type: this.filters[filterIndex].type,
@@ -867,7 +846,7 @@ export default {
                   } else {
                     // search in children of this filter to find index of a child that it`s id is equal to routeQueryId
                     let childIndex = this.filters[filterIndex].children
-                      .map(function (child) {
+                      .map(child => {
                         return child.id;
                       })
                       .indexOf(routeQueryId);
@@ -886,7 +865,6 @@ export default {
                 }
               }
             }
-            SearchServices;
           }
           if (filterCheckBoxItems.length > 0) {
             this.data[filterType.slug] = filterCheckBoxItems;
