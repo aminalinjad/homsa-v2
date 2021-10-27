@@ -491,6 +491,9 @@ export default {
     }
   },
   mounted() {
+    // it is for test
+    this.manipulateFilters();
+
     this.filterPanelSettingsHandler();
     this.setDataFromUrlQueries();
     window.addEventListener("resize", this.checkSize);
@@ -504,6 +507,34 @@ export default {
       setFilters: `modules/filters/${types.filters.actions.SET_FILTERS}`,
       setHistogramPrices: `modules/filters/${types.filters.actions.SET_HISTOGRAM_PRICES}`,
     }),
+    manipulateFilters() {
+      let filters = this.filters;
+      let filtersLength = filters.length;
+
+      this.filters.map(filter => {
+        if(filter.type === "price_range") {
+          filter.min_value = null;
+          filter.max_value = null;
+        } else {
+          if(filter.children === null) {
+            filter.value = filter.type === "counter" ? 0 : false;
+          } else {
+            filter.expand = 0;
+            filter.children.map(filterChild => {
+              if(filterChild.children === null) {
+                filterChild.value = filter.type === "list_counter" ? 0 : false;
+              } else {
+                filterChild.expand = 0;
+                filterChild.children.map(filterChildItem => {
+                  filterChildItem.value = false;
+                })
+              }
+            })
+
+          }
+        }
+      })
+    },
     filterPanelSettingsHandler() {
       let filters = this.filters;
       let filtersLength = filters.length;

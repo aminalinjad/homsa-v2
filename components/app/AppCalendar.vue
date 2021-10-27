@@ -3,7 +3,6 @@
     width="864"
     :height="checkIn.day && checkOut.day ? 460 : 415"
     class="pt-9 px-11 calenderClass"
-    style="transition: all 0.5s;"
   >
     <v-row class="ma-0 fill-height">
       <!-- calendar section  -->
@@ -518,41 +517,55 @@ export default {
 <style lang="scss">
 .calenderClass {
   border-radius: 16px !important;
+  transition: all 0.5s;
 }
 
 .calendarBtn {
   border-radius: 4px !important;
 }
 
-.calendarBtn.firstDay::after {
-  content: "";
-  width: 0;
-  height: 0;
-  border-left: 10px solid transparent;
-  border-bottom: 8px solid transparent;
-  border-top: 8px solid transparent;
-  border-right: 8px solid var(--v-primary-base);
-  position: absolute;
-  top: 10px;
-  left: -16px;
+.calendarBtn {
+  &.firstDay {
+    &::after {
+      content: "";
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-top: 8px solid transparent;
+      border-right: 8px solid var(--v-primary-base);
+      position: absolute;
+      top: 10px;
+      left: -16px;
+    }
+  }
 }
 
-.calendarBtn.lastDay::after {
-  content: "";
-  width: 0;
-  height: 0;
-  border-right: 10px solid transparent;
-  border-bottom: 8px solid transparent;
-  border-top: 8px solid transparent;
-  border-left: 8px solid var(--v-primary-base);
-  position: absolute;
-  top: 10px;
-  right: -16px;
+.calendarBtn {
+  &.lastDay {
+    &::after {
+      content: "";
+      width: 0;
+      height: 0;
+      border-right: 10px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-top: 8px solid transparent;
+      border-left: 8px solid var(--v-primary-base);
+      position: absolute;
+      top: 10px;
+      right: -16px;
+    }
+  }
 }
 
-.calendarBtn.firstDay:hover::after,
-.calendarBtn.lastDay:hover::after {
-  display: none;
+.calendarBtn {
+  &.firstDay, &.lastDay {
+    &:hover {
+      &::after {
+        display: none;
+      }
+    }
+  }
 }
 
 .selected {
