@@ -6,5 +6,5 @@ import SearchServices from "./modules/searchServices"
 export {
   CurrencyService,
   SearchServices,
-  CalendarService,
+  CalendarService
 }
