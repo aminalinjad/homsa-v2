@@ -63,3 +63,18 @@ export const currencies = {
       SET_CURRENCIES: "SET_CURRENCIES"
     }
   };
+
+// requestData
+export const requestData = {
+  getters: {
+    GET_REQUEST_DATA: "GET_REQUEST_DATA"
+  },
+
+  mutations: {
+    MUTATE_REQUEST_DATA: "MUTATE_REQUEST_DATA"
+  },
+
+  actions: {
+    SET_REQUEST_DATA: "SET_REQUEST_DATA"
+  }
+};
