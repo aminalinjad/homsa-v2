@@ -35,7 +35,7 @@
                     {{ calendarMonth.jalali_month }}
                   </span>
                   <span
-                    :class="$i18n.locale === 'fa' ? 'font-FaNummedium-14' : ''"
+                    :class="$vuetify.rtl ? 'font-FaNummedium-14' : ''"
                   >
                     {{ calendarMonth.jalali_year }}
                   </span>
@@ -79,29 +79,7 @@
                       v-for="(dayInfo, dayIndex) in calendarMonth.calendar"
                       :key="dayIndex"
                       class="my-1 py-0 text-center"
-                      :class="[
-                        dayInfo.other_month
-                          ? ''
-                          : btnColClass(dayInfo, calendarMonth.id),
-                        $vuetify.rtl
-                          ? btnColClass(dayInfo, calendarMonth.id) ===
-                            'firstDay selected'
-                            ? 'ms-1 ps-0'
-                            : 'ps-1'
-                          : btnColClass(dayInfo, calendarMonth.id) ===
-                            'lastDay selected'
-                          ? 'ms-1 ps-0'
-                          : 'ps-1',
-                        $vuetify.rtl
-                          ? btnColClass(dayInfo, calendarMonth.id) ===
-                            'lastDay selected'
-                            ? 'me-2 pe-0'
-                            : 'pe-2'
-                          : btnColClass(dayInfo, calendarMonth.id) ===
-                            'firstDay selected'
-                          ? 'me-2 pe-0'
-                          : 'pe-2',
-                      ]"
+                      :class="btnColumnClass(dayInfo, calendarMonth.id)"
                     >
                       <v-hover v-slot="{ hover }">
                         <v-btn
@@ -143,7 +121,7 @@
                                   dayInfo.end_of_weekend
                                 ? 'redOfferTime--text'
                                 : 'greenDark8--text',
-                              $i18n.locale === 'fa'
+                              $vuetify.rtl
                                 ? 'font-FaNumregular-14'
                                 : '',
                             ]"
@@ -192,7 +170,7 @@
                   >
                   <v-icon small v-else>$plusMinus</v-icon>
                   <span
-                    :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
+                    :class="$vuetify.rtl ? 'font-FaNumregular-14' : ''"
                     >{{ dateRanges[0] }}</span
                   >
                   <span>{{ $t("header.bottom.calendar.day") }}</span>
@@ -219,7 +197,7 @@
                   <v-icon small v-else>$plusMinus</v-icon>
 
                   <span
-                    :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
+                    :class="$vuetify.rtl ? 'font-FaNumregular-14' : ''"
                     >{{ dateRanges[1] }}</span
                   >
                   <span>{{ $t("header.bottom.calendar.day") }}</span>
@@ -245,7 +223,7 @@
                   >
                   <v-icon small v-else>$plusMinus</v-icon>
                   <span
-                    :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
+                    :class="$vuetify.rtl ? 'font-FaNumregular-14' : ''"
                     >{{ dateRanges[2] }}</span
                   >
                   <span>{{ $t("header.bottom.calendar.day") }}</span>
@@ -357,8 +335,10 @@ export default {
     },
   },
   watch: {
-    clearCalendarData() {
-      this.clearCalendar();
+    clearCalendarData(value) {
+      if(value) {
+        this.clearCalendar();
+      }
     },
   },
   created() {
@@ -369,6 +349,7 @@ export default {
       return this.checkIn.day === dayInfo.day && this.checkIn.monthId === calendarMonth.id && !dayInfo.other_month || this.checkOut.day === dayInfo.day && this.checkOut.monthId === calendarMonth.id && !dayInfo.other_month;
     },
     datePick(value, month, monthId) {
+      console.log('check !this.checkIn.day', !this.checkIn.day, value)
       if (!this.checkIn.day) {
         this.checkIn = value;
         this.checkIn.month = month;
@@ -406,12 +387,14 @@ export default {
       }
     },
     clearCalendar() {
-      this.checkIn = {};
-      this.checkIn.day = null;
-      this.checkIn.monthId = null;
-      this.checkOut = {};
-      this.checkOut.day = null;
-      this.checkOut.monthId = null;
+        this.checkIn = {};
+        this.checkIn.day = null;
+        this.checkIn.month = null;
+        this.checkIn.monthId = null;
+        this.checkOut = {};
+        this.checkOut.day = null;
+        this.checkOut.month = null;
+        this.checkOut.monthId = null;
     },
     setDisplayedCalendar(firstDisplayedMonth, secondDisplayedMonth) {
       this.displayedCalendar = [];
@@ -457,36 +440,41 @@ export default {
       }
       return "";
     },
-    btnColClass(value, monthId) {
+    btnColumnClass(value, monthId) {
       let valueDay = value.day;
       let checkInDay = this.checkIn.day;
       let checkInMonthId = this.checkIn.monthId;
       let checkOutDay = this.checkOut.day;
       let checkOutMonthId = this.checkOut.monthId;
-      if (checkInDay === valueDay && checkInMonthId === monthId) {
-        if (checkOutDay) {
-          return this.$vuetify.rtl ? "firstDay selected" : "lastDay selected";
-        }
-      } else if (checkOutDay === valueDay && checkOutMonthId === monthId) {
-        return this.$vuetify.rtl ? "lastDay selected" : "firstDay selected";
-      } else if (monthId === checkInMonthId) {
-        if (monthId === checkOutMonthId) {
-          if (valueDay > checkInDay && valueDay < checkOutDay) {
-            return "selected";
+      if(!value.other_month) {
+        if (checkInDay === valueDay && checkInMonthId === monthId) {
+          if (checkOutDay) {
+            return this.$vuetify.rtl ? "firstDay selected ms-1 ps-0 pe-2" : "firstDayLtr selected ms-1 ps-0 pe-2";
           }
-        } else if (monthId < checkOutMonthId && valueDay > checkInDay) {
-          return "selected";
-        }
-      } else if (monthId > checkInMonthId) {
-        if (monthId === checkOutMonthId) {
-          if (valueDay < checkOutDay) {
-            return "selected";
+        } else if (checkOutDay === valueDay && checkOutMonthId === monthId) {
+          return this.$vuetify.rtl ? "lastDay selected ps-1 me-2 pe-0" : "lastDayLtr selected ps-1 me-2 pe-0";
+        } else if (monthId === checkInMonthId) {
+          if (monthId === checkOutMonthId) {
+            if (valueDay > checkInDay && valueDay < checkOutDay) {
+              return "selected ps-1 pe-2";
+            }
+          } else if (monthId < checkOutMonthId && valueDay > checkInDay) {
+            return "selected ps-1 pe-2";
           }
-        } else if (monthId < checkOutMonthId) {
-          return "selected";
+        } else if (monthId > checkInMonthId) {
+          if (monthId === checkOutMonthId) {
+            if (valueDay < checkOutDay) {
+              return "selected ps-1 pe-2";
+            }
+          } else if (monthId < checkOutMonthId) {
+            return "selected ps-1 pe-2";
+          }
         }
+        return "ps-1 pe-2";
+      } else {
+        return "ps-1 pe-2";
       }
-      return "";
+
     },
     getCalendar() {
       return CalendarService.calendar(3)
@@ -518,7 +506,7 @@ export default {
 }
 
 .calendarBtn {
-  &.firstDay {
+  &.firstDay , &.lastDayLtr {
     &::after {
       content: "";
       width: 0;
@@ -532,10 +520,8 @@ export default {
       left: -16px;
     }
   }
-}
 
-.calendarBtn {
-  &.lastDay {
+  &.lastDay , &.firstDayLtr {
     &::after {
       content: "";
       width: 0;
@@ -549,9 +535,7 @@ export default {
       right: -16px;
     }
   }
-}
 
-.calendarBtn {
   &.firstDay, &.lastDay {
     &:hover {
       &::after {
@@ -560,6 +544,7 @@ export default {
     }
   }
 }
+
 
 .selected {
   background: #35913826;
