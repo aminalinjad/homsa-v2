@@ -110,17 +110,7 @@
                           :height="36"
                           :min-width="36"
                           color="primary"
-                          :text="
-                            !(
-                              (checkIn.day === dayInfo.day &&
-                                checkIn.monthId === calendarMonth.id &&
-                                !dayInfo.other_month) ||
-                              (checkOut.day === dayInfo.day &&
-                                checkOut.monthId === calendarMonth.id &&
-                                !dayInfo.other_month) ||
-                              hover
-                            )
-                          "
+                          :text="!(btnTextMode(dayInfo, calendarMonth) || hover)"
                           :outlined="hover"
                           @click="
                             datePick(
@@ -375,6 +365,9 @@ export default {
     this.getCalendar();
   },
   methods: {
+    btnTextMode(dayInfo, calendarMonth) {
+      return this.checkIn.day === dayInfo.day && this.checkIn.monthId === calendarMonth.id && !dayInfo.other_month || this.checkOut.day === dayInfo.day && this.checkOut.monthId === calendarMonth.id && !dayInfo.other_month;
+    },
     datePick(value, month, monthId) {
       if (!this.checkIn.day) {
         this.checkIn = value;
