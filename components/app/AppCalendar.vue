@@ -108,22 +108,8 @@
                           <span
                             v-if="!dayInfo.other_month"
                             :class="[
-                              (checkIn.day === dayInfo.day &&
-                                checkIn.monthId === calendarMonth.id) ||
-                              (checkOut.day === dayInfo.day &&
-                                checkOut.monthId === calendarMonth.id)
-                                ? 'WhiteColor'
-                                : hover
-                                ? ''
-                                : dayInfo.previous
-                                ? 'greyLight3--text'
-                                : dayInfo.type === 'holiday' ||
-                                  dayInfo.end_of_weekend
-                                ? 'redOfferTime--text'
-                                : 'greenDark8--text',
-                              $vuetify.rtl
-                                ? 'font-FaNumregular-14'
-                                : '',
+                              btnSpanClass(dayInfo, calendarMonth.id, hover),
+                              {'font-FaNumregular-14' : $vuetify.rtl}
                             ]"
                           >
                             {{ dayInfo.day }}
@@ -440,33 +426,47 @@ export default {
       }
       return "";
     },
+    btnSpanClass(value, monthId, hover) {
+        if((this.checkIn.day === value.day &&
+          this.checkIn.monthId === monthId )||
+          (this.checkOut.day === value.day &&
+            this.checkOut.monthId === monthId)) {
+          return 'WhiteColor';
+        } else if (!hover) {
+          if(value.previous) {
+            return 'greyLight3--text';
+          } else if ( value.type === 'holiday' || value.end_of_weekend) {
+            return 'redOfferTime--text';
+          } else {
+            return 'greenDark8--text';
+          }
+        } else {
+          return '';
+        }
+
+    },
     btnColumnClass(value, monthId) {
-      let valueDay = value.day;
-      let checkInDay = this.checkIn.day;
-      let checkInMonthId = this.checkIn.monthId;
-      let checkOutDay = this.checkOut.day;
-      let checkOutMonthId = this.checkOut.monthId;
       if(!value.other_month) {
-        if (checkInDay === valueDay && checkInMonthId === monthId) {
-          if (checkOutDay) {
+        if (this.checkIn.day === value.day && this.checkIn.monthId === monthId) {
+          if (this.checkOut.day) {
             return this.$vuetify.rtl ? "firstDay selected ms-1 ps-0 pe-2" : "firstDayLtr selected ms-1 ps-0 pe-2";
           }
-        } else if (checkOutDay === valueDay && checkOutMonthId === monthId) {
+        } else if (this.checkOut.day === value.day && this.checkOut.monthId === monthId) {
           return this.$vuetify.rtl ? "lastDay selected ps-1 me-2 pe-0" : "lastDayLtr selected ps-1 me-2 pe-0";
-        } else if (monthId === checkInMonthId) {
-          if (monthId === checkOutMonthId) {
-            if (valueDay > checkInDay && valueDay < checkOutDay) {
+        } else if (monthId === this.checkIn.monthId) {
+          if (monthId === this.checkOut.monthId) {
+            if (value.day > this.checkIn.day && value.day < this.checkOut.day) {
               return "selected ps-1 pe-2";
             }
-          } else if (monthId < checkOutMonthId && valueDay > checkInDay) {
+          } else if (monthId < this.checkOut.monthId && value.day > this.checkIn.day) {
             return "selected ps-1 pe-2";
           }
-        } else if (monthId > checkInMonthId) {
-          if (monthId === checkOutMonthId) {
-            if (valueDay < checkOutDay) {
+        } else if (monthId > this.checkIn.monthId) {
+          if (monthId === this.checkOut.monthId) {
+            if (value.day < this.checkOut.day) {
               return "selected ps-1 pe-2";
             }
-          } else if (monthId < checkOutMonthId) {
+          } else if (monthId < this.checkOut.monthId) {
             return "selected ps-1 pe-2";
           }
         }
@@ -474,7 +474,6 @@ export default {
       } else {
         return "ps-1 pe-2";
       }
-
     },
     getCalendar() {
       return CalendarService.calendar(3)
