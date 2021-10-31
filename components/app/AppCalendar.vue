@@ -35,7 +35,7 @@
                     {{ calendarMonth.jalali_month }}
                   </span>
                   <span
-                    :class="$vuetify.rtl ? 'font-FaNummedium-14' : ''"
+                    :class="{ 'font-FaNummedium-14' : $vuetify.rtl }"
                   >
                     {{ calendarMonth.jalali_year }}
                   </span>
@@ -98,18 +98,13 @@
                             )
                           "
                           :disabled="dayInfo.previous || dayInfo.other_month"
-                          class="calendarBtn"
-                          :class="
-                            dayInfo.other_month
-                              ? ''
-                              : btnClass(dayInfo, calendarMonth.id)
-                          "
+                          :class="['calendarBtn', btnClass(dayInfo, calendarMonth.id)]"
                         >
                           <span
                             v-if="!dayInfo.other_month"
                             :class="[
                               btnSpanClass(dayInfo, calendarMonth.id, hover),
-                              {'font-FaNumregular-14' : $vuetify.rtl}
+                              { 'font-FaNumregular-14' : $vuetify.rtl }
                             ]"
                           >
                             {{ dayInfo.day }}
@@ -156,7 +151,7 @@
                   >
                   <v-icon small v-else>$plusMinus</v-icon>
                   <span
-                    :class="$vuetify.rtl ? 'font-FaNumregular-14' : ''"
+                    :class="{ 'font-FaNumregular-14': $vuetify.rtl }"
                     >{{ dateRanges[0] }}</span
                   >
                   <span>{{ $t("header.bottom.calendar.day") }}</span>
@@ -183,7 +178,7 @@
                   <v-icon small v-else>$plusMinus</v-icon>
 
                   <span
-                    :class="$vuetify.rtl ? 'font-FaNumregular-14' : ''"
+                    :class="{ 'font-FaNumregular-14': $vuetify.rtl }"
                     >{{ dateRanges[1] }}</span
                   >
                   <span>{{ $t("header.bottom.calendar.day") }}</span>
@@ -209,7 +204,7 @@
                   >
                   <v-icon small v-else>$plusMinus</v-icon>
                   <span
-                    :class="$vuetify.rtl ? 'font-FaNumregular-14' : ''"
+                    :class="{ 'font-FaNumregular-14': $vuetify.rtl }"
                     >{{ dateRanges[2] }}</span
                   >
                   <span>{{ $t("header.bottom.calendar.day") }}</span>
@@ -399,11 +394,10 @@ export default {
       }
     },
     next(monthId) {
-      let calendarLength = this.calendar.length;
-      if (monthId !== calendarLength - 1) {
+      if (monthId !== this.calendar.length - 1) {
         this.setDisplayedCalendar(monthId, monthId + 1);
         this.prevDisable = false;
-        if (monthId === calendarLength - 2) {
+        if (monthId === this.calendar.length - 2) {
           this.nextDisable = true;
         }
       }
@@ -414,17 +408,16 @@ export default {
         : (this.selectedDaysFlexibility = value);
     },
     btnClass(value, monthId) {
-      let valueDay = value.day;
-      let checkInDay = this.checkIn.day;
-      let checkInMonthId = this.checkIn.monthId;
-      let checkOutDay = this.checkOut.day;
-      let checkOutMonthId = this.checkOut.monthId;
-      if (checkInDay === valueDay && checkInMonthId === monthId) {
-        return this.$vuetify.rtl ? "firstDay selected" : "lastDay selected";
-      } else if (checkOutDay === valueDay && checkOutMonthId === monthId) {
-        return this.$vuetify.rtl ? "lastDay selected" : "firstDay selected";
+      if(!value.other_month) {
+        if (this.checkIn.day === value.day && this.checkIn.monthId === monthId) {
+          return this.$vuetify.rtl ? "firstDay selected" : "lastDay selected";
+        } else if (this.checkOut.day === value.day && this.checkOut.monthId === monthId) {
+          return this.$vuetify.rtl ? "lastDay selected" : "firstDay selected";
+        }
+        return "";
+      } else {
+        return "";
       }
-      return "";
     },
     btnSpanClass(value, monthId, hover) {
         if((this.checkIn.day === value.day &&

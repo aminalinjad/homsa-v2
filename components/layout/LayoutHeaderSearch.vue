@@ -7,9 +7,8 @@
     <!-- header top section -->
     <v-row
       class="ma-0 rounded-t-lg whiteColor headerCls__top"
-      :class="[
-        searchSection || fixedHeader ? '' : 'rounded-b-lg',
-        !searchSection && fixedHeader ? 'bottomShodaw' : ''
+      :class="['ma-0 rounded-t-lg whiteColor headerCls__top',
+      { 'rounded-b-lg': !searchSection || !fixedHeader , 'bottomShadow': !searchSection && fixedHeader }
       ]"
     >
       <v-container
@@ -76,19 +75,20 @@
                 <v-divider vertical></v-divider>
                 <div v-if="checkInDate" class="px-3">
                   <span
-                    :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
+                    :class="{ 'font-FaNumregular-14': $vuetify.rtl }"
+
                   >{{ checkInDate }}</span
                   >
                   <v-icon v-if="$vuetify.rtl">$arrowLine</v-icon>
                   <v-icon v-else>$arrowLineRight</v-icon>
 
                   <span
-                    :class="$i18n.locale === 'fa' ? 'font-FaNumregular-14' : ''"
+                    :class="{ 'font-FaNumregular-14': $vuetify.rtl }"
                   >{{ checkOutDate }}</span
                   >
                   <span
                     class="ps-1 font-regular-12 greyLight2--text"
-                    :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
+                    :class="{ 'font-FaNumregular-12': $vuetify.rtl }"
                   >(
                     <v-icon small>$plusMinusGrey</v-icon>
                     {{ searchFormValue.flexibility }}
@@ -101,7 +101,7 @@
                 <div class="px-3">
                   <span
                     v-if="searchFormValue.guest"
-                    :class="$i18n.locale === 'fa' ? 'font-FaNummedium-14' : ''"
+                    :class="{ 'font-FaNummedium-14': $vuetify.rtl }"
                   >
                     {{ searchFormValue.guest }}
                     {{ $t("header.top.input.unit") }}
@@ -248,8 +248,7 @@
             append-icon=""
             prepend-inner-icon="$pinLocation"
             :menu-props="{ minWidth: 410, left: $vuetify.rtl }"
-            :class="hover ? 'searchInputBoxShadow' : ''"
-            class="me-2 rounded searchDestination font-regular-14"
+            :class="['me-2 rounded searchDestination font-regular-14', { 'searchInputBoxShadow': hover }]"
             @click:clear="clearDestination"
             return-object
             no-filter
@@ -306,7 +305,7 @@
         <!-- date range  -->
         <v-hover v-slot="{ hover }">
           <v-row
-            :class="hover ? 'searchInputBoxShadow' : ''"
+            :class="{ 'searchInputBoxShadow': hover }"
             class="ma-0 me-2 searchDateRange whiteColor rounded justify-sm-space-between align-center"
           >
             <v-row class="my-0 mx-3" @click="showCalendar">
@@ -343,7 +342,7 @@
         <!-- count / guest -->
         <v-hover v-slot="{ hover }">
           <v-row
-            :class="hover ? 'searchInputBoxShadow' : ''"
+            :class="{ 'searchInputBoxShadow': hover }"
             class="ma-0 me-2 searchCount whiteColor rounded"
           >
             <v-col cols="9" class="pa-0">
@@ -358,7 +357,7 @@
                 v-model="searchFormValue.guest"
                 class="rounded"
                 :class="
-                  $i18n.locale === 'fa' ? 'farsiFontCountInput' : 'inputRight'
+                  $vuetify.rtl ? 'farsiFontCountInput' : 'inputRight'
                 "
               >
               </v-text-field>
@@ -682,7 +681,7 @@ export default {
       if (checkInDate) {
         this.clearCalendar = false;
         this.searchFormValue.checkIn = checkInDate.date;
-        this.$i18n.locale === 'fa' ? this.checkInDate = checkInDate.jalali_date : this.checkInDate = checkInDate.date;
+        this.$vuetify.rtl ? this.checkInDate = checkInDate.jalali_date : this.checkInDate = checkInDate.date;
       } else {
         this.searchFormValue.checkIn = null;
         this.checkInDate = null;
@@ -691,7 +690,7 @@ export default {
     setCheckOutDate(checkOutDate) {
       if (checkOutDate) {
         this.searchFormValue.checkOut = checkOutDate.date;
-        this.$i18n.locale === 'fa' ? this.checkOutDate = checkOutDate.jalali_date : this.checkOutDate = checkOutDate.date;
+        this.$vuetify.rtl ? this.checkOutDate = checkOutDate.jalali_date : this.checkOutDate = checkOutDate.date;
       } else {
         this.searchFormValue.checkOut = null;
         this.checkOutDate = null;
@@ -845,7 +844,7 @@ export default {
     }
   }
 
-  .bottomShodaw {
+  .bottomShadow {
     box-shadow: 0 4px 10px -2px var(--v-greyLight2-base);
   }
 }
