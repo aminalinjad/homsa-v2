@@ -254,10 +254,6 @@
                 class="ms-6 mt-4 font-medium-14 greenDark8--text"
               >{{ $t("header.bottom.suggestion.title") }}
               </v-list-item-title>
-              <div
-                class="font-medium-14 greenDark8--text cursorPointer pa-5"
-                v-else-if="suggestionsDefault.length !== 0"
-              >
               <div class="font-medium-14 greenDark8--text cursorPointer pa-5" v-else-if="suggestionsDefault.length !== 0">
                   <v-list-item-title
                     @click="clickOnUserSuggestion"
