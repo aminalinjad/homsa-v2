@@ -6,8 +6,8 @@
         <PagesSearchResultTitle/>
       </v-col>
       <v-col lg="5">
-        <div class="d-flex align-center justify-end">
-          <div class="d-flex align-center">
+        <v-row justify="end" align="center" class="ma-0">
+          <v-row align="center" class="ma-0">
             <span class="font-regular-12 secondary--text">
               {{ $t("search.main.sort-by") }}
             </span>
@@ -24,7 +24,7 @@
                 class="font-regular-12"
               ></v-select>
             </div>
-          </div>
+          </v-row>
           <div class="white rounded ms-8">
             <v-btn
               elevation="0"
@@ -63,7 +63,7 @@
               />
             </v-btn>
           </div>
-        </div>
+        </v-row>
       </v-col>
     </v-row>
     <!-- Top Section End  -->
@@ -129,7 +129,7 @@
         class="paginationWidth46"
         :total-visible="7"
         :length="getSearchResult.last_page"
-        :class="[$i18n.locale == 'fa' ? 'farsiFontPagination' : '',]"
+        :class="{ 'farsiFontPagination': $vuetify.rtl }"
       ></v-pagination>
     </v-row>
 

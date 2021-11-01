@@ -956,12 +956,10 @@ export default {
                 appliedFilterExist = true;
                 appliedFilter.minPrice = rangeSliderFrom;
                 appliedFilter.maxPrice = rangeSliderTo;
-                console.log("here when its ", rangeSliderFrom, rangeSliderTo);
               }
             }
           );
           if (!appliedFilterExist) {
-            console.log("here before push", rangeSliderFrom, rangeSliderTo);
             this.appliedFilterList.push({
               type: filter.type,
               slug: filter.slug,
