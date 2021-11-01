@@ -252,17 +252,18 @@
                   userDestinationSearch === '' || userDestinationSearch === null
                 "
                 class="ms-6 mt-4 font-medium-14 greenDark8--text"
-                >پیشنهاد هومسا
+              >{{ $t("header.bottom.suggestion.title") }}
               </v-list-item-title>
               <div
                 class="font-medium-14 greenDark8--text cursorPointer pa-5"
                 v-else-if="suggestionsDefault.length !== 0"
               >
-                <v-list-item-title
-                  @click="clickOnUserSuggestion"
-                  v-html="`جستجوی ${userDestinationSearch} در هومسا`"
-                  class="font-regular-14 greenDark8--text"
-                ></v-list-item-title>
+              <div class="font-medium-14 greenDark8--text cursorPointer pa-5" v-else-if="suggestionsDefault.length !== 0">
+                  <v-list-item-title
+                    @click="clickOnUserSuggestion"
+                    v-html="`جستجوی ${userDestinationSearch} در هومسا`"
+                    class="font-regular-14 greenDark8--text"
+                  ></v-list-item-title>
               </div>
               <!--destination result -->
             </template>
@@ -513,7 +514,8 @@ export default {
 
   computed: {
     ...mapGetters({
-      mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`
+      mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
+      getRequestData: `modules/requestData/${types.requestData.getters.GET_REQUEST_DATA}`,
     })
   },
 
@@ -527,7 +529,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`
+      setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
+      setRequestData: `modules/requestData/${types.requestData.actions.SET_REQUEST_DATA}`,
     }),
     clickOnUserSuggestion() {
       if (this.$refs.cityAutocomplete) {
@@ -560,13 +563,12 @@ export default {
             this.$route.params.slug
           ) {
             setTimeout(() => {
-              this.$nuxt.$loading.start();
-            }, 1);
-            let data = {
-              page: Number(this.$route.query.page) || 1,
-              sort: this.$route.query.sort ? this.$route.query.sort : "popular",
-              guest: this.searchFormValue.guest
-            };
+              this.$nuxt.$loading.start()
+            }, 1)
+
+            let data = {...this.getRequestData}
+            data.guest = this.searchFormValue.guest
+
             if (this.searchFormValue.checkIn) {
               data.checkin = this.searchFormValue.checkIn;
             }
@@ -582,6 +584,8 @@ export default {
                 type: splitSlug[0]
               }
             ];
+            this.setRequestData(data)
+
             SearchServices.searchResults(data)
               .then(res => {
                 this.calendar = false;
@@ -615,20 +619,20 @@ export default {
           //check send request or not
           if (this.userDestinationSearch === this.$route.query.q) {
             setTimeout(() => {
-              this.$nuxt.$loading.start();
-            }, 1);
-            let data = {
-              page: Number(this.$route.query.page) || 1,
-              sort: this.$route.query.sort ? this.$route.query.sort : "popular",
-              guest: this.searchFormValue.guest,
-              q: this.userDestinationSearch
-            };
+              this.$nuxt.$loading.start()
+            }, 1)
+            let data = {...this.getRequestData}
+            data.guest = this.searchFormValue.guest
+            data.q = this.userDestinationSearch
             if (this.searchFormValue.checkIn) {
               data.checkin = this.searchFormValue.checkIn;
             }
             if (this.searchFormValue.checkOut) {
               data.checkout = this.searchFormValue.checkOut;
             }
+
+            this.setRequestData(data)
+
             SearchServices.searchResults(data)
               .then(res => {
                 this.calendar = false;

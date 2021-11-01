@@ -42,6 +42,9 @@
         "confirm": "confirm",
         "day": "day",
         "tips": "برای داشتن انتخاب بهتر میتوانید بازه زمانی بیشتری را جستجو کنید"
+      },
+      "suggestion": {
+        "title": "homsa suggestion"
       }
     }
   },
