@@ -98,7 +98,8 @@
                             )
                           "
                           :disabled="dayInfo.previous || dayInfo.other_month"
-                          :class="['calendarBtn', btnClass(dayInfo, calendarMonth.id)]"
+                          class="calendarBtn"
+                          :class="btnClass(dayInfo, calendarMonth.id)"
                         >
                           <span
                             v-if="!dayInfo.other_month"
@@ -330,7 +331,6 @@ export default {
       return this.checkIn.day === dayInfo.day && this.checkIn.monthId === calendarMonth.id && !dayInfo.other_month || this.checkOut.day === dayInfo.day && this.checkOut.monthId === calendarMonth.id && !dayInfo.other_month;
     },
     datePick(value, month, monthId) {
-      console.log('check !this.checkIn.day', !this.checkIn.day, value)
       if (!this.checkIn.day) {
         this.checkIn = value;
         this.checkIn.month = month;

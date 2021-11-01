@@ -2,20 +2,22 @@
   <header
     id="headerSearch"
     class="headerCls"
-    :class="{ 'pa-4 mb-0' : searchSection || !fixedHeader, 'fixedHeader' : fixedHeader }"
+    :class="{
+      'pa-4 mb-0': searchSection || !fixedHeader,
+      fixedHeader: fixedHeader
+    }"
   >
     <!-- header top section -->
     <v-row
       class="ma-0 rounded-t-lg whiteColor headerCls__top"
-      :class="['ma-0 rounded-t-lg whiteColor headerCls__top',
-      { 'rounded-b-lg': !searchSection || !fixedHeader , 'bottomShadow': !searchSection && fixedHeader }
-      ]"
+      :class="{
+        'rounded-b-lg': !(searchSection || fixedHeader),
+        bottomShadow: !searchSection && fixedHeader
+      }"
     >
       <v-container
         class="pa-4"
-        :fluid="
-          $vuetify.breakpoint.md || $route.query.showMap === 'true'
-        "
+        :fluid="$vuetify.breakpoint.md || $route.query.showMap === 'true'"
       >
         <v-row>
           <!-- header logo -->
@@ -42,30 +44,32 @@
               @click="showSearchSection"
               v-if="!searchSection"
             >
-              <div
-                class="d-flex justify-space-between align-center"
+              <v-row
+                class="ma-0"
+                justify="space-between"
+                align="center"
                 v-if="!searchFormValue.destination"
               >
-                <div
+                <v-row
+                  justify="start"
                   class="
+                  ma-0
                     ps-1
-                    d-flex
-                    justify-start
                     secondary--text
                     font-regular-14
                   "
                 >
                   <span>{{ $t("header.top.input.destination") }}</span>
-                </div>
+                </v-row>
                 <v-btn fab color="primary" elevation="0" width="32" height="32">
                   <v-icon>$searchLeft</v-icon>
                 </v-btn>
-              </div>
-              <div
+              </v-row>
+              <v-row
+                justify="space-between"
+                align="center"
                 class="
-                  d-flex
-                  justify-space-between
-                  align-center
+                ma-0
                   font-regular-14
                   greenDark8--text
                 "
@@ -74,22 +78,19 @@
                 <div class="pe-3">{{ userDestinationSearch }}</div>
                 <v-divider vertical></v-divider>
                 <div v-if="checkInDate" class="px-3">
-                  <span
-                    :class="{ 'font-FaNumregular-14': $vuetify.rtl }"
-
-                  >{{ checkInDate }}</span
-                  >
+                  <span :class="{ 'font-FaNumregular-14': $vuetify.rtl }">{{
+                    checkInDate
+                  }}</span>
                   <v-icon v-if="$vuetify.rtl">$arrowLine</v-icon>
                   <v-icon v-else>$arrowLineRight</v-icon>
 
-                  <span
-                    :class="{ 'font-FaNumregular-14': $vuetify.rtl }"
-                  >{{ checkOutDate }}</span
-                  >
+                  <span :class="{ 'font-FaNumregular-14': $vuetify.rtl }">{{
+                    checkOutDate
+                  }}</span>
                   <span
                     class="ps-1 font-regular-12 greyLight2--text"
                     :class="{ 'font-FaNumregular-12': $vuetify.rtl }"
-                  >(
+                    >(
                     <v-icon small>$plusMinusGrey</v-icon>
                     {{ searchFormValue.flexibility }}
                     {{ $t("header.top.input.day") }})
@@ -107,110 +108,98 @@
                     {{ $t("header.top.input.unit") }}
                   </span>
                   <span class="font-regular-14 secondary--text" v-else>{{
-                      $t("header.top.input.count")
-                    }}</span>
+                    $t("header.top.input.count")
+                  }}</span>
                 </div>
                 <v-btn fab color="primary" elevation="0" width="32" height="32">
                   <v-icon>$searchLeft</v-icon>
                 </v-btn>
-              </div>
+              </v-row>
             </div>
           </v-col>
 
           <!-- header user option -->
           <v-col>
-            <div class="mt-1 d-flex align-center justify-end">
-              <div>
-                <v-btn
-                  rounded
-                  text
-                  color="primary"
-                  height="30"
-                  class="px-2 py-1 text-capitalize"
-                >
-                  <span class="font-medium-14">
-                    {{ $t("header.top.guest") }}
-                  </span>
-                </v-btn>
-              </div>
+            <v-row align="center" justify="end" class="ma-0 mt-1">
+              <v-btn
+                rounded
+                text
+                color="primary"
+                height="30"
+                class="px-2 py-1 text-capitalize"
+              >
+                <span class="font-medium-14">
+                  {{ $t("header.top.guest") }}
+                </span>
+              </v-btn>
               <v-divider vertical class="mx-3 greyLight4"></v-divider>
-              <div>
-                <v-menu
-                  ref="menuRef"
-                  fixed
-                  :left="$vuetify.rtl"
-                  bottom
-                  offset-y
-                  min-width="184"
-                  content-class="headerUserMenu"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                      rounded
-                      text
-                      color="greenDark8"
-                      height="30"
-                      class="ps-1 pe-2 py-1 text-capitalize"
-                      v-bind="attrs"
-                      v-on="on"
-                    >
-                      <v-icon size="22">$profile</v-icon>
-                      <div class="ms-2">
-                        <span class="font-medium-14">
-                          {{ $t("header.top.user.login") }}
-                        </span>
-                        <span class="font-medium-14">/</span>
-                        <span class="font-medium-14">
-                          {{ $t("header.top.user.register") }}
-                        </span>
-                      </div>
-                    </v-btn>
-                  </template>
-                  <v-list class="cursorPointer">
-                    <v-list-item link to="">
-                      <v-list-item-subtitle class="greenDark8--text"
+              <v-menu
+                ref="menuRef"
+                fixed
+                :left="$vuetify.rtl"
+                bottom
+                offset-y
+                min-width="184"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    rounded
+                    text
+                    color="greenDark8"
+                    height="30"
+                    class="ps-1 pe-2 py-1 text-capitalize"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <v-icon size="22">$profile</v-icon>
+                    <div class="ms-2">
+                      <span class="font-medium-14">
+                        {{ $t("header.top.user.login") }} / {{ $t("header.top.user.register") }}
+                      </span>
+                    </div>
+                  </v-btn>
+                </template>
+                <v-list class="cursorPointer">
+                  <v-list-item link to="">
+                    <v-list-item-subtitle class="greenDark8--text"
                       >{{ userMenu.menuTitle }}
-                      </v-list-item-subtitle>
-                    </v-list-item>
-                    <v-divider class="greyLight4"></v-divider>
-                    <v-list-item
-                      v-for="(item, index) in userMenu.menuBody"
-                      :key="index"
-                      link
-                      :to="item.link"
-                    >
-                      <v-list-item-subtitle class="secondary--text"
+                    </v-list-item-subtitle>
+                  </v-list-item>
+                  <v-divider class="greyLight4"></v-divider>
+                  <v-list-item
+                    v-for="(item, index) in userMenu.menuBody"
+                    :key="index"
+                    link
+                    :to="item.link"
+                  >
+                    <v-list-item-subtitle class="secondary--text"
                       >{{ item.name }}
-                      </v-list-item-subtitle>
-                    </v-list-item>
-                    <v-divider class="greyLight4"></v-divider>
-                    <v-list-item
-                      v-for="(item, index) in userMenu.menuFooter"
-                      :key="`${index + userMenu.menuBody.length}`"
-                      link
-                      :to="item.link"
-                    >
-                      <v-list-item-subtitle class="secondary--text"
+                    </v-list-item-subtitle>
+                  </v-list-item>
+                  <v-divider class="greyLight4"></v-divider>
+                  <v-list-item
+                    v-for="(item, index) in userMenu.menuFooter"
+                    :key="`${index + userMenu.menuBody.length}`"
+                    link
+                    :to="item.link"
+                  >
+                    <v-list-item-subtitle class="secondary--text"
                       >{{ item.name }}
-                      </v-list-item-subtitle>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
-              </div>
+                    </v-list-item-subtitle>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
               <v-divider vertical class="mx-3 greyLight4"></v-divider>
-
-              <div class="d-flex align-center">
-                <v-btn
-                  icon
-                  width="30"
-                  height="30"
-                  class="pa-1"
-                  @click="changeLang"
-                >
-                  <v-icon size="30">$language</v-icon>
-                </v-btn>
-              </div>
-            </div>
+              <v-btn
+                icon
+                width="30"
+                height="30"
+                class="pa-1"
+                @click="changeLang"
+              >
+                <v-icon size="30">$language</v-icon>
+              </v-btn>
+            </v-row>
           </v-col>
         </v-row>
       </v-container>
@@ -228,7 +217,7 @@
         align-center
       "
     >
-      <div class="d-flex headerCls__bottom__content">
+      <v-row class="headerCls__bottom__content">
         <!-- destination  -->
         <v-hover v-slot="{ hover }">
           <v-combobox
@@ -237,8 +226,8 @@
             clearable
             height="66"
             background-color="whiteColor"
-            :label="`${$t('header.bottom.destination.label')}`"
-            :placeholder="`${$t('header.bottom.destination.place-holder')}`"
+            :label="$t('header.bottom.destination.label')"
+            :placeholder="$t('header.bottom.destination.place-holder')"
             persistent-placeholder
             :items="suggestionsDefault"
             :search-input.sync="userDestinationSearch"
@@ -248,7 +237,8 @@
             append-icon=""
             prepend-inner-icon="$pinLocation"
             :menu-props="{ minWidth: 410, left: $vuetify.rtl }"
-            :class="['me-2 rounded searchDestination font-regular-14', { 'searchInputBoxShadow': hover }]"
+            class="me-2 rounded searchDestination font-regular-14"
+            :class="{ searchInputBoxShadow: hover }"
             @click:clear="clearDestination"
             return-object
             no-filter
@@ -258,17 +248,21 @@
             <!-- title in suggestion mode -->
             <template v-slot:prepend-item>
               <v-list-item-title
-                v-if="userDestinationSearch === '' || userDestinationSearch === null"
+                v-if="
+                  userDestinationSearch === '' || userDestinationSearch === null
+                "
                 class="ms-6 mt-4 font-medium-14 greenDark8--text"
-              >پیشنهاد هومسا
-              </v-list-item-title
+                >پیشنهاد هومسا
+              </v-list-item-title>
+              <div
+                class="font-medium-14 greenDark8--text cursorPointer pa-5"
+                v-else-if="suggestionsDefault.length !== 0"
               >
-              <div class="font-medium-14 greenDark8--text cursorPointer pa-5" v-else-if="suggestionsDefault.length !== 0">
-                  <v-list-item-title
-                    @click="clickOnUserSuggestion"
-                    v-html="`جستجوی ${userDestinationSearch} در هومسا`"
-                    class="font-regular-14 greenDark8--text"
-                  ></v-list-item-title>
+                <v-list-item-title
+                  @click="clickOnUserSuggestion"
+                  v-html="`جستجوی ${userDestinationSearch} در هومسا`"
+                  class="font-regular-14 greenDark8--text"
+                ></v-list-item-title>
               </div>
               <!--destination result -->
             </template>
@@ -281,12 +275,11 @@
                   class="font-regular-14 greenDark8--text"
                 ></v-list-item-title>
               </div>
-
             </template>
 
             <template v-slot:item="data">
               <v-list-item-avatar rounded width="48" height="48" class="ms-2">
-                <img :src="data.item.image"/>
+                <img :src="data.item.image" />
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title
@@ -305,7 +298,7 @@
         <!-- date range  -->
         <v-hover v-slot="{ hover }">
           <v-row
-            :class="{ 'searchInputBoxShadow': hover }"
+            :class="{ searchInputBoxShadow: hover }"
             class="ma-0 me-2 searchDateRange whiteColor rounded justify-sm-space-between align-center"
           >
             <v-row class="my-0 mx-3" @click="showCalendar">
@@ -317,14 +310,25 @@
                 <v-row class="ma-0">
                   <span v-if="checkInDate" class="greenDark8--text">
                     <span
-                      :class="$vuetify.rtl ? 'font-FaNumregular-14': 'font-regular-14'"
-                    >{{ checkInDate }}</span
+                      :class="
+                        $vuetify.rtl
+                          ? 'font-FaNumregular-14'
+                          : 'font-regular-14'
+                      "
+                      >{{ checkInDate }}</span
                     >
                     <span>
                       <v-icon small v-if="$vuetify.rtl">$arrowLineDark</v-icon>
                       <v-icon small v-else>$arrowLineDarkRight</v-icon>
                     </span>
-                    <span v-if="checkOutDate" :class="$vuetify.rtl ? 'font-FaNumregular-14': 'font-regular-14'">
+                    <span
+                      v-if="checkOutDate"
+                      :class="
+                        $vuetify.rtl
+                          ? 'font-FaNumregular-14'
+                          : 'font-regular-14'
+                      "
+                    >
                       {{ checkOutDate }}
                     </span>
                   </span>
@@ -334,7 +338,13 @@
                 </v-row>
               </v-col>
             </v-row>
-            <v-btn small icon class="me-0" @click="clearDateRange" v-if="checkInDate">
+            <v-btn
+              small
+              icon
+              class="me-0"
+              @click="clearDateRange"
+              v-if="checkInDate"
+            >
               <v-icon>$close</v-icon>
             </v-btn>
           </v-row>
@@ -342,7 +352,7 @@
         <!-- count / guest -->
         <v-hover v-slot="{ hover }">
           <v-row
-            :class="{ 'searchInputBoxShadow': hover }"
+            :class="{ searchInputBoxShadow: hover }"
             class="ma-0 me-2 searchCount whiteColor rounded"
           >
             <v-col cols="9" class="pa-0">
@@ -352,13 +362,11 @@
                 height="66"
                 background-color="whiteColor"
                 prepend-inner-icon="$usersProfile"
-                :suffix="`${$t('header.bottom.count.suffix')}`"
-                :label="`${$t('header.bottom.count.label')}`"
+                :suffix="$t('header.bottom.count.suffix')"
+                :label="$t('header.bottom.count.label')"
                 v-model="searchFormValue.guest"
                 class="rounded"
-                :class="
-                  $vuetify.rtl ? 'farsiFontCountInput' : 'inputRight'
-                "
+                :class="$vuetify.rtl ? 'farsiFontCountInput' : 'inputRight'"
               >
               </v-text-field>
             </v-col>
@@ -422,7 +430,7 @@
         >
           <v-icon size="30">$search</v-icon>
         </v-btn>
-      </div>
+      </v-row>
     </v-row>
 
     <!-- calendar  -->
@@ -446,8 +454,8 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
-import {SearchServices} from "@/services";
+import { mapActions, mapGetters } from "vuex";
+import { SearchServices } from "@/services";
 import * as types from "@/store/types.js";
 import MinusIcon from "@/assets/AppIcons/minus.vue";
 import AddIcon from "@/assets/AppIcons/add.vue";
@@ -459,7 +467,6 @@ export default {
   },
   data() {
     return {
-      test: '',
       calendar: false,
       clearCalendar: false,
       checkInDate: null,
@@ -471,17 +478,17 @@ export default {
       userMenu: {
         menuTitle: "مشاهده حساب کاربری",
         menuBody: [
-          {name: "اقامتگاه‌های من", link: "#1"},
-          {name: "رزروهای من", link: "#2"},
-          {name: "لیست اعلان‌ها", link: "#3"},
-          {name: "لیست علاقه مندی‌ها", link: "#4"}
+          { name: "اقامتگاه‌های من", link: "#1" },
+          { name: "رزروهای من", link: "#2" },
+          { name: "لیست اعلان‌ها", link: "#3" },
+          { name: "لیست علاقه مندی‌ها", link: "#4" }
         ],
         menuFooter: [
-          {name: "پشتیبانی", link: "#5"},
-          {name: "خروج", link: "#6"}
+          { name: "پشتیبانی", link: "#5" },
+          { name: "خروج", link: "#6" }
         ]
       },
-      userDestinationSearch: '',
+      userDestinationSearch: "",
       searchFormValue: {
         destination: null,
         checkIn: null,
@@ -490,7 +497,7 @@ export default {
         guest: 1
       },
       suggestionsDefault: [],
-      suggestion: true,
+      suggestion: true
     };
   },
 
@@ -507,12 +514,12 @@ export default {
   computed: {
     ...mapGetters({
       mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`
-    }),
+    })
   },
 
   mounted() {
-    window.addEventListener("scroll", this.scrollPage, {passive: true});
-    this.destinationSearch('');
+    window.addEventListener("scroll", this.scrollPage, { passive: true });
+    this.destinationSearch("");
   },
 
   destroyed() {
@@ -520,7 +527,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
+      setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`
     }),
     clickOnUserSuggestion() {
       if (this.$refs.cityAutocomplete) {
@@ -537,97 +544,116 @@ export default {
       this.overlay = !this.overlay;
     },
     SearchServices() {
-      if (this.userDestinationSearch === '' || this.userDestinationSearch === null) {
-        this.$toast.error('جستجو بدون پارامتر امکانپذیر نیست')
-      }else  {
-
-        if (this.searchFormValue.destination && this.searchFormValue.destination.type) {
+      if (
+        this.userDestinationSearch === "" ||
+        this.userDestinationSearch === null
+      ) {
+        this.$toast.error("جستجو بدون پارامتر امکانپذیر نیست");
+      } else {
+        if (
+          this.searchFormValue.destination &&
+          this.searchFormValue.destination.type
+        ) {
           //check send request or not
-          if (`${this.searchFormValue.destination.type}-${this.searchFormValue.destination.slug}` === this.$route.params.slug) {
+          if (
+            `${this.searchFormValue.destination.type}-${this.searchFormValue.destination.slug}` ===
+            this.$route.params.slug
+          ) {
             setTimeout(() => {
-              this.$nuxt.$loading.start()
-            } , 1)
+              this.$nuxt.$loading.start();
+            }, 1);
             let data = {
               page: Number(this.$route.query.page) || 1,
-              sort: this.$route.query.sort ? this.$route.query.sort : 'popular',
-              guest: this.searchFormValue.guest,
-            }
+              sort: this.$route.query.sort ? this.$route.query.sort : "popular",
+              guest: this.searchFormValue.guest
+            };
             if (this.searchFormValue.checkIn) {
-              data.checkin = this.searchFormValue.checkIn
+              data.checkin = this.searchFormValue.checkIn;
             }
             if (this.searchFormValue.checkOut) {
-              data.checkout = this.searchFormValue.checkOut
+              data.checkout = this.searchFormValue.checkOut;
             }
 
-            let splitSlug = this.$route.params.slug.split('-')
+            let splitSlug = this.$route.params.slug.split("-");
 
-            data.slugs = [{
-              value: splitSlug[1],
-              type: splitSlug[0]
-            }]
-            SearchServices.searchResults(data).then(res => {
-              this.calendar = false;
-              this.closeSearchSection();
-              this.$nuxt.$loading.finish()
-              console.log(res.data)
-              this.setSearchResult(res.data)
-            }).catch(err => {
-              this.$nuxt.$loading.finish()
-            })
-          }else {
+            data.slugs = [
+              {
+                value: splitSlug[1],
+                type: splitSlug[0]
+              }
+            ];
+            SearchServices.searchResults(data)
+              .then(res => {
+                this.calendar = false;
+                this.closeSearchSection();
+                this.$nuxt.$loading.finish();
+                this.setSearchResult(res.data);
+              })
+              .catch(err => {
+                this.$nuxt.$loading.finish();
+              });
+          } else {
             this.calendar = false;
             this.closeSearchSection();
           }
           //end check request
           let queryData = {
             guest: this.searchFormValue.guest,
-            checkInDate: this.searchFormValue.checkIn ? this.searchFormValue.checkIn : undefined,
-            checkOutDate: this.searchFormValue.checkOut ? this.searchFormValue.checkOut : undefined,
+            checkInDate: this.searchFormValue.checkIn
+              ? this.searchFormValue.checkIn
+              : undefined,
+            checkOutDate: this.searchFormValue.checkOut
+              ? this.searchFormValue.checkOut
+              : undefined,
             q: undefined
-          }
+          };
           this.$router.push({
             path: `${this.searchFormValue.destination.type}-${this.searchFormValue.destination.slug}`,
-            query: {...this.$route.query, ...queryData}
-          })
+            query: { ...this.$route.query, ...queryData }
+          });
         } else {
           //check send request or not
           if (this.userDestinationSearch === this.$route.query.q) {
             setTimeout(() => {
-              this.$nuxt.$loading.start()
-            } , 1)
+              this.$nuxt.$loading.start();
+            }, 1);
             let data = {
               page: Number(this.$route.query.page) || 1,
-              sort: this.$route.query.sort ? this.$route.query.sort : 'popular',
+              sort: this.$route.query.sort ? this.$route.query.sort : "popular",
               guest: this.searchFormValue.guest,
               q: this.userDestinationSearch
-            }
+            };
             if (this.searchFormValue.checkIn) {
-              data.checkin = this.searchFormValue.checkIn
+              data.checkin = this.searchFormValue.checkIn;
             }
             if (this.searchFormValue.checkOut) {
-              data.checkout = this.searchFormValue.checkOut
+              data.checkout = this.searchFormValue.checkOut;
             }
-            SearchServices.searchResults(data).then(res => {
-              this.calendar = false;
-              this.closeSearchSection();
-              this.$nuxt.$loading.finish()
-              console.log(res.data)
-              this.setSearchResult(res.data)
-            }).catch(err => {
-              this.$nuxt.$loading.finish()
-            })
-          }else {
+            SearchServices.searchResults(data)
+              .then(res => {
+                this.calendar = false;
+                this.closeSearchSection();
+                this.$nuxt.$loading.finish();
+                this.setSearchResult(res.data);
+              })
+              .catch(err => {
+                this.$nuxt.$loading.finish();
+              });
+          } else {
             this.calendar = false;
             this.closeSearchSection();
           }
           //end check request
           this.$router.push({
-            path: 'search',
-            query: {...this.$route.query, guest: this.searchFormValue.guest, q: this.userDestinationSearch}
-          })
+            path: "search",
+            query: {
+              ...this.$route.query,
+              guest: this.searchFormValue.guest,
+              q: this.userDestinationSearch
+            }
+          });
         }
       }
-
     },
     scrollPage() {
       if (this.$refs.cityAutocomplete) {
@@ -645,17 +671,15 @@ export default {
     destinationSearch(userDestination) {
       let data = {
         term: userDestination
-      }
+      };
       return SearchServices.destinationSuggestions(data)
         .then(res => {
-          this.suggestionsDefault = res.data.data
+          this.suggestionsDefault = res.data.data;
         })
         .catch(err => {
-          console.log(err);
-        })
+        });
     },
-    clearDestination() {
-    },
+    clearDestination() {},
     addGuest() {
       this.searchFormValue.guest++;
     },
@@ -681,7 +705,9 @@ export default {
       if (checkInDate) {
         this.clearCalendar = false;
         this.searchFormValue.checkIn = checkInDate.date;
-        this.$vuetify.rtl ? this.checkInDate = checkInDate.jalali_date : this.checkInDate = checkInDate.date;
+        this.$vuetify.rtl
+          ? (this.checkInDate = checkInDate.jalali_date)
+          : (this.checkInDate = checkInDate.date);
       } else {
         this.searchFormValue.checkIn = null;
         this.checkInDate = null;
@@ -690,7 +716,9 @@ export default {
     setCheckOutDate(checkOutDate) {
       if (checkOutDate) {
         this.searchFormValue.checkOut = checkOutDate.date;
-        this.$vuetify.rtl ? this.checkOutDate = checkOutDate.jalali_date : this.checkOutDate = checkOutDate.date;
+        this.$vuetify.rtl
+          ? (this.checkOutDate = checkOutDate.jalali_date)
+          : (this.checkOutDate = checkOutDate.date);
       } else {
         this.searchFormValue.checkOut = null;
         this.checkOutDate = null;
@@ -706,7 +734,7 @@ export default {
     },
     closeCalendar() {
       if (this.calendar) {
-        this.clearDateRange()
+        this.clearDateRange();
       }
     },
     submitCalendarDate(flexibility) {
@@ -747,6 +775,7 @@ export default {
     &__content {
       max-width: min-content;
       max-height: 66px;
+      flex-wrap: nowrap;
 
       .searchInputBoxShadow {
         box-shadow: 0px 4px 10px #0000001a;
