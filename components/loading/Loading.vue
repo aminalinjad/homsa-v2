@@ -1,6 +1,6 @@
 <template>
   <div v-if="loading" class="loading-page">
-    <p>یکم صبر کن</p>
+    <img src="@/static/loading.gif" alt="loading">
   </div>
 </template>
 
@@ -23,16 +23,19 @@ export default {
 <style scoped>
 .loading-page {
   position: fixed;
-
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(69, 159, 114, 0.8);
+  background: rgba(255, 255, 255, 0.96);
   text-align: center;
   padding-top: 200px;
   font-size: 30px;
   font-family: sans-serif;
   z-index: 99999;
+}
+.loading-page img {
+  position: absolute;
+  top: 45%;
 }
 </style>

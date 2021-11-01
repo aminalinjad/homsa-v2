@@ -16,7 +16,6 @@ API_V1.interceptors.response.use(
     return response;
   },
   async function (error) {
-    $nuxt.$loading.finish()
     if (error && error.response.config.method !== "get") {
       Vue.$toast.clear();
       if (error.response.data.errors && Object.entries(error.response.data.errors).length > 0) {

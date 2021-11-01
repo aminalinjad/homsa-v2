@@ -151,6 +151,7 @@ export default {
   computed: {
     ...mapGetters({
       getSearchResult: `modules/search/${types.search.getters.GET_SEARCH_RESULTS}`,
+      getRequestData: `modules/requestData/${types.requestData.getters.GET_REQUEST_DATA}`,
     }),
     isFilter() {
       return this.filter;
@@ -171,6 +172,7 @@ export default {
     ...mapActions({
       setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
       setHoveredItem: `modules/search/${types.search.actions.SET_HOVERED_ITEM}`,
+      setRequestData: `modules/requestData/${types.requestData.actions.SET_REQUEST_DATA}`,
     }),
     changePagination() {
       setTimeout(() => {
@@ -180,25 +182,11 @@ export default {
       if (this.currentPage > 1) qs.page = this.currentPage
 
       this.$router.push({query: {...this.$route.query, page: qs.page}})
-      let data = {
-        page: this.currentPage,
-        sort: this.$route.query.sort ? this.$route.query.sort : 'popular',
-        guest: Number(this.$route.query.guest) || 1,
-        checkin: this.$route.query.checkInDate,
-        checkout: this.$route.query.checkOutDate,
-      }
 
-      if (this.$route.params.slug) {
-        let splitSlug = this.$route.params.slug.split('-')
+      let data = {...this.getRequestData}
+      data.page = this.currentPage
+      this.setRequestData(data)
 
-        data.slugs = [{
-          value: splitSlug[1],
-          type: splitSlug[0]
-        }]
-      }
-      if (this.$route.query.q) {
-        data.q = this.$route.query.q
-      }
       SearchServices.searchResults(data).then(res => {
         this.$nuxt.$loading.finish()
         this.setSearchResult(res.data)
