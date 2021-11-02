@@ -1,6 +1,8 @@
 <template>
   <div v-if="loading" class="loading-page">
-    <img src="@/static/loading.gif" alt="loading">
+    <div class="image-parent">
+      <img src="@/static/loading.gif" alt="loading">
+    </div>
   </div>
 </template>
 
@@ -27,15 +29,21 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 253, 253, 0.36);
   text-align: center;
-  padding-top: 200px;
   font-size: 30px;
   font-family: sans-serif;
   z-index: 99999;
 }
-.loading-page img {
+.image-parent {
   position: absolute;
-  top: 45%;
+  top: 40%;
+  background: #fff;
+  padding: 20px 20px 10px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: fit-content;
+  border-radius: 8px;
 }
 </style>
