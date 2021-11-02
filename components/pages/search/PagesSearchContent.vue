@@ -7,25 +7,25 @@
       </v-col>
       <v-col lg="5">
         <v-row justify="end" align="center" class="ma-0">
-          <v-row align="center" class="ma-0">
-            <span class="font-regular-12 secondary--text">
+          <v-col cols="auto" class="pa-0">
+            <v-row  align="center" class="ma-0">
+              <span class="font-regular-12 secondary--text">
               {{ $t("search.main.sort-by") }}
             </span>
-            <div class="sortByInput ms-3 mb-n7">
-              <v-select
-                :items="sortBy"
-                @change="changeTheSortSelect"
-                item-text="text"
-                item-value="value"
-                v-model="sortByDefault"
-                solo
-                flat
-                dense
-                class="font-regular-12"
-              ></v-select>
-            </div>
-          </v-row>
-          <div class="white rounded ms-8">
+                <v-select
+                  :items="sortBy"
+                  @change="changeTheSortSelect"
+                  item-text="text"
+                  item-value="value"
+                  v-model="sortByDefault"
+                  solo
+                  flat
+                  dense
+                  class="font-regular-12 sortByInput ms-3 mb-n7"
+                ></v-select>
+            </v-row>
+          </v-col>
+          <v-col cols="auto" class="pa-0 ps-8">
             <v-btn
               elevation="0"
               fab
@@ -62,7 +62,7 @@
                 "
               />
             </v-btn>
-          </div>
+          </v-col>
         </v-row>
       </v-col>
     </v-row>
