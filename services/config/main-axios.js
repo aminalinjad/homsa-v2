@@ -18,9 +18,10 @@ API_V1.interceptors.response.use(
   },
   async function (error) {
     setTimeout(() => {
-      $nuxt.$loading.finish()
+      if ($nuxt.$loading.loading) {
+        $nuxt.$loading.finish()
+      }
     } , 100)
-
 
 
     if (error && error.response.config.method !== "get") {
