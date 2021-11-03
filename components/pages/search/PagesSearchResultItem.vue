@@ -1,7 +1,7 @@
 <template>
   <v-card flat class="rounded-lg">
     <!--If Grid view  -->
-    <div v-if="ifGridView">
+    <div v-if="gridViewMode">
       <!-- offer sec  -->
       <div
         class="redOffer--text text-center offerSec mx-3 mb-2"
@@ -138,7 +138,7 @@
       <v-row>
         <!-- image sec -->
         <v-col cols="4">
-          <PagesSearchResultImg :images="place.photos" :ifGridView="ifGridView" />
+          <PagesSearchResultImg :images="place.photos" :gridViewMode="gridViewMode" />
         </v-col>
 
         <!-- info sec -->
@@ -288,7 +288,7 @@ export default {
     place: {
       type: Object
     },
-    ifGridView: {
+    gridViewMode: {
       type: Boolean,
       default: true,
     },

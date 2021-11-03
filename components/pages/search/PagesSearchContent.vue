@@ -7,25 +7,25 @@
       </v-col>
       <v-col lg="5">
         <v-row justify="end" align="center" class="ma-0">
-          <v-row align="center" class="ma-0">
-            <span class="font-regular-12 secondary--text">
+          <v-col cols="auto" class="pa-0">
+            <v-row  align="center" class="ma-0">
+              <span class="font-regular-12 secondary--text">
               {{ $t("search.main.sort-by") }}
             </span>
-            <div class="sortByInput ms-3 mb-n7">
-              <v-select
-                :items="sortBy"
-                @change="changeTheSortSelect"
-                item-text="text"
-                item-value="value"
-                v-model="sortByDefault"
-                solo
-                flat
-                dense
-                class="font-regular-12"
-              ></v-select>
-            </div>
-          </v-row>
-          <div class="white rounded ms-8">
+                <v-select
+                  :items="sortBy"
+                  @change="changeTheSortSelect"
+                  item-text="text"
+                  item-value="value"
+                  v-model="sortByDefault"
+                  solo
+                  flat
+                  dense
+                  class="font-regular-12 sortByInput ms-3 mb-n7"
+                ></v-select>
+            </v-row>
+          </v-col>
+          <v-col cols="auto" class="pa-0 ps-8">
             <v-btn
               elevation="0"
               fab
@@ -35,13 +35,7 @@
               @click="listView"
             >
               <ListIcon
-                :clr="
-                  !ifGridView
-                    ? $vuetify.theme.dark
-                      ? $vuetify.theme.themes.dark.greenDark8
-                      : $vuetify.theme.themes.light.greenDark8
-                    : null
-                "
+                :clr="listIconClass"
               />
             </v-btn>
             <v-btn
@@ -53,16 +47,10 @@
               @click="gridView"
             >
               <GridIcon
-                :clr="
-                  !ifGridView
-                    ? $vuetify.theme.dark
-                      ? $vuetify.theme.themes.dark.secondary
-                      : $vuetify.theme.themes.light.secondary
-                    : null
-                "
+                :clr="gridIconClass"
               />
             </v-btn>
-          </div>
+          </v-col>
         </v-row>
       </v-col>
     </v-row>
@@ -71,8 +59,7 @@
     <!-- Main Section Start   -->
     <div class="white rounded-lg">
       <!-- Top Sec Start-->
-      <div class="py-4 px-6">
-        <v-row class="ma-0" align="center">
+        <v-row class="ma-0 py-4 px-6" align="center">
           <v-col cols="1" class="pa-0">
             <div>
               <span class="secondary--text font-regular-14">
@@ -86,7 +73,6 @@
             </div>
           </v-col>
         </v-row>
-      </div>
       <v-divider class="greyLight4"></v-divider>
       <!-- Top Sec End -->
 
@@ -94,19 +80,19 @@
       <v-row v-if="getSearchResult.data.length !== 0" class="ma-0">
         <v-col
           cols="12"
-          :md="ifGridView ? 4 : 12"
+          :md="gridViewMode ? 4 : 12"
           v-for="(result, index) in getSearchResult.data"
           :key="index"
           class="px-6 resultBorder cursorPointer"
           :class="[
             $vuetify.rtl ? 'resultSideBorderRtl' : 'resultSideBorderLtr',
-            ifGridView ? 'py-10' : 'py-6',
+            gridViewMode ? 'py-10' : 'py-6',
           ]"
           @click="itemPage"
         >
           <!-- item component -->
 
-          <PagesSearchResultItem :place="result" :ifGridView="ifGridView" :index="index"/>
+          <PagesSearchResultItem :place="result" :gridViewMode="gridViewMode" :index="index"/>
 
         </v-col>
       </v-row>
@@ -154,7 +140,7 @@ export default {
     return {
       page: 1,
       currentPage: Number(this.$route.query.page) || 1,
-      gridViewResult: true,
+      gridViewMode: true,
       sortByDefault: "popular",
     };
   },
@@ -182,11 +168,18 @@ export default {
         {text: this.$t('sort.discount'), value: 'discount'},
       ]
     },
-    ifGridView() {
-      if (this.gridViewResult) {
-        return true;
+    listIconClass() {
+      if(!this.gridViewMode) {
+        return this.$vuetify.theme.dark ? this.$vuetify.theme.themes.dark.greenDark8 : this.$vuetify.theme.themes.light.greenDark8;
       } else {
-        return false;
+        return null;
+      }
+    },
+    gridIconClass() {
+      if(!this.gridViewMode) {
+        return this.$vuetify.theme.dark ? this.$vuetify.theme.themes.dark.secondary : this.$vuetify.theme.themes.light.secondary;
+      } else {
+        return null;
       }
     },
   },
@@ -234,10 +227,10 @@ export default {
       })
     },
     listView() {
-      this.gridViewResult = false;
+      this.gridViewMode = false;
     },
     gridView() {
-      this.gridViewResult = true;
+      this.gridViewMode = true;
     },
     itemPage() {
       this.$router.push('/#')
