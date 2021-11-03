@@ -1,7 +1,7 @@
 <template>
   <header
     id="headerSearch"
-    class="headerCls"
+    class="headerClass"
     :class="{
       'pa-4 mb-0': searchSection || !fixedHeader,
       fixedHeader: fixedHeader
@@ -9,7 +9,7 @@
   >
     <!-- header top section -->
     <v-row
-      class="ma-0 rounded-t-lg whiteColor headerCls__top"
+      class="ma-0 rounded-t-lg whiteColor headerClass__top"
       :class="{
         'rounded-b-lg': !(searchSection || fixedHeader),
         bottomShadow: !searchSection && fixedHeader
@@ -212,12 +212,12 @@
         ma-0
         greyLight4
         rounded-b-lg
-        headerCls__bottom
+        headerClass__bottom
         justify-center
         align-center
       "
     >
-      <v-row class="headerCls__bottom__content">
+      <v-row class="headerClass__bottom__content">
         <!-- destination  -->
         <v-hover v-slot="{ hover }">
           <v-combobox
@@ -235,7 +235,6 @@
             item-value="title"
             v-model="searchFormValue.destination"
             append-icon=""
-            prepend-inner-icon="$pinLocation"
             :menu-props="{ minWidth: 410, left: $vuetify.rtl }"
             class="me-2 rounded searchDestination font-regular-14"
             :class="{ searchInputBoxShadow: hover }"
@@ -245,6 +244,9 @@
             :value="userDestinationSearch"
             @click.native="closeCalendar"
           >
+            <template v-slot:prepend-inner>
+              <v-icon class="pe-1">$pinLocation</v-icon>
+            </template>
             <!-- title in suggestion mode -->
             <template v-slot:prepend-item>
               <v-list-item-title
@@ -300,7 +302,7 @@
           >
             <v-row class="my-0 mx-3" @click="showCalendar">
               <v-icon>$calendar</v-icon>
-              <v-col class="my-0 py-0">
+              <v-col class="my-0 py-0 pe-0">
                 <p class="my-0 font-medium-12 greenDark8--text">
                   {{ $t("header.bottom.date-range.date-range") }}
                 </p>
@@ -358,13 +360,15 @@
                 readonly
                 height="66"
                 background-color="whiteColor"
-                prepend-inner-icon="$usersProfile"
                 :suffix="$t('header.bottom.count.suffix')"
                 :label="$t('header.bottom.count.label')"
                 v-model="searchFormValue.guest"
                 class="rounded"
-                :class="$vuetify.rtl ? 'farsiFontCountInput' : 'inputRight'"
+                :class="{ 'farsiFontCountInput': $vuetify.rtl }"
               >
+                <template v-slot:prepend-inner>
+                  <v-icon class="pe-2">$usersProfile</v-icon>
+                </template>
               </v-text-field>
             </v-col>
 
@@ -746,7 +750,7 @@ export default {
 </script>
 
 <style lang="scss">
-.headerCls {
+.headerClass {
   position: relative;
   transition: all 0.2s;
   z-index: 1500;
@@ -785,7 +789,7 @@ export default {
         .v-select {
           &__slot {
             input {
-              top: -12px !important;
+              top: -8px !important;
             }
           }
         }
@@ -807,19 +811,6 @@ export default {
         width: 165px;
         height: 66px;
 
-        // .v-input {
-        //   input {
-        //       text-align: end!important;
-        //     }
-        // }
-
-        .v-input.farsiFontCountInput {
-          input,
-          textarea {
-            text-align: left !important;
-          }
-        }
-
         .v-input.inputRight {
           input,
           textarea {
@@ -832,6 +823,10 @@ export default {
         .v-input {
           &__control {
             .v-input {
+              &__slot {
+                padding-top: 5px!important;
+                transition: unset!important;
+              }
               &__slot:before {
                 border-style: none;
               }
@@ -844,22 +839,26 @@ export default {
         }
 
         .v-label {
+          transition: unset!important;
+          transform: translateY(-10px) scale(1)!important;
           color: var(--v-greenDark8-base) !important;
+          font-family: IRANSansmedium !important;
           font-size: 12px;
-          font-weight: 600;
         }
 
         &__suffix {
-          color: var(--v-greyLight2-base) !important;
+          color: var(--v-greenDark8-base) !important;
           font-size: 14px;
-          margin-top: 10px !important;
+          margin-top: 11px !important;
+          position: absolute;
+          padding-inline: 12px!important;
         }
       }
 
       .v-input {
         input,
         textarea {
-          color: var(--v-greyLight2-base) !important;
+          color: var(--v-greenDark8-base) !important;
         }
       }
 

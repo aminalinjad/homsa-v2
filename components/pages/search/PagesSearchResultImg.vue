@@ -29,8 +29,8 @@
     </v-row>
     <div class="resultImgSec__image rounded-lg">
       <v-carousel
-        :width="ifGridView ? 280 : 300"
-        :height="ifGridView ? 158 : 200"
+        :width="gridViewMode ? 280 : 300"
+        :height="gridViewMode ? 158 : 200"
         class="rounded-lg"
         show-arrows-on-hover
         hide-delimiter-background
@@ -38,7 +38,7 @@
         <v-carousel-item v-for="(image , index) in images" :key="`imageCarousel${index}`" :src="image"></v-carousel-item>
       </v-carousel>
     </div>
-    <div class="resultImgSec__bottom" v-if="ifGridView">
+    <div class="resultImgSec__bottom" v-if="gridViewMode">
       <v-tooltip :left="$vuetify.rtl" :right="!$vuetify.rtl" color="greenDark8">
         <template v-slot:activator="{ on, attrs }">
           <div
@@ -62,7 +62,7 @@ import Heart from "@/assets/AppIcons/heart.vue";
 
 export default {
   props: {
-    ifGridView: {
+    gridViewMode: {
       type: Boolean,
       default: true,
     },

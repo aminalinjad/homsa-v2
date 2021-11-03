@@ -63,6 +63,7 @@
           </v-card-text>
         </v-card>
       </div>
+
       <!-- price -->
       <div v-if="filter.type === 'price_range'" class="mb-3">
         <v-card flat class="rounded-lg py-3 px-5 histogramSectionCard">
@@ -172,6 +173,7 @@
           </div>
         </v-card>
       </div>
+
       <!-- counter -->
       <div v-else-if="filter.type === 'counter'" class="mb-3">
         <v-card flat class="rounded-lg">
