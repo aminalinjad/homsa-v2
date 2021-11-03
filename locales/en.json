@@ -79,6 +79,13 @@
       "filter": "Filter",
       "close-filter": "Close filter",
       "drag-map" : "Update the results map by shifting it."
-    }
+    },
+    "noResult": "Not Found Data!"
+  },
+  "sort": {
+    "popular": "popular",
+    "cheapest": "cheapest",
+    "priciest": "priciest",
+    "discount": "discount"
   }
 }

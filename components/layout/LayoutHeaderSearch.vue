@@ -423,7 +423,7 @@
           elevation="0"
           width="66"
           height="66"
-          @click="SearchServices"
+          @click="searchServices"
         >
           <v-icon size="30">$search</v-icon>
         </v-btn>
@@ -542,7 +542,7 @@ export default {
       this.calendar = false;
       this.overlay = !this.overlay;
     },
-    SearchServices() {
+    searchServices() {
       if (
         this.userDestinationSearch === "" ||
         this.userDestinationSearch === null
@@ -586,11 +586,11 @@ export default {
               .then(res => {
                 this.calendar = false;
                 this.closeSearchSection();
+                this.setSearchResult(res.data)
                 this.$nuxt.$loading.finish();
-                this.setSearchResult(res.data);
               })
               .catch(err => {
-                this.$nuxt.$loading.finish();
+
               });
           } else {
             this.calendar = false;
@@ -633,11 +633,10 @@ export default {
               .then(res => {
                 this.calendar = false;
                 this.closeSearchSection();
-                this.$nuxt.$loading.finish();
                 this.setSearchResult(res.data);
+                this.$nuxt.$loading.finish();
               })
               .catch(err => {
-                this.$nuxt.$loading.finish();
               });
           } else {
             this.calendar = false;

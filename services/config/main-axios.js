@@ -1,6 +1,7 @@
 import axios from "axios";
 import Vue from "vue";
 
+
 const headers = {
   "Content-Type": "application/json",
   Accept: "application/json",
@@ -16,7 +17,14 @@ API_V1.interceptors.response.use(
     return response;
   },
   async function (error) {
+    setTimeout(() => {
+      $nuxt.$loading.finish()
+    } , 100)
+
+
+
     if (error && error.response.config.method !== "get") {
+
       Vue.$toast.clear();
       if (error.response.data.errors && Object.entries(error.response.data.errors).length > 0) {
         Object.values(error.response.data.errors).forEach(value => {

@@ -2,12 +2,11 @@
   <div>
     <div class="thumbnailMapContainer">
       <div id="map-wrap" class="thumbnailMapContainer__map">
-        <img :src="require('@/assets/images/map.svg')" />
+        <img :src="require('@/assets/images/map.svg')"/>
       </div>
       <div class="thumbnailMapContainer__text text-center py-5 rounded-b-lg cursorPointer" @click="mapLayoutMode">
         <span class="greenDark8--text">
-<!--          {{ $t('search.filters.map-thumbnail') }}-->
-          {{ mapText }}
+          {{ $t('search.filters.map-thumbnail') }}
         </span>
       </div>
     </div>
@@ -17,21 +16,12 @@
 <script>
 
 export default {
-  props: {
-    mapText: {
-      type: String,
-      default() {
-        return this.$t('search.filters.map-thumbnail');
-      }
-    }
-  },
   methods: {
     mapLayoutMode() {
       this.$router.push({query: {...this.$route.query, showMap: 'true'}})
     }
-
   },
-};
+}
 </script>
 
 <style lang="scss">
@@ -45,6 +35,7 @@ export default {
     position: absolute;
     width: 100%;
   }
+
   &__text {
     position: absolute;
     width: 100%;

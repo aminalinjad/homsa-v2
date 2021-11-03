@@ -111,10 +111,10 @@
         </v-col>
       </v-row>
 
-      <v-row style="min-height: 400px" v-else
-             class="text-center justify-center align-content-center align-center fill-height flex-column">
+      <v-row  v-else
+             class="noResult-box text-center justify-center align-content-center align-center fill-height flex-column">
         <v-icon size="126">$noResults</v-icon>
-        <div class="font-regular-14 secondary--text>">اقامتگاهی یافت نشد!</div>
+        <div class="font-regular-14 secondary--text>">{{ $t('search.noResult') }}</div>
       </v-row>
       <!-- Result Sec End -->
     </div>
@@ -156,12 +156,6 @@ export default {
       currentPage: Number(this.$route.query.page) || 1,
       gridViewResult: true,
       sortByDefault: "popular",
-      sortBy: [
-        {text: 'بهترین تجربه', value: 'popular'},
-        {text: 'ارزان ترین', value: 'cheapest'},
-        {text: 'گران ترین', value: 'priciest'},
-        {text: 'تخفیف دار', value: 'discount'},
-      ],
     };
   },
   watch: {
@@ -180,6 +174,14 @@ export default {
       getSearchResult: `modules/search/${types.search.getters.GET_SEARCH_RESULTS}`,
       getRequestData: `modules/requestData/${types.requestData.getters.GET_REQUEST_DATA}`,
     }),
+    sortBy() {
+      return [
+        {text: this.$t('sort.popular'), value: 'popular'},
+        {text: this.$t('sort.cheapest'), value: 'cheapest'},
+        {text: this.$t('sort.priciest'), value: 'priciest'},
+        {text: this.$t('sort.discount'), value: 'discount'},
+      ]
+    },
     ifGridView() {
       if (this.gridViewResult) {
         return true;
@@ -248,7 +250,9 @@ export default {
 .sortByInput {
   width: 134px;
 }
-
+.noResult-box {
+  min-height: 400px
+}
 .resultBorder {
   border-bottom: var(--v-greyLight4-base) solid 1px;
 }
