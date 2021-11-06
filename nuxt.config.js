@@ -6,7 +6,7 @@ export default {
     titleTemplate: '%s - homsa',
     title: 'homsa',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'fa'
     },
     meta: [
       { charset: 'utf-8' },

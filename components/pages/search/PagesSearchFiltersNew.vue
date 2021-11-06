@@ -74,6 +74,7 @@
             <v-row ref="histogramParentDiv" justify="center" class="ma-0 mt-2 rangeSlider">
               <client-only>
                 <HistogramSlider
+                  ref="histogram"
                   :width="histogramWidth"
                   :hideFromTo="true"
                   :dragInterval="true"
@@ -493,6 +494,12 @@ export default {
     }
   },
   mounted() {
+    this.$nextTick(() => {
+      if (this.$route.query.min_price && this.$route.query.max_price) {
+        this.$refs.histogram[0].update({ from: this.$route.query.min_price , to: this.$route.query.max_price })
+      }
+    })
+
     // it is for test
     this.manipulateFilters();
 
