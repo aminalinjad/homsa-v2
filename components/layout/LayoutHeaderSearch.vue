@@ -382,13 +382,7 @@
                   <v-hover v-slot="{ hover }">
                     <v-btn small icon depressed @click="addGuest">
                       <AddIcon
-                        :clr="
-                          hover
-                            ? $vuetify.theme.dark
-                              ? $vuetify.theme.themes.dark.primary
-                              : $vuetify.theme.themes.light.primary
-                            : null
-                        "
+                        :clr=" hover? addIconClass : null"
                       />
                     </v-btn>
                   </v-hover>
@@ -403,15 +397,7 @@
                       :disabled="searchFormValue.guest === 1"
                     >
                       <MinusIcon
-                        :clr="
-                          searchFormValue.guest === 1
-                            ? null
-                            : hover
-                            ? $vuetify.theme.dark
-                              ? $vuetify.theme.themes.dark.primary
-                              : $vuetify.theme.themes.light.primary
-                            : $vuetify.theme.themes.dark.secondary
-                        "
+                        :clr="hover ? minusIconClass : null"
                       />
                     </v-btn>
                   </v-hover>
@@ -516,7 +502,16 @@ export default {
     ...mapGetters({
       mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
       getRequestData: `modules/requestData/${types.requestData.getters.GET_REQUEST_DATA}`,
-    })
+    }),
+    addIconClass() {
+     return this.$vuetify.theme.dark ? this.$vuetify.theme.themes.dark.primary : this.$vuetify.theme.themes.light.primary;
+    },
+    minusIconClass() {
+      if(this.searchFormValue.guest > 1) {
+        return this.$vuetify.theme.dark ? this.$vuetify.theme.themes.dark.primary: this.$vuetify.theme.themes.light.primary
+      }
+      return null;
+    }
   },
 
   mounted() {
@@ -846,6 +841,7 @@ export default {
         }
 
         &__suffix {
+
           color: var(--v-greenDark8-base) !important;
           font-size: 14px;
           margin-top: 11px !important;
