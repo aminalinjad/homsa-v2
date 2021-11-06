@@ -200,7 +200,7 @@
                 >
                   <MinusIcon
                     size="16"
-                    :clr="minusIconColor(filterIndex, index)"
+                    :clr="minusIconColorForCounterFilter(filterIndex)"
                   />
                 </v-btn>
               </div>
@@ -502,6 +502,9 @@ export default {
       setFilters: `modules/filters/${types.filters.actions.SET_FILTERS}`,
       setHistogramPrices: `modules/filters/${types.filters.actions.SET_HISTOGRAM_PRICES}`,
     }),
+    minusIconColorForCounterFilter(filterIndex) {
+      return this.filterPanelSettings[filterIndex].count === 0 ? this.$vuetify.theme.themes.light.secondary : this.$vuetify.theme.themes.light.greenDark8;
+    },
     minusIconColor(filterIndex, index) {
       return this.filterPanelSettings[filterIndex].ItemCounts[index].count === 0 ? this.$vuetify.theme.themes.light.secondary : this.$vuetify.theme.themes.light.greenDark8;
     },
@@ -630,9 +633,8 @@ export default {
     },
     setDataFromUrlQueries() {
       let routeQueries = this.$route.query;
-      let filterTypes = this.filterTypes;
 
-      filterTypes.forEach((filterType, filterTypeIndex) => {
+      this.filterTypes.forEach((filterType, filterTypeIndex) => {
         if (filterType.type === "price_range") {
           if (routeQueries.min_price && routeQueries.max_price) {
             this.rangeSliderFrom = this.$route.query.min_price;
@@ -703,7 +705,7 @@ export default {
               }
             }
           }
-        } else if (filterTypes[filterTypeIndex].type === "list_counter") {
+        } else if (this.filterTypes[filterTypeIndex].type === "list_counter") {
           let filterListCounterItems = [];
           for (let [routeQueryKey, routeQueryValue] of Object.entries(
             routeQueries
@@ -767,7 +769,7 @@ export default {
           if (filterListCounterItems.length > 0) {
             this.data[filterType.slug] = filterListCounterItems;
           }
-        } else if (filterTypes[filterTypeIndex].type === "switch") {
+        } else if (this.filterTypes[filterTypeIndex].type === "switch") {
           for (let [routeQueryKey, routeQueryValue] of Object.entries(
             routeQueries
           )) {
@@ -804,8 +806,8 @@ export default {
             }
           }
         } else if (
-          filterTypes[filterTypeIndex].type === "list" ||
-          filterTypes[filterTypeIndex].type === "list_checkbox"
+          this.filterTypes[filterTypeIndex].type === "list" ||
+          this.filterTypes[filterTypeIndex].type === "list_checkbox"
         ) {
           let filterCheckBoxItems = [];
           for (let [routeQueryKey, routeQueryValue] of Object.entries(
@@ -844,7 +846,7 @@ export default {
                   }
                 );
                 if (!appliedFilterExist) {
-                  if (filterTypes[filterTypeIndex].type === "list") {
+                  if (this.filterTypes[filterTypeIndex].type === "list") {
                     // search in children of this filter to find index of a child that it`s id is equal to routeQueryId
                     let childIndex = null;
                     let childItemIndex = null;
