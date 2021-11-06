@@ -16,8 +16,8 @@
         <v-card flat class="pb-3 rounded-lg">
           <v-card-title class="py-3 justify-space-between">
             <span class="font-regular-14">{{
-              $t("search.filters.all-filters.title")
-            }}</span>
+                $t("search.filters.all-filters.title")
+              }}</span>
             <v-btn
               small
               text
@@ -43,19 +43,19 @@
                 v-if="appliedFilter.count"
                 class="pe-1"
                 :class="{ 'font-FaNumregular-14': $vuetify.rtl }"
-                >{{ appliedFilter.count }}</span
+              >{{ appliedFilter.count }}</span
               >
               <span v-if="appliedFilter.name">{{ appliedFilter.name }}</span>
               <span v-if="appliedFilter.type === 'price_range'">
                 <span>{{ $t("search.filters.price.from") }}</span>
                 <span
                   :class="{ 'font-FaNumregular-14' : $vuetify.rtl }"
-                  >{{ appliedFilter.minPrice | comma }}</span
+                >{{ appliedFilter.minPrice | comma }}</span
                 >
                 <span>{{ $t("search.filters.price.to") }}</span>
                 <span
                   :class="{ 'font-FaNumregular-14' : $vuetify.rtl }"
-                  >{{ appliedFilter.maxPrice | comma }}</span
+                >{{ appliedFilter.maxPrice | comma }}</span
                 >
                 <span>{{ $t("search.filters.price.unit") }}</span>
               </span>
@@ -63,6 +63,7 @@
           </v-card-text>
         </v-card>
       </div>
+
       <!-- price -->
       <div v-if="filter.type === 'price_range'" class="mb-3">
         <v-card flat class="rounded-lg py-3 px-5 histogramSectionCard">
@@ -81,16 +82,8 @@
                   :bar-height="26"
                   primaryColor="#3591384D"
                   holderColor="#35913826"
-                  :handleColor="
-                    $vuetify.theme.dark
-                      ? $vuetify.theme.themes.dark.primary
-                      : $vuetify.theme.themes.light.primary
-                  "
-                  :gridTextColor="
-                    $vuetify.theme.dark
-                      ? $vuetify.theme.themes.dark.primary
-                      : $vuetify.theme.themes.light.primary
-                  "
+                  :handleColor="histogramHandleColor"
+                  :gridTextColor="histogramHandleColor"
                   :handleSize="10"
                   :barGap="1"
                   :barRadius="0"
@@ -173,6 +166,7 @@
           </div>
         </v-card>
       </div>
+
       <!-- counter -->
       <div v-else-if="filter.type === 'counter'" class="mb-3">
         <v-card flat class="rounded-lg">
@@ -195,7 +189,7 @@
                   class="px-2 greenDark8--text"
                   :class="{ 'font-FaNumregular-14' : $vuetify.rtl }"
                   v-if="filterPanelSettings[filterIndex]"
-                  >{{ filterPanelSettings[filterIndex].count }}</span
+                >{{ filterPanelSettings[filterIndex].count }}</span
                 >
                 <v-btn
                   small
@@ -206,11 +200,7 @@
                 >
                   <MinusIcon
                     size="16"
-                    :clr="
-                      filterPanelSettings[filterIndex].count === 0
-                        ? $vuetify.theme.themes.light.secondary
-                        : $vuetify.theme.themes.light.greenDark8
-                    "
+                    :clr="minusIconColor(filterIndex, index)"
                   />
                 </v-btn>
               </div>
@@ -278,12 +268,7 @@
                   >
                     <MinusIcon
                       size="16"
-                      :clr="
-                        filterPanelSettings[filterIndex].ItemCounts[index]
-                          .count === 0
-                          ? $vuetify.theme.themes.light.secondary
-                          : $vuetify.theme.themes.light.greenDark8
-                      "
+                      :clr="minusIconColor(filterIndex, index)"
                     />
                   </v-btn>
                 </div>
@@ -390,7 +375,7 @@
             >
               <v-expansion-panel-header
                 class="px-4 navyDark--text font-regular-14"
-                >{{ filterChild.name }}
+              >{{ filterChild.name }}
               </v-expansion-panel-header>
               <v-expansion-panel-content
                 class="mx-n2"
@@ -472,6 +457,9 @@ export default {
       histogramPrices: `modules/filters/${types.filters.getters.GET_HISTOGRAM_PRICES}`,
       mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
     }),
+    histogramHandleColor() {
+      return this.$vuetify.theme.dark ? this.$vuetify.theme.themes.dark.primary : this.$vuetify.theme.themes.light.primary;
+    },
     histogramData() {
       let filterHistogramPrices = this.histogramPrices;
       let histogramData = [];
@@ -498,6 +486,9 @@ export default {
       }
     })
 
+    // it is for test
+    this.manipulateFilters();
+
     this.filterPanelSettingsHandler();
     this.setDataFromUrlQueries();
     window.addEventListener("resize", this.checkSize);
@@ -511,6 +502,37 @@ export default {
       setFilters: `modules/filters/${types.filters.actions.SET_FILTERS}`,
       setHistogramPrices: `modules/filters/${types.filters.actions.SET_HISTOGRAM_PRICES}`,
     }),
+    minusIconColor(filterIndex, index) {
+      return this.filterPanelSettings[filterIndex].ItemCounts[index].count === 0 ? this.$vuetify.theme.themes.light.secondary : this.$vuetify.theme.themes.light.greenDark8;
+    },
+    manipulateFilters() {
+      let filters = this.filters;
+      let filtersLength = filters.length;
+
+      this.filters.map(filter => {
+        if(filter.type === "price_range") {
+          filter.min_value = null;
+          filter.max_value = null;
+        } else {
+          if(filter.children === null) {
+            filter.value = filter.type === "counter" ? 0 : false;
+          } else {
+            filter.expand = 0;
+            filter.children.map(filterChild => {
+              if(filterChild.children === null) {
+                filterChild.value = filter.type === "list_counter" ? 0 : false;
+              } else {
+                filterChild.expand = 0;
+                filterChild.children.map(filterChildItem => {
+                  filterChildItem.value = false;
+                })
+              }
+            })
+
+          }
+        }
+      })
+    },
     filterPanelSettingsHandler() {
       let filters = this.filters;
       let filtersLength = filters.length;
@@ -612,11 +634,10 @@ export default {
 
       filterTypes.forEach((filterType, filterTypeIndex) => {
         if (filterType.type === "price_range") {
-          if (routeQueries.min_price) {
+          if (routeQueries.min_price && routeQueries.max_price) {
             this.rangeSliderFrom = this.$route.query.min_price;
             this.data.min_price = parseInt(routeQueries.min_price);
-          }
-          if (routeQueries.max_price) {
+
             this.rangeSliderTo = this.$route.query.max_price;
             this.data.max_price = parseInt(routeQueries.max_price);
           }
@@ -635,7 +656,7 @@ export default {
               }
             }
           );
-          if (!appliedFilterExist && routeQueries.min_price) {
+          if (!appliedFilterExist && routeQueries.min_price && routeQueries.max_price) {
             this.appliedFilterList.push({
               type: this.filters[filterIndex].type,
               slug: this.filters[filterIndex].slug,
@@ -817,7 +838,7 @@ export default {
                       appliedFilterExist = true;
                       routeQueryValue
                         ? (this.appliedFilterList[appliedFilterIndex].value =
-                            routeQueryValue)
+                          routeQueryValue)
                         : this.clearFilter(appliedFilter, appliedFilterIndex);
                     }
                   }
@@ -932,12 +953,10 @@ export default {
                 appliedFilterExist = true;
                 appliedFilter.minPrice = rangeSliderFrom;
                 appliedFilter.maxPrice = rangeSliderTo;
-                console.log("here when its ", rangeSliderFrom, rangeSliderTo);
               }
             }
           );
           if (!appliedFilterExist) {
-            console.log("here before push", rangeSliderFrom, rangeSliderTo);
             this.appliedFilterList.push({
               type: filter.type,
               slug: filter.slug,
@@ -1038,7 +1057,7 @@ export default {
 
         this.setSearchResult(res.data);
         this.setFilters(res.data.filters.filters);
-          this.setHistogramPrices(res.data.histogram_prices.prices);
+        this.setHistogramPrices(res.data.histogram_prices.prices);
         this.$nuxt.$loading.finish();
       });
     },
@@ -1122,7 +1141,7 @@ export default {
 
         this.setSearchResult(res.data);
         this.setFilters(res.data.filters.filters);
-          this.setHistogramPrices(res.data.histogram_prices.prices);
+        this.setHistogramPrices(res.data.histogram_prices.prices);
         this.$nuxt.$loading.finish();
       });
     },
@@ -1166,7 +1185,7 @@ export default {
 
         this.setSearchResult(res.data);
         this.setFilters(res.data.filters.filters);
-          this.setHistogramPrices(res.data.histogram_prices.prices);
+        this.setHistogramPrices(res.data.histogram_prices.prices);
         this.$nuxt.$loading.finish();
       });
     },
@@ -1224,7 +1243,7 @@ export default {
             appliedFilterExist = true;
             checkBoxValue
               ? (this.appliedFilterList[appliedFilterIndex].value =
-                  checkBoxValue)
+                checkBoxValue)
               : this.clearFilter(appliedFilter, appliedFilterIndex);
           }
         });
@@ -1258,7 +1277,7 @@ export default {
 
         this.setSearchResult(res.data);
         this.setFilters(res.data.filters.filters);
-          this.setHistogramPrices(res.data.histogram_prices.prices);
+        this.setHistogramPrices(res.data.histogram_prices.prices);
         this.$nuxt.$loading.finish();
       });
     },
@@ -1339,7 +1358,7 @@ export default {
         // reset its value in filterpanelsetting array
         this.filterPanelSettings[
           appliedFilter.indexInFilterPanelSettings
-        ].value = false;
+          ].value = false;
 
         //remove it from url query
         this.$router.push({
@@ -1364,13 +1383,13 @@ export default {
         if (appliedFilter.type === "list_checkbox") {
           this.filterPanelSettings[
             appliedFilter.indexInFilterPanelSettings
-          ].listCheckBoxValues[
+            ].listCheckBoxValues[
             appliedFilter.childIndexInFilterPanelSettings
-          ].value = false;
+            ].value = false;
         } else {
           this.filterPanelSettings[appliedFilter.indexInFilterPanelSettings][
             appliedFilter.childIndexInFilterPanelSettings
-          ].listCheckBoxValues[
+            ].listCheckBoxValues[
             appliedFilter.childItemIndexInFilterPanelSettings
             ].value = false;
         }
@@ -1387,7 +1406,7 @@ export default {
       return SearchServices.searchResults(this.data).then((res) => {
         this.setSearchResult(res.data);
         this.setFilters(res.data.filters.filters);
-          this.setHistogramPrices(res.data.histogram_prices.prices);
+        this.setHistogramPrices(res.data.histogram_prices.prices);
         this.$nuxt.$loading.finish();
       });
     },
@@ -1413,29 +1432,29 @@ export default {
           if (appliedFilter.type === "counter") {
             this.filterPanelSettings[
               appliedFilter.indexInFilterPanelSettings
-            ].count = 0;
+              ].count = 0;
           } else if (appliedFilter.type === "list_counter") {
             this.filterPanelSettings[
               appliedFilter.indexInFilterPanelSettings
-            ].ItemCounts[
+              ].ItemCounts[
               appliedFilter.itemIndexInFilterPanelSettings
-            ].count = 0;
+              ].count = 0;
           } else if (appliedFilter.type === "switch") {
             this.filterPanelSettings[
               appliedFilter.indexInFilterPanelSettings
-            ].value = false;
+              ].value = false;
           } else if (appliedFilter.type === "list_checkbox") {
             this.filterPanelSettings[
               appliedFilter.indexInFilterPanelSettings
-            ].listCheckBoxValues[
+              ].listCheckBoxValues[
               appliedFilter.childIndexInFilterPanelSettings
-            ].value = false;
+              ].value = false;
           } else if (appliedFilter.type === "list") {
             this.filterPanelSettings[appliedFilter.indexInFilterPanelSettings][
               appliedFilter.childIndexInFilterPanelSettings
-            ].listCheckBoxValues[
+              ].listCheckBoxValues[
               appliedFilter.childItemIndexInFilterPanelSettings
-            ].value = false;
+              ].value = false;
           }
         }
       });
@@ -1466,7 +1485,7 @@ export default {
       return SearchServices.searchResults(this.data).then((res) => {
         this.setSearchResult(res.data);
         this.setFilters(res.data.filters.filters);
-          this.setHistogramPrices(res.data.histogram_prices.prices);
+        this.setHistogramPrices(res.data.histogram_prices.prices);
         this.$nuxt.$loading.finish();
       });
     },
