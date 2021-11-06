@@ -73,6 +73,7 @@
             <v-row ref="histogramParentDiv" justify="center" class="ma-0 mt-2 rangeSlider">
               <client-only>
                 <HistogramSlider
+                  ref="histogram"
                   :width="histogramWidth"
                   :hideFromTo="true"
                   :dragInterval="true"
@@ -94,8 +95,8 @@
                   :barGap="1"
                   :barRadius="0"
                   :histSliderGap="0"
-                  :min="filter.min_price"
-                  :max="filter.max_price"
+                  :min="filter.price_range.min_price"
+                  :max="filter.price_range.max_price"
                   :step="filter.step"
                   :data="histogramData"
                   :clip="false"
@@ -491,6 +492,12 @@ export default {
     }
   },
   mounted() {
+    this.$nextTick(() => {
+      if (this.$route.query.min_price && this.$route.query.max_price) {
+        this.$refs.histogram[0].update({ from: this.$route.query.min_price , to: this.$route.query.max_price })
+      }
+    })
+
     this.filterPanelSettingsHandler();
     this.setDataFromUrlQueries();
     window.addEventListener("resize", this.checkSize);

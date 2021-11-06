@@ -199,7 +199,7 @@ export default {
   },
   watch: {
     // for fitBounds the map when change the pagination in map side component
-    'getSearchResult.current_page': {
+    getSearchResult: {
       immediate: false,
       handler(newValue) {
         if (newValue) {
@@ -262,7 +262,6 @@ export default {
     },
     getUserLocation() {
       this.$refs.map.mapObject.locate()
-      console.log(this.$refs.map);
     },
     closeMapLayout() {
       this.$router.push({query: {...this.$route.query, showMap: 'false'}})

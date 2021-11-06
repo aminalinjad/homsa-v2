@@ -568,6 +568,7 @@ export default {
 
             let data = {...this.getRequestData}
             data.guest = this.searchFormValue.guest
+            data.page = 1
 
             if (this.searchFormValue.checkIn) {
               data.checkin = this.searchFormValue.checkIn;
@@ -602,6 +603,7 @@ export default {
           }
           //end check request
           let queryData = {
+            page: undefined,
             guest: this.searchFormValue.guest,
             checkInDate: this.searchFormValue.checkIn
               ? this.searchFormValue.checkIn
@@ -652,7 +654,8 @@ export default {
             query: {
               ...this.$route.query,
               guest: this.searchFormValue.guest,
-              q: this.userDestinationSearch
+              q: this.userDestinationSearch,
+              page: undefined
             }
           });
         }
