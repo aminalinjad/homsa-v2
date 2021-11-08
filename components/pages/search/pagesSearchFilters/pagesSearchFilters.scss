@@ -1,0 +1,123 @@
+//  histogram slider
+.histogramSectionCard {
+  height: 238px;
+
+  .v-text-field {
+    &--box {
+      .v-input {
+        &__slot {
+          min-height: 24px !important;
+        }
+      }
+    }
+
+    &--solo {
+      .v-input {
+        &__control input {
+          text-align: center !important;
+        }
+      }
+    }
+  }
+
+  .v-input {
+    &__slot {
+      min-height: 24px !important;
+    }
+  }
+
+  .irs {
+    &--round {
+      .irs-handle {
+        margin-top: 8px !important;
+      }
+
+      .irs-line {
+        height: 4px !important;
+      }
+
+      .irs-bar {
+        height: 4px !important;
+      }
+    }
+  }
+}
+
+.filterBoolean {
+  .v-input {
+    &--switch {
+      &.v-input {
+        &--dense {
+          .v-input {
+            &--switch {
+              &__thumb {
+                color: var(--v-whiteColor-base) !important;
+              }
+            }
+          }
+        }
+      }
+
+      &--inset {
+        .v-input {
+          &--switch {
+            &__track {
+              opacity: 1 !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .v-label {
+    font-size: 14px !important;
+  }
+}
+
+.filterBoolean {
+  .theme {
+    &--light {
+      .v-label {
+        color: var(--v-navyDark-base) !important;
+      }
+    }
+  }
+}
+
+.filterSelect {
+  .v-expansion-panel-header {
+    min-height: 46px !important;
+
+    .v-icon {
+      font-size: 18px !important;
+    }
+  }
+
+  .theme {
+    &--light {
+      &.v-label {
+        color: var(--v-greenDark8-base);
+        font-size: 12px !important;
+      }
+    }
+  }
+
+  .checkBoxClass {
+    .v-input {
+      &--selection-controls {
+        &__input {
+          width: 18px !important;
+        }
+      }
+    }
+  }
+}
+
+.countTitle {
+  .v-expansion-panel-header {
+    .v-icon {
+      font-size: 18px !important;
+    }
+  }
+}
