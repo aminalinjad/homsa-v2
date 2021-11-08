@@ -1,0 +1,38 @@
+<div class="itemHooper">
+  <v-btn
+    class="itemHooper__chevronRight"
+    elevation="1"
+    icon
+    x-small
+    @click.prevent="slidePrev"
+  >
+    <v-icon>$arrowRight</v-icon>
+  </v-btn>
+  <v-btn
+    class="itemHooper__chevronLeft"
+    elevation="1"
+    icon
+    x-small
+    @click.prevent="slideNext"
+  >
+    <v-icon>$arrowLeft</v-icon>
+  </v-btn>
+  <div class="mx-7 itemHooper__main">
+    <hooper
+      class="itmHoopr"
+      :rtl="$vuetify.rtl"
+      :itemsToShow="4.5"
+      ref="carousel"
+      @slide="updateCarousel"
+    >
+      <slide v-for="(tag, index) in tags" :key="index" class="me-2">
+        <v-chip outlined label class="tagItem" @click="filterTag(index)" color="greyLight4" text-color="secondary">
+          <v-icon >mdi-diamond-outline</v-icon>
+          <span class="ps-2 font-regular-14">اقامتگاه‌های لوکس</span>
+
+        </v-chip>
+      </slide>
+      <!-- <hooper-navigation slot="hooper-addons"></hooper-navigation> -->
+    </hooper>
+  </div>
+</div>

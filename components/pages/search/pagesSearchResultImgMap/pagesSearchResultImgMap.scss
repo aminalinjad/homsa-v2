@@ -1,0 +1,50 @@
+.resultImgSec {
+  position: relative;
+  &__top {
+    position: absolute;
+    width: 100%;
+    top: 16px;
+    margin-inline: auto;
+    z-index: 2;
+  }
+  &__imageMap {
+    width: 224px;
+
+    .v-btn {
+      &--icon.v-size {
+        &--default {
+          width: 24px !important;
+          height: 24px !important;
+          border-radius: 50px !important;
+
+          .v-icon {
+            font-size: 15px !important;
+          }
+        }
+      }
+
+      &--fab.v-size {
+        &--default {
+          .v-icon {
+            font-size: 15px !important;
+          }
+        }
+      }
+    }
+
+
+
+  }
+
+  &__bottom {
+    position: absolute;
+    bottom: 0;
+    margin: 16px;
+  }
+}
+
+.grnty {
+  background: #01220099;
+  width: 24px;
+  height: 24px;
+}

@@ -1,0 +1,32 @@
+.itmHoopr {
+  height: 100%;
+
+}
+.itemHooper {
+  position: relative;
+  &__chevronRight {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0 !important;
+  }
+  &__chevronLeft {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0 !important;
+  }
+  .hooper .hooper-slide {
+    width: auto !important;
+
+  }
+}
+
+.tagItem {
+  height: 40px!important;
+  width: 166px!important;
+}
+
+.tagItem:active , .tagItem:hover {
+  color: var(--v-primary-base)!important;
+}
