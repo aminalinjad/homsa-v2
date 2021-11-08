@@ -73,23 +73,6 @@ export default {
     window.removeEventListener("resize", this.checkSize);
   },
   methods: {
-    componentName(filterType) {
-      switch(filterType) {
-        case 'price_range':
-          return 'pagesSearchFiltersPrice'
-        case 'map':
-          return 'pagesSearchFiltersMap';
-        case 'counter':
-        case 'list_counter':
-          return 'pagesSearchFiltersCounter';
-        case 'switch':
-          return 'pagesSearchFiltersSwitch';
-        case 'list_checkbox':
-        case 'list':
-          return 'pagesSearchFiltersCheckbox';
-      }
-    },
-
     ...mapActions({
       setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
       setFilters: `modules/filters/${types.filters.actions.SET_FILTERS}`,
