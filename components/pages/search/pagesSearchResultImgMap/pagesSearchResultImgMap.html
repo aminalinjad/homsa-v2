@@ -1,0 +1,56 @@
+<div class="resultImgSec">
+  <v-row class="resultImgSec__top ps-2 pe-1">
+    <v-col class="pa-0 pt-2">
+      <v-chip label small color="white" class="px-2 font-regular-12"
+      >مهمان نواز</v-chip
+      >
+    </v-col>
+    <v-col class="pa-0 pt-1" :class="$vuetify.rtl?'text-left':'text-right'">
+      <v-btn icon @click="addFavorite">
+        <Heart
+          :clr="
+              favorite
+                ? $vuetify.theme.dark
+                  ? $vuetify.theme.themes.dark.redOfferTime
+                  : $vuetify.theme.themes.light.redOfferTime
+                : null
+            "
+          :strk="
+              favorite
+                ? $vuetify.theme.dark
+                  ? $vuetify.theme.themes.dark.redOfferTime
+                  : $vuetify.theme.themes.light.redOfferTime
+                : null
+            "
+        />
+      </v-btn>
+    </v-col>
+  </v-row>
+  <div class="resultImgSec__imageMap rounded-lg">
+    <v-carousel
+      width="224"
+      height="150"
+      class="rounded-lg"
+      show-arrows-on-hover
+      hide-delimiter-background
+    >
+      <v-carousel-item v-for="(image , index) in images" :key="`imageCarousel${index}`" :src="image"></v-carousel-item>
+    </v-carousel>
+  </div>
+  <div class="resultImgSec__bottom">
+    <v-tooltip :left="$vuetify.rtl" :right="!$vuetify.rtl" color="greenDark8">
+      <template v-slot:activator="{ on, attrs }">
+        <div
+          class="grnty rounded-sm d-flex align-center justify-center"
+          v-bind="attrs"
+          v-on="on"
+        >
+          <v-icon small color="white" v-bind="attrs" v-on="on"
+          >mdi-shield-check-outline</v-icon
+          >
+        </div>
+      </template>
+      <span>گارانتی شده</span>
+    </v-tooltip>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+.descriptionSec {
+  .v-expansion-panels {
+    .v-expansion-panel-header {
+      justify-content: center !important;
+      span {
+        flex: none !important;
+      }
+    }
+    .descriptionSecIconRtl {
+      .v-expansion-panel-header {
+        &__icon {
+          margin-right: unset !important;
+        }
+      }
+    }
+
+    .descriptionSecIconLtr {
+      .v-expansion-panel-header {
+        &__icon {
+          margin-left: unset !important;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,63 @@
+#map-wrap.mapContainer {
+  height: 100%;
+  width: 100%;
+
+  .custom-marker {
+    display: inline-block;
+    background-color: var(--v-whiteColor-base);
+    border-radius: 15px;
+    color: var(--v-primary-base);
+    white-space: nowrap;
+    padding: 5px 7px;
+    transform: translateX(50%);
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .custom-marker:hover,
+  .hoverOnItem {
+    background: var(--v-primary-base);
+    color: var(--v-whiteColor-base);
+  }
+
+  .custom-marker::before,
+  .hoverOnItem::before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 10px solid var(--v-whiteColor-base);
+    position: absolute;
+    top: 26px;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+
+  .custom-marker:hover:before,
+  .hoverOnItem:before {
+    border-top: 10px solid var(--v-primary-base);
+  }
+
+  .heart-icon {
+    position: absolute;
+    right: -6px;
+    top: -6px;
+  }
+
+  .drag-search-div {
+    position: absolute;
+    right: 0;
+    left: 0;
+    margin: auto;
+    z-index: 9999;
+    width: fit-content;
+    bottom: 17px;
+    background: var(--v-whiteColor-base);
+  }
+
+  .justifyBox > div {
+    text-align: justify;
+  }
+}

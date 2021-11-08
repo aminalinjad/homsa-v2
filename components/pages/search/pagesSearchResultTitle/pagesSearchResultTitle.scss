@@ -1,0 +1,24 @@
+//breadcrumb link color
+
+.v-application {
+  .breadCrumbs a {
+    color: var(--v-secondary-base) !important;
+  }
+
+  .v-breadcrumbs {
+    &__item {
+      color: var(--v-secondary-base) !important;
+      &--disabled {
+        color: var(--v-greenDark8-base) !important;
+      }
+    }
+  }
+
+  a.v-breadcrumbs {
+    &__item {
+      &--disabled {
+        color: var(--v-greenDark8-base) !important;
+      }
+    }
+  }
+}

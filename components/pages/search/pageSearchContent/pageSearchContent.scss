@@ -1,0 +1,17 @@
+.sortByInput {
+  width: 134px;
+}
+.noResult-box {
+  min-height: 400px
+}
+.resultBorder {
+  border-bottom: var(--v-greyLight4-base) solid 1px;
+}
+
+.resultSideBorderRtl {
+  border-left: var(--v-greyLight4-base) solid 1px;
+}
+
+.resultSideBorderLtr {
+  border-right: var(--v-greyLight4-base) solid 1px;
+}

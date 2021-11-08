@@ -1,0 +1,53 @@
+.calenderClass {
+  border-radius: 16px !important;
+  transition: all 0.5s;
+}
+
+.calendarBtn {
+  border-radius: 4px !important;
+}
+
+.calendarBtn {
+  &.firstDay , &.lastDayLtr {
+    &::after {
+      content: "";
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-top: 8px solid transparent;
+      border-right: 8px solid var(--v-primary-base);
+      position: absolute;
+      top: 10px;
+      left: -16px;
+    }
+  }
+
+  &.lastDay , &.firstDayLtr {
+    &::after {
+      content: "";
+      width: 0;
+      height: 0;
+      border-right: 10px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-top: 8px solid transparent;
+      border-left: 8px solid var(--v-primary-base);
+      position: absolute;
+      top: 10px;
+      right: -16px;
+    }
+  }
+
+  &.firstDay, &.lastDay {
+    &:hover {
+      &::after {
+        display: none;
+      }
+    }
+  }
+}
+
+
+.selected {
+  background: #35913826;
+}

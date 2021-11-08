@@ -1,0 +1,21 @@
+<v-row class="ma-0 descriptionSec" color="background">
+  <v-container :fluid="$vuetify.breakpoint.md">
+    <v-expansion-panels flat class=" mb-4 rounded-lg">
+      <v-expansion-panel
+        class="secondary--text"
+        :class="
+            $vuetify.rtl ? 'descriptionSecIconRtl' : 'descriptionSecIconLtr'
+          "
+      >
+        <v-expansion-panel-header>
+            <span class="me-2 font-regular-14">
+              {{ destinationTitle }}
+            </span>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content class="mt-4 font-regular-12">
+          {{ destinationDescription }}
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
+  </v-container>
+</v-row>

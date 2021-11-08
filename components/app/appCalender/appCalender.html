@@ -1,0 +1,248 @@
+<v-card
+  width="864"
+  :height="checkIn.day && checkOut.day ? 460 : 415"
+  class="pt-9 px-11 calenderClass"
+>
+  <v-row class="ma-0 fill-height">
+    <!-- calendar section  -->
+    <v-col cols="12" class="py-0">
+      <v-row>
+        <v-col
+          v-for="(calendarMonth, calendarMonthIndex) in displayedCalendar"
+          :key="calendarMonthIndex"
+        >
+          <!-- top  -->
+          <v-row align="center">
+            <v-col cols="auto" class="pe-0" v-if="calendarMonthIndex === 0">
+              <v-btn
+                small
+                icon
+                depressed
+                :disabled="prevDisable"
+                @click="prev(calendarMonth.id)"
+              >
+                <v-icon v-if="$vuetify.rtl">$arrowRight</v-icon>
+                <v-icon v-else>$arrowLeft</v-icon>
+              </v-btn>
+            </v-col>
+            <v-col
+              class="ps-0 text-center"
+              :class="calendarMonthIndex === 0 ? 'ps-0' : 'pe-0'"
+            >
+              <p class="mb-0 greenDark8--text">
+                  <span class="font-medium-14">
+                    {{ calendarMonth.jalali_month }}
+                  </span>
+                <span
+                  :class="{ 'font-FaNummedium-14' : $vuetify.rtl }"
+                >
+                    {{ calendarMonth.jalali_year }}
+                  </span>
+              </p>
+            </v-col>
+            <v-col cols="auto" class="ps-0" v-if="calendarMonthIndex === 1">
+              <v-btn
+                small
+                icon
+                depressed
+                :disabled="nextDisable"
+                @click="next(calendarMonth.id)"
+              >
+                <v-icon v-if="$vuetify.rtl">$arrowLeft</v-icon>
+                <v-icon v-else>$arrowRight</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+
+          <!-- body  -->
+          <v-row>
+            <v-col class="py-0">
+              <v-card flat width="327" class="mx-auto">
+                <!-- weeks head  -->
+                <v-row>
+                  <v-col
+                    v-for="(dayName, dayNameIndex) in calendarDaysName"
+                    :key="dayNameIndex"
+                    class="text-center"
+                  >
+                      <span class="font-medium-12 secondary--text">
+                        {{ dayName }}
+                      </span>
+                  </v-col>
+                </v-row>
+                <v-divider class="my-1 greyLight4"></v-divider>
+
+                <!--days -->
+                <v-row class="my-0">
+                  <v-col
+                    v-for="(dayInfo, dayIndex) in calendarMonth.calendar"
+                    :key="dayIndex"
+                    class="my-1 py-0 text-center"
+                    :class="btnColumnClass(dayInfo, calendarMonth.id)"
+                  >
+                    <v-hover v-slot="{ hover }">
+                      <v-btn
+                        elevation="0"
+                        :width="36"
+                        :height="36"
+                        :min-width="36"
+                        color="primary"
+                        :text="!(btnTextMode(dayInfo, calendarMonth) || hover)"
+                        :outlined="hover"
+                        @click="
+                            datePick(
+                              dayInfo,
+                              calendarMonth.jalali_month_number,
+                              calendarMonth.id
+                            )
+                          "
+                        :disabled="dayInfo.previous || dayInfo.other_month"
+                        class="calendarBtn"
+                        :class="btnClass(dayInfo, calendarMonth.id)"
+                      >
+                          <span
+                            v-if="!dayInfo.other_month"
+                            :class="[
+                              btnSpanClass(dayInfo, calendarMonth.id, hover),
+                              { 'font-FaNumregular-14' : $vuetify.rtl }
+                            ]"
+                          >
+                            {{ dayInfo.day }}
+                          </span>
+                      </v-btn>
+                    </v-hover>
+                  </v-col>
+                </v-row>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-col>
+
+    <!-- bottom section  -->
+    <v-col align-self="end">
+      <v-scroll-y-transition>
+        <v-row
+          align="center"
+          class="greenDark8--text my-0"
+          v-show="checkIn.day && checkOut.day"
+        >
+          <v-col cols="auto">
+            <v-row class="ma-0">
+              <v-btn
+                depressed
+                small
+                :color="
+                    selectedDaysFlexibility === dateRanges[0]
+                      ? '#3591380D'
+                      : 'greyLight1'
+                  "
+                :class="
+                    selectedDaysFlexibility === dateRanges[0]
+                      ? 'primary--text'
+                      : 'greenDark8--text'
+                  "
+                class="px-2 font-medium-14 text-lowercase"
+                @click="setSelectedDaysFlexibility(dateRanges[0])"
+              >
+                <v-icon small v-if="selectedDaysFlexibility === dateRanges[0]"
+                >$plusMinusPrimary</v-icon
+                >
+                <v-icon small v-else>$plusMinus</v-icon>
+                <span
+                  :class="{ 'font-FaNumregular-14': $vuetify.rtl }"
+                >{{ dateRanges[0] }}</span
+                >
+                <span>{{ $t("header.bottom.calendar.day") }}</span>
+              </v-btn>
+              <v-btn
+                depressed
+                small
+                :color="
+                    selectedDaysFlexibility === dateRanges[1]
+                      ? '#3591380D'
+                      : 'greyLight1'
+                  "
+                :class="
+                    selectedDaysFlexibility === dateRanges[1]
+                      ? 'primary--text'
+                      : 'greenDark8--text'
+                  "
+                class="mx-4 px-2 font-medium-14 text-lowercase"
+                @click="setSelectedDaysFlexibility(dateRanges[1])"
+              >
+                <v-icon small v-if="selectedDaysFlexibility === dateRanges[1]"
+                >$plusMinusPrimary</v-icon
+                >
+                <v-icon small v-else>$plusMinus</v-icon>
+
+                <span
+                  :class="{ 'font-FaNumregular-14': $vuetify.rtl }"
+                >{{ dateRanges[1] }}</span
+                >
+                <span>{{ $t("header.bottom.calendar.day") }}</span>
+              </v-btn>
+              <v-btn
+                depressed
+                small
+                :color="
+                    selectedDaysFlexibility === dateRanges[2]
+                      ? '#3591380D'
+                      : 'greyLight1'
+                  "
+                :class="
+                    selectedDaysFlexibility === dateRanges[2]
+                      ? 'primary--text'
+                      : 'greenDark8--text'
+                  "
+                class="px-2 font-medium-14 text-lowercase"
+                @click="setSelectedDaysFlexibility(dateRanges[2])"
+              >
+                <v-icon small v-if="selectedDaysFlexibility === dateRanges[2]"
+                >$plusMinusPrimary</v-icon
+                >
+                <v-icon small v-else>$plusMinus</v-icon>
+                <span
+                  :class="{ 'font-FaNumregular-14': $vuetify.rtl }"
+                >{{ dateRanges[2] }}</span
+                >
+                <span>{{ $t("header.bottom.calendar.day") }}</span>
+              </v-btn>
+            </v-row>
+            <v-row class="ma-0 align-center">
+              <v-icon small class="mb-n1 me-1">$information</v-icon>
+              <span class="pt-2 font-regular-10 primary--text">{{
+                  $t("header.bottom.calendar.tips")
+                }}</span>
+            </v-row>
+          </v-col>
+          <v-col
+            class="font-regular-14"
+            :class="$vuetify.rtl ? 'text-left' : 'text-right'"
+          >
+            <v-btn
+              depressed
+              color="primary"
+              class="font-medium-12"
+              width="160"
+              height="46"
+              @click="submitDate"
+            >
+                <span
+                  :class="
+                    $vuetify.rtl ? 'font-FaNummedium-12' : 'font-medium-12'
+                  "
+                >{{ selectedDays }}</span
+                >
+              <span class="font-medium-12">
+                  {{ $t("header.bottom.calendar.night") }} -
+                  {{ $t("header.bottom.calendar.confirm") }}
+                </span>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-scroll-y-transition>
+    </v-col>
+  </v-row>
+</v-card>

@@ -1,0 +1,439 @@
+<header
+  id="headerSearch"
+  class="headerClass"
+  :class="{
+      'pa-4 mb-0': searchSection || !fixedHeader,
+      fixedHeader: fixedHeader
+    }"
+>
+  <!-- header top section -->
+  <v-row
+    class="ma-0 rounded-t-lg whiteColor headerClass__top"
+    :class="{
+        'rounded-b-lg': !(searchSection || fixedHeader),
+        bottomShadow: !searchSection && fixedHeader
+      }"
+  >
+    <v-container
+      class="pa-4"
+      :fluid="$vuetify.breakpoint.md || $route.query.showMap === 'true'"
+    >
+      <v-row>
+        <!-- header logo -->
+        <v-col>
+          <img
+            src="@/assets/images/logo-homsa.svg"
+            class="mt-2 cursorPointer"
+          />
+        </v-col>
+
+        <!-- header input -->
+        <v-col>
+          <div
+            class="
+                mx-auto
+                pt-2
+                px-3
+                text-center
+                greyLight4
+                rounded-lg
+                cursorPointer
+                selectInput
+              "
+            @click="showSearchSection"
+            v-if="!searchSection"
+          >
+            <v-row
+              class="ma-0"
+              justify="space-between"
+              align="center"
+              v-if="!searchFormValue.destination"
+            >
+              <v-row
+                justify="start"
+                class="
+                  ma-0
+                    ps-1
+                    secondary--text
+                    font-regular-14
+                  "
+              >
+                <span>{{ $t("header.top.input.destination") }}</span>
+              </v-row>
+              <v-btn fab color="primary" elevation="0" width="32" height="32">
+                <v-icon>$searchLeft</v-icon>
+              </v-btn>
+            </v-row>
+            <v-row
+              justify="space-between"
+              align="center"
+              class="
+                ma-0
+                  font-regular-14
+                  greenDark8--text
+                "
+              v-else
+            >
+              <div class="pe-3">{{ userDestinationSearch }}</div>
+              <v-divider vertical></v-divider>
+              <div v-if="checkInDate" class="px-3">
+                  <span :class="{ 'font-FaNumregular-14': $vuetify.rtl }">{{
+                      checkInDate
+                    }}</span>
+                <v-icon v-if="$vuetify.rtl">$arrowLine</v-icon>
+                <v-icon v-else>$arrowLineRight</v-icon>
+
+                <span :class="{ 'font-FaNumregular-14': $vuetify.rtl }">{{
+                    checkOutDate
+                  }}</span>
+                <span
+                  class="ps-1 font-regular-12 greyLight2--text"
+                  :class="{ 'font-FaNumregular-12': $vuetify.rtl }"
+                >(
+                    <v-icon small>$plusMinusGrey</v-icon>
+                    {{ searchFormValue.flexibility }}
+                    {{ $t("header.top.input.day") }})
+                  </span>
+              </div>
+              <div v-else>تاریخ را انتخاب کنید</div>
+              <v-divider vertical></v-divider>
+
+              <div class="px-3">
+                  <span
+                    v-if="searchFormValue.guest"
+                    :class="{ 'font-FaNummedium-14': $vuetify.rtl }"
+                  >
+                    {{ searchFormValue.guest }}
+                    {{ $t("header.top.input.unit") }}
+                  </span>
+                <span class="font-regular-14 secondary--text" v-else>{{
+                    $t("header.top.input.count")
+                  }}</span>
+              </div>
+              <v-btn fab color="primary" elevation="0" width="32" height="32">
+                <v-icon>$searchLeft</v-icon>
+              </v-btn>
+            </v-row>
+          </div>
+        </v-col>
+
+        <!-- header user option -->
+        <v-col>
+          <v-row align="center" justify="end" class="ma-0 mt-1">
+            <v-btn
+              rounded
+              text
+              color="primary"
+              height="30"
+              class="px-2 py-1 text-capitalize"
+            >
+                <span class="font-medium-14">
+                  {{ $t("header.top.guest") }}
+                </span>
+            </v-btn>
+            <v-divider vertical class="mx-3 greyLight4"></v-divider>
+            <v-menu
+              ref="menuRef"
+              fixed
+              :left="$vuetify.rtl"
+              bottom
+              offset-y
+              min-width="184"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  rounded
+                  text
+                  color="greenDark8"
+                  height="30"
+                  class="ps-1 pe-2 py-1 text-capitalize"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <v-icon size="22">$profile</v-icon>
+                  <div class="ms-2">
+                      <span class="font-medium-14">
+                        {{ $t("header.top.user.login") }} / {{ $t("header.top.user.register") }}
+                      </span>
+                  </div>
+                </v-btn>
+              </template>
+              <v-list class="cursorPointer">
+                <v-list-item link to="">
+                  <v-list-item-subtitle class="greenDark8--text"
+                  >{{ userMenu.menuTitle }}
+                  </v-list-item-subtitle>
+                </v-list-item>
+                <v-divider class="greyLight4"></v-divider>
+                <v-list-item
+                  v-for="(item, index) in userMenu.menuBody"
+                  :key="index"
+                  link
+                  :to="item.link"
+                >
+                  <v-list-item-subtitle class="secondary--text"
+                  >{{ item.name }}
+                  </v-list-item-subtitle>
+                </v-list-item>
+                <v-divider class="greyLight4"></v-divider>
+                <v-list-item
+                  v-for="(item, index) in userMenu.menuFooter"
+                  :key="`${index + userMenu.menuBody.length}`"
+                  link
+                  :to="item.link"
+                >
+                  <v-list-item-subtitle class="secondary--text"
+                  >{{ item.name }}
+                  </v-list-item-subtitle>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+            <v-divider vertical class="mx-3 greyLight4"></v-divider>
+            <v-btn
+              icon
+              width="30"
+              height="30"
+              class="pa-1"
+              @click="changeLang"
+            >
+              <v-icon size="30">$language</v-icon>
+            </v-btn>
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-row>
+
+  <!-- header bottom / search section -->
+  <v-row
+    :class="searchSection ? 'search-section-down' : 'search-section-up'"
+    class="
+        ma-0
+        greyLight4
+        rounded-b-lg
+        headerClass__bottom
+        justify-center
+        align-center
+      "
+  >
+    <v-row class="headerClass__bottom__content">
+      <!-- destination  -->
+      <v-hover v-slot="{ hover }">
+        <v-combobox
+          ref="cityAutocomplete"
+          filled
+          clearable
+          height="66"
+          background-color="whiteColor"
+          :label="$t('header.bottom.destination.label')"
+          :placeholder="$t('header.bottom.destination.place-holder')"
+          persistent-placeholder
+          :items="suggestionsDefault"
+          :search-input.sync="userDestinationSearch"
+          item-text="title"
+          item-value="title"
+          v-model="searchFormValue.destination"
+          append-icon=""
+          :menu-props="{ minWidth: 410, left: $vuetify.rtl }"
+          class="me-2 rounded searchDestination font-regular-14"
+          :class="{ searchInputBoxShadow: hover }"
+          @click:clear="clearDestination"
+          return-object
+          no-filter
+          :value="userDestinationSearch"
+          @click.native="closeCalendar"
+        >
+          <template v-slot:prepend-inner>
+            <v-icon class="pe-1">$pinLocation</v-icon>
+          </template>
+          <!-- title in suggestion mode -->
+          <template v-slot:prepend-item>
+            <v-list-item-title
+              v-if="
+                  userDestinationSearch === '' || userDestinationSearch === null
+                "
+              class="ms-6 mt-4 font-medium-14 greenDark8--text"
+            >{{ $t("header.bottom.suggestion.title") }}
+            </v-list-item-title>
+            <div class="font-medium-14 greenDark8--text cursorPointer pa-5" v-else-if="suggestionsDefault.length !== 0">
+              <v-list-item-title
+                @click="clickOnUserSuggestion"
+                v-html="`جستجوی ${userDestinationSearch} در هومسا`"
+                class="font-regular-14 greenDark8--text"
+              ></v-list-item-title>
+            </div>
+            <!--destination result -->
+          </template>
+
+          <template v-slot:no-data>
+            <div class="font-medium-14 greenDark8--text cursorPointer pa-5">
+              <v-list-item-title
+                @click="clickOnUserSuggestion"
+                v-html="`جستجوی ${userDestinationSearch} در هومسا`"
+                class="font-regular-14 greenDark8--text"
+              ></v-list-item-title>
+            </div>
+          </template>
+
+          <template v-slot:item="data">
+            <v-list-item-avatar rounded width="48" height="48" class="ms-2">
+              <img :src="data.item.image" />
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title
+                v-html="data.item.title"
+                class="font-regular-14 greenDark8--text"
+              ></v-list-item-title>
+              <v-list-item-subtitle
+                v-html="data.item.sub_title"
+                class="font-regular-12 greyLight2--text"
+              ></v-list-item-subtitle>
+            </v-list-item-content>
+          </template>
+        </v-combobox>
+      </v-hover>
+
+      <!-- date range  -->
+      <v-hover v-slot="{ hover }">
+        <v-row
+          :class="{ searchInputBoxShadow: hover }"
+          class="ma-0 me-2 searchDateRange whiteColor rounded justify-sm-space-between align-center"
+        >
+          <v-row class="my-0 mx-3" @click="showCalendar">
+            <v-icon>$calendar</v-icon>
+            <v-col class="my-0 py-0 pe-0">
+              <p class="my-0 font-medium-12 greenDark8--text">
+                {{ $t("header.bottom.date-range.date-range") }}
+              </p>
+              <v-row class="ma-0">
+                  <span v-if="checkInDate" class="greenDark8--text">
+                    <span
+                      :class="
+                        $vuetify.rtl
+                          ? 'font-FaNumregular-14'
+                          : 'font-regular-14'
+                      "
+                    >{{ checkInDate }}</span
+                    >
+                    <span>
+                      <v-icon small v-if="$vuetify.rtl">$arrowLineDark</v-icon>
+                      <v-icon small v-else>$arrowLineDarkRight</v-icon>
+                    </span>
+                    <span
+                      v-if="checkOutDate"
+                      :class="
+                        $vuetify.rtl
+                          ? 'font-FaNumregular-14'
+                          : 'font-regular-14'
+                      "
+                    >
+                      {{ checkOutDate }}
+                    </span>
+                  </span>
+                <span class="font-regular-14 greyLight2--text" v-else>
+                    {{ $t("header.bottom.date-range.place-holder") }}
+                  </span>
+              </v-row>
+            </v-col>
+          </v-row>
+          <v-btn
+            small
+            icon
+            class="me-0"
+            @click="clearDateRange"
+            v-if="checkInDate"
+          >
+            <v-icon>$close</v-icon>
+          </v-btn>
+        </v-row>
+      </v-hover>
+      <!-- count / guest -->
+      <v-hover v-slot="{ hover }">
+        <v-row
+          :class="{ searchInputBoxShadow: hover }"
+          class="ma-0 me-2 searchCount whiteColor rounded"
+        >
+          <v-col cols="9" class="pa-0">
+            <v-text-field
+              filled
+              readonly
+              height="66"
+              background-color="whiteColor"
+              :suffix="$t('header.bottom.count.suffix')"
+              :label="$t('header.bottom.count.label')"
+              v-model="searchFormValue.guest"
+              class="rounded"
+              :class="{ 'farsiFontCountInput': $vuetify.rtl }"
+            >
+              <template v-slot:prepend-inner>
+                <v-icon class="pe-2">$usersProfile</v-icon>
+              </template>
+            </v-text-field>
+          </v-col>
+
+          <v-col
+            cols="3"
+            class="pa-0 pe-3"
+            :class="$vuetify.rtl ? 'text-left' : 'text-right'"
+          >
+            <v-row class="ma-0" v-if="hover">
+              <v-col class="pt-2 pb-1 px-0">
+                <v-hover v-slot="{ hover }">
+                  <v-btn small icon depressed @click="addGuest">
+                    <AddIcon
+                      :clr=" hover? addIconClass : null"
+                    />
+                  </v-btn>
+                </v-hover>
+              </v-col>
+              <v-col class="mt-n3 pt-1 px-0">
+                <v-hover v-slot="{ hover }">
+                  <v-btn
+                    small
+                    icon
+                    depressed
+                    @click="minusGuest"
+                    :disabled="searchFormValue.guest === 1"
+                  >
+                    <MinusIcon
+                      :clr="hover ? minusIconClass : null"
+                    />
+                  </v-btn>
+                </v-hover>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+      </v-hover>
+
+      <v-btn
+        fab
+        color="primary"
+        elevation="0"
+        width="66"
+        height="66"
+        @click="searchServices"
+      >
+        <v-icon size="30">$search</v-icon>
+      </v-btn>
+    </v-row>
+  </v-row>
+
+  <!-- calendar  -->
+  <AppCalendar
+    class="appCalendar"
+    v-show="calendar"
+    :checkInDate="checkInDate"
+    :checkOutDate="checkOutDate"
+    :clearCalendarData="clearCalendar"
+    @setCheckInDate="setCheckInDate"
+    @setCheckOutDate="setCheckOutDate"
+    @submitCalendarDate="submitCalendarDate"
+  />
+  <!-- overlay  -->
+  <v-overlay
+    :value="overlay"
+    @click.native="closeSearchSection"
+    z-index="-1"
+  ></v-overlay>
+</header>

@@ -1,0 +1,123 @@
+<v-container class="px-md-0 pt-0">
+  <!-- Top Section Start  -->
+  <v-row class="mb-3 align-center">
+    <v-col lg="7">
+      <PagesSearchResultTitle/>
+    </v-col>
+    <v-col lg="5">
+      <v-row justify="end" align="center" class="ma-0">
+        <v-col cols="auto" class="pa-0">
+          <v-row  align="center" class="ma-0">
+              <span class="font-regular-12 secondary--text">
+              {{ $t("search.main.sort-by") }}
+            </span>
+            <v-select
+              :items="sortBy"
+              @change="changeTheSortSelect"
+              item-text="text"
+              item-value="value"
+              v-model="sortByDefault"
+              solo
+              flat
+              dense
+              class="font-regular-12 sortByInput ms-3 mb-n7"
+            ></v-select>
+          </v-row>
+        </v-col>
+        <v-col cols="auto" class="pa-0 ps-8">
+          <v-btn
+            elevation="0"
+            fab
+            small
+            class="white me-n1"
+            :class="$vuetify.rtl ? 'rounded-l-0' : 'rounded-r-0'"
+            @click="listView"
+          >
+            <ListIcon
+              :clr="listIconClass"
+            />
+          </v-btn>
+          <v-btn
+            elevation="0"
+            fab
+            small
+            class="white"
+            :class="$vuetify.rtl ? 'rounded-r-0' : 'rounded-l-0'"
+            @click="gridView"
+          >
+            <GridIcon
+              :clr="gridIconClass"
+            />
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-col>
+  </v-row>
+  <!-- Top Section End  -->
+
+  <!-- Main Section Start   -->
+  <div class="white rounded-lg">
+    <!-- Top Sec Start-->
+    <v-row class="ma-0 py-4 px-6" align="center">
+      <v-col cols="1" class="pa-0">
+        <div>
+              <span class="secondary--text font-regular-14">
+                {{ $t("search.main.tags") }}
+              </span>
+        </div>
+      </v-col>
+      <v-col cols="11" class="pa-0">
+        <div>
+          <AppItemCarousel/>
+        </div>
+      </v-col>
+    </v-row>
+    <v-divider class="greyLight4"></v-divider>
+    <!-- Top Sec End -->
+
+    <!-- Result Sec Start -->
+    <v-row v-if="getSearchResult.data.length !== 0" class="ma-0">
+      <v-col
+        cols="12"
+        :md="gridViewMode ? 4 : 12"
+        v-for="(result, index) in getSearchResult.data"
+        :key="index"
+        class="px-6 resultBorder cursorPointer"
+        :class="[
+            $vuetify.rtl ? 'resultSideBorderRtl' : 'resultSideBorderLtr',
+            gridViewMode ? 'py-10' : 'py-6',
+          ]"
+        @click="itemPage"
+      >
+        <!-- item component -->
+
+        <PagesSearchResultItem :place="result" :gridViewMode="gridViewMode" :index="index"/>
+
+      </v-col>
+    </v-row>
+
+    <v-row  v-else
+            class="noResult-box text-center justify-center align-content-center align-center fill-height flex-column">
+      <v-icon size="126">$noResults</v-icon>
+      <div class="font-regular-14 secondary--text>">{{ $t('search.noResult') }}</div>
+    </v-row>
+    <!-- Result Sec End -->
+  </div>
+  <!-- Main Section End  -->
+
+  <!-- Bottom Section Start  -->
+  <v-row class="paginationContainer justify-center mt-6">
+    <v-pagination
+      v-if="getSearchResult.last_page > 1"
+      @input="changePagination()"
+      v-model="currentPage"
+      class="paginationWidth46"
+      :total-visible="7"
+      :length="getSearchResult.last_page"
+      :class="{ 'farsiFontPagination': $vuetify.rtl }"
+    ></v-pagination>
+  </v-row>
+
+  <PagesSearchRelatedSearch/>
+  <!-- Bottom Section End  -->
+</v-container>
