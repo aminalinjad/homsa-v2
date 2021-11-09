@@ -1,1 +1,18 @@
-<p>switch</p>
+<v-card flat class="rounded-lg" height="46">
+  <v-card-text class="py-1 filterBoolean">
+    <v-switch
+      inset
+      dense
+      :label="filter.name"
+      class="pt-0 mt-2"
+      v-model="filter.default"
+      @change="
+                filterSwitch(
+                  filter,
+                  filter.default,
+                  filterIndex
+                )
+              "
+    ></v-switch>
+  </v-card-text>
+</v-card>

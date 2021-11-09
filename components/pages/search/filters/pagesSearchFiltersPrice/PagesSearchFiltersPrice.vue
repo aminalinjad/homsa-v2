@@ -2,6 +2,3 @@
 
 <script src="./pagesSearchFiltersPrice.js"></script>
 
-<style lang="scss">
-@import "./pagesSearchFiltersPrice";
-</style>

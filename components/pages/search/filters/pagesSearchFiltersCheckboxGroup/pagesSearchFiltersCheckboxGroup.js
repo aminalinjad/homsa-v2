@@ -6,5 +6,10 @@ export default {
         return {}
       }
     }
+  },
+  data() {
+    return {
+      expand: 0
+    }
   }
 }

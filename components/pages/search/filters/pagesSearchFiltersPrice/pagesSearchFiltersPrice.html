@@ -1,1 +1,98 @@
-<p>price</p>
+<v-card flat class="rounded-lg py-3 px-5 histogramSectionCard">
+  <div id="histogramSection">
+    <h6 class="font-weight-regular font-regular-14">
+      {{ $t("search.filters.price.title") }}
+    </h6>
+    <v-row ref="histogramParentDiv" justify="center" class="ma-0 mt-2 rangeSlider">
+      <client-only>
+        <HistogramSlider
+          ref="histogram"
+          :width="histogramWidth"
+          :hideFromTo="true"
+          :dragInterval="true"
+          :grid="false"
+          :bar-height="26"
+          primaryColor="#3591384D"
+          holderColor="#35913826"
+          :handleColor="histogramHandleColor"
+          :gridTextColor="histogramHandleColor"
+          :handleSize="10"
+          :barGap="1"
+          :barRadius="0"
+          :histSliderGap="0"
+          :min="filter.price_range.min_price"
+          :max="filter.price_range.max_price"
+          :step="filter.step"
+          :data="histogramData"
+          :clip="false"
+          @finish="selectRange"
+        />
+      </client-only>
+    </v-row>
+
+    <v-row
+      justify="space-around"
+      class="
+              ma-0
+                mt-4
+                text-center
+                font-regular-12
+              "
+    >
+      <v-col class="mx-5 pa-0">
+        <div>{{ $t("search.filters.price.from") }}</div>
+        <div class="mt-1 mb-n6">
+          <v-text-field
+            filled
+            dense
+            solo
+            flat
+            background-color="greyLight4"
+            v-model="rangeSliderFrom"
+            :value="filter.min"
+            class="font-regular-12"
+            @input="inputRange"
+          >
+          </v-text-field>
+        </div>
+        <div>{{ $t("search.filters.price.unit") }}</div>
+      </v-col>
+      <v-col class="mx-5 pa-0">
+        <div>{{ $t("search.filters.price.to") }}</div>
+        <div class="mt-1 mb-n6">
+          <v-text-field
+            filled
+            dense
+            solo
+            flat
+            background-color="greyLight4"
+            v-model="rangeSliderTo"
+            class="font-regular-12"
+            @input="inputRange"
+          >
+          </v-text-field>
+        </div>
+        <div>{{ $t("search.filters.price.unit") }}</div>
+      </v-col>
+    </v-row>
+
+    <v-row justify="center" class="ma-0 mt-5">
+      <v-btn
+        color="primary"
+        class="font-medium-14"
+        outlined
+        :disabled="rangeBtnDisable"
+        @click="
+                  filterPrice(
+                    filter,
+                    rangeSliderFrom,
+                    rangeSliderTo,
+                    filterIndex
+                  )
+                "
+      >
+        {{ $t("search.filters.price.btn") }}
+      </v-btn>
+    </v-row>
+  </div>
+</v-card>
