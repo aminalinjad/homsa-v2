@@ -56,9 +56,9 @@ export default {
     window.removeEventListener("resize", this.checkSize);
   },
   methods: {
-    ...mapActions({
-      setRequestData: `modules/filters/${types.filters.actions.SET_REQUEST_DATA}`
-    }),
+    // ...mapActions({
+    //   setRequestData: `modules/filters/${types.filters.actions.SET_REQUEST_DATA}`
+    // }),
     inputRange() {
       if (this.rangeSliderFrom && this.rangeSliderTo) {
         this.rangeBtnDisable = false;
