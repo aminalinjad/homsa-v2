@@ -68,13 +68,13 @@ export default {
       if (this.rangeSliderFrom && this.rangeSliderTo) {
         this.rangeBtnDisable = false;
       } else {
-        this.$router.push({
-          query: {
-            ...this.$route.query,
-            min_price: undefined,
-            max_price: undefined,
-          },
-        });
+        // this.$router.push({
+        //   query: {
+        //     ...this.$route.query,
+        //     min_price: undefined,
+        //     max_price: undefined,
+        //   },
+        // });
         // this.data.min_price = null;
         // this.data.max_price = null;
 
