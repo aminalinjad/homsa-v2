@@ -1,4 +1,4 @@
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import * as types from "@/store/types.js";
 
 export default {
@@ -43,12 +43,22 @@ export default {
     }
   },
   mounted() {
+    this.$nextTick(() => {
+      if (this.$route.query.min_price && this.$route.query.max_price) {
+        this.$refs.histogram[0].update({ from: this.$route.query.min_price , to: this.$route.query.max_price })
+        this.rangeSliderFrom = this.$route.query.min_price;
+        this.rangeSliderTo = this.$route.query.max_price;
+      }
+    })
     window.addEventListener("resize", this.checkSize);
   },
   destroyed() {
     window.removeEventListener("resize", this.checkSize);
   },
   methods: {
+    // ...mapActions({
+    //
+    // })
     inputRange() {
       if (this.rangeSliderFrom && this.rangeSliderTo) {
         this.rangeBtnDisable = false;
@@ -60,8 +70,9 @@ export default {
             max_price: undefined,
           },
         });
-        this.data.min_price = null;
-        this.data.max_price = null;
+        // this.data.min_price = null;
+        // this.data.max_price = null;
+
         this.rangeBtnDisable = true;
       }
     },
