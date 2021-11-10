@@ -75,20 +75,13 @@
         <div>{{ $t("search.filters.price.unit") }}</div>
       </v-col>
     </v-row>
-
     <v-row justify="center" class="ma-0 mt-5">
       <v-btn
         color="primary"
         class="font-medium-14"
         outlined
         :disabled="rangeBtnDisable"
-        @click="
-                  filterPrice(
-                    filter,
-                    rangeSliderFrom,
-                    rangeSliderTo
-                  )
-                "
+        @click="filterPrice(filter,rangeSliderFrom,rangeSliderTo)"
       >
         {{ $t("search.filters.price.btn") }}
       </v-btn>

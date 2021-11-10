@@ -68,6 +68,10 @@ export default {
     window.removeEventListener("resize", this.checkSize);
   },
   methods: {
+    submitFilter(data , index) {
+      console.log(data)
+      console.log(index)
+    },
     componentName(filterType) {
       switch(filterType) {
         case 'price_range':

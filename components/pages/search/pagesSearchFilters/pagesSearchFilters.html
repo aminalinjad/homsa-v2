@@ -57,6 +57,6 @@
   </div>
 
   <div v-for="(filter, filterIndex) in filters" :key="filterIndex">
-    <component :is="componentName(filter.type)" :filter="filter" class="mb-3"/>
+    <component :is="componentName(filter.type)" :filter="filter" :filterIndex="filterIndex" class="mb-3"  @submitFilter="submitFilter(data)"/>
   </div>
 </div>
