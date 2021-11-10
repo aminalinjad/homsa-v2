@@ -12,7 +12,6 @@ export default {
   },
   data() {
     return {
-      histogramWidth: 272,
       appliedFilterList: [],
       filterPanelSettings: [],
       filterTypes: [],
@@ -33,9 +32,6 @@ export default {
       histogramPrices: `modules/filters/${types.filters.getters.GET_HISTOGRAM_PRICES}`,
       mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
     }),
-    histogramHandleColor() {
-      return this.$vuetify.theme.dark ? this.$vuetify.theme.themes.dark.primary : this.$vuetify.theme.themes.light.primary;
-    },
     histogramData() {
       let filterHistogramPrices = this.histogramPrices;
       let histogramData = [];
@@ -51,7 +47,6 @@ export default {
           }
         }
       );
-
       return histogramData;
     }
   },
@@ -73,6 +68,22 @@ export default {
     window.removeEventListener("resize", this.checkSize);
   },
   methods: {
+    componentName(filterType) {
+      switch(filterType) {
+        case 'price_range':
+          return 'pagesSearchFiltersPrice'
+        case 'counter':
+        case 'list_counter':
+          return 'pagesSearchFiltersCounter';
+        case 'switch':
+          return 'pagesSearchFiltersSwitch';
+        case 'list_checkbox':
+          return 'pagesSearchFiltersCheckbox';
+        case 'list':
+          return 'pagesSearchFiltersCheckboxGroup';
+      }
+    },
+
     ...mapActions({
       setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
       setFilters: `modules/filters/${types.filters.actions.SET_FILTERS}`,
@@ -298,7 +309,11 @@ export default {
                   id: routeQueryId,
                   count: parseInt(routeQueryValue),
                 });
+                this.data[filterType.slug] = {
+                  [routeQueryId]:  parseInt(routeQueryValue)};
+                console.log('data', this.data[filterType.slug]);
               }
+
 
               // push it in appliedFilterList Array
               let filterIndex = this.filters
@@ -477,27 +492,6 @@ export default {
           }
         }
       });
-    },
-    inputRange() {
-      if (this.rangeSliderFrom && this.rangeSliderTo) {
-        this.rangeBtnDisable = false;
-      } else {
-        this.$router.push({
-          query: {
-            ...this.$route.query,
-            min_price: undefined,
-            max_price: undefined,
-          },
-        });
-        this.data.min_price = null;
-        this.data.max_price = null;
-        this.rangeBtnDisable = true;
-      }
-    },
-    selectRange(e) {
-      this.rangeSliderFrom = e.from;
-      this.rangeSliderTo = e.to;
-      this.rangeBtnDisable = false;
     },
     checkSize() {
       if (Object.entries(this.$refs.histogramParentDiv).length !== 0) {

@@ -1,0 +1,39 @@
+<v-expansion-panels
+  flat
+  v-model="expand"
+>
+  <v-expansion-panel class="rounded-lg filterSelect">
+    <v-expansion-panel-header
+      class="navyDark--text py-3 px-4 font-regular-14"
+    >{{ filter.name }}
+    </v-expansion-panel-header
+    >
+    <v-expansion-panel-content
+      class="mx-n2"
+      :class="{ 'mb-n3' : expand === 0 }"
+    >
+      <v-row
+        v-for="(filterChild, filterChildIndex) in filter.children"
+        :key="filterChildIndex"
+        class="ma-0 mb-2 font-light-14"
+      >
+        <v-checkbox
+          off-icon="$checkBox"
+          on-icon="$checkBoxActive"
+          class="mt-0 mb-n5 pa-0 checkBoxClass"
+          :label="filterChild.name"
+          v-model="filterChild.default"
+          @change="
+                    filterCheckBox(
+                      filter,
+                      filterChild,
+                      filterChild.default,
+                      filterIndex,
+                      { filterChildIndex: filterChildIndex }
+                    )
+                  "
+        ></v-checkbox>
+      </v-row>
+    </v-expansion-panel-content>
+  </v-expansion-panel>
+</v-expansion-panels>

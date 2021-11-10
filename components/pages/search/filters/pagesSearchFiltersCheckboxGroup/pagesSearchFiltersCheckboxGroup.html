@@ -1,0 +1,17 @@
+<div>
+  <v-card flat class="rounded-t-lg mb-n1">
+    <v-card-title class="pt-3 pb-0 font-medium-14 greenDark8--text">
+      {{ filter.name }}
+    </v-card-title
+    >
+  </v-card>
+
+  <div
+    v-for="(filterChild, filterChildIndex) in filter.children"
+    :key="filterChildIndex"
+    class="mb-1"
+  >
+    <PagesSearchFiltersCheckbox :filter="filterChild" />
+  </div>
+
+</div>

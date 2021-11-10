@@ -1,0 +1,102 @@
+<v-expansion-panels
+  v-if="filter.children"
+  flat
+  v-model="expand"
+>
+  <v-expansion-panel class="rounded-lg countTitle">
+    <v-expansion-panel-header class="font-regular-14 navyDark--text">{{
+        filter.name
+      }}
+    </v-expansion-panel-header>
+    <v-expansion-panel-content
+      :class="{'mt-n4' : expand === 0 }"
+    >
+      <v-row
+        v-for="(item, index) in filter.children"
+        :key="index"
+        justify="space-between"
+        align="center"
+        class="
+                  ma-1
+                  mb-n1
+                  font-light-14
+                "
+      >
+        <div class="font-regular-12 greenDark8--text">
+          {{ item.name }}
+        </div>
+        <div class="font-medium-12">
+          <v-btn
+            small
+            icon
+            depressed
+            @click="addCounterList(filter, filterIndex, item, index)"
+          >
+            <AddIcon
+              size="16"
+              :clr="$vuetify.theme.themes.dark.greenDark8"
+            />
+          </v-btn>
+          <span
+            class="px-2 greenDark8--text"
+            :class="{ 'font-FaNumregular-12' : $vuetify.rtl }"
+          >
+                    {{
+              item.default
+            }}
+                  </span>
+          <v-btn
+            small
+            class="me-n3"
+            icon
+            depressed
+            @click="minusCounterList(filter, filterIndex, item, index)"
+          >
+            <MinusIcon
+              size="16"
+              :clr="minusIconColor(item.default)"
+            />
+          </v-btn>
+        </div>
+      </v-row>
+    </v-expansion-panel-content>
+  </v-expansion-panel>
+</v-expansion-panels>
+<v-card flat class="rounded-lg" v-else>
+  <v-card-text class="py-3">
+    <v-row justify="space-between" class="ma-0 px-2">
+      <h6 class="greenDark8--text font-weight-regular font-regular-14">{{ filter.name }}</h6>
+      <div>
+        <v-btn
+          small
+          icon
+          depressed
+          @click="addCounter(filter, filterIndex)"
+        >
+          <AddIcon
+            size="16"
+            :clr="$vuetify.theme.themes.light.greenDark8"
+          />
+        </v-btn>
+        <span
+          class="px-2 greenDark8--text"
+          :class="{ 'font-FaNumregular-14' : $vuetify.rtl }"
+        >{{ filter.default }}</span
+        >
+        <v-btn
+          small
+          class="me-n3"
+          icon
+          depressed
+          @click="minusCounter(filter, filterIndex)"
+        >
+          <MinusIcon
+            size="16"
+            :clr="minusIconColorForCounterFilter(filter.default)"
+          />
+        </v-btn>
+      </div>
+    </v-row>
+  </v-card-text>
+</v-card>
+
