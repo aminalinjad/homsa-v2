@@ -18,27 +18,27 @@ API_V1.interceptors.response.use(
     return response;
   },
   async function (error) {
-    setTimeout(() => {
-      if ($nuxt.$loading.loading) {
-        $nuxt.$loading.finish()
-      }
-    } , 100)
-
-
-    if (error && error.response.config.method !== "get") {
-
-      Vue.$toast.clear();
-      if (error.response.data.errors && Object.entries(error.response.data.errors).length > 0) {
-        Object.values(error.response.data.errors).forEach(value => {
-          Vue.$toast.error(value[0]);
-        });
-      } else if (
-        !error.response.data.errors ||
-        error.response.data.errors.length === 0
-      ) {
-        Vue.$toast.error(error.response.data.message);
-      }
-    }
+    // setTimeout(() => {
+    //   if ($nuxt.$loading.loading) {
+    //     $nuxt.$loading.finish()
+    //   }
+    // } , 100)
+    //
+    //
+    // if (error && error.response.config.method !== "get") {
+    //
+    //   Vue.$toast.clear();
+    //   if (error.response.data.errors && Object.entries(error.response.data.errors).length > 0) {
+    //     Object.values(error.response.data.errors).forEach(value => {
+    //       Vue.$toast.error(value[0]);
+    //     });
+    //   } else if (
+    //     !error.response.data.errors ||
+    //     error.response.data.errors.length === 0
+    //   ) {
+    //     Vue.$toast.error(error.response.data.message);
+    //   }
+    // }
     return Promise.reject(error.response);
   },
 );
