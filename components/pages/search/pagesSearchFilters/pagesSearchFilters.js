@@ -58,7 +58,7 @@ export default {
     })
 
     // it is for test
-    this.manipulateFilters();
+    // this.manipulateFilters();
 
     this.filterPanelSettingsHandler();
     this.setDataFromUrlQueries();
@@ -99,34 +99,34 @@ export default {
     minusIconColor(filterIndex, index) {
       return this.filterPanelSettings[filterIndex].ItemCounts[index].count === 0 ? this.$vuetify.theme.themes.light.secondary : this.$vuetify.theme.themes.light.greenDark8;
     },
-    manipulateFilters() {
-      let filters = this.filters;
-      let filtersLength = filters.length;
-
-      this.filters.map(filter => {
-        if(filter.type === "price_range") {
-          filter.min_value = null;
-          filter.max_value = null;
-        } else {
-          if(filter.children === null) {
-            filter.value = filter.type === "counter" ? 0 : false;
-          } else {
-            filter.expand = 0;
-            filter.children.map(filterChild => {
-              if(filterChild.children === null) {
-                filterChild.value = filter.type === "list_counter" ? 0 : false;
-              } else {
-                filterChild.expand = 0;
-                filterChild.children.map(filterChildItem => {
-                  filterChildItem.value = false;
-                })
-              }
-            })
-
-          }
-        }
-      })
-    },
+    // manipulateFilters() {
+    //   let filters = this.filters;
+    //   let filtersLength = filters.length;
+    //
+    //   this.filters.map(filter => {
+    //     if(filter.type === "price_range") {
+    //       filter.min_value = null;
+    //       filter.max_value = null;
+    //     } else {
+    //       if(filter.children === null) {
+    //         filter.value = filter.type === "counter" ? 0 : false;
+    //       } else {
+    //         filter.expand = 0;
+    //         filter.children.map(filterChild => {
+    //           if(filterChild.children === null) {
+    //             filterChild.value = filter.type === "list_counter" ? 0 : false;
+    //           } else {
+    //             filterChild.expand = 0;
+    //             filterChild.children.map(filterChildItem => {
+    //               filterChildItem.value = false;
+    //             })
+    //           }
+    //         })
+    //
+    //       }
+    //     }
+    //   })
+    // },
     filterPanelSettingsHandler() {
       let filters = this.filters;
       let filtersLength = filters.length;

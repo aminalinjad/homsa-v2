@@ -22,13 +22,12 @@
           on-icon="$checkBoxActive"
           class="mt-0 mb-n5 pa-0 checkBoxClass"
           :label="filterChild.name"
-          v-model="filterChild.default"
+          :value="filterChild.default"
           @change="
                     filterCheckBox(
                       filter,
                       filterChild,
-                      filterIndex,
-                      { filterChildIndex: filterChildIndex }
+                      filterChildIndex,
                     )
                   "
         ></v-checkbox>

@@ -5,7 +5,10 @@ export default {
       default() {
         return {}
       }
-    }
+    },
+    filterIndex: {
+      type: Number
+    },
   },
   data() {
     return {
