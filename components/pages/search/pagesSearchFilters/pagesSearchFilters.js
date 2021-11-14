@@ -29,6 +29,7 @@ export default {
   computed: {
     ...mapGetters({
       filters: `modules/filters/${types.filters.getters.GET_FILTERS}`,
+      appliedFilters: `modules/filters/${types.filters.getters.GET_APPLIED_FILTER}`,
       histogramPrices: `modules/filters/${types.filters.getters.GET_HISTOGRAM_PRICES}`,
       mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
     }),

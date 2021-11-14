@@ -32,18 +32,34 @@ const mutations = {
     state.appliedFilter[payload.index] = payload.value;
   },
   [types.filters.mutations.MUTATE_UPDATE_FILTER_DEFAULT]: (state, payload) => {
-    if(payload.childItemIndexInFilters && state.filters[payload.filterIndex].children[payload.childIndexInFilters]) {
+    if(payload.childItemIndexInFilters !== null) {
       state.filters[payload.filterIndex].children[payload.childIndexInFilters].children[payload.childItemIndexInFilters].default = payload.default;
+     // if(0) === false
     } else if (payload.childIndexInFilters >= 0 ) {
       state.filters[payload.filterIndex].children[payload.childIndexInFilters].default = payload.default;
     } else {
       state.filters[payload.filterIndex].default = payload.default;
     }
-    // console.log(state.filters[payload.filterIndex].children[payload.childIndexInFilters].default = payload.default)
-    // console.log(state.filters[payload.filterIndex].children[payload.childIndexInFilters].children[payload.childItemIndexInFilters].default = payload.default)
   },
 
+  [types.filters.mutations.MUTATE_UPDATE_FILTER_CHECKBOX_DEFAULT]: (state, payload) => {
+    if(payload.childItemIndexInFilters !== null) {
+      state.filters[payload.filterIndex].children[payload.childIndexInFilters].children[payload.childItemIndexInFilters].default = payload.default;
+    } else {
+      state.filters[payload.filterIndex].children[payload.childIndexInFilters].default = payload.default;
+    }
+  },
+  [types.filters.mutations.MUTATE_UPDATE_FILTER_COUNTER_DEFAULT]: (state, payload) => {
+    if(payload.itemIndex) {
+      console.log('if in store')
+      state.filters[payload.filterIndex].children[payload.childIndexInFilters].default = payload.default;
+    } else  {
+      console.log('else in store')
+      state.filters[payload.filterIndex].default = payload.default;
+    }
+  },
 };
+
 
 const actions = {
   [types.filters.actions.SET_FILTERS]: ({commit}, payload) => {
@@ -60,6 +76,13 @@ const actions = {
   },
   [types.filters.actions.SET_UPDATE_FILTER_DEFAULT]: ({commit}, payload) => {
     commit(types.filters.mutations.MUTATE_UPDATE_FILTER_DEFAULT, payload);
+  },
+
+  [types.filters.actions.SET_UPDATE_FILTER_COUNTER_DEFAULT]: ({commit}, payload) => {
+    commit(types.filters.mutations.MUTATE_UPDATE_FILTER_COUNTER_DEFAULT, payload);
+  },
+  [types.filters.actions.SET_UPDATE_FILTER_CHECKBOX_DEFAULT]: ({commit}, payload) => {
+    commit(types.filters.mutations.MUTATE_UPDATE_FILTER_CHECKBOX_DEFAULT, payload);
   },
 
 };

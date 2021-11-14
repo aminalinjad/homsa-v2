@@ -47,6 +47,7 @@ export default {
         }
       }
     }
+    console.log(data)
     return SearchServices.searchResults(data).then(res => {
       console.log(res)
       store.dispatch('modules/requestData/SET_REQUEST_DATA', data)

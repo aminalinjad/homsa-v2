@@ -19,7 +19,6 @@
     "sass-loader": "^10.1.1",
     "vue-custom-scrollbar": "^1.4.1",
     "vue-histogram-slider": "^0.3.8",
-    "vue-numeric": "^2.4.3",
     "vue-owl-carousel2": "^2.0.7",
     "vue-toastification": "^1.7.14",
     "vue2-leaflet": "^2.7.1",

@@ -1,5 +1,6 @@
 import {mapGetters, mapActions} from "vuex";
 import * as types from "@/store/types.js";
+import {SearchServices} from "@/services"
 
 export default {
   props: {
@@ -24,6 +25,7 @@ export default {
     ...mapGetters({
       histogramPrices: `modules/filters/${types.filters.getters.GET_HISTOGRAM_PRICES}`,
       appliedFilter: `modules/filters/${types.filters.getters.GET_APPLIED_FILTER}`,
+      getRequestData: `modules/requestData/${types.requestData.getters.GET_REQUEST_DATA}`,
     }),
     histogramHandleColor() {
       return this.$vuetify.theme.dark ? this.$vuetify.theme.themes.dark.primary : this.$vuetify.theme.themes.light.primary;
@@ -62,7 +64,11 @@ export default {
   methods: {
     ...mapActions({
       setAppliedFilter: `modules/filters/${types.filters.actions.SET_APPLIED_FILTER}`,
-      setUpdateAppliedFilter: `modules/filters/${types.filters.actions.SET_UPDATE_APPLIED_FILTER}`
+      setUpdateAppliedFilter: `modules/filters/${types.filters.actions.SET_UPDATE_APPLIED_FILTER}`,
+      setRequestData: `modules/requestData/${types.requestData.actions.SET_REQUEST_DATA}`,
+      setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
+      setFilters: `modules/filters/${types.filters.actions.SET_FILTERS}`,
+      setHistogramPrices: `modules/filters/${types.filters.actions.SET_HISTOGRAM_PRICES}`
     }),
     inputRange() {
       if (this.rangeSliderFrom && this.rangeSliderTo) {
@@ -92,6 +98,11 @@ export default {
       this.rangeBtnDisable = false;
     },
     filterPrice(filter, minPrice, maxPrice) {
+      console.log('dfdsfsdfsdfsdfsdfsdfdsf')
+      setTimeout(() => {
+        this.$nuxt.$loading.start();
+      }, 1);
+      //push in router
       this.$router.push({
         query: {
           ...this.$route.query,
@@ -99,6 +110,8 @@ export default {
           max_price: maxPrice,
         },
       });
+
+      //set in applied filter
       let currentFilter = {
         slug: filter.slug,
         minPrice: minPrice,
@@ -106,20 +119,36 @@ export default {
         filterIndex: this.filterIndex
       }
       let appliedFilters = [...this.appliedFilter]
-      console.log("appliedFilters" , appliedFilters)
+      console.log("appliedFilters", appliedFilters)
 
-      let appliedFilterIndex =  appliedFilters.findIndex(appliedFilter => appliedFilter.slug === filter.slug)
+      let appliedFilterIndex = appliedFilters.findIndex(appliedFilter => appliedFilter.slug === filter.slug)
       console.log(appliedFilterIndex)
-      this.setUpdateAppliedFilter({index: appliedFilterIndex, value: {
-          slug: filter.slug,
-          minPrice: minPrice,
-          maxPrice: maxPrice,
-          filterIndex: this.filterIndex
-        }})
-      if (appliedFilters.length === 0 || appliedFilterIndex < 0) {
+      if (appliedFilterIndex >= 0) {
+        this.setUpdateAppliedFilter({
+          index: appliedFilterIndex,
+          value: currentFilter
+        })
+      } else {
         appliedFilters.push(currentFilter)
+        this.setAppliedFilter(appliedFilters)
       }
-      console.log("appliedFilters" , appliedFilters)
+
+      // if (appliedFilters.length === 0 || appliedFilterIndex < 0) {
+      //   appliedFilters.push(currentFilter)
+      // }
+
+      //set in req data
+      let data = {...this.getRequestData}
+      data.max_price = maxPrice
+      data.min_price = minPrice
+      this.setRequestData(data)
+
+      //call service
+      return SearchServices.searchResults(data).then((res) => {
+        this.setSearchResult(res.data);
+        this.setHistogramPrices(res.data.histogram_prices.prices);
+        this.$nuxt.$loading.finish();
+      });
 
 
     }

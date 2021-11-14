@@ -1,5 +1,6 @@
 import {mapGetters, mapActions} from "vuex";
 import * as types from "@/store/types.js";
+import {SearchServices} from "@/services"
 
 export default {
   props: {
@@ -37,27 +38,25 @@ export default {
   methods: {
     ...mapActions({
       setAppliedFilter: `modules/filters/${types.filters.actions.SET_APPLIED_FILTER}`,
-      setUpdateAppliedFilter: `modules/filters/${types.filters.actions.SET_UPDATE_APPLIED_FILTER}`,
       setRequestData: `modules/requestData/${types.requestData.actions.SET_REQUEST_DATA}`,
-      setUpdateFilterDefault: `modules/filters/${types.filters.actions.SET_UPDATE_FILTER_DEFAULT}`,
+      setUpdateCheckboxFilterDefault: `modules/filters/${types.filters.actions.SET_UPDATE_FILTER_CHECKBOX_DEFAULT}`,
+      setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
+      setFilters: `modules/filters/${types.filters.actions.SET_FILTERS}`,
+      setHistogramPrices: `modules/filters/${types.filters.actions.SET_HISTOGRAM_PRICES}`
     }),
     filterCheckBox(filter, filterChild, filterChildIndex) {
-      // setTimeout(() => {
-      //   this.$nuxt.$loading.start();
-      // }, 1);
+      setTimeout(() => {
+        this.$nuxt.$loading.start();
+      }, 1);
+      let appliedFilters = [...this.appliedFilter]
       let value = !filterChild.default;
       // change default value
       let type = this.filterParent ? this.filterParent.type : filter.type
       let slug = this.filterParent ? this.filterParent.slug : filter.slug
 
-
-
       let data = {...this.getRequestData}
-
-      console.log('value jjjjjj', value)
-
       if (!value) {
-        this.setUpdateFilterDefault({
+        this.setUpdateCheckboxFilterDefault({
           default: false,
           filterIndex: this.filterParentIndex ? this.filterParentIndex : this.filterIndex,
           childIndexInFilters: this.filterParentIndex ? this.filterIndex : filterChildIndex,
@@ -71,34 +70,38 @@ export default {
           },
         });
         // delete form requestData
-        delete data[`${slug}[${filterChild.id}]`]
+
+        delete data[slug][filterChild.id]
+        if(Object.entries( data[slug]).length ===0) {
+           delete data[slug]
+        }
         this.setRequestData(data)
+
+        //remove from applied filter
+        let appliedFilterIndex = appliedFilters.findIndex(appliedFilter => appliedFilter.slug === filter.slug)
+        appliedFilters.splice(appliedFilterIndex, 1);
+        this.setAppliedFilter(appliedFilters)
       } else {
-        this.setUpdateFilterDefault({
+        // if the value is true so the item should be add in array for adding to data
+        this.setUpdateCheckboxFilterDefault({
           default: true,
           filterIndex: this.filterParentIndex ? this.filterParentIndex : this.filterIndex,
           childIndexInFilters: this.filterParentIndex ? this.filterIndex : filterChildIndex,
           childItemIndexInFilters: this.filterParentIndex ? filterChildIndex : null,
         })
-        // if the value is true so the item should be add in array for adding to data
 
         // set in applied filter
-        let appliedFilters = [...this.appliedFilter]
-        let appliedFilterIndex = appliedFilters.findIndex(appliedFilter => appliedFilter.slug === filter.slug)
-        this.setUpdateAppliedFilter(
-          {
-            index: appliedFilterIndex,
-            value: {
-              type: type,
-              slug: slug,
-              id: filterChild.id,
-              name: filterChild.name,
-              value: filterChild.default,
-              filterIndex: this.filterParentIndex ? this.filterParentIndex : this.filterIndex,
-              childIndexInFilters: this.filterParentIndex ? this.filterIndex : filterChildIndex,
-              childItemIndexInFilters: this.filterParentIndex ? filterChildIndex : null,
-            }
-          })
+        appliedFilters.push({
+          type: type,
+          slug: slug,
+          id: filterChild.id,
+          name: filterChild.name,
+          value: filterChild.default,
+          filterIndex: this.filterParentIndex ? this.filterParentIndex : this.filterIndex,
+          childIndexInFilters: this.filterParentIndex ? this.filterIndex : filterChildIndex,
+          childItemIndexInFilters: this.filterParentIndex ? filterChildIndex : null
+        })
+        this.setAppliedFilter(appliedFilters)
 
         // push in query
         this.$router.push({
@@ -109,67 +112,21 @@ export default {
         });
 
         // set in req data
-        data[`${slug}[${filterChild.id}]`] = filterChild.id
+        // data[`${slug}[${filterChild.id}]`] = filterChild.id
+        data[slug] = {...data[slug]}
+        data[slug][filterChild.id] = filterChild.id
         this.setRequestData(data)
       }
+      return SearchServices.searchResults(data)
+        .then((res) => {
+          this.$nuxt.$loading.finish();
+          this.setSearchResult(res.data);
+          this.setHistogramPrices(res.data.histogram_prices.prices);
 
-      // return SearchServices.searchResults(this.data).then((res) => {
-      //   if (checkBoxItem.default) {
-      //     this.$router.push({
-      //       query: {
-      //         ...this.$route.query,
-      //         [`${filter.slug}[${checkBoxItem.id}]`]: checkBoxItem.id,
-      //       },
-      //     });
-      //   }
-      //
-      //   // add this filter to applied filter
-      //   let appliedFilterExist;
-      //   this.appliedFilterList.forEach((appliedFilter, appliedFilterIndex) => {
-      //     if (
-      //       appliedFilter.slug === filter.slug &&
-      //       appliedFilter.id === checkBoxItem.id
-      //     ) {
-      //       // appliedFilterExist = true;
-      //       // checkBoxItem.default
-      //       //   ? (this.appliedFilterList[appliedFilterIndex].value =
-      //       //     checkBoxItem.default
-      //       //   : this.clearFilter(appliedFilter, appliedFilterIndex);
-      //     }
-      //   });
-      //   if (!appliedFilterExist && checkBoxItem.default) {
-      //     if (filter.type === "list") {
-      //       this.appliedFilterList.push({
-      //         type: filter.type,
-      //         slug: filter.slug,
-      //         id: checkBoxItem.id,
-      //         name: checkBoxItem.name,
-      //         value: checkBoxItem.default,
-      //         indexInFilterPanelSettings: this.filterIndex,
-      //         childIndexInFilterPanelSettings:
-      //         filterChildIndexObject.filterChildIndex,
-      //         childItemIndexInFilterPanelSettings:
-      //         filterChildIndexObject.filterChildItemIndex
-      //       });
-      //     } else {
-      //       this.appliedFilterList.push({
-      //         type: filter.type,
-      //         slug: filter.slug,
-      //         id: checkBoxItem.id,
-      //         name: checkBoxItem.name,
-      //         value: checkBoxItem.default,
-      //         indexInFilterPanelSettings: this.filterIndex,
-      //         childIndexInFilterPanelSettings:
-      //         filterChildIndexObject.filterChildIndex
-      //       });
-      //     }
-      //   }
-      //
-      //   this.setSearchResult(res.data);
-      //   this.setFilters(res.data.filters.filters);
-      //   this.setHistogramPrices(res.data.histogram_prices.prices);
-      //   this.$nuxt.$loading.finish();
-      // });
+        })
+        .catch(err => {
+
+        })
     },
   }
 
