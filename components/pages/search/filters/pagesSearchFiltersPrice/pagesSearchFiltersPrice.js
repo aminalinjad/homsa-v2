@@ -10,6 +10,9 @@ export default {
     },
     filterIndex: {
       type: Number
+    },
+    resetPriceValue: {
+      type: Boolean
     }
   },
   data() {
@@ -19,6 +22,14 @@ export default {
       rangeSliderTo: null,
       histogramSectionWidth: null,
       rangeBtnDisable: true,
+    }
+  },
+  watch: {
+    resetPriceValue() {
+      this.rangeBtnDisable = true;
+      this.rangeSliderFrom= null
+      this.rangeSliderTo= null
+      this.$refs.histogram.update({from: this.filter.price_range.min_price, to: this.filter.price_range.max_price})
     }
   },
   computed: {
@@ -51,7 +62,7 @@ export default {
   mounted() {
     this.$nextTick(() => {
       if (this.$route.query.min_price && this.$route.query.max_price) {
-        this.$refs.histogram[0].update({from: this.$route.query.min_price, to: this.$route.query.max_price})
+        this.$refs.histogram.update({from: this.$route.query.min_price, to: this.$route.query.max_price})
         this.rangeSliderFrom = this.$route.query.min_price;
         this.rangeSliderTo = this.$route.query.max_price;
       }
