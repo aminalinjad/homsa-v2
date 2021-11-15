@@ -78,7 +78,7 @@ export default {
         this.setRequestData(data)
 
         //remove from applied filter
-        let appliedFilterIndex = appliedFilters.findIndex(appliedFilter => appliedFilter.slug === filter.slug)
+        let appliedFilterIndex = appliedFilters.findIndex(appliedFilter => appliedFilter.slug === slug  && appliedFilter.id === filterChild.id)
         appliedFilters.splice(appliedFilterIndex, 1);
         this.setAppliedFilter(appliedFilters)
       } else {

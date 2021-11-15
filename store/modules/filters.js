@@ -50,9 +50,9 @@ const mutations = {
     }
   },
   [types.filters.mutations.MUTATE_UPDATE_FILTER_COUNTER_DEFAULT]: (state, payload) => {
-    if(payload.itemIndex) {
+    if( payload.itemIndex >=0 ) {
       console.log('if in store')
-      state.filters[payload.filterIndex].children[payload.childIndexInFilters].default = payload.default;
+      state.filters[payload.filterIndex].children[payload.itemIndex].default = payload.default;
     } else  {
       console.log('else in store')
       state.filters[payload.filterIndex].default = payload.default;

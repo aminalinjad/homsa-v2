@@ -5,11 +5,10 @@
       dense
       :label="filter.name"
       class="pt-0 mt-2"
-      v-model="filter.default"
+      :value="filter.default"
       @change="
                 filterSwitch(
                   filter,
-                  filter.default,
                   filterIndex
                 )
               "
