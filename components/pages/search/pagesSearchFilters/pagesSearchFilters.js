@@ -100,16 +100,89 @@ export default {
 
     setFilterValueFromQueries() {
       let appliedFilters = [...this.appliedFilters]
-      let data = {...this.getRequestData}
+
       for (let [routeQueryKey, routeQueryValue] of Object.entries(this.$route.query)) {
-        if (routeQueryKey.match('\\[(.*?)\\]')) {
-          data[routeQueryKey.split('[')[0]] = {...data[routeQueryKey.split('[')[0]], [routeQueryKey.match('\\[(.*?)\\]')[1]]: +routeQueryValue}
-        } else {
-          if (routeQueryValue) {
-            // push it in appliedFilterList Array
-            this.filters.forEach((filter, filterIndex) => {
-              if(filter.slug === 'price_range' && routeQueryKey === 'min_price') {
-                if(this.$route.query.min_price && this.$route.query.max_price) {
+        this.filters.forEach((filter, filterIndex) => {
+          if (routeQueryKey.match('\\[(.*?)\\]') && filter.children) {
+            if (routeQueryKey.includes(filter.slug)) {
+              let childIndex = filter.children
+                .map(child => {
+                  return child.id
+                })
+                .indexOf(+[routeQueryKey.match('\\[(.*?)\\]')[1]])
+              // set in default filter value
+              if(filter.type === 'list') {
+                // console.log('fsdfsdfsd')
+                // console.log('sss', filter.children)
+                // console.log('sss', childIndex)
+                let childItemIndex = filter.children[childIndex].children
+                  .map(child => {
+                    return child.id
+                  })
+                  .indexOf(+[routeQueryKey.match('\\[(.*?)\\]')[1]])
+                setTimeout(() => {
+                  this.setUpdateCheckboxFilterDefault({
+                    default: true,
+                    filterIndex: filterIndex,
+                    childIndexInFilters: childIndex,
+                    childItemIndexInFilters: childItemIndex,
+                  })
+                }, 1)
+              } else if (filter.type === 'list_checkbox') {
+                setTimeout(() => {
+                  this.setUpdateCheckboxFilterDefault({
+                    default: true,
+                    filterIndex: filterIndex,
+                    childIndexInFilters: childIndex,
+                    childItemIndexInFilters: null,
+                  })
+                }, 1)
+              } else {
+                setTimeout(() => {
+                  this.setUpdateFilterDefault({
+                    default: +routeQueryValue,
+                    filterIndex: filterIndex,
+                    itemIndex: childIndex
+                  });
+                } , 1)
+              }
+
+            }
+            // if (filter.type === 'list') {
+            //
+            // } else {
+            //   // if (filter.children) {
+            //   //   let childIndex = filter.children
+            //   //     .map(child => {
+            //   //       return child.id;
+            //   //     })
+            //   //     .indexOf(+routeQueryValue);
+            //     if (filter.type === 'list_checkbox') {
+            //       let childIndex = filter.children
+            //         .map(child => {
+            //           return child.id;
+            //         })
+            //         .indexOf(+routeQueryValue);
+            //
+            //       // set in default filter value
+            //       this.setUpdateCheckboxFilterDefault({
+            //         default: true,
+            //         filterIndex: filterIndex,
+            //         childIndexInFilters: childIndex,
+            //         childItemIndexInFilters: null,
+            //       })
+            //     } else {
+            //
+            //     }
+            //   // }
+            //
+            // }
+          } else {
+            if (routeQueryValue) {
+              // push it in appliedFilterList Array
+              // this.filters.forEach((filter, filterIndex) => {
+              if (filter.slug === 'price_range' && routeQueryKey === 'min_price') {
+                if (this.$route.query.min_price && this.$route.query.max_price) {
                   console.log('in price')
                   let currentFilter = {
                     slug: filter.slug,
@@ -120,29 +193,53 @@ export default {
                   appliedFilters.push(currentFilter)
                   this.setAppliedFilter(appliedFilters)
                 }
-              } else if (filter.slug === routeQueryKey ) {
-                console.log('route query', routeQueryValue)
+              } else if (filter.slug === routeQueryKey) {
+                //push in applied filter
+                let appliedFilters = [...this.appliedFilters]
+
                 let currentFilter = {
                   type: filter.type,
                   slug: filter.slug,
                   name: filter.name,
-                  value: routeQueryValue,
-                  count: routeQueryValue,
                   filterIndex: filterIndex
                 };
+                if (filter.type === 'counter') {
+                  currentFilter.count = routeQueryValue
+
+                  //set in default filter value
+                  this.setUpdateFilterDefault({
+                    default: +routeQueryValue,
+                    filterIndex: filterIndex
+                  });
+                } else {
+                  currentFilter.value = routeQueryValue
+
+                  //set in default filter value
+                  setTimeout(() => {
+                    //using set timeout is necessary couse default value of filter doesnt overwrite this change
+                    this.setUpdateFilterDefault({
+                      default: true,
+                      filterIndex: filterIndex
+                    });
+                  }, 1)
+
+                }
                 this.setUpdateAppliedFilter({
                   index: appliedFilters.length,
                   value: currentFilter
                 });
+
               }
-              })
-            // if (routeQueryValue === 'true') {
-            //   data[routeQueryKey] = true
-            // }else {
-            //   data[routeQueryKey] = +routeQueryValue
-            // }
+              // })
+
+              // if (routeQueryValue === 'true') {
+              //   data[routeQueryKey] = true
+              // }else {
+              //   data[routeQueryKey] = +routeQueryValue
+              // }
+            }
           }
-        }
+        })
       }
       // push it in appliedFilterList Array
 
