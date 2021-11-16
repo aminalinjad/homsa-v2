@@ -36,7 +36,7 @@ export default {
     ...mapActions({
       setAppliedFilter: `modules/filters/${types.filters.actions.SET_APPLIED_FILTER}`,
       setRequestData: `modules/requestData/${types.requestData.actions.SET_REQUEST_DATA}`,
-      setUpdateCounterFilterDefault: `modules/filters/${types.filters.actions.SET_UPDATE_FILTER_COUNTER_DEFAULT}`,
+      setUpdateFilterDefault: `modules/filters/${types.filters.actions.SET_UPDATE_FILTER_DEFAULT}`,
       setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
       setHistogramPrices: `modules/filters/${types.filters.actions.SET_HISTOGRAM_PRICES}`,
       setUpdateAppliedFilter: `modules/filters/${types.filters.actions.SET_UPDATE_APPLIED_FILTER}`
@@ -55,7 +55,7 @@ export default {
       let value = filter.default;
       value += 1;
       //change default value
-      this.setUpdateCounterFilterDefault({
+      this.setUpdateFilterDefault({
         default: value,
         filterIndex: this.filterIndex
       });
@@ -66,7 +66,7 @@ export default {
       if (value > 0) {
         value -= 1;
         //change default value
-        this.setUpdateCounterFilterDefault({
+        this.setUpdateFilterDefault({
           default: value,
           filterIndex: this.filterIndex
         });
@@ -144,7 +144,7 @@ export default {
       let value = item.default;
       value += 1;
       //change default value
-      this.setUpdateCounterFilterDefault({
+      this.setUpdateFilterDefault({
         default: value,
         filterIndex: this.filterIndex,
         itemIndex: itemIndex
@@ -156,7 +156,7 @@ export default {
       if (value > 0) {
         value -= 1;
         //change default value
-        this.setUpdateCounterFilterDefault({
+        this.setUpdateFilterDefault({
           default: value,
           filterIndex: this.filterIndex,
           itemIndex: itemIndex

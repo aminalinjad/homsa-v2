@@ -34,7 +34,6 @@ export default {
     }]
 
     for (let [routeQueryKey, routeQueryValue] of Object.entries(route.query)) {
-      console.log(routeQueryKey)
       if (routeQueryKey.match('\\[(.*?)\\]')) {
         data[routeQueryKey.split('[')[0]] = {...data[routeQueryKey.split('[')[0]], [routeQueryKey.match('\\[(.*?)\\]')[1]]: +routeQueryValue}
       } else {
@@ -47,9 +46,7 @@ export default {
         }
       }
     }
-    console.log(data)
     return SearchServices.searchResults(data).then(res => {
-      console.log(res)
       store.dispatch('modules/requestData/SET_REQUEST_DATA', data)
       store.dispatch('modules/search/SET_SEARCH_RESULTS', res.data)
       store.dispatch('modules/filters/SET_FILTERS', res.data.filters.filters)
@@ -59,7 +56,6 @@ export default {
         results: res.data.data
       }
     }).catch(err => {
-      console.log(err)
     })
   },
   computed: {

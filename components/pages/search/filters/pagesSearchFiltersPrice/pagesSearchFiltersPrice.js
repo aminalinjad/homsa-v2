@@ -109,7 +109,6 @@ export default {
       this.rangeBtnDisable = false;
     },
     filterPrice(filter, minPrice, maxPrice) {
-      console.log('dfdsfsdfsdfsdfsdfsdfdsf')
       setTimeout(() => {
         this.$nuxt.$loading.start();
       }, 1);
@@ -130,7 +129,6 @@ export default {
         filterIndex: this.filterIndex
       }
       let appliedFilters = [...this.appliedFilter]
-      console.log("appliedFilters", appliedFilters)
 
       let appliedFilterIndex = appliedFilters.findIndex(appliedFilter => appliedFilter.slug === filter.slug)
       console.log(appliedFilterIndex)

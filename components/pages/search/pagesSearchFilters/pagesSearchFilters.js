@@ -53,12 +53,24 @@ export default {
   },
   mounted() {
     // this.setDataFromUrlQueries();
+    this.setFilterValueFromQueries();
     window.addEventListener("resize", this.checkSize);
   },
   destroyed() {
     window.removeEventListener("resize", this.checkSize);
   },
   methods: {
+    ...mapActions({
+      setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
+      setFilters: `modules/filters/${types.filters.actions.SET_FILTERS}`,
+      setRequestData: `modules/requestData/${types.requestData.actions.SET_REQUEST_DATA}`,
+      setHistogramPrices: `modules/filters/${types.filters.actions.SET_HISTOGRAM_PRICES}`,
+      setAppliedFilter: `modules/filters/${types.filters.actions.SET_APPLIED_FILTER}`,
+      setUpdateFilterDefault: `modules/filters/${types.filters.actions.SET_UPDATE_FILTER_DEFAULT}`,
+      setUpdateCheckboxFilterDefault: `modules/filters/${types.filters.actions.SET_UPDATE_FILTER_CHECKBOX_DEFAULT}`,
+      setUpdateAppliedFilter: `modules/filters/${types.filters.actions.SET_UPDATE_APPLIED_FILTER}`,
+    }),
+
     submitFilter(data, index) {
       console.log(data)
       console.log(index)
@@ -79,20 +91,62 @@ export default {
       }
     },
 
-    ...mapActions({
-      setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
-      setFilters: `modules/filters/${types.filters.actions.SET_FILTERS}`,
-      setRequestData: `modules/requestData/${types.requestData.actions.SET_REQUEST_DATA}`,
-      setHistogramPrices: `modules/filters/${types.filters.actions.SET_HISTOGRAM_PRICES}`,
-      setAppliedFilter: `modules/filters/${types.filters.actions.SET_APPLIED_FILTER}`,
-      setUpdateCounterFilterDefault: `modules/filters/${types.filters.actions.SET_UPDATE_FILTER_COUNTER_DEFAULT}`,
-      setUpdateCheckboxFilterDefault: `modules/filters/${types.filters.actions.SET_UPDATE_FILTER_CHECKBOX_DEFAULT}`,
-    }),
     minusIconColorForCounterFilter(filterIndex) {
       return this.filterPanelSettings[filterIndex].count === 0 ? this.$vuetify.theme.themes.light.secondary : this.$vuetify.theme.themes.light.greenDark8;
     },
     minusIconColor(filterIndex, index) {
       return this.filterPanelSettings[filterIndex].ItemCounts[index].count === 0 ? this.$vuetify.theme.themes.light.secondary : this.$vuetify.theme.themes.light.greenDark8;
+    },
+
+    setFilterValueFromQueries() {
+      let appliedFilters = [...this.appliedFilters]
+      let data = {...this.getRequestData}
+      for (let [routeQueryKey, routeQueryValue] of Object.entries(this.$route.query)) {
+        if (routeQueryKey.match('\\[(.*?)\\]')) {
+          data[routeQueryKey.split('[')[0]] = {...data[routeQueryKey.split('[')[0]], [routeQueryKey.match('\\[(.*?)\\]')[1]]: +routeQueryValue}
+        } else {
+          if (routeQueryValue) {
+            // push it in appliedFilterList Array
+            this.filters.forEach((filter, filterIndex) => {
+              if(filter.slug === 'price_range' && routeQueryKey === 'min_price') {
+                if(this.$route.query.min_price && this.$route.query.max_price) {
+                  console.log('in price')
+                  let currentFilter = {
+                    slug: filter.slug,
+                    minPrice: this.$route.query.min_price,
+                    maxPrice: this.$route.query.max_price,
+                    filterIndex: filterIndex
+                  }
+                  appliedFilters.push(currentFilter)
+                  this.setAppliedFilter(appliedFilters)
+                }
+              } else if (filter.slug === routeQueryKey ) {
+                console.log('route query', routeQueryValue)
+                let currentFilter = {
+                  type: filter.type,
+                  slug: filter.slug,
+                  name: filter.name,
+                  value: routeQueryValue,
+                  count: routeQueryValue,
+                  filterIndex: filterIndex
+                };
+                this.setUpdateAppliedFilter({
+                  index: appliedFilters.length,
+                  value: currentFilter
+                });
+              }
+              })
+            // if (routeQueryValue === 'true') {
+            //   data[routeQueryKey] = true
+            // }else {
+            //   data[routeQueryKey] = +routeQueryValue
+            // }
+          }
+        }
+      }
+      // push it in appliedFilterList Array
+
+      //set default value
     },
 
     setDataFromUrlQueries() {
@@ -191,7 +245,6 @@ export default {
                 };
                 console.log('data', this.data[filterType.slug]);
               }
-
 
               // push it in appliedFilterList Array
               let filterIndex = this.filters
@@ -378,9 +431,9 @@ export default {
     },
 
     clearFilter(appliedFilter, appliedFilterIndex) {
-      // setTimeout(() => {
-      //   this.$nuxt.$loading.start();
-      // }, 1);
+      setTimeout(() => {
+        this.$nuxt.$loading.start();
+      }, 1);
 
       let appliedFilters = [...this.appliedFilters];
       let data = {...this.getRequestData};
@@ -409,206 +462,95 @@ export default {
             [`${appliedFilter.slug}[${appliedFilter.id}]`]: undefined,
           },
         });
+        if (appliedFilter.type === "list_counter") {
+          this.setUpdateFilterDefault({
+            default: 0,
+            filterIndex: appliedFilter.filterIndex,
+            itemIndex: appliedFilter.itemIndex
+          });
+        } else {
+          this.setUpdateCheckboxFilterDefault({
+            default: false,
+            filterIndex: appliedFilter.filterIndex,
+            childIndexInFilters: appliedFilter.childIndexInFilters,
+            childItemIndexInFilters: appliedFilter.childItemIndexInFilters
+          })
+        }
       } else {
-        // if (appliedFilter.type === "list_counter") {
-        //   this.setUpdateCounterFilterDefault({
-        //     default: appliedFilter.value,
-        //     filterIndex: appliedFilter.filterIndex,
-        //     itemIndex: appliedFilter.itemIndex
-        //   });
-        // } else {
-        //   this.setUpdateCheckboxFilterDefault()
-        // }
         // delete it from data send in api
         delete data[appliedFilter.slug]
         //remove it  from url query
         this.$router.push({
           query: {...this.$route.query, [appliedFilter.slug]: undefined},
         });
+
+        // reset default value in filters
+        this.setUpdateFilterDefault({
+          default: appliedFilter.type === "counter" ? 0 : false,
+          filterIndex: appliedFilter.filterIndex
+        });
+
       }
 
       this.setRequestData(data)
       // remove it from applied filter
       appliedFilters.splice(appliedFilterIndex, 1);
       this.setAppliedFilter(appliedFilters);
-      //
-      // if (appliedFilter.type === "price_range") {
 
-      // } else if (appliedFilter.type === "counter") {
-      //
-      //
-      //   // remove it from applied filter list
-      //   this.appliedFilterList.splice(appliedFilterIndex, 1);
-      //
-      //   // reset its value in filterpanelsetting array
-      //   this.filterPanelSettings[
-      //     appliedFilter.indexInFilterPanelSettings
-      //     ].count = 0;
-      //
-      //   //remove it  from url query
-      //   this.$router.push({
-      //     query: {...this.$route.query, [appliedFilter.slug]: undefined},
-      //   });
-      // } else if (appliedFilter.type === "list_counter") {
-      //   // delete it from data send in api
-      //   this.data[appliedFilter.slug].forEach((itemObject, itemObjectIndex) => {
-      //     if (itemObject.id === appliedFilter.id) {
-      //       this.data[appliedFilter.slug].splice(itemObjectIndex, 1);
-      //     }
-      //   });
-      //   if(this.data[appliedFilter.slug].length === 0) delete this.data[appliedFilter.slug];
-      //
-      //
-      //   // remove it from applied filter list
-      //   this.appliedFilterList.splice(appliedFilterIndex, 1);
-      //
-      //   // reset its value in filterpanelsetting array
-      //   this.filterPanelSettings[
-      //     appliedFilter.indexInFilterPanelSettings
-      //     ].ItemCounts[appliedFilter.itemIndexInFilterPanelSettings].count = 0;
-      //
-      //   //remove it  from url query
-      //   this.$router.push({
-      //     query: {
-      //       ...this.$route.query,
-      //       [`${appliedFilter.slug}[${appliedFilter.id}]`]: undefined,
-      //     },
-      //   });
-      // } else if (appliedFilter.type === "switch") {
-      //   // delete it from data send in api
-      //   delete this.data[appliedFilter.slug];
-      //
-      //   // remove it from applied filter list
-      //   this.appliedFilterList.splice(appliedFilterIndex, 1);
-      //
-      //   // reset its value in filterpanelsetting array
-      //   this.filterPanelSettings[
-      //     appliedFilter.indexInFilterPanelSettings
-      //     ].value = false;
-      //
-      //   //remove it from url query
-      //   this.$router.push({
-      //     query: { ...this.$route.query, [appliedFilter.slug]: undefined },
-      //   });
-      // } else if (
-      //   appliedFilter.type === "list_checkbox" ||
-      //   appliedFilter.type === "list"
-      // ) {
-      //   // delete it from data send in api
-      //   this.data[appliedFilter.slug].forEach((item, itemIndex) => {
-      //     if (item === appliedFilter.id) {
-      //       this.data[appliedFilter.slug].splice(itemIndex, 1);
-      //     }
-      //   });
-      //   if(this.data[appliedFilter.slug].length === 0) delete this.data[appliedFilter.slug];
-      //
-      //   // remove it from applied filter list
-      //   this.appliedFilterList.splice(appliedFilterIndex, 1);
-      //
-      //   // reset its value in filterpanelsetting array
-      //   if (appliedFilter.type === "list_checkbox") {
-      //     this.filterPanelSettings[
-      //       appliedFilter.indexInFilterPanelSettings
-      //       ].listCheckBoxValues[
-      //       appliedFilter.childIndexInFilterPanelSettings
-      //       ].value = false;
-      //   } else {
-      //     this.filterPanelSettings[appliedFilter.indexInFilterPanelSettings][
-      //       appliedFilter.childIndexInFilterPanelSettings
-      //       ].listCheckBoxValues[
-      //       appliedFilter.childItemIndexInFilterPanelSettings
-      //       ].value = false;
-      //   }
-      //
-      //   //remove it  from url query
-      //   this.$router.push({
-      //     query: {
-      //       ...this.$route.query,
-      //       [`${appliedFilter.slug}[${appliedFilter.id}]`]: undefined,
-      //     },
-      //   });
-      // }
-      //
-      // return SearchServices.searchResults(this.data).then((res) => {
-      //   this.setSearchResult(res.data);
-      //   this.setFilters(res.data.filters.filters);
-      //   this.setHistogramPrices(res.data.histogram_prices.prices);
-      //   this.$nuxt.$loading.finish();
-      // });
+      return SearchServices.searchResults(data)
+        .then((res) => {
+          this.setSearchResult(res.data);
+          this.setHistogramPrices(res.data.histogram_prices.prices);
+          this.$nuxt.$loading.finish();
+        });
     },
+
     clearAllFilter(appliedFilterList) {
       setTimeout(() => {
         this.$nuxt.$loading.start();
       }, 1);
-      const routeQueries = Object.assign({}, this.$route.query);
+      let appliedFilters = [...this.appliedFilters];
+      let requestData = {...this.requestData}
 
-      // clear add applied filter from data
-      appliedFilterList.forEach((appliedFilter, appliedFilterIndex) => {
-        if (appliedFilter.slug === "price_range") {
-          delete this.data.min_price;
-          delete this.data.max_price;
+      let routeQueries = Object.assign({}, this.$route.query);
+      // let routeQueries = this.$route.query
 
-          // reset its values
-          this.rangeSliderFrom = null;
-          this.rangeSliderTo = null;
-        } else {
-          delete this.data[appliedFilter.slug];
+      // create a data that doesn't delete from query
+      let staticData = {
+        page: routeQueries.page ? routeQueries.page : 1,
+        sort: routeQueries.sort ? routeQueries.sort : 'popular',
+        guests: routeQueries.guests ? routeQueries.guests : 1
+      }
+      if (routeQueries.q) {
+        staticData.q = routeQueries.q
+      }
+      if (routeQueries.checkin) {
+        staticData.checkin = routeQueries.checkin
+      }
+      if (routeQueries.checkout) {
+        staticData.checkout = routeQueries.checkout
+      }
 
-          // reset its values
-          if (appliedFilter.type === "counter") {
-            this.filterPanelSettings[
-              appliedFilter.indexInFilterPanelSettings
-              ].count = 0;
-          } else if (appliedFilter.type === "list_counter") {
-            this.filterPanelSettings[
-              appliedFilter.indexInFilterPanelSettings
-              ].ItemCounts[
-              appliedFilter.itemIndexInFilterPanelSettings
-              ].count = 0;
-          } else if (appliedFilter.type === "switch") {
-            this.filterPanelSettings[
-              appliedFilter.indexInFilterPanelSettings
-              ].value = false;
-          } else if (appliedFilter.type === "list_checkbox") {
-            this.filterPanelSettings[
-              appliedFilter.indexInFilterPanelSettings
-              ].listCheckBoxValues[
-              appliedFilter.childIndexInFilterPanelSettings
-              ].value = false;
-          } else if (appliedFilter.type === "list") {
-            this.filterPanelSettings[appliedFilter.indexInFilterPanelSettings][
-              appliedFilter.childIndexInFilterPanelSettings
-              ].listCheckBoxValues[
-              appliedFilter.childItemIndexInFilterPanelSettings
-              ].value = false;
-          }
-        }
-      });
-
-      // clear all appliedFilterList
-      this.appliedFilterList = [];
-
-      // clear all filter form query
-      appliedFilterList.forEach((appliedFilter, appliedFilterIndex) => {
-        for (let [routeQueryKey, routeQueryValue] of Object.entries(
-          routeQueries
-        )) {
-          if (routeQueryKey.includes(appliedFilter.slug)) {
-            delete routeQueries[routeQueryKey];
-          } else if (
-            routeQueryKey === "min_price" ||
-            routeQueryKey === "max_price"
-          ) {
-            delete routeQueries[routeQueryKey];
-          }
-        }
-      });
+      // push to query
       this.$router.push({
-        query: routeQueries,
+        query: staticData,
       });
-      // this.$router.replace({ query: routeQueries });
 
-      return SearchServices.searchResults(this.data).then((res) => {
+      if (this.$route.params.slug) {
+        let splitSlug = this.$route.params.slug.split('-')
+        staticData.slugs = [{
+          value: splitSlug[1],
+          type: splitSlug[0]
+        }]
+      }
+
+      // set in requestData
+      this.setRequestData(staticData)
+
+      // // clear all appliedFilterList
+      this.setAppliedFilter([])
+
+      return SearchServices.searchResults(staticData).then((res) => {
         this.setSearchResult(res.data);
         this.setFilters(res.data.filters.filters);
         this.setHistogramPrices(res.data.histogram_prices.prices);
