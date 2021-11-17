@@ -52,8 +52,7 @@ export default {
     }
   },
   mounted() {
-    // this.setDataFromUrlQueries();
-    this.setFilterValueFromQueries();
+    if (this.appliedFilters.length === 0) this.setFilterValueFromQueries();
     window.addEventListener("resize", this.checkSize);
   },
   destroyed() {
@@ -100,26 +99,39 @@ export default {
 
     setFilterValueFromQueries() {
       let appliedFilters = [...this.appliedFilters]
+      let currentFilter ={}
 
       for (let [routeQueryKey, routeQueryValue] of Object.entries(this.$route.query)) {
         this.filters.forEach((filter, filterIndex) => {
           if (routeQueryKey.match('\\[(.*?)\\]') && filter.children) {
             if (routeQueryKey.includes(filter.slug)) {
-              let childIndex = filter.children
-                .map(child => {
-                  return child.id
-                })
-                .indexOf(+[routeQueryKey.match('\\[(.*?)\\]')[1]])
               // set in default filter value
               if(filter.type === 'list') {
-                // console.log('fsdfsdfsd')
-                // console.log('sss', filter.children)
-                // console.log('sss', childIndex)
-                let childItemIndex = filter.children[childIndex].children
-                  .map(child => {
-                    return child.id
-                  })
-                  .indexOf(+[routeQueryKey.match('\\[(.*?)\\]')[1]])
+                // search in children of this filter to find index of a child that it`s id is equal
+                let childIndex = null;
+                let childItemIndex = null;
+                filter.children.forEach(
+                  (child, index) => {
+                    child.children.forEach((childItem, i) => {
+                      if (childItem.id === +[routeQueryKey.match('\\[(.*?)\\]')[1]]) {
+                        childIndex = index;
+                        childItemIndex = i;
+
+                        currentFilter = {
+                          type: filter.type,
+                          slug: filter.slug,
+                          id: childItem.id,
+                          name: childItem.name,
+                          value: true,
+                          filterIndex: filterIndex,
+                          childIndexInFilters: index,
+                          childItemIndexInFilters: i
+                        }
+                      }
+                    });
+                  }
+                );
+
                 setTimeout(() => {
                   this.setUpdateCheckboxFilterDefault({
                     default: true,
@@ -128,7 +140,32 @@ export default {
                     childItemIndexInFilters: childItemIndex,
                   })
                 }, 1)
+
+                //push in applied filter
+                let appliedFilters = [...this.appliedFilters]
+                this.setUpdateAppliedFilter({
+                  index: appliedFilters.length,
+                  value: currentFilter
+                });
               } else if (filter.type === 'list_checkbox') {
+                let childIndex;
+
+                filter.children.forEach((child, index) => {
+                  if(child.id === +[routeQueryKey.match('\\[(.*?)\\]')[1]] ) {
+                    childIndex = index
+                    currentFilter= {
+                      type: filter.type,
+                      slug: filter.slug,
+                      id: child.id,
+                      name: child.name,
+                      value: true,
+                      filterIndex: filterIndex,
+                      childIndexInFilters: index,
+                      childItemIndexInFilters: null
+                    }
+                  }
+                })
+
                 setTimeout(() => {
                   this.setUpdateCheckboxFilterDefault({
                     default: true,
@@ -137,7 +174,35 @@ export default {
                     childItemIndexInFilters: null,
                   })
                 }, 1)
+
+                //push in applied filter
+                let appliedFilters = [...this.appliedFilters]
+                this.setUpdateAppliedFilter({
+                  index: appliedFilters.length,
+                  value: currentFilter
+                });
               } else {
+                let childIndex;
+
+                filter.children.forEach((child, index) => {
+                  if(child.id === +[routeQueryKey.match('\\[(.*?)\\]')[1]] ) {
+                    childIndex = index
+                    currentFilter= {
+                      type: filter.type,
+                      slug: filter.slug,
+                      id: child.id,
+                      count: +routeQueryValue,
+                      name: child.name,
+                      filterIndex: filterIndex,
+                      itemIndex: index
+                    }
+                  }
+                })
+
+                this.setUpdateAppliedFilter({
+                  index: appliedFilters.length,
+                  value: currentFilter
+                });
                 setTimeout(() => {
                   this.setUpdateFilterDefault({
                     default: +routeQueryValue,
