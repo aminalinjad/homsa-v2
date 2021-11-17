@@ -198,7 +198,8 @@ export default {
                     }
                   }
                 })
-
+                //push in applied filter
+                let appliedFilters = [...this.appliedFilters]
                 this.setUpdateAppliedFilter({
                   index: appliedFilters.length,
                   value: currentFilter
@@ -213,36 +214,8 @@ export default {
               }
 
             }
-            // if (filter.type === 'list') {
-            //
-            // } else {
-            //   // if (filter.children) {
-            //   //   let childIndex = filter.children
-            //   //     .map(child => {
-            //   //       return child.id;
-            //   //     })
-            //   //     .indexOf(+routeQueryValue);
-            //     if (filter.type === 'list_checkbox') {
-            //       let childIndex = filter.children
-            //         .map(child => {
-            //           return child.id;
-            //         })
-            //         .indexOf(+routeQueryValue);
-            //
-            //       // set in default filter value
-            //       this.setUpdateCheckboxFilterDefault({
-            //         default: true,
-            //         filterIndex: filterIndex,
-            //         childIndexInFilters: childIndex,
-            //         childItemIndexInFilters: null,
-            //       })
-            //     } else {
-            //
-            //     }
-            //   // }
-            //
-            // }
-          } else {
+          }
+          else {
             if (routeQueryValue) {
               // push it in appliedFilterList Array
               // this.filters.forEach((filter, filterIndex) => {
@@ -255,10 +228,13 @@ export default {
                     maxPrice: this.$route.query.max_price,
                     filterIndex: filterIndex
                   }
+
+                  let appliedFilters = [...this.appliedFilters]
                   appliedFilters.push(currentFilter)
                   this.setAppliedFilter(appliedFilters)
                 }
               } else if (filter.slug === routeQueryKey) {
+                console.log('test',routeQueryKey, filter.slug)
                 //push in applied filter
                 let appliedFilters = [...this.appliedFilters]
 
@@ -270,7 +246,6 @@ export default {
                 };
                 if (filter.type === 'counter') {
                   currentFilter.count = routeQueryValue
-
                   //set in default filter value
                   this.setUpdateFilterDefault({
                     default: +routeQueryValue,
@@ -278,7 +253,6 @@ export default {
                   });
                 } else {
                   currentFilter.value = routeQueryValue
-
                   //set in default filter value
                   setTimeout(() => {
                     //using set timeout is necessary couse default value of filter doesnt overwrite this change
@@ -289,19 +263,13 @@ export default {
                   }, 1)
 
                 }
+
                 this.setUpdateAppliedFilter({
                   index: appliedFilters.length,
                   value: currentFilter
                 });
 
               }
-              // })
-
-              // if (routeQueryValue === 'true') {
-              //   data[routeQueryKey] = true
-              // }else {
-              //   data[routeQueryKey] = +routeQueryValue
-              // }
             }
           }
         })
