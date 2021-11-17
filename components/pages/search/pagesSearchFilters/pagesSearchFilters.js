@@ -12,51 +12,18 @@ export default {
   },
   data() {
     return {
-      appliedFilterList: [],
-      filterPanelSettings: [],
-      filterTypes: [],
-      data: {
-        q: "tehran",
-        page: 1,
-        sort: "popular",
-      },
       resetPriceValue: false,
-      histogramSectionWidth: null,
-      rangeBtnDisable: true,
     };
   },
   computed: {
     ...mapGetters({
       filters: `modules/filters/${types.filters.getters.GET_FILTERS}`,
       appliedFilters: `modules/filters/${types.filters.getters.GET_APPLIED_FILTER}`,
-      histogramPrices: `modules/filters/${types.filters.getters.GET_HISTOGRAM_PRICES}`,
-      mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
       getRequestData: `modules/requestData/${types.requestData.getters.GET_REQUEST_DATA}`
     }),
-    histogramData() {
-      let filterHistogramPrices = this.histogramPrices;
-      let histogramData = [];
-
-      filterHistogramPrices.forEach(
-        (histogramPriceObject, histogramPriceIndex) => {
-          for (
-            let priceCount = 0;
-            priceCount < histogramPriceObject.doc_count;
-            priceCount++
-          ) {
-            histogramData.push(histogramPriceObject.key);
-          }
-        }
-      );
-      return histogramData;
-    }
   },
   mounted() {
     if (this.appliedFilters.length === 0) this.setFilterValueFromQueries();
-    window.addEventListener("resize", this.checkSize);
-  },
-  destroyed() {
-    window.removeEventListener("resize", this.checkSize);
   },
   methods: {
     ...mapActions({
@@ -70,10 +37,6 @@ export default {
       setUpdateAppliedFilter: `modules/filters/${types.filters.actions.SET_UPDATE_APPLIED_FILTER}`,
     }),
 
-    submitFilter(data, index) {
-      console.log(data)
-      console.log(index)
-    },
     componentName(filterType) {
       switch (filterType) {
         case 'price_range':
@@ -88,13 +51,6 @@ export default {
         case 'list':
           return 'pagesSearchFiltersCheckboxGroup';
       }
-    },
-
-    minusIconColorForCounterFilter(filterIndex) {
-      return this.filterPanelSettings[filterIndex].count === 0 ? this.$vuetify.theme.themes.light.secondary : this.$vuetify.theme.themes.light.greenDark8;
-    },
-    minusIconColor(filterIndex, index) {
-      return this.filterPanelSettings[filterIndex].ItemCounts[index].count === 0 ? this.$vuetify.theme.themes.light.secondary : this.$vuetify.theme.themes.light.greenDark8;
     },
 
     setFilterValueFromQueries() {
@@ -217,7 +173,7 @@ export default {
           }
           else {
             if (routeQueryValue) {
-              // push it in appliedFilterList Array
+              // push it in appliedFilter Array
               // this.filters.forEach((filter, filterIndex) => {
               if (filter.slug === 'price_range' && routeQueryKey === 'min_price') {
                 if (this.$route.query.min_price && this.$route.query.max_price) {
@@ -274,290 +230,9 @@ export default {
           }
         })
       }
-      // push it in appliedFilterList Array
+      // push it in appliedFilter Array
 
       //set default value
-    },
-
-    setDataFromUrlQueries() {
-      let routeQueries = this.$route.query;
-
-      this.filterTypes.forEach((filterType, filterTypeIndex) => {
-        if (filterType.type === "price_range") {
-          if (routeQueries.min_price && routeQueries.max_price) {
-            this.rangeSliderFrom = this.$route.query.min_price;
-            this.data.min_price = parseInt(routeQueries.min_price);
-
-            this.rangeSliderTo = this.$route.query.max_price;
-            this.data.max_price = parseInt(routeQueries.max_price);
-          }
-
-          // push it in appliedFilterList Array
-          let filterIndex = this.filters
-            .map(filter => {
-              return filter.slug;
-            })
-            .indexOf(filterType.slug);
-          let appliedFilterExist;
-          this.appliedFilterList.forEach(
-            (appliedFilter, appliedFilterIndex) => {
-              if (appliedFilter.slug === this.filters[filterIndex].slug) {
-                appliedFilterExist = true;
-              }
-            }
-          );
-          if (!appliedFilterExist && routeQueries.min_price && routeQueries.max_price) {
-            this.appliedFilterList.push({
-              type: this.filters[filterIndex].type,
-              slug: this.filters[filterIndex].slug,
-              minPrice: routeQueries.min_price,
-              maxPrice: routeQueries.max_price,
-              indexInFilterPanelSettings: filterIndex,
-            });
-          }
-        } else if (filterType.type === "counter") {
-          for (let [routeQueryKey, routeQueryValue] of Object.entries(
-            routeQueries
-          )) {
-            if (routeQueryKey.includes(filterType.slug)) {
-              this.data[filterType.slug] = routeQueryValue
-                ? parseInt(routeQueryValue)
-                : 0;
-
-              // push it in appliedFilterList Array
-              let filterIndex = this.filters
-                .map(filter => {
-                  return filter.slug;
-                })
-                .indexOf(filterType.slug);
-              let appliedFilterExist;
-              this.appliedFilterList.forEach(
-                (appliedFilter, appliedFilterIndex) => {
-                  if (appliedFilter.slug === this.filters[filterIndex].slug) {
-                    appliedFilterExist = true;
-                    parseInt(routeQueryValue) > 0
-                      ? (this.appliedFilterList[appliedFilterIndex].count =
-                        parseInt(routeQueryValue))
-                      : this.clearFilter(appliedFilter, appliedFilterIndex);
-                  }
-                }
-              );
-              if (!appliedFilterExist && routeQueryValue) {
-                this.appliedFilterList.push({
-                  type: this.filters[filterIndex].type,
-                  slug: this.filters[filterIndex].slug,
-                  name: this.filters[filterIndex].name,
-                  count: parseInt(routeQueryValue),
-                  indexInFilterPanelSettings: filterIndex,
-                });
-              }
-            }
-          }
-        } else if (this.filterTypes[filterTypeIndex].type === "list_counter") {
-          let filterListCounterItems = [];
-          for (let [routeQueryKey, routeQueryValue] of Object.entries(
-            routeQueries
-          )) {
-            if (routeQueryKey.includes(filterType.slug)) {
-              let routeQueryId = parseInt(
-                routeQueryKey.substring(
-                  filterType.slug.length + 1,
-                  routeQueryKey.length - 1
-                )
-              );
-              if (routeQueryValue) {
-                filterListCounterItems.push({
-                  id: routeQueryId,
-                  count: parseInt(routeQueryValue),
-                });
-                this.data[filterType.slug] = {
-                  [routeQueryId]: parseInt(routeQueryValue)
-                };
-                console.log('data', this.data[filterType.slug]);
-              }
-
-              // push it in appliedFilterList Array
-              let filterIndex = this.filters
-                .map(filter => {
-                  return filter.slug;
-                })
-                .indexOf(filterType.slug);
-              let appliedFilterExist;
-              this.appliedFilterList.forEach(
-                (appliedFilter, appliedFilterIndex) => {
-                  if (
-                    appliedFilter.slug === this.filters[filterIndex].slug &&
-                    appliedFilter.id === routeQueryId
-                  ) {
-                    appliedFilterExist = true;
-                    parseInt(routeQueryValue) > 0
-                      ? (this.appliedFilterList[appliedFilterIndex].count =
-                        parseInt(routeQueryValue))
-                      : this.clearFilter(appliedFilter, appliedFilterIndex);
-                  }
-                }
-              );
-              if (!appliedFilterExist && routeQueryValue) {
-                // search in children of this filter to find index of a child that it`s id is equal to routeQueryId
-                let itemIndex = this.filters[filterIndex].children
-                  .map(child => {
-                    return child.id;
-                  })
-                  .indexOf(routeQueryId);
-
-                //so I have all needed values to push them fo applied filter list
-                this.appliedFilterList.push({
-                  type: this.filters[filterIndex].type,
-                  slug: this.filters[filterIndex].slug,
-                  id: routeQueryId,
-                  name: this.filters[filterIndex].children[itemIndex].name,
-                  count: parseInt(routeQueryValue),
-                  indexInFilterPanelSettings: filterIndex,
-                  itemIndexInFilterPanelSettings: itemIndex,
-                });
-              }
-            }
-          }
-          if (filterListCounterItems.length > 0) {
-            this.data[filterType.slug] = filterListCounterItems;
-          }
-        } else if (this.filterTypes[filterTypeIndex].type === "switch") {
-          for (let [routeQueryKey, routeQueryValue] of Object.entries(
-            routeQueries
-          )) {
-            if (routeQueryKey.includes(filterType.slug)) {
-              this.data[filterType.slug] = routeQueryValue === "true";
-
-              // push it in appliedFilterList Array
-              let filterIndex = this.filters
-                .map(filter => {
-                  return filter.slug;
-                })
-                .indexOf(filterType.slug);
-              let appliedFilterExist;
-              this.appliedFilterList.forEach(
-                (appliedFilter, appliedFilterIndex) => {
-                  if (appliedFilter.slug === this.filters[filterIndex].slug) {
-                    appliedFilterExist = true;
-                    routeQueryValue
-                      ? (this.appliedFilterList[appliedFilterIndex].value =
-                        routeQueryValue)
-                      : this.clearFilter(appliedFilter, appliedFilterIndex);
-                  }
-                }
-              );
-              if (!appliedFilterExist && routeQueryValue) {
-                this.appliedFilterList.push({
-                  type: this.filters[filterIndex].type,
-                  slug: this.filters[filterIndex].slug,
-                  name: this.filters[filterIndex].name,
-                  value: routeQueryValue,
-                  indexInFilterPanelSettings: filterIndex,
-                });
-              }
-            }
-          }
-        } else if (
-          this.filterTypes[filterTypeIndex].type === "list" ||
-          this.filterTypes[filterTypeIndex].type === "list_checkbox"
-        ) {
-          let filterCheckBoxItems = [];
-          for (let [routeQueryKey, routeQueryValue] of Object.entries(
-            routeQueries
-          )) {
-            if (routeQueryKey.includes(filterType.slug)) {
-              if (routeQueryValue) {
-                filterCheckBoxItems.push(parseInt(routeQueryValue));
-
-                // push it in appliedFilterList Array
-                let routeQueryId = parseInt(
-                  routeQueryKey.substring(
-                    filterType.slug.length + 1,
-                    routeQueryKey.length - 1
-                  )
-                );
-
-                let filterIndex = this.filters
-                  .map(filter => {
-                    return filter.slug;
-                  })
-                  .indexOf(filterType.slug);
-                let appliedFilterExist;
-                this.appliedFilterList.forEach(
-                  (appliedFilter, appliedFilterIndex) => {
-                    if (
-                      appliedFilter.slug === this.filters[filterIndex].slug &&
-                      appliedFilter.id === routeQueryId
-                    ) {
-                      appliedFilterExist = true;
-                      routeQueryValue
-                        ? (this.appliedFilterList[appliedFilterIndex].value =
-                          routeQueryValue)
-                        : this.clearFilter(appliedFilter, appliedFilterIndex);
-                    }
-                  }
-                );
-                if (!appliedFilterExist) {
-                  if (this.filterTypes[filterTypeIndex].type === "list") {
-                    // search in children of this filter to find index of a child that it`s id is equal to routeQueryId
-                    let childIndex = null;
-                    let childItemIndex = null;
-
-                    this.filters[filterIndex].children.forEach(
-                      (child, index) => {
-                        child.children.forEach((childItem, i) => {
-                          if (childItem.id === routeQueryId) {
-                            childItemIndex = i;
-                            childIndex = index;
-                          }
-                        });
-                      }
-                    );
-                    //so I have all needed values to push them fo applied filter list
-                    this.appliedFilterList.push({
-                      type: this.filters[filterIndex].type,
-                      slug: this.filters[filterIndex].slug,
-                      id: routeQueryId,
-                      name: this.filters[filterIndex].children[childIndex]
-                        .children[childItemIndex].name,
-                      value: routeQueryValue,
-                      indexInFilterPanelSettings: filterIndex,
-                      childIndexInFilterPanelSettings: childIndex,
-                      childItemIndexInFilterPanelSettings: childItemIndex,
-                    });
-                  } else {
-                    // search in children of this filter to find index of a child that it`s id is equal to routeQueryId
-                    let childIndex = this.filters[filterIndex].children
-                      .map(child => {
-                        return child.id;
-                      })
-                      .indexOf(routeQueryId);
-
-                    //so I have all needed values to push them fo applied filter list
-                    this.appliedFilterList.push({
-                      type: this.filters[filterIndex].type,
-                      slug: this.filters[filterIndex].slug,
-                      id: routeQueryId,
-                      name: this.filters[filterIndex].children[childIndex].name,
-                      value: routeQueryValue,
-                      indexInFilterPanelSettings: filterIndex,
-                      childIndexInFilterPanelSettings: childIndex,
-                    });
-                  }
-                }
-              }
-            }
-          }
-          if (filterCheckBoxItems.length > 0) {
-            this.data[filterType.slug] = filterCheckBoxItems;
-          }
-        }
-      });
-    },
-    checkSize() {
-      if (Object.entries(this.$refs.histogramParentDiv).length !== 0) {
-        this.histogramWidth = this.$refs.histogramParentDiv[0].clientWidth;
-      }
     },
 
     clearFilter(appliedFilter, appliedFilterIndex) {
@@ -635,7 +310,7 @@ export default {
         });
     },
 
-    clearAllFilter(appliedFilterList) {
+    clearAllFilter() {
       setTimeout(() => {
         this.$nuxt.$loading.start();
       }, 1);
@@ -677,8 +352,11 @@ export default {
       // set in requestData
       this.setRequestData(staticData)
 
-      // // clear all appliedFilterList
+      // // clear all appliedFilter
       this.setAppliedFilter([])
+
+      // reset min and max price values by changing props
+      this.resetPriceValue = !this.resetPriceValue
 
       return SearchServices.searchResults(staticData).then((res) => {
         this.setSearchResult(res.data);

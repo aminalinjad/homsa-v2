@@ -100,7 +100,7 @@ export default {
     },
     checkSize() {
       if (this.$refs.histogramParentDiv && Object.entries(this.$refs.histogramParentDiv).length !== 0) {
-        this.histogramWidth = this.$refs.histogramParentDiv[0].clientWidth;
+        this.histogramWidth = this.$refs.histogramParentDiv.clientWidth;
       }
     },
     selectRange(e) {
