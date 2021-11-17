@@ -105,9 +105,7 @@ export default {
       this.$router.push({query: {...this.$route.query, showMap: 'false'}})
     },
     boundsUpdated(bounds) {
-
       this.bounds = bounds;
-      console.log(this.bounds)
     },
     rankColor(color) {
       if (color >= 4) {

@@ -34,13 +34,7 @@ export default {
   loading: '~/components/loading/Loading.vue',
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  // plugins: [
-  //   '@/plugins/axios',
-  //   '@/plugins/histogram-slider',
-  // ],
-
   plugins: [
-    {src:'@/plugins/axios'},
     {src:'@/plugins/comma'},
     {src:'@/plugins/histogram-slider', mode:'client'},
     {src: '@/plugins/owl.js', mode:'client'},

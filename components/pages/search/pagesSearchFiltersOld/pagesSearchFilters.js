@@ -300,7 +300,6 @@ export default {
                 });
                 this.data[filterType.slug] = {
                   [routeQueryId]:  parseInt(routeQueryValue)};
-                console.log('data', this.data[filterType.slug]);
               }
 
 

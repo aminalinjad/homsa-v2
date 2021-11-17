@@ -26,7 +26,6 @@ API_V1.interceptors.response.use(
 
 
     if (error && error.response.config.method !== "get") {
-
       Vue.$toast.clear();
       if (error.response.data.errors && Object.entries(error.response.data.errors).length > 0) {
         Object.values(error.response.data.errors).forEach(value => {

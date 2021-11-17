@@ -75,7 +75,6 @@ export default {
     test() {
       let data = {}
       for (let [routeQueryKey, routeQueryValue] of Object.entries(this.$route.query)) {
-        console.log(routeQueryKey)
         if (routeQueryKey.match('\\[(.*?)\\]')) {
           data[routeQueryKey.split('[')[0]] = {...data[routeQueryKey.split('[')[0]], [routeQueryKey.match('\\[(.*?)\\]')[1]]: +routeQueryValue}
         } else {
@@ -88,9 +87,6 @@ export default {
           }
         }
       }
-      console.log(data)
-
-
     }
   },
 };

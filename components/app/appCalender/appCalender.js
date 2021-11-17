@@ -225,7 +225,6 @@ export default {
           this.setDisplayedCalendar(0, 1);
         })
         .catch((err) => {
-          console.log(err);
         });
     },
     submitDate() {

@@ -131,7 +131,6 @@ export default {
       let appliedFilters = [...this.appliedFilter]
 
       let appliedFilterIndex = appliedFilters.findIndex(appliedFilter => appliedFilter.slug === filter.slug)
-      console.log(appliedFilterIndex)
       if (appliedFilterIndex >= 0) {
         this.setUpdateAppliedFilter({
           index: appliedFilterIndex,

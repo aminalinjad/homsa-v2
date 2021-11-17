@@ -5,7 +5,6 @@ import MinusIcon from "@/assets/AppIcons/minus.vue";
 import AddIcon from "@/assets/AppIcons/add.vue";
 
 export default {
-  props: {},
   components: {
     MinusIcon,
     AddIcon,
@@ -177,7 +176,6 @@ export default {
               // this.filters.forEach((filter, filterIndex) => {
               if (filter.slug === 'price_range' && routeQueryKey === 'min_price') {
                 if (this.$route.query.min_price && this.$route.query.max_price) {
-                  console.log('in price')
                   let currentFilter = {
                     slug: filter.slug,
                     minPrice: this.$route.query.min_price,
@@ -190,7 +188,6 @@ export default {
                   this.setAppliedFilter(appliedFilters)
                 }
               } else if (filter.slug === routeQueryKey) {
-                console.log('test',routeQueryKey, filter.slug)
                 //push in applied filter
                 let appliedFilters = [...this.appliedFilters]
 

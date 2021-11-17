@@ -58,7 +58,6 @@ export default {
       guest: 5
     }
     return SearchServices.searchResults(data).then(res => {
-      // console.log(res.data)
       store.dispatch('modules/search/SET_SEARCH_RESULTS', res.data)
       store.dispatch('modules/filters/SET_FILTERS', res.data.filters.filters)
       store.dispatch('modules/filters/SET_HISTOGRAM_PRICES', res.data.histogram_prices.prices)
