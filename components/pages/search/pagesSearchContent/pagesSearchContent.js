@@ -14,7 +14,7 @@ export default {
       page: 1,
       currentPage: Number(this.$route.query.page) || 1,
       gridViewMode: true,
-      sortByDefault: "popular",
+      sortByDefault: this.$route.query.sort? this.$route.query.sort : "popular",
     };
   },
   watch: {

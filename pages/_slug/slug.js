@@ -5,6 +5,7 @@ import {indexOf} from "core-js/internals/array-includes";
 
 export default {
   layout: "search",
+  name: 'slugPage',
   props: [],
   head() {
     return {
@@ -18,6 +19,7 @@ export default {
       data: null
     };
   },
+
   asyncData({params, app, store, route, router}) {
     let data = {
       page: Number(route.query.page) || 1,
@@ -65,6 +67,8 @@ export default {
   },
   mounted() {
     this.test()
+    this.$cookies.set('test' , 'amir piri')
+    console.log(this.$cookies.get('test'))
   },
   methods: {
     ...mapActions({
