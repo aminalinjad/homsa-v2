@@ -1,5 +1,6 @@
 import axios from "axios";
 import Vue from "vue";
+
 const headers = {
   "Content-Type": "application/json",
   Accept: "application/json",
@@ -8,7 +9,7 @@ const headers = {
 const API_V1 = axios.create({
   // baseURL: "https://new-homsa-dev.ernyka.com/api/website/v1",
   baseURL: "http://homsa.test/api/website/v1",
-  // headers: headers
+  headers: headers
 });
 
 API_V1.interceptors.response.use(
@@ -20,7 +21,7 @@ API_V1.interceptors.response.use(
       if ($nuxt.$loading.loading) {
         $nuxt.$loading.finish()
       }
-    } , 100)
+    }, 100)
 
 
     if (error && error.response.config.method !== "get") {
