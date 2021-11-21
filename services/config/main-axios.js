@@ -8,6 +8,7 @@ const headers = {
 const API_V1 = axios.create({
   // baseURL: "https://new-homsa-dev.ernyka.com/api/website/v1",
   baseURL: "http://homsa.test/api/website/v1",
+  // baseURL: "http://172.25.1.40/api/website/v1",
   // headers: headers
 });
 

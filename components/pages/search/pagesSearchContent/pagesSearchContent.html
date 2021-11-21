@@ -1,11 +1,11 @@
 <v-container class="px-md-0 pt-0">
   <!-- Top Section Start  -->
   <v-row class="mb-3 align-center">
-    <v-col lg="7">
+    <v-col cols="12" lg="6" xl="7">
       <PagesSearchResultTitle/>
     </v-col>
-    <v-col lg="5">
-      <v-row justify="end" align="center" class="ma-0">
+    <v-col cols="12" lg="6" xl="5">
+      <v-row :justify="$vuetify.breakpoint.md ? 'space-between' : 'end'" align="center" class="ma-0">
         <v-col cols="auto" class="pa-0">
           <v-row  align="center" class="ma-0">
               <span class="font-regular-12 secondary--text">
@@ -79,7 +79,8 @@
     <v-row v-if="getSearchResult.data.length !== 0" class="ma-0">
       <v-col
         cols="12"
-        :md="gridViewMode ? 4 : 12"
+        :md="gridViewMode ? 6 : 12"
+        :lg="gridViewMode ? 4 : 12"
         v-for="(result, index) in getSearchResult.data"
         :key="index"
         class="px-6 resultBorder cursorPointer"

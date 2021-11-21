@@ -6,9 +6,11 @@
       <v-container class="" :fluid="$vuetify.breakpoint.md">
         <v-row class="justify-center">
           <v-col class="filterContainer">
-            <PagesSearchFilters />
+<!--            <affix relative-element-selector="#resultSectionContainer">-->
+              <PagesSearchFilters />
+<!--            </affix>-->
           </v-col>
-          <v-col class="resultContainer">
+          <v-col id="resultSectionContainer" class="resultContainer">
             <PagesSearchContent />
           </v-col>
         </v-row>
@@ -34,6 +36,7 @@
 import {mapGetters, mapActions} from "vuex"
 import * as types from "@/store/types.js"
 import {SearchServices} from "@/services"
+// import { Affix } from 'vue-affix'
 
 export default {
   layout: "search",
@@ -44,6 +47,9 @@ export default {
       title: this.getSearchResult.title,
     }
   },
+  // components: {
+  //   Affix
+  // },
   data() {
     return {
       id: 444,
@@ -99,7 +105,7 @@ export default {
 .filterContainer {
   flex: 0 0 336px;
   height: max-content;
-  position: sticky;
+  //position: sticky;
   top: 96px;
 }
 
@@ -107,7 +113,7 @@ export default {
   // flex: 0 0 1008px;
   overflow: hidden;
   height: max-content;
-  position: sticky;
+  //position: sticky;
   top: 96px;
 }
 
