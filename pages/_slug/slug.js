@@ -6,7 +6,7 @@ import {indexOf} from "core-js/internals/array-includes";
 export default {
   layout: "search",
   name: 'slugPage',
-  props: [],
+  middleware: 'checkToken',
   head() {
     return {
       title: this.getSearchResult.title,
@@ -67,8 +67,6 @@ export default {
   },
   mounted() {
     this.test()
-    this.$cookies.set('test' , 'amir piri')
-    console.log(this.$cookies.get('test'))
   },
   methods: {
     ...mapActions({

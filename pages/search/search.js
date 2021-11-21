@@ -5,7 +5,7 @@ import {SearchServices} from "@/services";
 export default {
   layout: "search",
   name: 'searchPage',
-  props: [],
+  middleware: 'checkToken',
   head() {
     return {
       title: this.getSearchResult.title,

@@ -1,16 +1,14 @@
 import axios from "axios";
 import Vue from "vue";
-
-
 const headers = {
   "Content-Type": "application/json",
   Accept: "application/json",
-  'Accept-Language': 'fa'
+  'Accept-Language': 'fa',
 };
 const API_V1 = axios.create({
   // baseURL: "https://new-homsa-dev.ernyka.com/api/website/v1",
-  baseURL: "http://172.25.1.40/api/website/v1",
-  headers: headers
+  baseURL: "http://homsa.test/api/website/v1",
+  // headers: headers
 });
 
 API_V1.interceptors.response.use(
