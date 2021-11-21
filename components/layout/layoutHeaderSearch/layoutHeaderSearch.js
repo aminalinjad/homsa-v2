@@ -34,11 +34,11 @@ export default {
       },
       userDestinationSearch: "",
       searchFormValue: {
-        destination: null,
+        destination: this.$route.query.q ? this.$route.query.q : null,
         checkIn: null,
         checkOut: null,
         flexibility: 1,
-        guest: 1
+        guest: this.$route.query.guest ? this.$route.query.guest: 1
       },
       suggestionsDefault: [],
       suggestion: true
