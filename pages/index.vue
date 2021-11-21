@@ -37,6 +37,7 @@ import {SearchServices} from "@/services"
 
 export default {
   layout: "search",
+  name: 'mainPage',
   props: [],
   head() {
     return {
