@@ -25,8 +25,8 @@ export default {
       page: Number(route.query.page) || 1,
       sort: route.query.sort ? route.query.sort : 'popular',
       guest: Number(route.query.guest) || 1,
-      checkin: route.query.checkInDate,
-      checkout: route.query.checkOutDate,
+      checkin: route.query.checkin,
+      checkout: route.query.checkout,
     }
     let splitSlug = params.slug.split('-')
 

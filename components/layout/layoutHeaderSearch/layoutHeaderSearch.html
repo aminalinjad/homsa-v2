@@ -21,10 +21,15 @@
       <v-row>
         <!-- header logo -->
         <v-col>
-          <img
-            src="@/assets/images/logo-homsa.svg"
-            class="mt-2 cursorPointer"
-          />
+          <a :href="$config.baseUrl">
+<!--            <h1>{{ process && process.env && process.env.baseUrl}}</h1>-->
+<!--            <h1>{{ process ? process.env.baseUrl : 'null'  }}</h1>-->
+            <img
+              src="@/assets/images/logo-homsa.svg"
+              class="mt-2 cursorPointer"
+            />
+          </a>
+
         </v-col>
 
         <!-- header input -->
@@ -133,6 +138,7 @@
             </v-btn>
             <v-divider vertical class="mx-3 greyLight4"></v-divider>
             <v-menu
+              v-if="userProfile"
               ref="menuRef"
               fixed
               :left="$vuetify.rtl"
@@ -140,6 +146,7 @@
               offset-y
               min-width="184"
             >
+
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   rounded
@@ -153,7 +160,7 @@
                   <v-icon size="22">$profile</v-icon>
                   <div class="ms-2">
                       <span class="font-medium-14">
-                        {{ $t("header.top.user.login") }} / {{ $t("header.top.user.register") }}
+                        {{ userProfile.full_name }}
                       </span>
                   </div>
                 </v-btn>
@@ -161,7 +168,7 @@
               <v-list class="cursorPointer">
                 <v-list-item link to="">
                   <v-list-item-subtitle class="greenDark8--text"
-                  >{{ userMenu.menuTitle }}
+                  ><a :href="`${$config.baseUrl}/users/edit`">{{ userMenu.menuTitle }}</a>
                   </v-list-item-subtitle>
                 </v-list-item>
                 <v-divider class="greyLight4"></v-divider>
@@ -169,7 +176,7 @@
                   v-for="(item, index) in userMenu.menuBody"
                   :key="index"
                   link
-                  :to="item.link"
+                  :href="item.link"
                 >
                   <v-list-item-subtitle class="secondary--text"
                   >{{ item.name }}
@@ -180,7 +187,7 @@
                   v-for="(item, index) in userMenu.menuFooter"
                   :key="`${index + userMenu.menuBody.length}`"
                   link
-                  :to="item.link"
+                  :href="item.link"
                 >
                   <v-list-item-subtitle class="secondary--text"
                   >{{ item.name }}
@@ -188,6 +195,14 @@
                 </v-list-item>
               </v-list>
             </v-menu>
+            <div v-else>
+              <a :href="`${$config.baseUrl}/login`">
+                <span class="ps-1 pe-2 py-1 text-capitalize">{{
+                    $t("header.top.user.login")
+                  }} / {{ $t("header.top.user.register") }}</span>
+              </a>
+
+            </div>
             <v-divider vertical class="mx-3 greyLight4"></v-divider>
             <v-btn
               icon
@@ -277,7 +292,7 @@
 
           <template v-slot:item="data">
             <v-list-item-avatar rounded width="48" height="48" class="ms-2">
-              <img :src="data.item.image" />
+              <img :src="data.item.image"/>
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title

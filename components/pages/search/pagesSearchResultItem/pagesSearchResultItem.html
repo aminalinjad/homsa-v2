@@ -45,7 +45,7 @@
               >(
                 <span
                   :class="$i18n.locale === 'fa' ? 'font-FaNumregular-10' : ''"
-                >360</span
+                >{{ place.review_count }}</span
                 >
                 <span>{{ $t("search.main.item.comments") }}</span>
                 )</span
@@ -152,7 +152,7 @@
                 >(
                   <span
                     :class="$i18n.locale === 'fa' ? 'font-FaNumregular-12' : ''"
-                  >460</span
+                  >{{ place.review_count }}</span
                   >
                   <span>{{ $t("search.main.item.comments") }}</span>
                   )</span
