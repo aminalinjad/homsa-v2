@@ -1,0 +1,13 @@
+import {API_V1} from "../services/config/main-axios";
+
+export default function ({app}) {
+  let token = app.$cookies.get('access_token')
+  // let token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZTQ3M2M5ZDQ2Mjk2ZGRkMjQxZDM3YmIzZWI4YmMxZDNmYzQyY2ZkNDU5MGYzYTA3NmQ4M2M4MTc5OTgyMjNhYmU4ZGVhY2JhMjQ4MTJhNzUiLCJpYXQiOjE2Mzc1NjY5MDkuNTkyNjIzLCJuYmYiOjE2Mzc1NjY5MDkuNTkyNjI2LCJleHAiOjE2Mzc1NzQxMDkuNTgxNTE4LCJzdWIiOiIxOTg1NSIsInNjb3BlcyI6W119.r1U710GEouE_3A5HVLl88gYnFWeadlP82SsDiNU1EVJ-kguYQhA6LzWdcWkhdTbH8hiQg5iQudOU1P1dNMYwndRbKTYzMlXv6lDsci-KdoN9XX1sh6UAHPtnU7VKO-svE9UFhSrX40JxaZEH06a8iUPaaPjbzD9SZ2D589j03q04utZnrJQU9N-IIftVWkTdQ3s43w5-g1WN8Z4ETmoFJ4bzLtce2eoSGawAemiJo2sLHIzQXHKNCM0JzDL_n26Nf-TwuG2lzVo56X8g7eP38hmKjxxv_C8rMcqD2PbU8mhE-VU1omeoEEyobN1jCPiFH0BoEqMil5TA9TrHjhXsgwlYfZxxacph57KFtSn7eOFDsZSb_k3mxuJ4Fik3lBShKdXwi2dumBkYhTSBTAS4a_9Jer2XTPR5bb5XYbSbM1iJ2cKi2-QzmUqv8tpFKhWmiisfDjaUM64T1ParJkSpDJTNhN_DHHyS_qVsRgNjedNd3ASYUUhleKCxlgmAoT6cGDOuucSeua3NJiGoEFxfZDIrCWshB9lthgSvej1otW9DdjN5hE6E2liuqbpXWv03BfHbQMXCEdTwVwsa2QpRCGEuGBiNsCBN4FFLNPh1PYHhj0uCZJSczzR9BB8s0HlXSUMzGH0b3bUqvZlavURF0eisOK69bTinfL6aoCL1YDY'
+  // app.$cookies.set('access_token' , token)
+  console.log(token)
+  if (token) {
+    API_V1.defaults.headers.common = {
+      Authorization: `Bearer ${token}`
+    }
+  }
+}

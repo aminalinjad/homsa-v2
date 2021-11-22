@@ -105,8 +105,11 @@ export default {
     gridView() {
       this.gridViewMode = true;
     },
-    itemPage() {
-      this.$router.push('/#')
+    itemPage(link) {
+      window.open(
+        link,
+        '_blank' // <- This is what makes it open in a new window.
+      );
     }
   },
 };

@@ -8,7 +8,7 @@
     >
       <template v-slot:item="{ item }">
         <v-breadcrumbs-item
-          :href="item.type ? `https://homsa.net/${item.type}-${item.slug}` : 'https://homsa.net'"
+          :href="item.type ? `${$config.baseUrl}/${item.type}-${item.slug}` : $config.baseUrl"
           :disabled="item.disable"
         >
           {{ item.title }}

@@ -2,6 +2,10 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
+
+  publicRuntimeConfig: {
+    baseUrl: 'http://172.25.1.40',
+  },
   head: {
     titleTemplate: '%s - homsa',
     title: 'homsa',
@@ -20,7 +24,7 @@ export default {
   },
   env: {
     // baseUrl: process.env.BASE_URL || 'http://localhost:3000'
-    baseUrl: process.env.BASE_URL || 'https://api-dev-ex.ernyka.com/api/'
+    baseUrl: 'https://api-dev-ex.ernyka.com/api/'
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -36,6 +40,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     {src:'@/plugins/comma'},
+    {src:'@/plugins/axios'},
     {src:'@/plugins/histogram-slider', mode:'client'},
     {src: '@/plugins/owl.js', mode:'client'},
     {src: '@/plugins/toast', mode:'client'},

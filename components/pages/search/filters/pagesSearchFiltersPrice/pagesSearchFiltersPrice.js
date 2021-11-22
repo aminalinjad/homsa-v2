@@ -141,9 +141,6 @@ export default {
         this.setAppliedFilter(appliedFilters)
       }
 
-      // if (appliedFilters.length === 0 || appliedFilterIndex < 0) {
-      //   appliedFilters.push(currentFilter)
-      // }
 
       //set in req data
       let data = {...this.getRequestData}

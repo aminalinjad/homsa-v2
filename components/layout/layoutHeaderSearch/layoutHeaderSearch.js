@@ -1,5 +1,5 @@
 import { mapActions, mapGetters } from "vuex";
-import { SearchServices } from "@/services";
+import { SearchServices , Profile } from "@/services";
 import * as types from "@/store/types.js";
 import MinusIcon from "@/assets/AppIcons/minus.vue";
 import AddIcon from "@/assets/AppIcons/add.vue";
@@ -11,6 +11,8 @@ export default {
   },
   data() {
     return {
+      ytyty: process?.env?.baseUrl,
+      userProfile: null,
       calendar: false,
       clearCalendar: false,
       checkInDate: null,
@@ -22,14 +24,13 @@ export default {
       userMenu: {
         menuTitle: "مشاهده حساب کاربری",
         menuBody: [
-          { name: "اقامتگاه‌های من", link: "#1" },
-          { name: "رزروهای من", link: "#2" },
-          { name: "لیست اعلان‌ها", link: "#3" },
-          { name: "لیست علاقه مندی‌ها", link: "#4" }
+          { name: "رزروهای من", link: `${this.$config.baseUrl}/reservation_list` },
+          { name: "لیست اعلان‌ها", link: `${this.$config.baseUrl}/users/notifications` },
+          { name: "لیست علاقه مندی‌ها", link: `${this.$config.baseUrl}/wishlists/my` }
         ],
         menuFooter: [
-          { name: "پشتیبانی", link: "#5" },
-          { name: "خروج", link: "#6" }
+          { name: "پشتیبانی", link: `${this.$config.baseUrl}/users/support` },
+          { name: "خروج", link: `${this.$config.baseUrl}/logout` }
         ]
       },
       userDestinationSearch: "",
@@ -73,7 +74,8 @@ export default {
 
   mounted() {
     window.addEventListener("scroll", this.scrollPage, { passive: true });
-    this.destinationSearch("");
+    this.destinationSearch("")
+    this.getUserProfile()
   },
 
   destroyed() {
@@ -84,6 +86,16 @@ export default {
       setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
       setRequestData: `modules/requestData/${types.requestData.actions.SET_REQUEST_DATA}`,
     }),
+    getUserProfile() {
+      if (this.$cookies.get('access_token')) {
+        Profile.getProfile().then((res) => {
+          console.log(res)
+          this.userProfile = res.data
+        }).catch(err => {
+
+        })
+      }
+    },
     clickOnUserSuggestion() {
       if (this.$refs.cityAutocomplete) {
         this.$refs.cityAutocomplete.isMenuActive = false;
