@@ -3,105 +3,99 @@
   <div v-if="$route.query.showMap === 'false' || !$route.query.showMap">
     <!-- main  -->
     <v-main class="pt-3">
-      <v-container class="" :fluid="$vuetify.breakpoint.md">
+      <v-container :fluid="$vuetify.breakpoint.md">
         <v-row class="justify-center">
           <v-col class="filterContainer">
-<!--            <affix relative-element-selector="#resultSectionContainer">-->
-              <PagesSearchFilters />
-<!--            </affix>-->
+            <PagesSearchFilters />
           </v-col>
-          <v-col id="resultSectionContainer" class="resultContainer">
+          <v-col
+            id="sahar"
+            ref="resultContainerRef"
+            class="resultContainer"
+            :class="{ stickyResultContainer: isIntersecting }"
+          >
             <PagesSearchContent />
           </v-col>
         </v-row>
       </v-container>
     </v-main>
-
     <!-- footer  -->
-    <PagesSearchFooter/>
+    <PagesSearchFooter />
   </div>
 
   <!--  with map -->
   <v-row v-else class="ma-0">
-    <PagesSearchMapSide class="pb-4" :isRtl="$vuetify.rtl"/>
+    <PagesSearchMapSide class="pb-4" :isRtl="$vuetify.rtl" />
     <v-main>
       <v-container class="pt-0 fill-height" fluid>
-        <PagesSearchMap class="mapLayoutContainer px-1"/>
+        <PagesSearchMap class="mapLayoutContainer px-1" />
       </v-container>
     </v-main>
   </v-row>
-
 </template>
 <script>
-import {mapGetters, mapActions} from "vuex"
-import * as types from "@/store/types.js"
-import {SearchServices} from "@/services"
-// import { Affix } from 'vue-affix'
+import { mapGetters, mapActions } from "vuex";
+import * as types from "@/store/types.js";
+import { SearchServices } from "@/services";
 
 export default {
   layout: "search",
-  name: 'mainPage',
+  name: "mainPage",
   props: [],
   head() {
     return {
-      title: this.getSearchResult.title,
-    }
+      title: this.getSearchResult.title
+    };
   },
-  // components: {
-  //   Affix
-  // },
   data() {
     return {
       id: 444,
-      propsPagination: null
+      propsPagination: null,
+      isIntersecting: false
     };
   },
-  asyncData({params, app, store , route}) {
+  asyncData({ params, app, store, route }) {
     let data = {
       // "Accept-Language": "fa",
       q: "اجاره ویلا استخردار رامسر",
       page: Number(route.query.page) || 1,
       sort: "popular",
       guest: 5
-    }
+    };
     return SearchServices.searchResults(data).then(res => {
-      store.dispatch('modules/search/SET_SEARCH_RESULTS', res.data)
-      store.dispatch('modules/filters/SET_FILTERS', res.data.filters.filters)
-      store.dispatch('modules/filters/SET_HISTOGRAM_PRICES', res.data.histogram_prices.prices)
+      store.dispatch("modules/search/SET_SEARCH_RESULTS", res.data);
+      store.dispatch("modules/filters/SET_FILTERS", res.data.filters.filters);
+      store.dispatch(
+        "modules/filters/SET_HISTOGRAM_PRICES",
+        res.data.histogram_prices.prices
+      );
       return {
         results: res.data.data
-      }
-    })
+      };
+    });
   },
   computed: {
     ...mapGetters({
-      mapLayout: `modules/structure/${types.structure.getters.GET_MAP_LAYOUT}`,
-      getSearchResult: `modules/search/${types.search.getters.GET_SEARCH_RESULTS}`,
-    }),
+      getSearchResult: `modules/search/${types.search.getters.GET_SEARCH_RESULTS}`
+    })
   },
   mounted() {
+    window.addEventListener("scroll", this.scrollHandler);
   },
   methods: {
-    ...mapActions({
-      setMapLayout: `modules/structure/${types.structure.actions.GET_MAP_LAYOUT}`,
-      setFilters: `modules/filters/${types.filters.actions.SET_FILTERS}`,
-      setSearchResult: `modules/search/${types.search.actions.SET_SEARCH_RESULTS}`,
-    }),
-  },
+    scrollHandler() {
+      if (this.$refs.resultContainerRef.offsetHeight -window.innerHeight -150 <= window.pageYOffset) {
+        this.isIntersecting = true;
+      } else {
+        this.isIntersecting = false;
+      }
+    }
+
+  }
 };
 </script>
 
 <style scoped lang="scss">
-.resultContainerMap {
-  flex: 0 0 504px;
-  overflow: hidden;
-}
-
-.mapContainer {
-  // flex: 0 0 1008px;
-  overflow: hidden;
-}
-
 .filterContainer {
   flex: 0 0 336px;
   height: max-content;
@@ -117,9 +111,12 @@ export default {
   top: 96px;
 }
 
+.stickyResultContainer {
+  position: sticky !important;
+}
+
 .mapLayoutContainer {
   flex: 1;
   height: 100%;
 }
 </style>
-
