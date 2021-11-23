@@ -1,5 +1,4 @@
 <template>
-  <div>
     <div v-if="$route.query.showMap === 'false' || !$route.query.showMap">
       <!-- main  -->
       <v-main class="pt-3">
@@ -29,7 +28,6 @@
         </v-container>
       </v-main>
     </v-row>
-  </div>
 
 </template>
 
@@ -59,10 +57,32 @@ export default {
       page: Number(route.query.page) || 1,
       sort: route.query.sort ? route.query.sort : 'popular',
       guest: Number(route.query.guest) || 1,
-      checkin: route.query.checkInDate,
-      checkout: route.query.checkOutDate,
+    }
+    if (route.query.checkin) {
+      data.checkin = route.query.checkin
+    }
+    if (route.query.checkout) {
+      data.checkout = route.query.checkout
+    }
+
+    for (let [routeQueryKey, routeQueryValue] of Object.entries(route.query)) {
+      if (routeQueryKey.match('\\[(.*?)\\]')) {
+        data[routeQueryKey.split('[')[0]] = {
+          ...data[routeQueryKey.split('[')[0]],
+          [routeQueryKey.match('\\[(.*?)\\]')[1]]: +routeQueryValue
+        }
+      } else {
+        if (routeQueryValue) {
+          if (routeQueryValue === 'true') {
+            data[routeQueryKey] = true
+          } else if(typeof routeQueryValue !== 'string') {
+            data[routeQueryKey] = +routeQueryValue
+          }
+        }
+      }
     }
     return SearchServices.searchResults(data).then(res => {
+      store.dispatch('modules/requestData/SET_REQUEST_DATA', data)
       store.dispatch('modules/search/SET_SEARCH_RESULTS', res.data)
       store.dispatch('modules/filters/SET_FILTERS', res.data.filters.filters)
       store.dispatch('modules/filters/SET_HISTOGRAM_PRICES', res.data.histogram_prices.prices)

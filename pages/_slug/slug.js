@@ -25,8 +25,12 @@ export default {
       page: Number(route.query.page) || 1,
       sort: route.query.sort ? route.query.sort : 'popular',
       guest: Number(route.query.guest) || 1,
-      checkin: route.query.checkin,
-      checkout: route.query.checkout,
+    }
+    if (route.query.checkin) {
+      data.checkin = route.query.checkin
+    }
+    if (route.query.checkout) {
+      data.checkout = route.query.checkout
     }
     let splitSlug = params.slug.split('-')
 
@@ -37,12 +41,15 @@ export default {
 
     for (let [routeQueryKey, routeQueryValue] of Object.entries(route.query)) {
       if (routeQueryKey.match('\\[(.*?)\\]')) {
-        data[routeQueryKey.split('[')[0]] = {...data[routeQueryKey.split('[')[0]], [routeQueryKey.match('\\[(.*?)\\]')[1]]: +routeQueryValue}
+        data[routeQueryKey.split('[')[0]] = {
+          ...data[routeQueryKey.split('[')[0]],
+          [routeQueryKey.match('\\[(.*?)\\]')[1]]: +routeQueryValue
+        }
       } else {
         if (routeQueryValue) {
           if (routeQueryValue === 'true') {
             data[routeQueryKey] = true
-          }else {
+          } else if (typeof routeQueryValue !== 'string') {
             data[routeQueryKey] = +routeQueryValue
           }
         }
@@ -78,12 +85,15 @@ export default {
       let data = {}
       for (let [routeQueryKey, routeQueryValue] of Object.entries(this.$route.query)) {
         if (routeQueryKey.match('\\[(.*?)\\]')) {
-          data[routeQueryKey.split('[')[0]] = {...data[routeQueryKey.split('[')[0]], [routeQueryKey.match('\\[(.*?)\\]')[1]]: +routeQueryValue}
+          data[routeQueryKey.split('[')[0]] = {
+            ...data[routeQueryKey.split('[')[0]],
+            [routeQueryKey.match('\\[(.*?)\\]')[1]]: +routeQueryValue
+          }
         } else {
           if (routeQueryValue) {
             if (routeQueryValue === 'true') {
               data[routeQueryKey] = true
-            }else {
+            } else {
               data[routeQueryKey] = +routeQueryValue
             }
           }
