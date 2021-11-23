@@ -79,7 +79,17 @@
                 "
               v-else
             >
-              <div class="pe-3">{{ userDestinationSearch }}</div>
+              <div class="pe-1 pe-lg-3">
+                <span class="d-none d-lg-inline">
+                  {{ userDestinationSearch.substring(0,30) }}
+                <span v-if="userDestinationSearch.length>30">...</span>
+                </span>
+                <span class="d-inline d-lg-none">
+                  {{ userDestinationSearch.substring(0,11) }}
+                <span v-if="userDestinationSearch.length>11">...</span>
+                </span>
+
+              </div>
               <v-divider vertical></v-divider>
               <div v-if="checkInDate" class="px-3">
                   <span :class="{ 'font-FaNumregular-14': $vuetify.rtl }">{{
@@ -100,7 +110,7 @@
                     {{ $t("header.top.input.day") }})
                   </span>
               </div>
-              <div v-else>تاریخ را انتخاب کنید</div>
+              <div class="px-1 px-lg-2" v-else>تاریخ را انتخاب کنید</div>
               <v-divider vertical></v-divider>
 
               <div class="px-3">
