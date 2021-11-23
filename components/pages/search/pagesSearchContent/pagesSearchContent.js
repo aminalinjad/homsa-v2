@@ -34,12 +34,8 @@ export default {
       getRequestData: `modules/requestData/${types.requestData.getters.GET_REQUEST_DATA}`,
     }),
     sortBy() {
-      return [
-        {text: this.$t('sort.popular'), value: 'popular'},
-        {text: this.$t('sort.cheapest'), value: 'cheapest'},
-        {text: this.$t('sort.priciest'), value: 'priciest'},
-        {text: this.$t('sort.discount'), value: 'discount'},
-      ]
+      return this.getSearchResult.filters.sort_by
+
     },
     listIconClass() {
       if(!this.gridViewMode) {

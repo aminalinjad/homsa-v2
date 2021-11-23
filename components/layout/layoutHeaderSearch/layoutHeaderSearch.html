@@ -206,7 +206,8 @@
               </v-list>
             </v-menu>
             <div v-else>
-              <a :href="`${$config.baseUrl}/login`">
+              <a class="font-medium-14 greenDark8--text" :href="`${$config.baseUrl}/login`">
+                <v-icon size="22">$profile</v-icon>
                 <span class="ps-1 pe-2 py-1 text-capitalize">{{
                     $t("header.top.user.login")
                   }} / {{ $t("header.top.user.register") }}</span>

@@ -1,4 +1,4 @@
-<v-row>
+<v-row v-if="getSearchResult.tags.length !== 0">
   <v-col>
     <v-row>
       <v-col class="pb-1">
@@ -9,15 +9,19 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-chip
-          v-for="(item, index) in relatedSearch"
+        <nuxt-link
+          v-for="(item, index) in getSearchResult.tags"
           :key="index"
-          label
-          color="whiteColor"
-          class="mx-2 mb-3 px- font-regular-12 secondary--text cursorPointer"
-        >
-          {{ item }}
-        </v-chip>
+          :to="`/${item.type}-${item.slug}`">
+          <v-chip
+            label
+            color="whiteColor"
+            class="mx-2 mb-3 px- font-regular-12 secondary--text cursorPointer"
+          >
+            {{ item.title }}
+          </v-chip>
+        </nuxt-link>
+
       </v-col>
     </v-row>
   </v-col>

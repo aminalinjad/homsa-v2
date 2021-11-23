@@ -1,22 +1,10 @@
+import {mapGetters} from "vuex"
+import * as types from "@/store/types.js";
+
 export default {
-  data() {
-    return {
-      relatedSearch: [
-        "اجاره ویلا ارزان در رشت",
-        "اجاره ویلا ارزان در رشت",
-        "اجاره ویلا ارزان در رشت",
-        "اجاره",
-        "اجاره ویلا ارزان در رشت",
-        "رشت",
-        "اجاره ویلا ارزان در رشت",
-        "اجاره ویلا ارزان در رشت",
-        "اجاره ویلا",
-        "اجاره ویلا ارزان در رشت",
-        "اجاره ویلا ارزان در رشت",
-        "اجاره ویلا ارزان در رشت",
-        "ویلا ارزان در رشت",
-        "اجاره ویلا ارزان در رشت",
-      ],
-    };
+  computed: {
+    ...mapGetters({
+      getSearchResult: `modules/search/${types.search.getters.GET_SEARCH_RESULTS}`,
+    }),
   },
 };
